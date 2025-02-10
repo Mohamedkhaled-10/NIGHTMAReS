@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NIGHTMAReS</title>
+<link rel="manifest" href="/manifest.json">
   <!-- أيقونة المتصفح الأساسية -->
 <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
@@ -180,6 +181,17 @@
   </footer>
   
   <!-- ربط ملف JavaScript الخارجي -->
-  <script src="scripts.js"></script>
+<script src="scripts.js"></script>
+
+<!-- تسجيل الـ Service Worker -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").then(() => {
+      console.log("Service Worker Registered");
+    }).catch(error => {
+      console.log("Service Worker registration failed:", error);
+    });
+  }
+</script>
 </body>
 </html>
