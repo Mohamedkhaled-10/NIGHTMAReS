@@ -1,0 +1,993 @@
+/* استيراد الخطوط من Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+/* تفعيل التمرير السلس */
+html {
+  scroll-behavior: smooth;
+}
+
+/* إعادة تعيين الأنماط */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+}
+
+body {
+  /* خلفية جديدة: تدرج عمودي بين الأخضر الداكن (#013220) والأسود */
+  background: linear-gradient(180deg, #013220, #000000);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* تطبيق اللون الأبيض لجميع النصوص العامة */
+body, p, li, span {
+  color: #fff;
+}
+
+/* تطبيق خط مرعب للعناوين */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Creepster', cursive;
+}
+
+/* شريط التنقل (يُترك بألوانه الأصلية) */
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+/* شريط التنقل */
+.navbar ul {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px; /* تقليل الحشو لتقليل ارتفاع الشريط */
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+}
+
+.navbar ul li a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;  /* تقليل الحشو داخل عناصر الرابط */
+  transition: 0.3s;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  font-family: 'Cairo', sans-serif;
+}
+
+.navbar ul li {
+  list-style: none;
+  margin: 0 15px;
+  position: relative;
+}
+.navbar ul li a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  transition: 0.3s;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  font-family: 'Cairo', sans-serif;
+}
+.navbar ul li a ion-icon {
+  font-size: 1.8em;
+  pointer-events: none;
+  opacity: 0.7;
+  transition: 0.3s;
+}
+.navbar ul li a span {
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+.navbar ul li:hover a ion-icon,
+.navbar ul li.active a ion-icon {
+  opacity: 1;
+}
+
+/* عنصر marker */
+#marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  transition: 0.5s;
+  z-index: 0;
+}
+#marker::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 40px;
+  border-radius: 8px;
+  background: #5da6ff;
+  box-shadow: 0 0 15px #5da6ff,
+              0 0 30px #5da6ff,
+              0 0 40px #5da6ff,
+              0 0 60px #5da6ff;
+}
+
+/* تغيير ألوان marker بناءً على العنصر النشط */
+.navbar ul li:nth-child(1).active ~ #marker::before {
+  background: #027a4c;
+  box-shadow: 0 0 15px #027a4c,
+              0 0 30px #027a4c,
+              0 0 40px #027a4c,
+              0 0 60px #027a4c;
+}
+.navbar ul li:nth-child(2).active ~ #marker::before {
+  background: #ff0;
+  box-shadow: 0 0 15px #ff0,
+              0 0 30px #ff0,
+              0 0 40px #ff0,
+              0 0 60px #ff0;
+}
+.navbar ul li:nth-child(3).active ~ #marker::before {
+  background: #df2fff;
+  box-shadow: 0 0 15px #df2fff,
+              0 0 30px #df2fff,
+              0 0 40px #df2fff,
+              0 0 60px #df2fff;
+}
+.navbar ul li:nth-child(4).active ~ #marker::before {
+  background: #0f0;
+  box-shadow: 0 0 15px #0f0,
+              0 0 30px #0f0,
+              0 0 40px #0f0,
+              0 0 60px #0f0;
+}
+
+/* Media Query لتعديل حجم القائمة على الأجهزة الصغيرة */
+@media (max-width: 768px) {
+  .navbar ul li {
+    margin: 0 10px;
+  }
+  .navbar ul li a ion-icon {
+    font-size: 1.5em;
+  }
+  .navbar ul li a span {
+    font-size: 0.8em;
+  }
+}
+
+
+/* قائمة الهامبرغر */
+.menu-icon:checked + label,
+.menu-icon:not(:checked) + label {
+  position: fixed;
+  top: 63px;
+  right: 75px;
+  display: block;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  z-index: 10;
+}
+.menu-icon:checked + label:before,
+.menu-icon:not(:checked) + label:before {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 30px;
+  height: 20px;
+  z-index: 20;
+  top: 0;
+  left: 0;
+  border-top: 2px solid #ececee;
+  border-bottom: 2px solid #ececee;
+  transition: border-width 100ms 1500ms ease, 
+              top 100ms 1600ms cubic-bezier(0.23, 1, 0.32, 1),
+              height 100ms 1600ms cubic-bezier(0.23, 1, 0.32, 1), 
+              background-color 200ms ease,
+              transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.menu-icon:checked + label:after,
+.menu-icon:not(:checked) + label:after {
+  position: absolute;
+  content: '';
+  display: block;
+  width: 22px;
+  height: 2px;
+  z-index: 20;
+  top: 10px;
+  right: 4px;
+  background-color: #ececee;
+  margin-top: -1px;
+  transition: width 100ms 1750ms ease, 
+              right 100ms 1750ms ease,
+              margin-top 100ms ease, 
+              transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.menu-icon:checked + label:before {
+  top: 10px;
+  transform: rotate(45deg);
+  height: 2px;
+  background-color: #ececee;
+  border-width: 0;
+  transition: border-width 100ms 340ms ease, 
+              top 100ms 300ms cubic-bezier(0.23, 1, 0.32, 1),
+              height 100ms 300ms cubic-bezier(0.23, 1, 0.32, 1), 
+              background-color 200ms 500ms ease,
+              transform 200ms 1700ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.menu-icon:checked + label:after {
+  width: 30px;
+  margin-top: 0;
+  right: 0;
+  transform: rotate(-45deg);
+  transition: width 100ms ease,
+              right 100ms ease,  
+              margin-top 100ms 500ms ease, 
+              transform 200ms 1700ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* قائمة الـ Nav (الهامبرغر) */
+.nav {
+  position: fixed;
+  top: 33px;
+  right: 50px;
+  display: block;
+  width: 80px;
+  height: 80px;
+  z-index: 9;
+  overflow: hidden;
+  box-shadow: 0 8px 30px 0 rgba(0,0,0,0.3);
+  background-color: #353746;
+  animation: border-transform 7s linear infinite;
+  transition: top 350ms 1100ms cubic-bezier(0.23, 1, 0.32, 1),
+              right 350ms 1100ms cubic-bezier(0.23, 1, 0.32, 1),
+              transform 250ms 1100ms ease,
+              width 650ms 400ms cubic-bezier(0.23, 1, 0.32, 1),
+              height 650ms 400ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes border-transform {
+  0%,100% { border-radius: 63% 37% 54% 46% / 55% 48% 52% 45%; }
+  14% { border-radius: 40% 60% 54% 46% / 49% 60% 40% 51%; }
+  28% { border-radius: 54% 46% 38% 62% / 49% 70% 30% 51%; }
+  42% { border-radius: 61% 39% 55% 45% / 61% 38% 62% 39%; }
+  56% { border-radius: 61% 39% 67% 33% / 70% 50% 50% 30%; }
+  70% { border-radius: 50% 50% 34% 66% / 56% 68% 32% 44%; }
+  84% { border-radius: 46% 54% 50% 50% / 35% 61% 39% 65%; }
+}
+.menu-icon:checked ~ .nav {
+  animation-play-state: paused;
+  top: 50%;
+  right: 50%;
+  transform: translate(50%, -50%);
+  width: 200%;
+  height: 200%;
+  transition: top 350ms 700ms cubic-bezier(0.23, 1, 0.32, 1),
+              right 350ms 700ms cubic-bezier(0.23, 1, 0.32, 1),
+              transform 250ms 700ms ease,
+              width 750ms 1000ms cubic-bezier(0.23, 1, 0.32, 1),
+              height 750ms 1000ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.nav ul {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  transform: translateY(-50%);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 6;
+}
+.nav ul li {
+  margin: 10px 0;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(30px);
+  transition: all 250ms linear;
+}
+.nav ul li:nth-child(1){ transition-delay: 200ms; }
+.nav ul li:nth-child(2){ transition-delay: 150ms; }
+.nav ul li:nth-child(3){ transition-delay: 100ms; }
+.nav ul li:nth-child(4){ transition-delay: 50ms; }
+.nav ul li a {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9vh;
+  text-transform: uppercase;
+  line-height: 1.2;
+  font-weight: 800;
+  color: #ececee;
+  position: relative;
+  display: inline-block;
+  transition: all 250ms linear;
+}
+.nav ul li a:hover {
+  color: #ffeba7;
+  text-decoration: none;
+}
+.nav ul li a:after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 0;
+  height: 2vh;
+  background-color: #353746;
+  opacity: 0.8;
+  transition: width 250ms linear;
+}
+.nav ul li a:hover:after {
+  width: 100%;
+}
+.menu-icon:checked ~ .nav ul li {
+  pointer-events: auto;
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 350ms ease,
+              transform 250ms ease;
+}
+.menu-icon:checked ~ .nav ul li:nth-child(1){ transition-delay: 1400ms; }
+.menu-icon:checked ~ .nav ul li:nth-child(2){ transition-delay: 1480ms; }
+.menu-icon:checked ~ .nav ul li:nth-child(3){ transition-delay: 1560ms; }
+.menu-icon:checked ~ .nav ul li:nth-child(4){ transition-delay: 1640ms; }
+
+/* تنسيق الـ SVG وتأثير النص */
+.hero-svg {
+  display: block;
+  width: 100%;
+  max-width: 960px;
+  height: auto;
+  margin: 0 auto;
+  font: 5em 'Montserrat', sans-serif;
+}
+.text-copy {
+  fill: none;
+  stroke: white;
+  stroke-dasharray: 6% 29%;
+  stroke-width: 5px;
+  stroke-dashoffset: 0%;
+  animation: stroke-offset 5.5s infinite linear;
+}
+.text-copy:nth-child(1) {
+  stroke: #4D163D;
+  animation-delay: -1s;
+}
+.text-copy:nth-child(2) {
+  stroke: #840037;
+  animation-delay: -2s;
+}
+.text-copy:nth-child(3) {
+  stroke: #BD0034;
+  animation-delay: -3s;
+}
+.text-copy:nth-child(4) {
+  stroke: #BD0034;
+  animation-delay: -4s;
+}
+.text-copy:nth-child(5) {
+  stroke: #FDB731;
+  animation-delay: -5s;
+}
+@keyframes stroke-offset {
+  100% { stroke-dashoffset: -35%; }
+}
+
+/* ========================= */
+/* قسم الـ Hero */
+/* ========================= */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 100px 20px;
+  position: relative;
+  overflow: hidden;
+}
+.hero .hero-text,
+.hero .hero-image {
+  opacity: 0;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+}
+.hero .hero-text {
+  width: 45%;
+  animation-name: slideInRight;
+  animation-delay: 0.5s;
+  text-align: right;
+  font-size: 2em;
+}
+.hero .hero-image {
+  width: 55%;
+  animation-name: slideInLeft;
+  animation-delay: 0.5s;
+  position: relative;
+  overflow: hidden;
+}
+.hero .hero-image img {
+  width: 110%;
+  transform: scale(1.1);
+  border-radius: 15px;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+.fade-out {
+  opacity: 0;
+}
+@keyframes slideInRight {
+  from { transform: translateX(100px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* تأثير الضوء الأبيض المتوهج حول صورة الـ Hero */
+.hero-image {
+  position: relative;
+  border-radius: 15px;
+  overflow: hidden;
+}
+.hero-image::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 6px solid transparent;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, #fff, transparent);
+  background-size: 200% 100%;
+  animation: borderSlide 3s linear infinite;
+  pointer-events: none;
+  
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+}
+@keyframes borderSlide {
+  from { background-position: 200% 0; }
+  to   { background-position: -200% 0; }
+}
+
+/* ========================= */
+/* قسم النقاط في أسفل الـ Hero (قالب الصورة) */
+/* ========================= */
+.hero-dots {
+  position: absolute;
+  bottom: -30px; /* تمتد المنطقة قليلاً خارج حدود الصورة */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #013220, #000000);
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+.hero-dots .dot {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  opacity: 0.5;
+  animation: dotPulse 2s infinite ease-in-out;
+}
+.hero-dots .dot.active {
+  opacity: 1;
+}
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+/* ========================= */
+/* قسم القوالب (الكروت) */
+/* ========================= */
+.cards-section {
+  padding: 50px 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* أقصى 3 أعمدة */
+  gap: 30px;
+}
+@media (max-width: 1024px) {
+  .cards-section {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .cards-section {
+    grid-template-columns: 1fr;
+  }
+}
+.card {
+  position: relative;
+  height: 250px;
+  overflow: hidden;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s;
+  cursor: pointer;
+  perspective: 1000px;
+}
+.card:hover {
+  transform: translateY(-10px);
+}
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+}
+.card:hover .card-inner {
+  transform: rotateY(10deg);
+}
+.card-inner img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.card-inner .overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+  z-index: 1;
+  pointer-events: none;
+}
+.card-inner .card-content {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 2;
+  padding: 15px;
+  text-align: center;
+}
+.card-inner .card-content h3 {
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+.card-inner .card-content a {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #027a4c;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s;
+}
+.card-inner .card-content a:hover {
+  background: #026b47;
+}
+
+/* ========================= */
+/* المودال */
+/* ========================= */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+.modal.active {
+  display: flex;
+}
+.modal-content {
+  background: #fff;
+  color: #000;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+}
+.modal-header {
+  background: #ff0000;
+  height: 5px;
+  animation: loading 2s linear forwards;
+}
+@keyframes loading {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+.modal-body {
+  padding: 20px;
+}
+.modal-body button {
+  padding: 10px 20px;
+  background: #027a4c;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+/* ========================= */
+/* قسم الأخبار والفعاليات */
+/* ========================= */
+.news-section {
+  padding: 50px 20px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.news-section h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2em;
+}
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+.news-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transform: perspective(1000px) rotateX(0deg);
+  transition: transform 0.3s;
+}
+.news-card:hover {
+  transform: perspective(1000px) rotateX(5deg);
+}
+.news-card img {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+.news-card .news-content {
+  padding: 15px;
+}
+.news-card .news-content h3 {
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+/* ========================= */
+/* التذييل */
+/* ========================= */
+footer {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 30px 20px;
+  color: #fff;
+  position: relative;
+}
+footer::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #027a4c;
+  border-radius: 2px;
+}
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-text {
+  flex: 1 1 50%;
+  text-align: right;
+  font-size: 0.9em;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.footer-social {
+  flex: 1 1 50%;
+  text-align: right;
+}
+.footer-social ul {
+  display: flex;
+  list-style: none;
+  gap: 15px;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+}
+.footer-social ul li a {
+  color: #fff;
+  font-size: 1.8em;
+  transition: color 0.3s;
+}
+.footer-social ul li a:hover {
+  color: #ffeba7;
+}
+.footer-text p {
+  margin-bottom: 5px;
+}
+footer ul {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding: 0;
+}
+footer ul li {
+  position: relative;
+  list-style: none;
+  margin: 0 10px;
+  cursor: pointer;
+}
+footer ul li a {
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+}
+footer ul li a .fa-brands {
+  font-size: 3em;
+  color: #fff;
+}
+footer ul li a::before {
+  font-family: "FontAwesome";
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 3em;
+  height: 0;
+  overflow: hidden;
+  transition: 0.5s ease-in-out;
+}
+footer ul li:nth-child(1) a::before {
+  content: "\f16d";
+  background-image: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border-bottom: 2px solid #f09433;
+}
+footer ul li:nth-child(2) a::before {
+  content: "\f232";
+  color: #25D366;
+  border-bottom: 2px solid #25D366;
+}
+footer ul li:nth-child(3) a::before {
+  content: "\f099";
+  color: #1DA1F2;
+  border-bottom: 2px solid #1DA1F2;
+}
+footer ul li:hover a::before {
+  height: 100%;
+}
+
+/* ========================= */
+/* قسم النقاط في أسفل الـ Hero (تأثير الدخان الأخضر) */
+/* ========================= */
+.hero-smoke {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1; /* خلف محتوى الـ Hero */
+  /* لتلاشي التأثير من الأسفل */
+  -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent);
+  mask-image: linear-gradient(to bottom, black 60%, transparent);
+}
+
+/* تأثير الدخان الأخضر - نجوم وخطوط shooting-star */
+/* تعديل لون النجوم إلى أخضر باهت */
+.stars {
+  width: 1px;
+  height: 1px;
+  position: absolute;
+  background: rgba(0,128,0,0.6);
+  box-shadow: 2vw 5vh 2px rgba(0,128,0,0.6), 10vw 8vh 2px rgba(0,128,0,0.6), 15vw 15vh 1px rgba(0,128,0,0.6),
+              22vw 22vh 1px rgba(0,128,0,0.6), 28vw 12vh 2px rgba(0,128,0,0.6), 32vw 32vh 1px rgba(0,128,0,0.6),
+              38vw 18vh 2px rgba(0,128,0,0.6), 42vw 35vh 1px rgba(0,128,0,0.6), 48vw 25vh 2px rgba(0,128,0,0.6),
+              53vw 42vh 1px rgba(0,128,0,0.6), 58vw 15vh 2px rgba(0,128,0,0.6), 63vw 38vh 1px rgba(0,128,0,0.6),
+              68vw 28vh 2px rgba(0,128,0,0.6), 73vw 45vh 1px rgba(0,128,0,0.6), 78vw 32vh 2px rgba(0,128,0,0.6),
+              83vw 48vh 1px rgba(0,128,0,0.6), 88vw 20vh 2px rgba(0,128,0,0.6), 93vw 52vh 1px rgba(0,128,0,0.6),
+              98vw 35vh 2px rgba(0,128,0,0.6), 5vw 60vh 1px rgba(0,128,0,0.6), 12vw 65vh 2px rgba(0,128,0,0.6),
+              18vw 72vh 1px rgba(0,128,0,0.6), 25vw 78vh 2px rgba(0,128,0,0.6), 30vw 85vh 1px rgba(0,128,0,0.6),
+              35vw 68vh 2px rgba(0,128,0,0.6), 40vw 82vh 1px rgba(0,128,0,0.6), 45vw 92vh 2px rgba(0,128,0,0.6),
+              50vw 75vh 1px rgba(0,128,0,0.6), 55vw 88vh 2px rgba(0,128,0,0.6), 60vw 95vh 1px rgba(0,128,0,0.6),
+              65vw 72vh 2px rgba(0,128,0,0.6), 70vw 85vh 1px rgba(0,128,0,0.6), 75vw 78vh 2px rgba(0,128,0,0.6),
+              80vw 92vh 1px rgba(0,128,0,0.6), 85vw 82vh 2px rgba(0,128,0,0.6), 90vw 88vh 1px rgba(0,128,0,0.6),
+              95vw 75vh 2px rgba(0,128,0,0.6);
+  animation: twinkle 8s infinite linear;
+}
+
+.shooting-star {
+  position: absolute;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(0,128,0,1), transparent);
+  animation: shoot 3s infinite ease-in;
+}
+
+.shooting-star:nth-child(2) {
+  top: 35%;
+  left: -100px;
+  animation-delay: 1s;
+}
+.shooting-star:nth-child(3) {
+  top: 50%;
+  left: -100px;
+  animation-delay: 2s;
+}
+.shooting-star:nth-child(4) {
+  top: 65%;
+  left: -100px;
+  animation-delay: 0.5s;
+}
+.shooting-star:nth-child(5) {
+  top: 75%;
+  left: -100px;
+  animation-delay: 1.5s;
+}
+.shooting-star:nth-child(6) {
+  top: 80%;
+  left: -100px;
+  animation-delay: 2.5s;
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+}
+
+@keyframes shoot {
+  0% {
+    transform: translateX(0) translateY(0) rotate(25deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120vw) translateY(50vh) rotate(25deg);
+    opacity: 0;
+  }
+}
+
+/* باقي التنسيقات كما في الكود الأصلي للموقع (شريط التنقل، Hero، الكروت، الأخبار، التذييل، ... ) */
+/* --- (تحتفظ بباقي الكود كما هو دون تعديل) --- */
+@media (max-width: 600px) {
+  .hero {
+    /* تغيير اتجاه العناصر ليكون عموديًا */
+    flex-direction: column;
+    /* تقليل الحشوة وتوسيط المحتوى */
+    padding: 50px 10px;
+    justify-content: center;
+    text-align: center;
+  }
+  .hero .hero-text {
+    width: 100%;
+    /* تغيير محاذاة النص لتوسيطه */
+    text-align: center;
+    /* تقليل حجم الخط ليتناسب مع الشاشات الصغيرة */
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+  .hero .hero-image {
+    width: 100%;
+  }
+  .hero .hero-image img {
+    width: 100%;
+    /* إزالة التحجيم الزائد إن وُجد */
+    transform: scale(1);
+  }
+}
+/* تحسين تصميم المودال */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.modal.active {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-content {
+  background: #fff;           /* خلفية المودال بيضاء */
+  color: #000;                /* لون النص افتراضياً أسود */
+  width: 90%;
+  max-width: 700px;
+  border-radius: 15px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  transform: scale(0.9);
+  transition: transform 0.3s ease-in-out;
+}
+
+.modal.active .modal-content {
+  transform: scale(1);
+}
+
+/* ترويسة المودال */
+.modal-header {
+  background: #027a4c;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #fff;
+}
+
+/* زر الإغلاق */
+.modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5em;
+  color: #fff;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.modal-close:hover {
+  color: #ffeba7;
+}
+
+/* محتوى المودال مع تفعيل التمرير العمودي */
+.modal-body {
+  padding: 20px;
+  max-height: 60vh;       /* تحديد ارتفاع أقصى لجسم المودال */
+  overflow-y: auto;       /* تفعيل التمرير العمودي لو المحتوى طويل */
+  color: #000;            /* تعيين لون النص بالأسود داخل المودال */
+  font-size: 1em;
+  line-height: 1.6;
+}
+
+/* لو حابب تغير لون أي عناصر جوا المودال تقدر تضيف قاعدة شاملة زي دي */
+.modal-content p,
+.modal-content li,
+.modal-content span {
+  color: #000;
+}

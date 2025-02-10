@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>موقع إلكتروني إبداعي</title>
+  <!-- تضمين Font Awesome و Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <!-- ربط ملف CSS الخارجي -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- شريط التنقل -->
+  <nav class="navbar">
+    <ul>
+      <li class="active">
+        <a href="#home">
+          <ion-icon name="home-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="#cards">
+          <ion-icon name="book-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="#news">
+          <ion-icon name="newspaper-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="#footer">
+          <ion-icon name="call-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <div id="marker"></div>
+    </ul>
+  </nav>
+
+  <!-- قسم الـ Hero -->
+  <section class="hero" id="home">
+    <div class="hero-text">
+      <!-- SVG مع تأثيرات النص المتحرك -->
+      <svg class="hero-svg" viewBox="0 0 960 300">
+        <symbol id="s-text">
+          <text text-anchor="middle" x="50%" y="80%">Nightmares</text>
+        </symbol>
+        <g class="g-ants">
+          <use xlink:href="#s-text" class="text-copy"></use>
+          <use xlink:href="#s-text" class="text-copy"></use>
+          <use xlink:href="#s-text" class="text-copy"></use>
+          <use xlink:href="#s-text" class="text-copy"></use>
+          <use xlink:href="#s-text" class="text-copy"></use>
+        </g>
+      </svg>
+      <p>مرحبًا بك في عالم الظلام… حيث تختبئ الكوابيس خلف كل همسة، وحيث يصبح الخوف رفيقك الدائم! هل تجرؤ على الدخول؟</p>
+    </div>
+    <div class="hero-image">
+      <img src="images/1.webp" alt="صورة تفاعلية">
+      <!-- العناصر الأربعة لإطار الضوء المتوهج -->
+      <span class="span1"></span>
+      <span class="span2"></span>
+      <span class="span3"></span>
+      <span class="span4"></span>
+    </div>
+    <!-- تأثير الدخان الأخضر (النجوم وخطوط "shooting-star") يظهر داخل هذا العنصر -->
+    <div class="hero-smoke">
+      <div class="stars"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+      <div class="shooting-star"></div>
+    </div>
+  </section>
+
+  <!-- قسم القوالب (الكروت) -->
+  <section class="cards-section" id="cards">
+    <div class="card" data-content="اكتب هنا">
+      <div class="card-inner">
+        <img src="images/1.webp" alt="صورة القالب 1">
+        <div class="overlay"></div>
+        <div class="card-content">
+          <h3>سفاح الجيزة</h3>
+          <a href="stories/سفاح الجيزة/سفاح الجيزة.html">اقرأ المزيد</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-content="اكتب هنا">
+      <div class="card-inner">
+        <img src="images/2.webp" alt="صورة القالب 2">
+        <div class="overlay"></div>
+        <div class="card-content">
+          <h3>الطريق 56</h3>
+          <a href="stories/الطريق 56/الطريق 56.html">اقرأ المزيد</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-content="اكتب هنا">
+      <div class="card-inner">
+        <img src="images/3.webp" alt="صورة القالب 3">
+        <div class="overlay"></div>
+        <div class="card-content">
+          <h3>فتاة الطريق</h3>
+          <a href="stories/فتاة الطريق/فتاة الطريق.html">اقرأ المزيد</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم الأخبار والفعاليات -->
+  <section class="news-section" id="news">
+    <h2>الأخبار والفعاليات</h2>
+    <div class="news-grid">
+      <div class="news-card">
+        <img src="images/terrifier.jpg" alt="Terrifier 3">
+        <div class="news-content">
+          <h3>Terrifier 3</h3>
+          <p>أحد أكثر المشاهد الدموية والمرعبة في Terrifier 3 كان مشهد الحمام المروع، حيث استخدم صُنّاع الفيلم أكثر من 20 جالونًا من الدم المزيف لجعل اللقطة تبدو واقعية لأقصى درجة! المشهد كان وحشيًا لدرجة أن بعض المشاهدين غادروا السينما بسبب الغثيان، خاصة مع التفاصيل المقززة التي أضافها المخرج داميان ليوني لجعل العنف أكثر صدمة من أي وقت مضى!</p>
+        </div>
+      </div>
+      <div class="news-card">
+        <img src="images/المداح.png" alt="خبر 2">
+        <div class="news-content">
+          <h3>المداح: أسطورة العهد</h3>
+          <p>في الجزء الخامس من مسلسل "المداح: أسطورة العهد"، المقرر عرضه في رمضان 2025، يعود "صابر المداح" (حمادة هلال) إلى الحياة بمعجزة إلهية، ليجد نفسه في مواجهة جديدة مع قوى الجن العلوي. يُكلَّف بمهمة خطيرة: التصدي لبنات إبليس - ست الحسن، بلقيس، وفحيح - اللاتي اجتمعن لتنفيذ مخطط يهدد البشرية. مع انضمام نجوم جدد مثل غادة عادل وخالد الصاوي، يعد هذا الموسم بمزيد من التشويق والرعب. 
+</p>
+        </div>
+      </div>
+      <div class="news-card">
+        <img src="images/البيت بيتي.png" alt="خبر 3">
+        <div class="news-content">
+          <h3>البيت بيتي 3</h3>
+          <p>مسلسل "البيت بيتي" بيجمع بين الضحك والرعب في حكاية واحدة. القصة بتحكي عن "بينو" اللي رجع القاهرة عشان يخلّص ورثه، لكنه اكتشف إنه ورث قصر مليان بأحداث غامضة ومخيفة. مع سائق التاكسي "كراكيري"، بيلاقوا نفسهم في مغامرات مرعبة ومضحكة في نفس الوقت.
+
+بالنسبة للجزء الثالث، كان فيه تحضيرات إنه يتعرض في رمضان 2025، لكن الشركة المنتجة قررت تأجيل التصوير لبعد رمضان بسبب انشغال بعض الممثلين في أعمال تانية خلال الشهر الكريم. 
+
+
+الجمهور مستني بشغف الجزء الجديد، خاصة بعد النجاح الكبير للأجزاء اللي فاتت.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- تذييل الصفحة مع روابط مواقع التواصل الاجتماعي -->
+  <footer id="footer">
+    <div class="footer-content">
+      <div class="footer-text">
+        <p>حقوق النشر © 2025. جميع الحقوق محفوظة.</p>
+        <p>تصميم وتطوير: Nightmaers</p>
+      </div>
+      <div class="footer-social">
+        <ul>
+          <li><a href="#" target="_blank"><i class="fa-brands fa-instagram instagram"></i></a></li>
+          <li><a href="https://chat.whatsapp.com/FDt6HLnxUfiLuK6AgDPNIJ" target="_blank"><i class="fa-brands fa-whatsapp whatsapp"></i></a></li>
+          <li><a href="#" target="_blank"><i class="fa-brands fa-twitter twitter"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- ربط ملف JavaScript الخارجي -->
+  <script src="scripts.js"></script>
+</body>
+</html>
