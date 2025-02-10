@@ -414,7 +414,7 @@ h1, h2, h3, h4, h5, h6 {
   animation-fill-mode: forwards;
 }
 .hero .hero-text {
-  width: 45%;
+  width: 40%;
   animation-name: slideInRight;
   animation-delay: 0.5s;
   text-align: right;
