@@ -1,4 +1,4 @@
-// تحديث حركة marker في شريط التنقل
+/* تحديث حركة marker في شريط التنقل */
 let marker = document.querySelector('#marker');
 let listItems = document.querySelectorAll('.navbar ul li');
 
@@ -26,7 +26,7 @@ listItems.forEach(item => {
   item.addEventListener('click', setActive);
 });
 
-// تبديل صور قسم الـ Hero مع تأثير التلاشي
+/* تبديل صور قسم الـ Hero مع تأثير التلاشي */
 let heroImg = document.querySelector('.hero-image img');
 let heroImages = [
   "images/1.webp",
@@ -44,13 +44,12 @@ setInterval(() => {
   }, 500);
 }, 4000);
 
-// إظهار تأثير الدخان الأخضر في قسم الـ Hero بناءً على توقيت القاهرة (من 5 مساءً إلى 6 صباحاً)
+/* إظهار تأثير الدخان الأخضر في قسم الـ Hero بناءً على توقيت القاهرة */
 function updateHeroSmokeVisibility() {
   const now = new Date();
   let cairoHour = now.getUTCHours() + 2; // توقيت القاهرة (UTC+2)
   if (cairoHour >= 24) cairoHour -= 24;
   const heroSmoke = document.querySelector('.hero-smoke');
-  // إذا كان الوقت بين 17:00 (5 مساءً) و 6:00 صباحاً
   if (cairoHour >= 17 || cairoHour < 6) {
     heroSmoke.style.display = 'block';
   } else {
@@ -59,3 +58,36 @@ function updateHeroSmokeVisibility() {
 }
 updateHeroSmokeVisibility();
 setInterval(updateHeroSmokeVisibility, 10 * 60 * 1000);
+
+/* التحكم في عدد القوالب وإضافة زر "إظهار المزيد" */
+document.querySelectorAll('.news-section').forEach(section => {
+  let cards = section.querySelectorAll('.news-card');
+  
+  if (cards.length > 6) {
+    cards.forEach((card, index) => {
+      if (index >= 6) card.style.display = 'none';
+    });
+
+    let blurOverlay = document.createElement('div');
+    blurOverlay.classList.add('blur-overlay');
+    blurOverlay.textContent = "إظهار المزيد";
+
+    section.appendChild(blurOverlay);
+
+    blurOverlay.addEventListener('click', () => {
+      if (blurOverlay.classList.contains('expanded')) {
+        // إخفاء القوالب الزائدة
+        cards.forEach((card, index) => {
+          if (index >= 6) card.style.display = 'none';
+        });
+        blurOverlay.textContent = "إظهار المزيد";
+        blurOverlay.classList.remove('expanded');
+      } else {
+        // عرض القوالب المخفية
+        cards.forEach(card => card.style.display = 'block');
+        blurOverlay.textContent = "إظهار أقل";
+        blurOverlay.classList.add('expanded');
+      }
+    });
+  }
+});

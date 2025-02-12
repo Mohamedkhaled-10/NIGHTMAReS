@@ -126,20 +126,20 @@ h1, h2, h3, h4, h5, h6 {
   width: 50px;
   height: 40px;
   border-radius: 8px;
-  background: #5da6ff;
-  box-shadow: 0 0 15px #5da6ff,
-              0 0 30px #5da6ff,
-              0 0 40px #5da6ff,
-              0 0 60px #5da6ff;
-}
-
-/* تغيير ألوان marker بناءً على العنصر النشط */
-.navbar ul li:nth-child(1).active ~ #marker::before {
   background: #027a4c;
   box-shadow: 0 0 15px #027a4c,
               0 0 30px #027a4c,
               0 0 40px #027a4c,
               0 0 60px #027a4c;
+}
+
+/* تغيير ألوان marker بناءً على العنصر النشط */
+.navbar ul li:nth-child(1).active ~ #marker::before {
+  background: #5da6ff;
+  box-shadow: 0 0 15px #5da6ff,
+              0 0 30px #5da6ff,
+              0 0 40px #5da6ff,
+              0 0 60px #5da6ff;
 }
 .navbar ul li:nth-child(2).active ~ #marker::before {
   background: #ff0;
@@ -793,7 +793,6 @@ h1, h2, h3, h4, h5, h6 {
 .video-card {
   position: relative;
   overflow: hidden;
-  height: auto; /* السماح للقالب بالتكيف مع المحتوى */
 }
 
 .video-card::before {
@@ -820,7 +819,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .video-card img {
     width: 100%; /* يضمن أن الصورة لا تتجاوز القالب */
-    height: 330px; /* يثبت ارتفاع الصورة لمنع التمدد الزائد */
+    height: 200px; /* يثبت ارتفاع الصورة لمنع التمدد الزائد */
     object-fit: cover; /* يضمن أن الصورة لا تتشوه */
     transition: transform 0.3s ease-in-out; /* إضافة تأثير سلس */
 }
@@ -835,7 +834,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .video-card iframe {
   width: 100%;
-  height: 330px;
+  height: 200px;
   border: none;
 }
 
@@ -1252,26 +1251,6 @@ footer ul li:hover a::before {
     grid-template-columns: repeat(1, 1fr); /* عمود واحد للهواتف */
   }
 }
-
-/* تنسيق زر تصفح القصص */
-.story-button-container {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.story-button {
-  display: inline-block;
-  padding: 15px 25px;
-  background: #027a4c; /* لون الزر */
-  color: white;
-  text-decoration: none;
-  font-size: 1.2em;
-  font-weight: bold;
-  border-radius: 10px;
-  transition: background 0.3s, transform 0.2s;
-}
-
-.story-button:hover {
-  background: #02613c;
-  transform: scale(1.05);
+.stories-section {
+  margin-top: 200px; /* يمكنك زيادة أو تقليل الرقم حسب الحاجة */
 }

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Videos</title>
+    <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="ckin-video-player-master/dist/css/ckin.css">
+</head>
+<body>
+    <div class="wrapper">
+        <nav class="navbar">
+            <ul>
+                <li><a href="https://mohamedkhaled-10.github.io/NIGHTMAReS/">الرئيسية</a></li>
+            </ul>
+        </nav>
+
+        <h1 class="story-title"></h1>
+        <div class="story-separator"></div>
+
+        <div class="story-container">
+<div class="video-box">
+    <video poster="GcHcqyWxaW8-SD.jpg" src="المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.mp4" data-overlay="1" data-title="المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد" controls></video>
+</div>
+
+            <div class="video-description">
+                <h2>عنوان الفيديو</h2>
+                <p>هذا وصف الفيديو الذي يتم عرضه. يمكنك إضافة أي تفاصيل إضافية هنا.</p>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2024 جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+  
+  <script src="ckin-video-player-master/dist/js/ckin.js"></script>
+</body>
+</html>
