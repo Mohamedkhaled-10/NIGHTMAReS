@@ -28,18 +28,21 @@ listItems.forEach(item => {
 
 /* تبديل صور قسم الـ Hero مع تأثير التلاشي */
 let heroImg = document.querySelector('.hero-image img');
-let heroImages = [
-  "images/1.webp",
-  "images/2.webp",
-  "images/3.webp"
-];
 let currentHeroIndex = 0;
 
 setInterval(() => {
   heroImg.classList.add('fade-out');
   setTimeout(() => {
-    currentHeroIndex = (currentHeroIndex + 1) % heroImages.length;
-    heroImg.src = heroImages[currentHeroIndex];
+    currentHeroIndex = (currentHeroIndex + 1) % [
+      "images/1.webp",
+      "images/2.webp",
+      "images/3.webp"
+    ].length;
+    heroImg.src = [
+      "images/1.webp",
+      "images/2.webp",
+      "images/3.webp"
+    ][currentHeroIndex];
     heroImg.classList.remove('fade-out');
   }, 500);
 }, 4000);
@@ -91,3 +94,21 @@ document.querySelectorAll('.news-section').forEach(section => {
     });
   }
 });
+// Array of images for the hero section
+const heroImages = ["hero1.jpg", "hero2.jpg", "hero3.jpg"];
+let heroIndex = 0;
+
+// Function to change the main image every few seconds
+setInterval(() => {
+  heroIndex = (heroIndex + 1) % [
+    "images/1.webp",
+    "images/2.webp",
+    "images/3.webp"
+  ].length;
+  document.getElementById("heroImage").src = [
+    "images/1.webp",
+    "images/2.webp",
+    "images/3.webp"
+  ][heroIndex];
+}, 4000); // Change image every 4 seconds
+

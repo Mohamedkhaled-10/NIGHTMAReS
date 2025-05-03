@@ -1,0 +1,80 @@
+body {
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(180deg, #320101, #000000);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  .container {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .form-title {
+    font-family: 'Creepster', cursive;
+    font-size: 2.5em;
+    text-align: center;
+    color: #ffeba7;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+  }
+  
+  input, select, textarea {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: white;
+    font-size: 1em;
+    transition: background 0.3s ease;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    background: rgba(255, 255, 255, 0.3);
+    outline: none;
+  }
+  
+  button.submit-btn {
+    background: #ffeba7;
+    color: #333;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  button.submit-btn:hover {
+    background-color: #ff6f00;
+    transform: scale(1.1);
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 90%;
+      max-width: 100%;
+    }
+  }
+  

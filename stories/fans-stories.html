@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>صفحة قصص المتابعين</title>
+  <link rel="stylesheet" href="fans-stories.css"> <!-- ربط ملف الـ CSS -->
+</head>
+<body>
+
+  <!-- شريط التنقل -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="../index.html"><ion-icon name="home"></ion-icon><span>الرئيسية</span></a></li>
+      <li><a href="#stories"><ion-icon name="book"></ion-icon><span>قصص المتابعين</span></a></li>
+      <li><a href="form.html"><ion-icon name="mail"></ion-icon><span>ارسل قصتك</span></a></li>
+      <li><a href="#about"><ion-icon name="information-circle"></ion-icon><span>عن الموقع</span></a></li>
+    </ul>
+    <div id="marker"></div>
+  </nav>
+
+  <section id="stories" class="stories-section">
+    <div class="container">
+      <h2>قصص المتابعين</h2>
+  
+      <!-- الفلاتر -->
+      <div class="filters">
+        <button class="filter-btn" data-filter="all">الكل</button>
+        <button class="filter-btn" data-filter="horror">رعب</button>
+        <button class="filter-btn" data-filter="mystery">غامض</button>
+        <button class="filter-btn" data-filter="weird">غريب</button>
+      </div>
+  
+      <!-- شبكة القصص -->
+      <div class="stories-grid">
+        <div class="story horror">
+          <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="قصة رعب" class="story-thumbnail">
+          <div class="category">رعب</div> <!-- التصنيف -->
+          <h3>قصة رعب في الليل</h3>
+          <p>في إحدى الليالي، كنت أسمع أصواتاً غريبة في المنزل...</p>
+          <a href="#">قراءة المزيد</a>
+        </div>
+  
+        <div class="story mystery">
+          <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="مغامرة غامضة" class="story-thumbnail">
+          <div class="category">غامض</div> <!-- التصنيف -->
+          <h3>مغامرة في الغابة</h3>
+          <p>أثناء رحلتنا في الغابة، اكتشفنا شيئاً غريباً...</p>
+          <a href="#">قراءة المزيد</a>
+        </div>
+        
+  
+        <div class="story weird">
+          <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="حادثة غريبة" class="story-thumbnail">
+          <div class="category">غريب</div> <!-- التصنيف -->
+          <h3>حادثة غير متوقعة</h3>
+          <p>في أحد الأيام، وقعت حادثة غير متوقعة تركت الجميع في حالة من الذهول...</p>
+          <a href="#">قراءة المزيد</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  <!-- التذييل -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-text">
+        <p>حقوق النشر &copy; 2025 جميع الحقوق محفوظة.</p>
+      </div>
+      <div class="footer-social">
+        <ul>
+          <li><a href="https://facebook.com"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="https://instagram.com"><ion-icon name="logo-instagram"></ion-icon></a></li>
+          <li><a href="https://twitter.com"><ion-icon name="logo-twitter"></ion-icon></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/ionicons@5.5.4/dist/ionicons.js"></script> <!-- تحميل أيقونات Ionicons -->
+  <script src="fans-stories.js"></script>
+</body>
+</html>

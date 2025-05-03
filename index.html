@@ -24,8 +24,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <!-- ربط ملف CSS الخارجي -->
   <link rel="stylesheet" href="styles.css">
+
 </head>
 <body>
   <!-- شريط التنقل -->
@@ -66,41 +68,37 @@
   </nav>
 
   <!-- قسم الـ Hero -->
-  <section class="hero" id="home">
-    <div class="hero-text">
-      <!-- SVG مع تأثيرات النص المتحرك -->
-      <svg class="hero-svg" viewBox="0 0 960 300">
-        <symbol id="s-text">
-          <text text-anchor="middle" x="50%" y="80%">NIGHTMAReS</text>
-        </symbol>
-        <g class="g-ants">
-          <use xlink:href="#s-text" class="text-copy"></use>
-          <use xlink:href="#s-text" class="text-copy"></use>
-          <use xlink:href="#s-text" class="text-copy"></use>
-          <use xlink:href="#s-text" class="text-copy"></use>
-          <use xlink:href="#s-text" class="text-copy"></use>
-        </g>
-      </svg>
-      <p>مرحبًا بك في عالم الظلام… حيث تختبئ الكوابيس خلف كل همسة، وحيث يصبح الخوف رفيقك الدائم! هل تجرؤ على الدخول؟</p>
-    </div>
-    <div class="hero-image">
-      <img src="images/1.webp" alt="صورة تفاعلية">
-      <!-- العناصر الأربعة لإطار الضوء المتوهج -->
-      <span class="span1"></span>
-      <span class="span2"></span>
-      <span class="span3"></span>
-      <span class="span4"></span>
-    </div>
-    <!-- تأثير الدخان الأخضر (النجوم وخطوط "shooting-star") يظهر داخل هذا العنصر -->
-    <div class="hero-smoke">
-      <div class="stars"></div>
-      <div class="shooting-star"></div>
-      <div class="shooting-star"></div>
-      <div class="shooting-star"></div>
-      <div class="shooting-star"></div>
-      <div class="shooting-star"></div>
-    </div>
-  </section>
+<section class="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-gradient-to-b from-[#7f1d1d] to-[#000000] text-white font-['Cairo',sans-serif]" id="home">
+  <!-- Background Images -->
+  <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg" alt="Left Image" class="absolute left-0 top-0 h-full w-1/3 object-cover opacity-40 z-0 blur-md" />
+  <img src="https://i.ytimg.com/vi/KnWzz0n60pE/hq720.jpg" alt="Right Image" class="absolute right-0 top-0 h-full w-1/3 object-cover opacity-40 z-0 blur-md" />
+
+  <!-- Main Content -->
+  <div class="relative z-10 text-center px-4">
+    <img id="heroImage" src="https://i.ytimg.com/vi/husMGbXEIho/hq720.jpg" alt="Main Hero Image"
+      class="w-full max-w-4xl mx-auto rounded-3xl h-[500px] object-cover transition-all duration-1000 ease-in-out border-[4px] border-[#dc2626] shadow-[0_0_25px_5px_#dc2626] sm:h-[300px]" />
+    
+    <h1 class="mt-10 text-5xl md:text-6xl font-extrabold drop-shadow-md leading-tight">أهلاً بيك في عالم الرعب</h1>
+    <p class="mt-4 text-lg md:text-2xl text-gray-200 drop-shadow-sm">قصص، نظريات، وكل شيء يخليك تتوتر وتتشوق</p>
+    
+    <a href="stories/fans-stories.html" class="mt-6 inline-block px-8 py-4 bg-gradient-to-r from-[#b91c1c] to-[#7f1d1d] text-white text-lg rounded-full shadow-lg hover:scale-105 transition duration-300">
+      قصص المتابعين
+    </a>    
+  </div>
+
+  <!-- Waves Separator -->
+  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] rotate-180">
+    <svg class="relative block w-full h-[100px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+      <path fill="#320101" fill-opacity="1"
+        d="M0,32L60,37.3C120,43,240,53,360,74.7C480,96,600,128,720,128C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64V0H1380C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0H0Z">
+      </path>
+    </svg>
+  </div>
+</section>
+
+
+
+
 
   <!-- قسم القوالب (الكروت) -->
   <section class="cards-section" id="cards">

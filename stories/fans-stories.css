@@ -1,0 +1,435 @@
+/* استيراد الخطوط من Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Creepster&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+/* تفعيل التمرير السلس */
+html {
+  scroll-behavior: smooth;
+}
+
+/* إعادة تعيين الأنماط */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+}
+
+body {
+  /* خلفية جديدة: تدرج عمودي بين الأخضر الداكن (#013220) والأسود */
+  background: linear-gradient(180deg, #320101, #000000);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* تطبيق اللون الأبيض لجميع النصوص العامة */
+body, p, li, span {
+  color: #fff;
+}
+
+/* تطبيق خط مرعب للعناوين */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Creepster', cursive;
+}
+
+/* شريط التنقل (يُترك بألوانه الأصلية) */
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+/* شريط التنقل */
+.navbar ul {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px; /* تقليل الحشو لتقليل ارتفاع الشريط */
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+}
+
+.navbar ul li a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;  /* تقليل الحشو داخل عناصر الرابط */
+  transition: 0.3s;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  font-family: 'Cairo', sans-serif;
+}
+
+.navbar ul li {
+  list-style: none;
+  margin: 0 15px;
+  position: relative;
+}
+.navbar ul li a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  transition: 0.3s;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  font-family: 'Cairo', sans-serif;
+}
+.navbar ul li a ion-icon {
+  font-size: 1.8em;
+  pointer-events: none;
+  opacity: 0.7;
+  transition: 0.3s;
+}
+.navbar ul li a span {
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+.navbar ul li:hover a ion-icon,
+.navbar ul li.active a ion-icon {
+  opacity: 1;
+}
+
+/* عنصر marker */
+#marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  transition: 0.5s;
+  z-index: 0;
+}
+#marker::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 40px;
+  border-radius: 8px;
+  background: #ff0000;
+  box-shadow: 0 0 15px #ff0000,
+              0 0 30px #ff0000,
+              0 0 40px #ff0000,
+              0 0 60px #ff0000;
+}
+
+/* تغيير ألوان marker بناءً على العنصر النشط */
+.navbar ul li:nth-child(1).active ~ #marker::before {
+  background: #5da6ff;
+  box-shadow: 0 0 15px #5da6ff,
+              0 0 30px #5da6ff,
+              0 0 40px #5da6ff,
+              0 0 60px #5da6ff;
+}
+.navbar ul li:nth-child(2).active ~ #marker::before {
+  background: #ff0;
+  box-shadow: 0 0 15px #ff0,
+              0 0 30px #ff0,
+              0 0 40px #ff0,
+              0 0 60px #ff0;
+}
+.navbar ul li:nth-child(3).active ~ #marker::before {
+  background: #df2fff;
+  box-shadow: 0 0 15px #df2fff,
+              0 0 30px #df2fff,
+              0 0 40px #df2fff,
+              0 0 60px #df2fff;
+}
+.navbar ul li:nth-child(4).active ~ #marker::before {
+  background: #0f0;
+  box-shadow: 0 0 15px #0f0,
+              0 0 30px #0f0,
+              0 0 40px #0f0,
+              0 0 60px #0f0;
+}
+
+
+/* تحسين العنوان */
+.section-title {
+    font-family: 'Creepster', cursive;
+    text-align: center;
+    color: #ffeba7;
+    font-size: 2.5em;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* الفلاتر */
+  .filters {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+  }
+  
+  .filter-btn {
+    padding: 12px 25px;
+    margin: 0 15px;
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    border: 2px solid #ffeba7;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s ease;
+  }
+  
+  .filter-btn:hover {
+    background-color: rgba(255, 235, 167, 0.7);
+    transform: scale(1.1);
+  }
+  
+  /* تنسيق شبكة القصص */
+  .stories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 0 10px;
+  }
+  
+  /* تصميم القصة مع الشفافية والبلور */
+  .story {
+    position: relative;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
+  
+  .story:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* التصنيف داخل القالب */
+  .category {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: #ffeba7;
+    font-size: 1.1em;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-weight: bold;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+  }
+  
+  /* صورة القصة */
+  .story-thumbnail {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    opacity: 0.85;
+    transition: opacity 0.3s ease;
+  }
+  
+  .story-thumbnail:hover {
+    opacity: 1;
+  }
+  
+  /* العنوان داخل القصة */
+  .story h3 {
+    font-family: 'Creepster', cursive;
+    font-size: 1.6em;
+    margin-bottom: 15px;
+    color: #ffeba7;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* نص القصة */
+  .story p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+  }
+  
+  /* زر "قراءة المزيد" */
+  .story a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #ffeba7;
+    color: #333;
+    font-weight: bold;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: background-color 0.3s, transform 0.3s ease;
+  }
+  
+  .story a:hover {
+    background-color: #ff6f00;
+    transform: scale(1.1);
+  }
+  
+  /* فئات القصص */
+  .story.horror {
+    border-left: 8px solid #ff0000;
+  }
+  
+  .story.mystery {
+    border-left: 8px solid #6b2a99;
+  }
+  
+  .story.weird {
+    border-left: 8px solid #9b9b00;
+  }
+  
+  /* تحسين الشبكة على الشاشات الصغيرة */
+  @media (max-width: 768px) {
+    .stories-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .stories-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+
+/* Media Query لتعديل حجم القائمة على الأجهزة الصغيرة */
+@media (max-width: 768px) {
+  .navbar ul li {
+    margin: 0 10px;
+  }
+  .navbar ul li a ion-icon {
+    font-size: 1.5em;
+  }
+  .navbar ul li a span {
+    font-size: 0.8em;
+  }
+}
+
+
+/* ========================= */
+/* التذييل */
+/* ========================= */
+/* تعديل المسافة بين الفوتر والأزرار */
+footer {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 30px 20px;
+    color: #fff;
+    position: relative;
+    z-index: 999;
+    margin-top: 50px; /* تعديل المسافة بين الفوتر والمحتوى */
+  }
+  
+  footer::before {
+    content: "";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 4px;
+    background: #7a0202;
+    border-radius: 2px;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .footer-text, .footer-social {
+    flex: 1 1 50%;
+    text-align: right;
+  }
+  
+  .footer-social ul {
+    display: flex;
+    list-style: none;
+    gap: 15px;
+    justify-content: flex-end;
+  }
+  
+  .footer-social ul li a {
+    color: #fff;
+    font-size: 1.8em;
+    transition: color 0.3s;
+  }
+  
+  .footer-social ul li a:hover {
+    color: #ffeba7;
+  }
+  
+  footer ul {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  footer ul li {
+    list-style: none;
+    margin: 0 10px;
+    cursor: pointer;
+  }
+  
+  footer ul li a {
+    text-decoration: none;
+    position: relative;
+  }
+  
+  footer ul li a .fa-brands {
+    font-size: 3em;
+    color: #fff;
+  }
+  
+  /* تحسين التنسيق على الشاشات الصغيرة */
+  @media (max-width: 768px) {
+    .navbar ul li {
+      margin: 0 10px;
+    }
+    .navbar ul li a ion-icon {
+      font-size: 1.5em;
+    }
+    .navbar ul li a span {
+      font-size: 0.8em;
+    }
+  }
+  
+  @media (max-width: 1024px) {
+    .video-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .video-grid {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
+  
+  .stories-section {
+    margin-top: 200px;
+  }
