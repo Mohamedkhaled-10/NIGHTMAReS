@@ -5,20 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>إرسال القصة</title>
   <link rel="stylesheet" href="form.css">
-
-  <!-- إضافة مكتبة EmailJS -->
-  <script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
-  <script type="text/javascript">
-    (function(){
-      emailjs.init('rIT-1yelHQRLFgnhB');  // استبدل بـ User ID الخاص بك من EmailJS
-    })();
-  </script>
 </head>
 <body>
 
   <div class="container">
     <h1 class="form-title">إرسال قصتك</h1>
-    <form id="story-form" class="story-form">
+    <!-- تعديل الرابط هنا ليكون رابط Formspree -->
+    <form action="https://formspree.io/f/xpwdponz" method="POST" id="story-form" class="story-form">
       
       <!-- اسم المرسل -->
       <label for="name">اسمك</label>
@@ -40,33 +33,6 @@
       <button type="submit" class="submit-btn">إرسال القصة</button>
     </form>
   </div>
-
-  <script>
-    document.getElementById('story-form').addEventListener('submit', function(event) {
-      event.preventDefault(); // منع إرسال النموذج بالطريقة التقليدية
-  
-      const name = document.getElementById('name').value;
-      const title = document.getElementById('story-title').value;
-      const category = document.getElementById('category').value;
-      const content = document.getElementById('story-content').value;
-  
-      // إرسال البيانات عبر EmailJS بالأسماء المطابقة للقالب
-      emailjs.send('service_pp4kb66', 'template_tfk3bt5', {
-        name: name,
-        title: title,
-        category: category,
-        content: content
-      })
-      .then(function(response) {
-        alert('تم إرسال القصة بنجاح!');
-      }, function(error) {
-        alert('حدث خطأ أثناء إرسال القصة.');
-        console.error('EmailJS Error:', error);
-      });
-    });
-  </script>
-  
-  
 
 </body>
 </html>
