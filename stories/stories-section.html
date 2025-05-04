@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحة قصص المتابعين</title>
-  <link rel="stylesheet" href="fans-stories.css"> <!-- ربط ملف الـ CSS -->
+  <title>صفحة القصص</title>
+  <link rel="stylesheet" href="stories-section.css"> <!-- ربط ملف الـ CSS -->
 </head>
 <body>
 
@@ -12,7 +12,7 @@
   <nav class="navbar">
     <ul>
       <li><a href="../home.html"><ion-icon name="home"></ion-icon><span>الرئيسية</span></a></li>
-      <li><a href="#stories"><ion-icon name="book"></ion-icon><span>قصص المتابعين</span></a></li>
+      <li><a href="fans-stories.html"><ion-icon name="book"></ion-icon><span>قصص المتابعين</span></a></li>
       <li><a href="form.html"><ion-icon name="mail"></ion-icon><span>ارسل قصتك</span></a></li>
       <li><a href="#about"><ion-icon name="information-circle"></ion-icon><span>عن الموقع</span></a></li>
     </ul>
@@ -21,10 +21,9 @@
 
   <section id="stories" class="stories-section">
     <h2 class="story-title">
-      <span class="title-part white">قصص</span>
-      <span class="title-part yellow">المتابعين</span>
-    </h2>
-    
+        <span class="title-part white">قسم</span>
+        <span class="title-part yellow">القصص</span>
+      </h2>
   
       <!-- الفلاتر -->
       <div class="filters">
@@ -62,14 +61,7 @@
         </div>
       </div>
     </div>
-  </section>
-  
-  <!-- شخصية مرعبة -->
-<div class="horror-character-container">
-  <img src="../images/ChatGPT Image May 3, 2025, 10_23_30 PM.png" alt="شخصية مرعبة" class="horror-character">
-  <div class="speech-bubble" id="bubble">...</div>
-</div>
-
+  </section> 
   
   <!-- التذييل -->
   <footer>
@@ -88,44 +80,6 @@
   </footer>
 
   <script src="https://unpkg.com/ionicons@5.5.4/dist/ionicons.js"></script> <!-- تحميل أيقونات Ionicons -->
-  <script src="fans-stories.js"></script>
-  <script>
-    const messages = [
-      "اممم داخل اكيد عشان...",
-      "عشان عندك فضول تعرف قصص الناس",
-      "صدقني..",
-      "مش هتنساها"
-    ];
-  
-    const bubble = document.getElementById("bubble");
-    const container = document.querySelector(".horror-character-container");
-  
-    let index = 0;
-  
-    function showNextMessage() {
-  if (index >= messages.length) {
-    // إخفاء الشخصية بعد آخر رسالة
-    container.style.transition = "top 2s ease, opacity 2s ease";
-    container.style.top = "-300px";
-    container.style.opacity = "0"; // إضافة إخفاء بالتدريج
-    setTimeout(() => {
-      container.style.display = "none"; // إزالة نهائية من الصفحة
-    }, 2000); // بعد انتهاء الأنيميشن
-    return;
-  }
-
-  bubble.style.opacity = "0";
-  setTimeout(() => {
-    bubble.textContent = messages[index];
-    bubble.style.opacity = "1";
-    index++;
-    setTimeout(showNextMessage, 3500); // مدة كل رسالة
-  }, 500);
-}
-
-  
-    // بدء التشغيل بعد نزول الشخصية
-    setTimeout(showNextMessage, 3000);
-  </script>  
+  <script src="stories-section.js"></script>
 </body>
 </html>

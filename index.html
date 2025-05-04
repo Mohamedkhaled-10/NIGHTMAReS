@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta name="google-site-verification" content="eBq9l8CCfzBrXYArPr96pdVtWRutunbaLMa6WLUxlz0" />
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NIGHTMAReS</title>
-<link rel="manifest" href="/manifest.json">
-  <!-- أيقونة المتصفح الأساسية -->
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <!-- أيقونة المتصفح الأساسية -->
 <link rel="icon" type="image/x-icon" href="images/favicon.ico">
 
 <!-- أيقونات مختلفة لحجم متعدد -->
@@ -15,301 +15,40 @@
 <link rel="icon" type="image/png" sizes="192x192" href="images/android-chrome-192x192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="images/android-chrome-512x512.png">
 
-<!-- أيقونة خاصة بأجهزة Apple -->
-<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
-
-<!-- ملف Web Manifest لتعريف الأيقونات على أنظمة التشغيل -->
-<link rel="manifest" href="images/site.webmanifest">
-  <!-- تضمين Font Awesome و Ionicons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
   <!-- ربط ملف CSS الخارجي -->
-  <link rel="stylesheet" href="styles.css">
-
+  <link rel="stylesheet" href="age-verification.css">
 </head>
 <body>
-  <!-- شريط التنقل -->
-  <nav class="navbar">
-    <ul>
-      <li class="active">
-        <a href="#home">
-          <ion-icon name="home-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="#cards">
-          <ion-icon name="book-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="#news">
-          <ion-icon name="newspaper-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="#video">
-          <ion-icon name="camera-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="#footer">
-          <ion-icon name="call-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <div id="marker"></div>
-    </ul>
-  </nav>
+  <div class="background-filter"></div>
 
-  <!-- قسم الـ Hero -->
-<section class="relative w-full h-screen overflow-hidden flex flex-col justify-center items-center bg-gradient-to-b from-[#7f1d1d] to-[#000000] text-white font-['Cairo',sans-serif]" id="home">
-  <!-- Background Images -->
-  <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg" alt="Left Image" class="absolute left-0 top-0 h-full w-1/3 object-cover opacity-40 z-0 blur-md" />
-  <img src="https://i.ytimg.com/vi/KnWzz0n60pE/hq720.jpg" alt="Right Image" class="absolute right-0 top-0 h-full w-1/3 object-cover opacity-40 z-0 blur-md" />
-
-  <!-- Main Content -->
-  <div class="relative z-10 text-center px-4">
-    <img id="heroImage" src="images/logo1.png" alt="Main Hero Image"
-      class="w-full max-w-4xl mx-auto rounded-3xl h-[500px] object-cover transition-all duration-1000 ease-in-out border-[4px] border-[#dc2626] shadow-[0_0_25px_5px_#dc2626] sm:h-[300px]" />
-    
-    <h1 class="mt-10 text-5xl md:text-6xl font-extrabold drop-shadow-md leading-tight">NIGHTMAReS</h1>
-    <p class="mt-4 text-lg md:text-2xl text-gray-200 drop-shadow-sm">قصص، نظريات، وكل شيء يخليك تتوتر وتتشوق</p>
-    
-    <a href="stories/fans-stories.html" class="mt-6 inline-block px-8 py-4 bg-gradient-to-r from-[#b91c1c] to-[#7f1d1d] text-white text-lg rounded-full shadow-lg hover:scale-105 transition duration-300">
-      قصص المتابعين
-    </a>    
+  <div class="popup-overlay" id="popup">
+    <div class="popup-content">
+      <div class="popup-logo">
+        <img src="images/ChatGPT Image May 3, 2025, 10_23_30 PM.png" alt="لوجو الموقع">
+      </div>
+      <div class="popup-title">⚠️ تحذير</div>
+      <div class="popup-text">
+        هذا الموقع يحتوي على محتوى مرعب وغير مناسب للأطفال.<br>
+        يجب أن يكون عمرك 16 عامًا أو أكثر للدخول.
+      </div>
+      <div class="popup-checkbox">
+        <input type="checkbox" id="ageCheck">
+        <label for="ageCheck">أؤكد أنني أبلغ من 16 عامًا أو أكثر</label>
+      </div>
+      <button class="popup-button" onclick="enterSite()">دخول</button>
+    </div>
   </div>
 
-  <!-- Waves Separator -->
-  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] rotate-180">
-    <svg class="relative block w-full h-[100px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
-      <path fill="#320101" fill-opacity="1"
-        d="M0,32L60,37.3C120,43,240,53,360,74.7C480,96,600,128,720,128C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64V0H1380C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0H0Z">
-      </path>
-    </svg>
-  </div>
-</section>
+  <script>
+    function enterSite() {
+      const checkbox = document.getElementById('ageCheck');
+      if (checkbox.checked) {
+        window.location.href = "index.html";
+      } else {
+        alert("يجب تأكيد أنك تبلغ من العمر 16 عامًا أو أكثر.");
+      }
+    }
+  </script>
 
-
-
-
-
-  <!-- قسم القوالب (الكروت) -->
-  <section class="cards-section" id="cards">
-    <div class="card" data-content="اكتب هنا">
-      <div class="card-inner">
-        <img src="images/1.webp" alt="صورة القالب 1">
-        <div class="overlay"></div>
-        <div class="card-content">
-          <h3>سفاح الجيزة</h3>
-          <a href="stories/سفاح الجيزة/سفاح الجيزة.html">اقرأ المزيد</a>
-        </div>
-      </div>
-    </div>
-    <div class="card" data-content="اكتب هنا">
-      <div class="card-inner">
-        <img src="images/2.webp" alt="صورة القالب 2">
-        <div class="overlay"></div>
-        <div class="card-content">
-          <h3>الطريق 56</h3>
-          <a href="stories/الطريق 56/الطريق 56.html">اقرأ المزيد</a>
-        </div>
-      </div>
-    </div>
-    <div class="card" data-content="اكتب هنا">
-      <div class="card-inner">
-        <img src="images/3.webp" alt="صورة القالب 3">
-        <div class="overlay"></div>
-        <div class="card-content">
-          <h3>فتاة الطريق</h3>
-          <a href="stories/فتاة الطريق/فتاة الطريق.html">اقرأ المزيد</a>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-<div class="story-button-container">
-  <a href="stories/stories-page.html" class="story-button">تصفح المزيد من القصص</a>
-</div>
-
-  <!-- قسم الأخبار والفعاليات -->
-  <section class="news-section" id="news">
-    <h2>الأخبار والفعاليات</h2>
-    <div class="news-grid">
-      <div class="news-card">
-        <img src="images/terrifier.jpg" alt="Terrifier 3">
-        <div class="news-content">
-          <h3>Terrifier 3</h3>
-          <p>أحد أكثر المشاهد الدموية والمرعبة في Terrifier 3 كان مشهد الحمام المروع، حيث استخدم صُنّاع الفيلم أكثر من 20 جالونًا من الدم المزيف لجعل اللقطة تبدو واقعية لأقصى درجة! المشهد كان وحشيًا لدرجة أن بعض المشاهدين غادروا السينما بسبب الغثيان، خاصة مع التفاصيل المقززة التي أضافها المخرج داميان ليوني لجعل العنف أكثر صدمة من أي وقت مضى!</p>
-        </div>
-      </div>
-      <div class="news-card">
-        <img src="images/المداح.png" alt="خبر 2">
-        <div class="news-content">
-          <h3>المداح: أسطورة العهد</h3>
-          <p>في الجزء الخامس من مسلسل "المداح: أسطورة العهد"، المقرر عرضه في رمضان 2025، يعود "صابر المداح" (حمادة هلال) إلى الحياة بمعجزة إلهية، ليجد نفسه في مواجهة جديدة مع قوى الجن العلوي. يُكلَّف بمهمة خطيرة: التصدي لبنات إبليس - ست الحسن، بلقيس، وفحيح - اللاتي اجتمعن لتنفيذ مخطط يهدد البشرية. مع انضمام نجوم جدد مثل غادة عادل وخالد الصاوي، يعد هذا الموسم بمزيد من التشويق والرعب. 
-</p>
-        </div>
-      </div>
-      <div class="news-card">
-        <img src="images/البيت بيتي.png" alt="خبر 3">
-        <div class="news-content">
-          <h3>البيت بيتي 3</h3>
-          <p>مسلسل "البيت بيتي" بيجمع بين الضحك والرعب في حكاية واحدة. القصة بتحكي عن "بينو" اللي رجع القاهرة عشان يخلّص ورثه، لكنه اكتشف إنه ورث قصر مليان بأحداث غامضة ومخيفة. مع سائق التاكسي "كراكيري"، بيلاقوا نفسهم في مغامرات مرعبة ومضحكة في نفس الوقت.
-
-بالنسبة للجزء الثالث، كان فيه تحضيرات إنه يتعرض في رمضان 2025، لكن الشركة المنتجة قررت تأجيل التصوير لبعد رمضان بسبب انشغال بعض الممثلين في أعمال تانية خلال الشهر الكريم. 
-
-
-الجمهور مستني بشغف الجزء الجديد، خاصة بعد النجاح الكبير للأجزاء اللي فاتت.</p>
-        </div>
-      </div>
-      
-          <div class="news-card">
-        <img src="images/28 years later.png" alt="خبر 4">
-        <div class="news-content">
-          <h3>28 YEARS LATER</h3>
-          <p>القصة: يُعد هذا الفيلم الجزء الثالث من سلسلة "28 Days Later". تدور الأحداث بعد 28 عامًا من انتشار فيروس قاتل، حيث يحاول الناجون إعادة بناء المجتمع في عالم ما بعد الكارثة.
-أحدث الأخبار: أعلنت شركة الإنتاج أن المخرج داني بويل سيعود لإخراج هذا الجزء، مع عودة كيليان مورفي لبطولة الفيلم. من المتوقع أن يتم إصدار الفيلم في أواخر عام 2025.</p>
-        </div>
-      </div>
-      
-                <div class="news-card">
-        <img src="images/the conjuring last rites.png" alt="خبر 5">
-        <div class="news-content">
-          <h3>The Conjuring: Last Rites</h3>
-          <p>القصة: يعود المحققان في الظواهر الخارقة، إد ولورين وارن، لمواجهة قضية جديدة تتعلق بكيانات غامضة وأرواح شريرة.
-
-أحدث الأخبار: أعلنت شركة الإنتاج عن عودة فيرا فارميغا وباتريك ويلسون لأداء دوريهما كإد ولورين وارن. من المتوقع عرض الفيلم في 5 سبتمبر 2025.</p>
-        </div>
-      </div>
-      
-                <div class="news-card">
-        <img src="images/Heart Eyes.png" alt="خبر 6">
-        <div class="news-content">
-          <h3>Heart Eyes</h3>
-          <p>القصة: في عالم ما بعد الكارثة، تتجول فتاة شابة في مدينة مدمرة، محاطة بوحوش تتغذى على الخوف. تكتشف أن الحب قد يكون السلاح الوحيد للبقاء.
-
-أحدث الأخبار: أعلنت شركة الإنتاج عن انضمام أوليفيا هولت وماسون جودينج لبطولة الفيلم. من المتوقع عرض الفيلم في 7 فبراير 2025.</p>
-        </div>
-      </div>
-      
-                      <div class="news-card">
-        <img src="images/Final Destination Bloodlines0.png" alt="خبر 7">
-        <div class="news-content">
-          <h3>Final Destination: Bloodlines</h3>
-          <p>القصة: تعود سلسلة "الوجهة النهائية" بجزء جديد، حيث ينجو مجموعة من الأشخاص من حادث مميت، لكن الموت يبدأ بملاحقتهم بطرق غامضة ومروعة.
-
-أحدث الأخبار: تم الإعلان عن انضمام الممثل توني تود لطاقم العمل، حيث سيعيد تجسيد دوره كـ"ويليام بلودوورث". من المقرر عرض الفيلم في 16 مايو 2025.</p>
-        </div>
-      </div>
-      
-                      <div class="news-card">
-        <img src="images/Hell House LLC Lineage.png" alt="خبر 8">
-        <div class="news-content">
-          <h3>Hell House LLC: Lineage</h3>
-          <p>القصة: يُعد هذا الفيلم الجزء الخامس والأخير من سلسلة "Hell House LLC". تدور الأحداث حول مجموعة من صانعي الأفلام الوثائقية الذين يعودون إلى فندق "أبادرون" المسكون لكشف أسراره المظلمة، ويواجهون رعبًا يفوق توقعاتهم.
-
-تاريخ الإصدار: من المقرر عرضه حصريًا على منصة Shudder في أكتوبر 2025.</p>
-        </div>
-      </div>
-      
-                      <div class="news-card">
-        <img src="images/The Monkey.png" alt="خبر 9">
-        <div class="news-content">
-          <h3>The Monkey</h3>
-          <p>القصة: يستند الفيلم إلى قصة قصيرة للكاتب ستيفن كينغ، ويتناول قصة شقيقين يكتشفان قردًا آليًا قديمًا في منزل والدهم الراحل. سرعان ما يدركان أن هذا القرد مرتبط بسلسلة من الأحداث المروعة، ويجب عليهما مواجهة ماضيهما المشترك لكشف سر هذا الكائن الغامض.
-
-تاريخ الإصدار: من المتوقع أن يُعرض الفيلم في عام 2025.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<section class="video-section" id="video">
-  <h2>أحدث الفيديوهات</h2>
-  <div class="video-grid">
-    <a href="videos/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/GcHcqyWxaW8/hqdefault.jpg?sqp=-oaymwEnCOADEI4CSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLCRvLYh0w_ugBR1346YQVGjHZZ6cw" alt="videos/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.html">
-      <div class="video-content">
-        <h3>المداح - أسطورة العهد | البرومو الرسمي</h3>
-      </div>
-    </a>
-
-    <a href="videos/28 YEARS LATER/28 YEARS LATER.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/mcvLKldPM08/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLC1qf7BkSiD6w8qGc5zR7gfqEYaHw" alt="فيديو 2">
-      <div class="video-content">
-        <h3>28 YEARS LATER</h3>
-      </div>
-    </a>
-
-    <a href="videos/HEART EYES - Official Trailer (HD)/HEART EYES - Official Trailer (HD).html" class="video-card">
-      <img src="https://i.ytimg.com/vi/1cRzZcMlJh8/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLAx3jS3ewyelOVnKUCbcW7egFNbqw" alt="فيديو 3">
-      <div class="video-content">
-        <h3>HEART EYES - Official Trailer (HD)</h3>
-      </div>
-    </a>
-
-    <a href="videos/THE MONKEY - Official Redband Trailer/THE MONKEY - Official Redband Trailer.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/husMGbXEIho/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLCoSkAGf-ri1HofJ6ZTeaZJj1xItQ" alt="فيديو 4">
-      <div class="video-content">
-        <h3>THE MONKEY - Official Redband Trailer</h3>
-      </div>
-    </a>
-
-    <a href="videos/Final Destination Bloodlines  Official Teaser Trailer/Final Destination Bloodlines  Official Teaser Trailer.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/KnWzz0n60pE/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLBTXF0aa7H5R1Ai_ixF0nnDREre5w" alt="فيديو 5">
-      <div class="video-content">
-        <h3>Final Destination Bloodlines | Official Teaser Trailer</h3>
-      </div>
-    </a>
-
-    <a href="videos/Hell House LLC Origins The Carmichael Manor  Official Trailer/Hell House LLC Origins The Carmichael Manor  Official Trailer.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="فيديو 6">
-      <div class="video-content">
-        <h3>Hell House LLC Origins The Carmichael Manor  Official Trailer</h3>
-      </div>
-    </a>
-  </div>
-  
-  <div class="blur-overlay" onclick="toggleVideos()">إظهار المزيد</div>
-</section>
-
-
-  <!-- تذييل الصفحة مع روابط مواقع التواصل الاجتماعي -->
-  <footer id="footer">
-    <div class="footer-content">
-      <div class="footer-text">
-        <p>حقوق النشر © 2025. جميع الحقوق محفوظة.</p>
-        <p>تصميم وتطوير: NIGHTMAReS</p>
-      </div>
-      <div class="footer-social">
-        <ul>
-          <li><a href="#" target="_blank"><i class="fa-brands fa-instagram instagram"></i></a></li>
-          <li><a href="https://chat.whatsapp.com/FDt6HLnxUfiLuK6AgDPNIJ" target="_blank"><i class="fa-brands fa-whatsapp whatsapp"></i></a></li>
-          <li><a href="#" target="_blank"><i class="fa-brands fa-twitter twitter"></i></a></li>
-        </ul>
-      </div>
-    </div>
-  </footer>
-  
-  <!-- ربط ملف JavaScript الخارجي -->
-<script src="scripts.js"></script>
-
-<!-- تسجيل الـ Service Worker -->
-<script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").then(() => {
-      console.log("Service Worker Registered");
-    }).catch(error => {
-      console.log("Service Worker registration failed:", error);
-    });
-  }
-</script>
 </body>
 </html>

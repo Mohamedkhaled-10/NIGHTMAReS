@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta name="google-site-verification" content="eBq9l8CCfzBrXYArPr96pdVtWRutunbaLMa6WLUxlz0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIGHTMAReS</title>
+<link rel="manifest" href="/manifest.json">
+  <!-- أيقونة المتصفح الأساسية -->
+<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+
+<!-- أيقونات مختلفة لحجم متعدد -->
+<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="images/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="images/android-chrome-512x512.png">
+
+<!-- أيقونة خاصة بأجهزة Apple -->
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+
+<!-- ملف Web Manifest لتعريف الأيقونات على أنظمة التشغيل -->
+<link rel="manifest" href="images/site.webmanifest">
+  <!-- تضمين Font Awesome و Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ربط ملف CSS الخارجي -->
+  <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+  <!-- شريط التنقل -->
+  <nav class="navbar">
+    <ul>
+      <li class="active">
+        <a href="#home">
+          <ion-icon name="home-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="#cards">
+          <ion-icon name="book-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="#news">
+          <ion-icon name="newspaper-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="#video">
+          <ion-icon name="camera-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="#footer">
+          <ion-icon name="call-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <div id="marker"></div>
+    </ul>
+  </nav>
+
+  <!-- قسم الـ Hero -->
+  <section class="relative w-full min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-[#7f1d1d] to-[#000000] text-white font-['Cairo',sans-serif]" id="home">
+  <!-- Background Images -->
+  <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg" alt="Left Image" class="absolute left-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacity-50 pointer-events-none select-none z-0" />
+  <img src="https://i.ytimg.com/vi/KnWzz0n60pE/hq720.jpg" alt="Right Image" class="absolute right-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacity-50 pointer-events-none select-none z-0" />
+
+  <!-- Main Content -->
+  <div class="relative z-10 text-center px-4 py-6 sm:py-10">
+    <img id="heroImage" src="images/logo1.png" alt="Main Hero Image"
+  class="w-full max-w-4xl mx-auto rounded-3xl h-auto max-h-[80vh] object-cover transition-all duration-1000 ease-in-out border-[4px] border-[#dc2626] shadow-[0_0_25px_5px_#dc2626]" />
+    
+    <h1 class="mt-10 text-5xl md:text-6xl font-extrabold drop-shadow-md leading-tight">NIGHTMAReS</h1>
+    <p class="mt-4 text-lg md:text-2xl text-gray-200 drop-shadow-sm">حيث تختبئ الكوابيس خلف كل همسة</p>
+    
+    <a href="stories/fans-stories.html" class="mt-6 inline-block px-8 py-4 bg-gradient-to-r from-[#b91c1c] to-[#7f1d1d] text-white text-lg rounded-full shadow-lg hover:scale-105 transition duration-300">
+      قصص المتابعين
+    </a>    
+  </div>
+
+  <!-- Waves Separator -->
+  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] rotate-180">
+    <svg class="relative block w-full h-[100px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
+      <path fill="#320101" fill-opacity="1"
+        d="M0,32L60,37.3C120,43,240,53,360,74.7C480,96,600,128,720,128C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64V0H1380C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0H0Z">
+      </path>
+    </svg>
+  </div>
+</section>
+
+
+
+
+
+  <!-- قسم القوالب (الكروت) -->
+  <section class="cards-section" id="cards">
+    <div class="card" data-content="اكتب هنا">
+      <div class="card-inner">
+        <img src="images/1.webp" alt="صورة القالب 1">
+        <div class="overlay"></div>
+        <div class="card-content">
+          <h3>سفاح الجيزة</h3>
+          <a href="stories/سفاح الجيزة/سفاح الجيزة.html">اقرأ المزيد</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-content="اكتب هنا">
+      <div class="card-inner">
+        <img src="images/2.webp" alt="صورة القالب 2">
+        <div class="overlay"></div>
+        <div class="card-content">
+          <h3>الطريق 56</h3>
+          <a href="stories/الطريق 56/الطريق 56.html">اقرأ المزيد</a>
+        </div>
+      </div>
+    </div>
+    <div class="card" data-content="اكتب هنا">
+      <div class="card-inner">
+        <img src="images/3.webp" alt="صورة القالب 3">
+        <div class="overlay"></div>
+        <div class="card-content">
+          <h3>فتاة الطريق</h3>
+          <a href="stories/فتاة الطريق/فتاة الطريق.html">اقرأ المزيد</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+<div class="story-button-container">
+  <a href="stories/stories-section.html" class="story-button">تصفح المزيد من القصص</a>
+</div>
+
+  <!-- قسم الأخبار والفعاليات -->
+  <section class="news-section" id="news">
+    <h2>الأخبار والفعاليات</h2>
+    <div class="news-grid">
+      <div class="news-card">
+        <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2124490/header.jpg?t=1744248682" alt="Terrifier 3">
+        <div class="news-content">
+          <h3>Silent Hill 2 Remake – العودة إلى مدينة الرعب</h3>
+          <p class="news-text">
+            <!-- النص المختصر -->
+            تعود لعبة Silent Hill 2 بنسخة معاد تطويرها، المقرر إصدارها في 8 أكتوبر 2024 على PS5 وPC...
+            <span class="more-text" style="display: none;">
+              تقدم اللعبة تحسينات رسومية وتجربة أكثر تفاعلية، مع دعم كامل لوحدة التحكم DualSense. تسعى شركة Bloober Team لتقديم تجربة تدمج بين الرعب النفسي والتقنيات الحديثة .
+            </span>
+          </p>
+          <button class="read-more-btn">اقرأ المزيد</button>
+          
+        </div>
+      </div>
+      <div class="news-card">
+        <img src="https://i.ytimg.com/vi/3bsTgNADTn4/maxresdefault.jpg" alt="خبر 2">
+        <div class="news-content">
+          <h3> The Outlast Trials – تجربة رعب تعاونية</h3>
+          <p class="news-text">
+            <!-- النص المختصر -->
+            تقدم لعبة The Outlast Trials تجربة رعب تعاونية جديدة، حيث يعمل اللاعبون معًا للبقاء على قيد الحياة في...
+            <span class="more-text" style="display: none;">
+              منشأة تجارب سرية. تتميز اللعبة بأسلوب لعب مشوق وأجواء مرعبة، مما يجعلها إضافة مثيرة لعشاق ألعاب الرعب.
+            </span>
+          </p>
+          <button class="read-more-btn">اقرأ المزيد</button>
+        </div>
+      </div>
+      <div class="news-card">
+        <img src="https://i.postimg.cc/s2MhZv31/faaae3e63c4203812333053766a534fe08d58fea058527cd.avif" alt="خبر 3">
+        <div class="news-content">
+          <h3>Killing Floor 3 – مواجهة الزومبي في بيئات جديدة</h3>
+          <p class="news-text">
+            <!-- النص المختصر -->
+            تعود سلسلة Killing Floor بجزءها الثالث، مع مزيد من الوحوش والتحديات...
+            <span class="more-text" style="display: none;">
+              تقدم اللعبة خرائط جديدة، وأسلحة متنوعة، وأعداء أكثر تنوعًا، مما يعزز من تجربة اللعب الجماعي.
+            </span>
+          </p>
+          <button class="read-more-btn">اقرأ المزيد</button>
+        </div>
+      </div>
+      
+          <div class="news-card">
+        <img src="https://i.postimg.cc/hvBsr9G2/67c1b1db7ac7279c0a4f02e3-Group-28-1-p-2000.png" alt="خبر 4">
+        <div class="news-content">
+          <h3>Ritual Tides – لعبة رعب نفسية مستقلة</h3>
+          <p class="news-text">
+            <!-- النص المختصر -->
+            تقدم لعبة Ritual Tides تجربة رعب نفسية فريدة، حيث يستكشف اللاعبون طقوسًا غامضة وأحداثًا غير مفسرة...
+            <span class="more-text" style="display: none;">
+              تتميز اللعبة بأسلوب سردي عميق وأجواء مشحونة بالتوتر.
+            </span>
+          </p>
+          <button class="read-more-btn">اقرأ المزيد</button>
+        </div>
+      </div>
+      
+                <div class="news-card">
+        <img src="https://i.postimg.cc/TwqgTBRc/SH-Townfall-Thumbnail.webp" alt="خبر 5">
+        <div class="news-content">
+          <h3>Silent Hill Townfall – إضافة جديدة للسلسلة</h3>
+          <p class="news-text">
+            <!-- النص المختصر -->
+            تقدم لعبة Silent Hill Townfall تجربة رعب نفسية جديدة، حيث يستكشف اللاعبون مدينة مهجورة مليئة بالأسرار...
+            <span class="more-text" style="display: none;">
+              تتميز اللعبة بأسلوب سردي فريد وأجواء مشحونة بالتوتر، مما يجعلها إضافة مثيرة لعشاق السلسلة.
+            </span>
+          </p>
+          <button class="read-more-btn">اقرأ المزيد</button>
+        </div>
+      </div>
+      
+                <div class="news-card">
+        <img src="https://i.postimg.cc/nc6zw0xV/maxresdefault.jpg" alt="خبر 6">
+        <div class="news-content">
+          <h3>Directive 8020 – رعب في الفضاء العميق</h3>
+          <p class="news-text">
+            <!-- النص المختصر -->
+            اللعبة الجديدة من سلسلة The Dark Pictures Anthology تأخذ اللاعبين في...
+            <span class="more-text" style="display: none;">
+              رحلة إلى الفضاء، حيث يواجهون كائنات فضائية وأحداثًا مرعبة. يُتوقع أن تقدم اللعبة تجربة تفاعلية مع عناصر رعب نفسية. لم يُعلن بعد عن تاريخ إصدار محدد.
+            </span>
+          </p>
+          <button class="read-more-btn">اقرأ المزيد</button>
+        </div>
+      </div>
+  </section>
+
+<section class="video-section" id="video">
+  <h2>أحدث الفيديوهات</h2>
+  <div class="video-grid">
+    <a href="videos/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.html" class="video-card">
+      <img src="https://i.ytimg.com/vi/GcHcqyWxaW8/hqdefault.jpg?sqp=-oaymwEnCOADEI4CSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLCRvLYh0w_ugBR1346YQVGjHZZ6cw" alt="videos/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.html">
+      <div class="video-content">
+        <h3>المداح - أسطورة العهد | البرومو الرسمي</h3>
+      </div>
+    </a>
+
+    <a href="videos/28 YEARS LATER/28 YEARS LATER.html" class="video-card">
+      <img src="https://i.ytimg.com/vi/mcvLKldPM08/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLC1qf7BkSiD6w8qGc5zR7gfqEYaHw" alt="فيديو 2">
+      <div class="video-content">
+        <h3>28 YEARS LATER</h3>
+      </div>
+    </a>
+
+    <a href="videos/HEART EYES - Official Trailer (HD)/HEART EYES - Official Trailer (HD).html" class="video-card">
+      <img src="https://i.ytimg.com/vi/1cRzZcMlJh8/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLAx3jS3ewyelOVnKUCbcW7egFNbqw" alt="فيديو 3">
+      <div class="video-content">
+        <h3>HEART EYES - Official Trailer (HD)</h3>
+      </div>
+    </a>
+
+    <a href="videos/THE MONKEY - Official Redband Trailer/THE MONKEY - Official Redband Trailer.html" class="video-card">
+      <img src="https://i.ytimg.com/vi/husMGbXEIho/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLCoSkAGf-ri1HofJ6ZTeaZJj1xItQ" alt="فيديو 4">
+      <div class="video-content">
+        <h3>THE MONKEY - Official Redband Trailer</h3>
+      </div>
+    </a>
+
+    <a href="videos/Final Destination Bloodlines  Official Teaser Trailer/Final Destination Bloodlines  Official Teaser Trailer.html" class="video-card">
+      <img src="https://i.ytimg.com/vi/KnWzz0n60pE/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLBTXF0aa7H5R1Ai_ixF0nnDREre5w" alt="فيديو 5">
+      <div class="video-content">
+        <h3>Final Destination Bloodlines | Official Teaser Trailer</h3>
+      </div>
+    </a>
+
+    <a href="videos/Hell House LLC Origins The Carmichael Manor  Official Trailer/Hell House LLC Origins The Carmichael Manor  Official Trailer.html" class="video-card">
+      <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="فيديو 6">
+      <div class="video-content">
+        <h3>Hell House LLC Origins The Carmichael Manor  Official Trailer</h3>
+      </div>
+    </a>
+  </div>
+  
+  <div class="blur-overlay" onclick="toggleVideos()">إظهار المزيد</div>
+</section>
+
+<!-- شخصية مرعبة -->
+<div class="horror-character-container">
+  <img src="images/ChatGPT Image May 3, 2025, 10_23_30 PM.png" alt="شخصية مرعبة" class="horror-character">
+  <div class="speech-bubble" id="bubble">...</div>
+</div>
+
+  <!-- تذييل الصفحة مع روابط مواقع التواصل الاجتماعي -->
+  <footer id="footer">
+    <div class="footer-content">
+      <div class="footer-text">
+        <p>حقوق النشر © 2025. جميع الحقوق محفوظة.</p>
+        <p>تصميم وتطوير: NIGHTMAReS</p>
+      </div>
+      <div class="footer-social">
+        <ul>
+          <li><a href="#" target="_blank"><i class="fa-brands fa-instagram instagram"></i></a></li>
+          <li><a href="https://chat.whatsapp.com/FDt6HLnxUfiLuK6AgDPNIJ" target="_blank"><i class="fa-brands fa-whatsapp whatsapp"></i></a></li>
+          <li><a href="#" target="_blank"><i class="fa-brands fa-twitter twitter"></i></a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- ربط ملف JavaScript الخارجي -->
+<script src="scripts.js"></script>
+
+<!-- تسجيل الـ Service Worker -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").then(() => {
+      console.log("Service Worker Registered");
+    }).catch(error => {
+      console.log("Service Worker registration failed:", error);
+    });
+  }
+</script>
+<script>
+  const messages = [
+    "مرحبًا بك في عالم الظلام...",
+    "هل تظن أنك وحدك؟",
+    "راقب الاشياء من حولك جيدًا...",
+    "أنا هنا لأحكي لك قصة لن تنساها!"
+  ];
+
+  const bubble = document.getElementById("bubble");
+  const container = document.querySelector(".horror-character-container");
+
+  let index = 0;
+
+  function showNextMessage() {
+if (index >= messages.length) {
+  // إخفاء الشخصية بعد آخر رسالة
+  container.style.transition = "top 2s ease, opacity 2s ease";
+  container.style.top = "-300px";
+  container.style.opacity = "0"; // إضافة إخفاء بالتدريج
+  setTimeout(() => {
+    container.style.display = "none"; // إزالة نهائية من الصفحة
+  }, 2000); // بعد انتهاء الأنيميشن
+  return;
+}
+
+bubble.style.opacity = "0";
+setTimeout(() => {
+  bubble.textContent = messages[index];
+  bubble.style.opacity = "1";
+  index++;
+  setTimeout(showNextMessage, 3500); // مدة كل رسالة
+}, 500);
+}
+
+
+  // بدء التشغيل بعد نزول الشخصية
+  setTimeout(showNextMessage, 3000);
+</script>
+<script>
+  const buttons = document.querySelectorAll(".read-more-btn");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const textElement = this.previousElementSibling.querySelector(".more-text");
+
+      if (textElement.style.display === "none") {
+        textElement.style.display = "inline";
+        this.textContent = "إخفاء";
+      } else {
+        textElement.style.display = "none";
+        this.textContent = "اقرأ المزيد";
+      }
+    });
+  });
+</script>
+</body>
+</html>

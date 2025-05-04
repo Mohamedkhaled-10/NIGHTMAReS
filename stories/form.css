@@ -1,3 +1,49 @@
+/* استيراد الخطوط من Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rakkas&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sultan&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Droid+Arabic+Kufi&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap'); /* إضافة خط Cairo */
+
+/* تفعيل التمرير السلس */
+html {
+  scroll-behavior: smooth;
+}
+
+/* إعادة تعيين الأنماط */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  font-family: 'Cairo', sans-serif; /* استخدم الخط العربي Cairo */
+  direction: rtl;
+}
+
+body {
+  /* خلفية جديدة: تدرج عمودي بين الأخضر الداكن (#013220) والأسود */
+  background: linear-gradient(180deg, #320101, #000000);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* تطبيق اللون الأبيض لجميع النصوص العامة */
+body, p, li, span {
+  color: #fff;
+}
+
+/* تطبيق الخطوط الجديدة للعناوين */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Zilla Slab', 'Rakkas', 'Rock Salt', 'Amiri', 'Sultan', 'Droid Arabic Kufi', sans-serif; /* استخدام الخطوط الجديدة للإنجليزي */
+}
+
 body {
     font-family: 'Cairo', sans-serif;
     background: linear-gradient(180deg, #320101, #000000);

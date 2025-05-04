@@ -6,12 +6,13 @@
   <title>قصص الرعب - NIGHTMAReS</title>
   <link rel="stylesheet" href="styles-stories-page.css">
   <style>
-    /* تنسيق الصفحة بحيث يكون "قريبًا" في المنتصف */
+    /* تنسيق الصفحة */
     .content-container {
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 80vh; /* يجعل النص في منتصف الصفحة */
+      height: 80vh;
       text-align: center;
     }
 
@@ -21,9 +22,36 @@
       color: white;
       text-transform: uppercase;
       letter-spacing: 5px;
+      animation: blink 1.5s infinite;
     }
 
-    /* خلفية الصفحة */
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .subscribe-text {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #ccc;
+    }
+
+    .subscribe-btn {
+      margin-top: 15px;
+      padding: 12px 25px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .subscribe-btn:hover {
+      background-color: darkred;
+    }
+
     body {
       background-color: black;
       color: white;
@@ -38,7 +66,7 @@
   <!-- ✅ شريط التنقل -->
   <nav class="navbar">
     <ul>
-      <li><a href="../index.html"><ion-icon name="home-outline"></ion-icon><span>الرئيسية</span></a></li>
+      <li><a href="../home.html"><ion-icon name="home-outline"></ion-icon><span>الرئيسية</span></a></li>
       <div id="marker"></div>
     </ul>
   </nav>
@@ -46,6 +74,8 @@
   <!-- ✅ المحتوى -->
   <div class="content-container">
     <div class="coming-soon">قريبًا</div>
+    <p class="subscribe-text">تابعنا ليصلك كل جديد من قصص الرعب الحقيقية والخيالية.</p>
+    <button class="subscribe-btn">اشترك الآن</button>
   </div>
 
   <!-- ✅ التذييل -->
@@ -55,6 +85,9 @@
     </div>
   </footer>
 
+  <!-- أيقونات -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script src="scripts.js"></script>
 </body>
 </html>
