@@ -1034,3 +1034,42 @@ footer ul li:hover a::before {
   background: #610202;
   transform: scale(1.05);
 }
+  .read-more-btn {
+    background-color: transparent;
+    color: #fff;
+    border: 2px solid transparent;
+    padding: 8px 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 30px;
+    font-weight: bold;
+    position: relative;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 0px rgba(255, 255, 255, 0.5);
+  }
+
+  .read-more-btn::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 30px;
+    padding: 2px;
+    background: linear-gradient(90deg, #ffffff, #888, #ffffff);
+    -webkit-mask: 
+      linear-gradient(#fff 0 0) content-box, 
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out;
+            mask-composite: exclude;
+    pointer-events: none;
+    animation: glow 2s linear infinite;
+  }
+
+  @keyframes glow {
+    0% { box-shadow: 0 0 3px rgba(255,255,255,0.3); }
+    50% { box-shadow: 0 0 8px rgba(255,255,255,0.8); }
+    100% { box-shadow: 0 0 3px rgba(255,255,255,0.3); }
+  }
+
+  .read-more-btn:hover {
+    transform: scale(1.05);
+  }
