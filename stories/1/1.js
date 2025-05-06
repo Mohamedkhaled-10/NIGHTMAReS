@@ -45,10 +45,3 @@ window.onscroll = function () {
     lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // لضمان التمرير للأعلى عند الوصول للأعلى
   });
 
-// دالة لتبديل إظهار الأزرار عند النقر على زر المشاركة
-function toggleShareButtons() {
-  var buttons = document.getElementById('additional-buttons');
-  buttons.classList.toggle('show');  // التبديل بين الإظهار والإخفاء
-}
-
-
