@@ -22,8 +22,3 @@ window.addEventListener('scroll', function () {
 
   lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
 });
-
-function toggleShareButtons() {
-  const buttons = document.getElementById('additional-buttons');
-  buttons.style.display = buttons.style.display === 'none' || buttons.style.display === '' ? 'block' : 'none';
-}
