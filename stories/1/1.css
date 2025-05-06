@@ -218,20 +218,7 @@ footer {
   position: absolute;
   top: 0; /* نفس المستوى الأفقي */
   right: 50px; /* تظهر الأزرار على نفس المحور الأفقي */
-  animation: slideIn 0.5s ease forwards; /* تطبيق الأنيميشن عند الظهور */
   white-space: nowrap; /* منع التفاف النصوص داخل الأزرار */
-}
-
-/* تأثير التدرج لليمين */
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(50px); /* بدء التدرج من اليمين */
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0); /* الوصول إلى الموضع النهائي */
-  }
 }
 
 /* إضافة مسافة بين الأزرار */
@@ -242,4 +229,14 @@ footer {
 /* إظهار الأزرار عند التبديل */
 #additional-buttons.show {
   display: inline-flex; /* جعل الأزرار تظهر في نفس السطر */
+}
+
+/* زر المشاركة الأساسي */
+.share-btn {
+  cursor: pointer;
+}
+
+.share-logo {
+  width: 40px;
+  height: 40px;
 }
