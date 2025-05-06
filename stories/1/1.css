@@ -212,14 +212,15 @@ footer {
   height: 30px; /* ارتفاع اللوجو */
 }
 
-/* إخفاء الأزرار الإضافية في البداية */
+/* جعل الأزرار في أسفل الصفحة */
 #additional-buttons {
-  display: none;
-  position: relative; /* تغيير من absolute إلى relative لظهورها بجانب الزر الرئيسي */
-  top: 0;
-  right: 0;
+  display: inline-flex; /* جعل الأزرار تظهر بجانب بعضها في نفس السطر */
+  position: fixed; /* تحديد الموضع ليكون ثابتًا بالنسبة للشاشة */
+  bottom: 10px; /* المسافة من أسفل الصفحة */
+  left: 50%; /* وضع الأزرار في منتصف الشاشة أفقياً */
+  transform: translateX(-50%); /* لضمان تمركز الأزرار بشكل دقيق */
+  margin: 10px 0; /* إضافة مسافة من الأسفل */
   white-space: nowrap; /* منع التفاف النصوص داخل الأزرار */
-  margin-left: 10px; /* مسافة بسيطة بين الزر الرئيسي والأزرار */
 }
 
 /* إضافة مسافة بين الأزرار */
@@ -227,19 +228,9 @@ footer {
   margin: 0 10px; /* مسافة بين الأزرار */
 }
 
-/* إظهار الأزرار عند التبديل */
-#additional-buttons.show {
-  display: inline-flex; /* جعل الأزرار تظهر في نفس السطر */
+/* جعل الأزرار مرئية بشكل دائم */
+#additional-buttons a {
+  display: inline-block; /* جعل الأزرار تظهر بجانب بعضها البعض */
 }
 
-/* زر المشاركة الأساسي */
-.share-btn {
-  cursor: pointer;
-  display: inline-block; /* جعل الزر الرئيسي يظهر بجانب الأزرار الأخرى */
-}
-
-.share-logo {
-  width: 40px;
-  height: 40px;
-}
 
