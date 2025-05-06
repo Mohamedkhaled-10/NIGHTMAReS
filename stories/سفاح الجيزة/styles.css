@@ -42,6 +42,14 @@ html, body {
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
+  opacity: 0; /* يبدأ مخفي */
+  pointer-events: none; /* إلغاء التفاعل مع شريط التنقل في البداية */
+  transition: opacity 0.3s ease;
+}
+
+.navbar.show {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .navbar ul {
@@ -87,7 +95,7 @@ html, body {
 }
 
 /* قالب القصة */
-.story-container {
+.article-container {
   width: 80%;
   max-width: 900px;
   padding: 20px;
@@ -103,7 +111,7 @@ html, body {
 }
 
 /* تنسيق فقرات القصة */
-.story-box p {
+.article-box p {
   margin-bottom: 15px;
   text-indent: 20px;
   font-size: 1.2em;
@@ -117,3 +125,80 @@ footer {
   margin-top: auto;
   width: 100%;
 }
+
+.footer-content p {
+  margin: 5px 0;
+  color: #fff;
+}
+
+/* زر العودة للأعلى */
+#scrollToTop {
+  position: fixed;
+  bottom: 30px; /* زيادة المسافة من الأسفل */
+  right: 20px;
+  background-color: #444;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 999;
+  opacity: 0; /* البداية ستكون غير مرئي */
+  pointer-events: none; /* إلغاء التفاعل مع الزر عندما يكون غير مرئي */
+}
+
+#scrollToTop.show {
+  opacity: 1; /* يظهر الزر عند التمرير لأسفل */
+  pointer-events: auto;
+}
+
+#scrollToTop:hover {
+  background-color: #333;
+  box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.8);
+}
+
+#scrollToTop:active {
+  background-color: #ff0000;
+  box-shadow: 0 0 15px 5px rgba(255, 0, 0, 1);
+}
+
+/* حاوية الزر */
+.share-container {
+  text-align: center; /* لتوسيط الزر */
+  margin: 30px 0; /* مسافة فوق وتحت الزر */
+}
+
+/* تصميم الزر نفسه */
+.share-btn {
+  background-color: #000000; /* لون الزر */
+  color: white; /* لون النص (لن يتم استخدامه لأننا نعرض الأيقونة) */
+  font-size: 16px; /* حجم الخط */
+  padding: 15px; /* حجم الزر */
+  border: none; /* إزالة الحدود */
+  border-radius: 50%; /* حواف دائرية */
+  cursor: pointer; /* تغيير المؤشر عند المرور على الزر */
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* توهج حول الزر */
+  transition: all 0.3s ease; /* تأثير الانتقال عند التفاعل */
+  display: inline-flex; /* لضبط الأيقونة بشكل مناسب داخل الزر */
+  justify-content: center; /* لتوسيط الأيقونة داخل الزر */
+  align-items: center; /* لتوسيط الأيقونة عموديًا */
+  width: 50px; /* عرض الزر */
+  height: 50px; /* ارتفاع الزر */
+}
+
+/* تأثير عند المرور على الزر */
+.share-btn:hover {
+  background-color: #cc0000; /* تغير اللون عند المرور */
+  transform: scale(1.1); /* تكبير الزر عند المرور */
+  box-shadow: 0 0 15px rgba(255, 0, 0, 1); /* زيادة التوهج عند المرور */
+}
+
+/* إضافة اللوجو */
+.share-logo {
+  width: 30px; /* عرض اللوجو */
+  height: 30px; /* ارتفاع اللوجو */
+}
+
