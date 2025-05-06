@@ -132,71 +132,34 @@ footer {
   width: 100%;
 }
 
-/* حاوية الزر */
-.share-container {
-  text-align: center; /* لتوسيط الزر */
-  margin: 30px 0; /* مسافة فوق وتحت الزر */
+.share-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 20px auto;
 }
 
-/* تصميم الزر نفسه */
 .share-btn {
-  background-color: #000000; /* لون الزر */
-  color: white; /* لون النص (لن يتم استخدامه لأننا نعرض الأيقونة) */
-  font-size: 16px; /* حجم الخط */
-  padding: 15px; /* حجم الزر */
-  border: none; /* إزالة الحدود */
-  border-radius: 50%; /* حواف دائرية */
-  cursor: pointer; /* تغيير المؤشر عند المرور على الزر */
-  box-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* توهج حول الزر */
-  transition: all 0.3s ease; /* تأثير الانتقال عند التفاعل */
-  display: inline-flex; /* لضبط الأيقونة بشكل مناسب داخل الزر */
-  justify-content: center; /* لتوسيط الأيقونة داخل الزر */
-  align-items: center; /* لتوسيط الأيقونة عموديًا */
-  width: 50px; /* عرض الزر */
-  height: 50px; /* ارتفاع الزر */
+  background-color: #000; /* زر أسود */
+  border-radius: 50%;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 0 0 rgba(255, 0, 0, 0); /* بدون توهج مبدئي */
 }
 
-/* تأثير عند المرور على الزر */
 .share-btn:hover {
-  background-color: #cc0000; /* تغير اللون عند المرور */
-  transform: scale(1.1); /* تكبير الزر عند المرور */
-  box-shadow: 0 0 15px rgba(255, 0, 0, 1); /* زيادة التوهج عند المرور */
+  box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.8); /* توهج أحمر */
+  transform: scale(1.1);
 }
 
-/* إضافة اللوجو */
-.share-logo {
-  width: 30px; /* عرض اللوجو */
-  height: 30px; /* ارتفاع اللوجو */
+.share-btn img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
 }
 
-/* إخفاء الأزرار الإضافية في البداية */
-#additional-buttons {
-  display: none;
-  position: absolute;
-  top: 0; /* نفس المستوى الأفقي */
-  right: 50px; /* تظهر الأزرار على نفس المحور الأفقي */
-  animation: slideIn 0.5s ease forwards; /* تطبيق الأنيميشن عند الظهور */
-  white-space: nowrap; /* منع التفاف النصوص داخل الأزرار */
-}
-
-/* تأثير التدرج لليمين */
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    transform: translateX(50px); /* بدء التدرج من اليمين */
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0); /* الوصول إلى الموضع النهائي */
-  }
-}
-
-/* إضافة مسافة بين الأزرار */
-#additional-buttons a {
-  margin: 0 10px; /* مسافة بين الأزرار */
-}
-
-/* إظهار الأزرار عند التبديل */
-#additional-buttons.show {
-  display: inline-flex; /* جعل الأزرار تظهر في نفس السطر */
-}
