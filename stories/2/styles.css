@@ -95,7 +95,7 @@ html, body {
 }
 
 /* قالب القصة */
-.article-container {
+.story-container {
   width: 80%;
   max-width: 900px;
   padding: 20px;
@@ -111,7 +111,7 @@ html, body {
 }
 
 /* تنسيق فقرات القصة */
-.article-box p {
+.story-box p {
   margin-bottom: 15px;
   text-indent: 20px;
   font-size: 1.2em;
