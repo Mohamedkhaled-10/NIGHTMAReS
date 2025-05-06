@@ -215,10 +215,11 @@ footer {
 /* إخفاء الأزرار الإضافية في البداية */
 #additional-buttons {
   display: none;
-  position: absolute;
-  top: 0; /* نفس المستوى الأفقي */
-  right: 50px; /* تظهر الأزرار على نفس المحور الأفقي */
+  position: relative; /* تغيير من absolute إلى relative لظهورها بجانب الزر الرئيسي */
+  top: 0;
+  right: 0;
   white-space: nowrap; /* منع التفاف النصوص داخل الأزرار */
+  margin-left: 10px; /* مسافة بسيطة بين الزر الرئيسي والأزرار */
 }
 
 /* إضافة مسافة بين الأزرار */
@@ -234,9 +235,11 @@ footer {
 /* زر المشاركة الأساسي */
 .share-btn {
   cursor: pointer;
+  display: inline-block; /* جعل الزر الرئيسي يظهر بجانب الأزرار الأخرى */
 }
 
 .share-logo {
   width: 40px;
   height: 40px;
 }
+
