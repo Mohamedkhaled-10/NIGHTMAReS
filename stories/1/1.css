@@ -197,7 +197,6 @@ footer {
 .share-btn img {
   width: 30px;
   height: 30px;
-  filter: invert(100%); /* يجعل اللوجو أبيض */
 }
 
 .share-btn:hover {
