@@ -212,25 +212,35 @@ footer {
   height: 30px; /* ارتفاع اللوجو */
 }
 
-/* جعل الأزرار في أسفل الصفحة */
-#additional-buttons {
-  display: inline-flex; /* جعل الأزرار تظهر بجانب بعضها في نفس السطر */
-  position: fixed; /* تحديد الموضع ليكون ثابتًا بالنسبة للشاشة */
-  bottom: 10px; /* المسافة من أسفل الصفحة */
-  left: 50%; /* وضع الأزرار في منتصف الشاشة أفقياً */
-  transform: translateX(-50%); /* لضمان تمركز الأزرار بشكل دقيق */
-  margin: 10px 0; /* إضافة مسافة من الأسفل */
-  white-space: nowrap; /* منع التفاف النصوص داخل الأزرار */
+/* تصميم الزر نفسه */
+.share-btn {
+  background-color: #000000; /* لون الزر */
+  color: white; /* لون النص (لن يتم استخدامه لأننا نعرض الأيقونة) */
+  font-size: 16px; /* حجم الخط */
+  padding: 15px; /* حجم الزر */
+  border: none; /* إزالة الحدود */
+  border-radius: 50%; /* حواف دائرية */
+  cursor: pointer; /* تغيير المؤشر عند المرور على الزر */
+  box-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* توهج حول الزر */
+  transition: all 0.3s ease; /* تأثير الانتقال عند التفاعل */
+  display: inline-flex; /* لضبط الأيقونة بشكل مناسب داخل الزر */
+  justify-content: center; /* لتوسيط الأيقونة داخل الزر */
+  align-items: center; /* لتوسيط الأيقونة عموديًا */
+  width: 50px; /* عرض الزر */
+  height: 50px; /* ارتفاع الزر */
 }
 
-/* إضافة مسافة بين الأزرار */
-#additional-buttons a {
-  margin: 0 10px; /* مسافة بين الأزرار */
+/* تأثير عند المرور على الزر */
+.share-btn:hover {
+  background-color: #cc0000; /* تغير اللون عند المرور */
+  transform: scale(1.1); /* تكبير الزر عند المرور */
+  box-shadow: 0 0 15px rgba(255, 0, 0, 1); /* زيادة التوهج عند المرور */
 }
 
-/* جعل الأزرار مرئية بشكل دائم */
-#additional-buttons a {
-  display: inline-block; /* جعل الأزرار تظهر بجانب بعضها البعض */
+/* إضافة اللوجو */
+.share-logo {
+  width: 30px; /* عرض اللوجو */
+  height: 30px; /* ارتفاع اللوجو */
 }
 
 
