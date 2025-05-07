@@ -28,6 +28,16 @@
   <!-- ربط ملف CSS الخارجي -->
   <link rel="stylesheet" href="styles.css">
 
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+<script>
+  window.OneSignal = window.OneSignal || [];
+  OneSignal.push(function() {
+    OneSignal.init({
+      appId: "69b97a9f-de81-41e4-ae6d-e7d582f3d33d", // هنا ضع المعرف الخاص بتطبيقك
+    });
+  });
+</script>
+
 </head>
 <body>
   <!-- شريط التنقل -->
