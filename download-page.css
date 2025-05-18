@@ -1,0 +1,284 @@
+/* استيراد الخطوط من Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rakkas&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sultan&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Droid+Arabic+Kufi&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap'); /* إضافة خط Cairo */
+
+/* تفعيل التمرير السلس */
+html {
+  scroll-behavior: smooth;
+}
+
+/* إعادة تعيين الأنماط */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  font-family: 'Cairo', sans-serif; /* استخدم الخط العربي Cairo */
+  direction: rtl;
+}
+
+body {
+  /* خلفية جديدة: تدرج عمودي بين الأخضر الداكن (#013220) والأسود */
+  background: linear-gradient(180deg, #320101, #000000);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* تطبيق اللون الأبيض لجميع النصوص العامة */
+body, p, li, span {
+  color: #fff;
+}
+
+/* تطبيق خط مرعب للعناوين */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Zilla Slab', 'Rakkas', 'Rock Salt', 'Amiri', 'Sultan', 'Droid Arabic Kufi', sans-serif; /* استخدام الخطوط الجديدة للإنجليزي */
+}
+
+/* شريط التنقل (يُترك بألوانه الأصلية) */
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+/* شريط التنقل */
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.navbar {
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar ul {
+  display: flex;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+}
+
+.navbar ul li {
+  list-style: none;
+  margin: 0 15px;
+}
+
+.navbar ul li a {
+  color: #fff;
+  text-decoration: none;
+  padding: 5px;
+  transition: 0.3s;
+  font-family: 'Cairo', sans-serif;
+}
+
+
+/* عنصر marker */
+#marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  transition: 0.5s;
+  z-index: 0;
+}
+#marker::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 40px;
+  border-radius: 8px;
+  background: #ff0000;
+  box-shadow: 0 0 15px #ff0000,
+              0 0 30px #ff0000,
+              0 0 40px #ff0000,
+              0 0 60px #ff0000;
+}
+
+/* تغيير ألوان marker بناءً على العنصر النشط */
+.navbar ul li:nth-child(1).active ~ #marker::before {
+  background: #5da6ff;
+  box-shadow: 0 0 15px #5da6ff,
+              0 0 30px #5da6ff,
+              0 0 40px #5da6ff,
+              0 0 60px #5da6ff;
+}
+.navbar ul li:nth-child(2).active ~ #marker::before {
+  background: #ff0;
+  box-shadow: 0 0 15px #ff0,
+              0 0 30px #ff0,
+              0 0 40px #ff0,
+              0 0 60px #ff0;
+}
+.navbar ul li:nth-child(3).active ~ #marker::before {
+  background: #df2fff;
+  box-shadow: 0 0 15px #df2fff,
+              0 0 30px #df2fff,
+              0 0 40px #df2fff,
+              0 0 60px #df2fff;
+}
+.navbar ul li:nth-child(4).active ~ #marker::before {
+  background: #0f0;
+  box-shadow: 0 0 15px #0f0,
+              0 0 30px #0f0,
+              0 0 40px #0f0,
+              0 0 60px #0f0;
+}
+
+/* Media Query لتعديل حجم القائمة على الأجهزة الصغيرة */
+@media (max-width: 768px) {
+  .navbar ul li {
+    margin: 0 10px;
+  }
+  .navbar ul li a ion-icon {
+    font-size: 1.5em;
+  }
+  .navbar ul li a span {
+    font-size: 0.8em;
+  }
+}
+
+
+/* ========================= */
+/* التذييل */
+/* ========================= */
+footer {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 30px 20px;
+  color: #fff;
+  position: relative;
+}
+footer::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: #7a0202;
+  border-radius: 2px;
+}
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-text {
+  flex: 1 1 50%;
+  text-align: right;
+  font-size: 0.9em;
+  line-height: 1.6;
+  margin-bottom: 10px;
+}
+.footer-social {
+  flex: 1 1 50%;
+  text-align: right;
+}
+.footer-social ul {
+  display: flex;
+  list-style: none;
+  gap: 15px;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+}
+.footer-social ul li a {
+  color: #fff;
+  font-size: 1.8em;
+  transition: color 0.3s;
+}
+.footer-social ul li a:hover {
+  color: #ffeba7;
+}
+.footer-text p {
+  margin-bottom: 5px;
+}
+footer ul {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding: 0;
+}
+footer ul li {
+  position: relative;
+  list-style: none;
+  margin: 0 10px;
+  cursor: pointer;
+}
+footer ul li a {
+  text-decoration: none;
+  position: relative;
+  display: inline-block;
+}
+footer ul li a .fa-brands {
+  font-size: 3em;
+  color: #fff;
+}
+footer ul li a::before {
+  font-family: "FontAwesome";
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 3em;
+  height: 0;
+  overflow: hidden;
+  transition: 0.5s ease-in-out;
+}
+footer ul li:nth-child(1) a::before {
+  content: "\f16d";
+  background-image: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  border-bottom: 2px solid #f09433;
+}
+footer ul li:nth-child(2) a::before {
+  content: "\f232";
+  color: #25D366;
+  border-bottom: 2px solid #25D366;
+}
+footer ul li:nth-child(3) a::before {
+  content: "\f099";
+  color: #1DA1F2;
+  border-bottom: 2px solid #1DA1F2;
+}
+footer ul li:hover a::before {
+  height: 100%;
+}
+
+
+@media (max-width: 1024px) {
+  .video-grid {
+    grid-template-columns: repeat(2, 1fr); /* عمودان للأجهزة اللوحية */
+  }
+}
+
+@media (max-width: 600px) {
+  .video-grid {
+    grid-template-columns: repeat(1, 1fr); /* عمود واحد للهواتف */
+  }
+}
+.stories-section {
+  margin-top: 200px; /* يمكنك زيادة أو تقليل الرقم حسب الحاجة */
+}

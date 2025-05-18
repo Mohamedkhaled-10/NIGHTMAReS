@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>تحميل تطبيق NIGHTMAReS</title>
+  <link rel="stylesheet" href="download-page.css" />
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .play-container {
+      max-width: 1000px;
+      margin: auto;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 30px 20px;
+      border-radius: 15px;
+      margin-top: 150px;
+    }
+
+    .app-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 20px;
+      border-bottom: 1px solid #555;
+      padding-bottom: 20px;
+    }
+
+    .app-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 20px;
+      border: 2px solid #fff;
+      background-size: cover;
+      background-position: center;
+      flex-shrink: 0;
+    }
+
+    .app-info {
+      flex: 1;
+    }
+
+    .app-info h1 {
+      font-size: 2.2em;
+      margin-bottom: 5px;
+      color: #fff;
+    }
+
+    .app-info span {
+      color: #ccc;
+      font-size: 1em;
+    }
+
+    .download-btn {
+      margin-top: 20px;
+      display: inline-block;
+      background: #7a0202;
+      color: white;
+      font-size: 1.1em;
+      padding: 12px 25px;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 0 15px #7a0202;
+      transition: background 0.3s;
+    }
+
+    .download-btn:hover {
+      background: #b50303;
+    }
+
+    .screenshots {
+      display: flex;
+      overflow-x: auto;
+      gap: 20px;
+      padding: 20px 0;
+    }
+
+    .screenshots img {
+      width: 200px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      border: 2px solid white;
+    }
+
+    .section {
+      margin-top: 40px;
+    }
+
+    .section h2 {
+      font-size: 1.6em;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #888;
+      padding-bottom: 10px;
+      text-align: right;
+    }
+
+    .section p, .section ul {
+      text-align: right;
+      font-size: 1em;
+      line-height: 1.8;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      text-align: right;
+    }
+
+    .info-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 15px;
+      border-radius: 10px;
+      border: 1px solid #444;
+    }
+
+    @media (max-width: 600px) {
+      .app-header {
+        flex-direction: column;
+        text-align: center;
+      }
+      .app-info h1 {
+        font-size: 1.6em;
+      }
+      .download-btn {
+        width: 100%;
+      }
+      .screenshots img {
+        width: 160px;
+      }
+    }
+  </style>
+</head>
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar">
+      <ul>
+        <li><a href="home.html"><ion-icon name="home-outline"></ion-icon><span>الرئيسية</span></a></li>
+      </ul>
+    </nav>
+
+  <div class="play-container">
+
+    <!-- رأس التطبيق -->
+    <div class="app-header">
+      <div class="app-icon" style="background-image: url('images/icon\ white.png');"></div>
+      <div class="app-info">
+        <h1>NIGHTMAReS</h1>
+        <span>بواسطة NIGHTMAReS</span><br />
+        <a href="apk/app-release.apk" download class="download-btn">تحميل التطبيق</a>
+      </div>
+    </div>
+
+    <!-- صور التطبيق -->
+    <div class="section">
+      <h2>صور من التطبيق</h2>
+      <div class="screenshots">
+        <img src="images/Screenshot_٢٠٢٥٠٥١٨-١١٠٠١٥.png" alt="عند فتح التطبيق" />
+        <img src="images/Screenshot_٢٠٢٥٠٥١٨-١١٠١٠٥.png" alt="واجهة التطبيق" />
+        <img src="images/stories screen.png" alt="قسم القصص" />
+      </div>
+    </div>
+
+    <!-- وصف -->
+    <div class="section">
+      <h2>عن التطبيق</h2>
+      <p>
+        تطبيق NIGHTMAReS هو منصتك المخصصة لخوض تجربة قصصية مرعبة من نوع مختلف. يقدم محتوى مرئي وصوتي حصري لمحبي الرعب والغموض، بواجهة مظلمة وسلسة تناسب جميع الأوقات.
+      </p>
+    </div>
+
+    <!-- الميزات -->
+    <div class="section">
+      <h2>الميزات</h2>
+      <ul>
+        <li>قصص حصرية متجددة بشكل منتظم.</li>
+        <li>تشغيل في الخلفية دون توقف.</li>
+        <li>واجهة مظلمة سهلة الاستخدام.</li>
+        <li>تنبيهات تلقائية عند صدور محتوى جديد.</li>
+      </ul>
+    </div>
+
+    <!-- معلومات إضافية -->
+    <div class="section">
+      <h2>معلومات إضافية</h2>
+      <div class="info-grid">
+        <div class="info-box"><strong>الحجم:</strong><br> 6.19 ميجابايت</div>
+        <div class="info-box"><strong>الإصدار:</strong><br> 1.0.0</div>
+        <div class="info-box"><strong>آخر تحديث:</strong><br> مايو 2025</div>
+        <div class="info-box"><strong>نظام التشغيل:</strong><br> Android 5.0 أو أحدث</div>
+      </div>
+    </div>
+
+    <!-- QR Code -->
+    <div class="section">
+      <h2>رمز QR</h2>
+      <p>يمكنك نسخ رابط الموقع عبر مسح الرمز باستخدام كاميرا هاتفك.</p>
+      <img src="images/qr-code.png" alt="رمز QR" style="width: 200px; height: 200px; margin-top: 10px; border: 5px solid white; border-radius: 10px;">
+    </div>
+
+  </div>
+
+  <!-- التذييل -->
+  <footer style="margin-top: 100px;">
+    <div class="footer-content">
+      <div class="footer-text">
+        <p>© 2025 جميع الحقوق محفوظة | تصميم وتطوير NIGHTMAReS</p>
+      </div>
+    </div>
+  </footer>
+<!-- نافذة عرض الصور -->
+<div id="imagePopup" style="display:none; position:fixed; top:0; right:0; bottom:0; left:0; background:rgba(0,0,0,0.9); z-index:9999; justify-content:center; align-items:center;">
+  <img id="popupImage" src="" alt="صورة مكبرة" style="max-width: 90%; max-height: 90%; border: 5px solid #fff; border-radius: 10px;">
+</div>
+  <script src="download-page.js"></script>
+</body>
+</html>
