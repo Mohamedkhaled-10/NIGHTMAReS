@@ -48,6 +48,15 @@
         alert("يجب تأكيد أنك تبلغ من العمر 16 عامًا أو أكثر.");
       }
     }
+      window.addEventListener("load", () => {
+    const loaderOverlay = document.querySelector('.loader-overlay');
+    const popupOverlay = document.querySelector('.popup-overlay');
+
+    setTimeout(() => {
+      loaderOverlay.style.display = 'none';
+      popupOverlay.style.display = 'flex'; // أو استخدام visibility + opacity لو حابب تعملها بسلاسة أكتر
+    }, 2000); // ممكن تعدل الوقت حسب سرعة تحميل الصفحة
+  });
   </script>
 
 </body>
