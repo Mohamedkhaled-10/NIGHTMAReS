@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم</title>
+</head>
+<body>
+  <h2>تحديث صورة القالب</h2>
+  <form id="cardForm">
+    <label>اختر رقم القالب (مثلاً 1 أو 2 أو 3):</label>
+    <input type="number" id="cardNumber" required><br><br>
+
+    <label>رابط الصورة الجديدة:</label>
+    <input type="text" id="cardImageURL" required><br><br>
+
+    <label>عنوان القصة:</label>
+    <input type="text" id="cardTitle"><br><br>
+
+    <label>رابط القصة:</label>
+    <input type="text" id="cardLink"><br><br>
+
+    <button type="submit">تحديث</button>
+  </form>
+
+  <hr>
+
+  <h2>تحديث الأخبار</h2>
+  <form id="newsForm">
+    <label>رقم الخبر:</label>
+    <input type="number" id="newsNumber" required><br><br>
+
+    <label>رابط الصورة:</label>
+    <input type="text" id="newsImage"><br><br>
+
+    <label>عنوان الخبر:</label>
+    <input type="text" id="newsTitle"><br><br>
+
+    <label>محتوى الخبر المختصر:</label>
+    <textarea id="newsShort"></textarea><br><br>
+
+    <label>التفاصيل الكاملة:</label>
+    <textarea id="newsMore"></textarea><br><br>
+
+    <button type="submit">تحديث الخبر</button>
+  </form>
+
+  <script src="admin.js"></script>
+</body>
+</html>
