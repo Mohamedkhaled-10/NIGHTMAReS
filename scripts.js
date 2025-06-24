@@ -112,26 +112,33 @@ setInterval(() => {
   ][heroIndex];
 }, 4000); // Change image every 4 seconds
 
-fetch('/data.json')
-  .then(res => res.json())
-  .then(data => {
-    // تحديث الكروت
-    const cards = document.querySelectorAll('.cards-section .card');
-    cards.forEach((card, index) => {
-      card.querySelector('img').src = data.cards[index].image;
-      card.querySelector('h3').textContent = data.cards[index].title;
-      card.querySelector('a').href = data.cards[index].link;
-    });
+const db = firebase.database();
 
-    // تحديث الأخبار
-    const news = document.querySelectorAll('.news-card');
-    news.forEach((card, index) => {
-      card.querySelector('img').src = data.news[index].image;
-      card.querySelector('h3').textContent = data.news[index].title;
-      card.querySelector('.news-text').firstChild.textContent = data.news[index].short;
-      card.querySelector('.more-text').textContent = data.news[index].more;
-    });
+db.ref("cards").once("value").then(snapshot => {
+  const cards = snapshot.val();
+  const cardElements = document.querySelectorAll(".cards-section .card");
+  cardElements.forEach((card, i) => {
+    if (cards[i]) {
+      card.querySelector("img").src = cards[i].image;
+      card.querySelector("h3").textContent = cards[i].title;
+      card.querySelector("a").href = cards[i].link;
+    }
   });
+});
+
+db.ref("news").once("value").then(snapshot => {
+  const newsList = snapshot.val();
+  const newsElements = document.querySelectorAll(".news-card");
+  newsElements.forEach((card, i) => {
+    if (newsList[i]) {
+      card.querySelector("img").src = newsList[i].image;
+      card.querySelector("h3").textContent = newsList[i].title;
+      card.querySelector(".news-text").firstChild.textContent = newsList[i].short;
+      card.querySelector(".more-text").textContent = newsList[i].more;
+    }
+  });
+});
+
 
 
 
