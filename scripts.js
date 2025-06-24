@@ -112,3 +112,23 @@ setInterval(() => {
   ][heroIndex];
 }, 4000); // Change image every 4 seconds
 
+fetch('data.json')
+  .then(res => res.json())
+  .then(data => {
+    const cards = document.querySelectorAll('.cards-section .card');
+    cards.forEach((card, index) => {
+      card.querySelector('img').src = data.cards[index].image;
+      card.querySelector('h3').textContent = data.cards[index].title;
+      card.querySelector('a').href = data.cards[index].link;
+    });
+
+    const newsCards = document.querySelectorAll('.news-card');
+    newsCards.forEach((news, index) => {
+      news.querySelector('img').src = data.news[index].image;
+      news.querySelector('h3').textContent = data.news[index].title;
+      news.querySelector('.news-text').firstChild.textContent = data.news[index].short;
+      news.querySelector('.more-text').textContent = data.news[index].more;
+    });
+  });
+
+
