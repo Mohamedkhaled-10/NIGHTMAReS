@@ -112,9 +112,10 @@ setInterval(() => {
   ][heroIndex];
 }, 4000); // Change image every 4 seconds
 
-fetch('data.json')
+fetch('/data.json')
   .then(res => res.json())
   .then(data => {
+    // تحديث الكروت
     const cards = document.querySelectorAll('.cards-section .card');
     cards.forEach((card, index) => {
       card.querySelector('img').src = data.cards[index].image;
@@ -122,13 +123,15 @@ fetch('data.json')
       card.querySelector('a').href = data.cards[index].link;
     });
 
-    const newsCards = document.querySelectorAll('.news-card');
-    newsCards.forEach((news, index) => {
-      news.querySelector('img').src = data.news[index].image;
-      news.querySelector('h3').textContent = data.news[index].title;
-      news.querySelector('.news-text').firstChild.textContent = data.news[index].short;
-      news.querySelector('.more-text').textContent = data.news[index].more;
+    // تحديث الأخبار
+    const news = document.querySelectorAll('.news-card');
+    news.forEach((card, index) => {
+      card.querySelector('img').src = data.news[index].image;
+      card.querySelector('h3').textContent = data.news[index].title;
+      card.querySelector('.news-text').firstChild.textContent = data.news[index].short;
+      card.querySelector('.more-text').textContent = data.news[index].more;
     });
   });
+
 
 
