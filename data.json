@@ -1,0 +1,28 @@
+{
+  "cards": [
+    {
+      "image": "images/1.webp",
+      "title": "سفاح الجيزة",
+      "link": "stories/1/1.html"
+    },
+    {
+      "image": "images/2.webp",
+      "title": "الطريق 56",
+      "link": "stories/2/2.html"
+    }
+  ],
+  "news": [
+    {
+      "image": "https://link1.jpg",
+      "title": "خبر 1",
+      "short": "النص المختصر...",
+      "more": "النص الكامل..."
+    },
+    {
+      "image": "https://link2.jpg",
+      "title": "خبر 2",
+      "short": "النص المختصر...",
+      "more": "النص الكامل..."
+    }
+  ]
+}
