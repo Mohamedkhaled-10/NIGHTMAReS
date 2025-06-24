@@ -1,67 +1,98 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <title>لوحة التحكم</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Firebase v8 -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <!-- إعدادات خط وتحكم بالتنسيق -->
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f7f7f7;
+    }
+    input, textarea {
+      direction: rtl;
+    }
+  </style>
 </head>
-<body>
-  <h2>تحديث صورة القالب</h2>
-  <form id="cardForm">
-    <label>اختر رقم القالب (مثلاً 1 أو 2 أو 3):</label>
-    <input type="number" id="cardNumber" required><br><br>
+<body class="p-6 max-w-4xl mx-auto">
 
-    <label>رابط الصورة الجديدة:</label>
-    <input type="text" id="cardImageURL" required><br><br>
+  <h1 class="text-3xl font-bold mb-6 text-red-700 text-center">لوحة التحكم</h1>
 
-    <label>عنوان القصة:</label>
-    <input type="text" id="cardTitle"><br><br>
+  <!-- تحديث القوالب -->
+  <div class="bg-white p-6 rounded-lg shadow mb-10">
+    <h2 class="text-xl font-semibold mb-4">🖼️ تحديث قوالب القصص</h2>
+    <form id="cardForm" class="space-y-4">
+      <div>
+        <label class="block mb-1">رقم القالب:</label>
+        <input type="number" id="cardNumber" class="w-full border rounded p-2" required>
+      </div>
+      <div>
+        <label class="block mb-1">رابط الصورة:</label>
+        <input type="text" id="cardImageURL" class="w-full border rounded p-2" required>
+      </div>
+      <div>
+        <label class="block mb-1">عنوان القصة:</label>
+        <input type="text" id="cardTitle" class="w-full border rounded p-2">
+      </div>
+      <div>
+        <label class="block mb-1">رابط القصة:</label>
+        <input type="text" id="cardLink" class="w-full border rounded p-2">
+      </div>
+      <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition">تحديث القالب</button>
+    </form>
+  </div>
 
-    <label>رابط القصة:</label>
-    <input type="text" id="cardLink"><br><br>
+  <!-- تحديث الأخبار -->
+  <div class="bg-white p-6 rounded-lg shadow">
+    <h2 class="text-xl font-semibold mb-4">📰 تحديث الأخبار</h2>
+    <form id="newsForm" class="space-y-4">
+      <div>
+        <label class="block mb-1">رقم الخبر:</label>
+        <input type="number" id="newsNumber" class="w-full border rounded p-2" required>
+      </div>
+      <div>
+        <label class="block mb-1">رابط الصورة:</label>
+        <input type="text" id="newsImage" class="w-full border rounded p-2">
+      </div>
+      <div>
+        <label class="block mb-1">عنوان الخبر:</label>
+        <input type="text" id="newsTitle" class="w-full border rounded p-2">
+      </div>
+      <div>
+        <label class="block mb-1">محتوى مختصر:</label>
+        <textarea id="newsShort" rows="2" class="w-full border rounded p-2"></textarea>
+      </div>
+      <div>
+        <label class="block mb-1">تفاصيل إضافية:</label>
+        <textarea id="newsMore" rows="3" class="w-full border rounded p-2"></textarea>
+      </div>
+      <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition">تحديث الخبر</button>
+    </form>
+  </div>
 
-    <button type="submit">تحديث</button>
-  </form>
-
-  <hr>
-
-  <h2>تحديث الأخبار</h2>
-  <form id="newsForm">
-    <label>رقم الخبر:</label>
-    <input type="number" id="newsNumber" required><br><br>
-
-    <label>رابط الصورة:</label>
-    <input type="text" id="newsImage"><br><br>
-
-    <label>عنوان الخبر:</label>
-    <input type="text" id="newsTitle"><br><br>
-
-    <label>محتوى الخبر المختصر:</label>
-    <textarea id="newsShort"></textarea><br><br>
-
-    <label>التفاصيل الكاملة:</label>
-    <textarea id="newsMore"></textarea><br><br>
-
-    <button type="submit">تحديث الخبر</button>
-  </form>
-  <!-- Firebase v8.10.0 compatible with script loading -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
+  <!-- Firebase Config -->
   <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
-    authDomain: "night-ac2a0.firebaseapp.com",
-    databaseURL: "https://night-ac2a0-default-rtdb.firebaseio.com",
-    projectId: "night-ac2a0",
-    storageBucket: "night-ac2a0.appspot.com",
-    messagingSenderId: "202751732517",
-    appId: "1:202751732517:web:5d458d19aac8d7135848cc"
-  };
+    const firebaseConfig = {
+      apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
+      authDomain: "night-ac2a0.firebaseapp.com",
+      databaseURL: "https://night-ac2a0-default-rtdb.firebaseio.com",
+      projectId: "night-ac2a0",
+      storageBucket: "night-ac2a0.appspot.com",
+      messagingSenderId: "202751732517",
+      appId: "1:202751732517:web:5d458d19aac8d7135848cc"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 
-  // تهيئة Firebase
-  firebase.initializeApp(firebaseConfig);
-</script>
-<script src="admin.js"></script>
+  <!-- كود التحكم -->
+  <script src="admin.js"></script>
 </body>
 </html>
