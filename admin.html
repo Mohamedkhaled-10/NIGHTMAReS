@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>لوحة تحكم الأدمن</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
+      authDomain: "night-ac2a0.firebaseapp.com",
+      databaseURL: "https://night-ac2a0-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "night-ac2a0",
+      storageBucket: "night-ac2a0.appspot.com",
+      messagingSenderId: "202751732517",
+      appId: "1:202751732517:web:5d458d19aac8d7135848cc"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</head>
+<body class="bg-[#0f0f0f] text-white font-sans p-6">
+
+  <div class="max-w-3xl mx-auto">
+    <div class="flex justify-between items-center mb-6">
+      <h1 class="text-3xl font-bold">لوحة تحكم الأخبار</h1>
+      <button onclick="logout()" class="bg-red-700 hover:bg-red-900 px-4 py-2 rounded">تسجيل الخروج</button>
+    </div>
+
+    <div class="bg-[#1a1a1a] p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">إضافة خبر جديد</h2>
+      <input id="image" type="text" placeholder="رابط الصورة" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
+      <input id="title" type="text" placeholder="عنوان الخبر" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
+      <input id="summary" type="text" placeholder="الخبر المختصر" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
+      <textarea id="details" placeholder="تفاصيل الخبر (الجزء المخفي)" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"></textarea>
+      <button onclick="addNews()" class="bg-green-700 hover:bg-green-900 px-4 py-2 rounded">إضافة</button>
+    </div>
+
+    <div id="newsList" class="space-y-4">
+      <!-- الأخبار ستظهر هنا -->
+    </div>
+  </div>
+
+  <script>
+    // التحقق من تسجيل الدخول
+    firebase.auth().onAuthStateChanged(user => {
+      if (!user) {
+        window.location.href = "login.html";
+      }
+    });
+
+    const dbRef = firebase.database().ref("news");
+
+    // إضافة خبر
+    function addNews() {
+      const image = document.getElementById("image").value.trim();
+      const title = document.getElementById("title").value.trim();
+      const summary = document.getElementById("summary").value.trim();
+      const details = document.getElementById("details").value.trim();
+
+      if (!image || !title || !summary || !details) return alert("يرجى تعبئة جميع الحقول");
+
+      const newsId = dbRef.push().key;
+
+      dbRef.child(newsId).set({ image, title, summary, details });
+      
+      // إعادة تعيين النموذج
+      document.getElementById("image").value = "";
+      document.getElementById("title").value = "";
+      document.getElementById("summary").value = "";
+      document.getElementById("details").value = "";
+    }
+
+    // عرض الأخبار
+    dbRef.on("value", snapshot => {
+      const newsList = document.getElementById("newsList");
+      newsList.innerHTML = "";
+
+      snapshot.forEach(child => {
+        const data = child.val();
+        const key = child.key;
+
+        const item = document.createElement("div");
+        item.className = "bg-[#1f1f1f] p-4 rounded shadow";
+
+        item.innerHTML = `
+          <img src="${data.image}" class="w-full h-48 object-cover rounded mb-2">
+          <input value="${data.title}" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="title-${key}">
+          <input value="${data.summary}" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="summary-${key}">
+          <textarea class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="details-${key}">${data.details}</textarea>
+          <input value="${data.image}" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="image-${key}">
+          <div class="flex gap-4">
+            <button onclick="updateNews('${key}')" class="bg-blue-700 hover:bg-blue-900 px-3 py-1 rounded">تعديل</button>
+            <button onclick="deleteNews('${key}')" class="bg-red-700 hover:bg-red-900 px-3 py-1 rounded">حذف</button>
+          </div>
+        `;
+
+        newsList.appendChild(item);
+      });
+    });
+
+    function updateNews(id) {
+      const title = document.getElementById(`title-${id}`).value;
+      const summary = document.getElementById(`summary-${id}`).value;
+      const details = document.getElementById(`details-${id}`).value;
+      const image = document.getElementById(`image-${id}`).value;
+
+      dbRef.child(id).update({ title, summary, details, image });
+    }
+
+    function deleteNews(id) {
+      if (confirm("هل أنت متأكد من حذف هذا الخبر؟")) {
+        dbRef.child(id).remove();
+      }
+    }
+
+    function logout() {
+      firebase.auth().signOut().then(() => {
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+</body>
+</html>

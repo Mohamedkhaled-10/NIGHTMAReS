@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تسجيل دخول الأدمن</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
+      authDomain: "night-ac2a0.firebaseapp.com",
+      databaseURL: "https://night-ac2a0-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "night-ac2a0",
+      storageBucket: "night-ac2a0.appspot.com",
+      messagingSenderId: "202751732517",
+      appId: "1:202751732517:web:5d458d19aac8d7135848cc"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
+</head>
+<body class="bg-black text-white flex items-center justify-center min-h-screen font-sans">
+  <div class="bg-[#1a1a1a] p-8 rounded-lg shadow-lg w-full max-w-sm">
+    <h2 class="text-2xl font-bold mb-6 text-center">تسجيل دخول الأدمن</h2>
+    <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-3 mb-4 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none">
+    <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-3 mb-4 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none">
+    <button onclick="login()" class="w-full bg-red-700 hover:bg-red-900 transition text-white p-3 rounded">تسجيل الدخول</button>
+    <p id="error" class="mt-4 text-red-500 text-center hidden">خطأ في البيانات، تأكد من صحة الحساب</p>
+  </div>
+
+  <script>
+    function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorEl = document.getElementById("error");
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(() => {
+          window.location.href = "admin.html";
+        })
+        .catch((error) => {
+          console.error(error);
+          errorEl.classList.remove("hidden");
+        });
+    }
+  </script>
+</body>
+</html>
