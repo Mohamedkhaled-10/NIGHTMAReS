@@ -47,6 +47,15 @@
     </div>
   </div>
 
+  <div class="bg-[#1a1a1a] p-6 rounded-lg shadow-md mb-6">
+  <h2 class="text-xl font-semibold mb-4">إرسال إشعار</h2>
+  <input id="notifImage" type="text" placeholder="رابط الصورة" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
+  <input id="notifText" type="text" placeholder="نص الإشعار" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
+  <input id="notifLink" type="text" placeholder="رابط زر (اذهب إلى)" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
+  <button onclick="sendNotification()" class="bg-yellow-600 hover:bg-yellow-800 px-4 py-2 rounded">إرسال</button>
+</div>
+
+
   <script>
     // التحقق من تسجيل الدخول
     firebase.auth().onAuthStateChanged(user => {
@@ -131,5 +140,28 @@
       });
     }
   </script>
+
+  <script>
+const notifRef = firebase.database().ref("notifications");
+
+function sendNotification() {
+  const image = document.getElementById("notifImage").value.trim();
+  const text = document.getElementById("notifText").value.trim();
+  const link = document.getElementById("notifLink").value.trim();
+
+  if (!image || !text || !link) {
+    return alert("يرجى تعبئة كل بيانات الإشعار");
+  }
+
+  notifRef.set({ image, text, link }); // نستبدل المحتوى الحالي لأنه إشعار واحد فقط
+
+  document.getElementById("notifImage").value = "";
+  document.getElementById("notifText").value = "";
+  document.getElementById("notifLink").value = "";
+
+  alert("تم إرسال الإشعار بنجاح");
+}
+</script>
+
 </body>
 </html>
