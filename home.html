@@ -408,5 +408,64 @@ setTimeout(() => {
     });
   });
 </script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
+    authDomain: "night-ac2a0.firebaseapp.com",
+    databaseURL: "https://night-ac2a0-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "night-ac2a0",
+    storageBucket: "night-ac2a0.appspot.com",
+    messagingSenderId: "202751732517",
+    appId: "1:202751732517:web:5d458d19aac8d7135848cc"
+  };
+  firebase.initializeApp(firebaseConfig);
+
+  const dbRef = firebase.database().ref("news");
+
+  const newsSection = document.querySelector(".news-section .news-grid");
+
+  dbRef.on("value", snapshot => {
+    newsSection.innerHTML = ""; // تنظيف الأخبار القديمة
+
+    snapshot.forEach(child => {
+      const data = child.val();
+
+      const card = document.createElement("div");
+      card.className = "news-card";
+
+      card.innerHTML = `
+        <img src="${data.image}" alt="${data.title}">
+        <div class="news-content">
+          <h3>${data.title}</h3>
+          <p class="news-text">
+            ${data.summary}
+            <span class="more-text" style="display: none;">${data.details}</span>
+          </p>
+          <button class="read-more-btn">اقرأ المزيد</button>
+        </div>
+      `;
+
+      newsSection.appendChild(card);
+    });
+
+    // إعادة تفعيل زر "اقرأ المزيد"
+    const buttons = document.querySelectorAll(".read-more-btn");
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const textElement = this.previousElementSibling.querySelector(".more-text");
+        if (textElement.style.display === "none") {
+          textElement.style.display = "inline";
+          this.textContent = "إخفاء";
+        } else {
+          textElement.style.display = "none";
+          this.textContent = "اقرأ المزيد";
+        }
+      });
+    });
+  });
+</script>
+
+  
 </body>
 </html>
