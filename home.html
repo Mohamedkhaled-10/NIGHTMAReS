@@ -462,6 +462,37 @@ dbRef.on("value", snapshot => {
 
 </script>
 
+<script>
+const dbRef = firebase.database().ref("news");
+const cardsSection = document.querySelector(".cards-section");
+
+dbRef.on("value", snapshot => {
+  snapshot.forEach(child => {
+    const data = child.val();
+
+    // استخراج رقم القالب
+    const number = data.number;
+
+    // ابحث عن كارت القالب باستخدام alt
+    const targetCard = Array.from(cardsSection.querySelectorAll(".card")).find(card => {
+      const img = card.querySelector("img");
+      return img && img.alt.includes(number);
+    });
+
+    if (targetCard) {
+      const img = targetCard.querySelector("img");
+      const title = targetCard.querySelector("h3");
+      const link = targetCard.querySelector("a");
+
+      img.src = data.image;
+      title.textContent = data.title;
+      link.textContent = "اقرأ المزيد";
+      link.href = `stories/${number}/${number}.html`;
+    }
+  });
+});
+
+</script>
   
 </body>
 </html>
