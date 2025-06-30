@@ -1252,3 +1252,13 @@ button#enterBtn:hover:enabled {
     transform: translateY(0);
   }
 }
+
+@keyframes bounceIn {
+  0% { opacity: 0; transform: translateY(100%); }
+  60% { opacity: 1; transform: translateY(-10px); }
+  80% { transform: translateY(5px); }
+  100% { transform: translateY(0); }
+}
+.animate-bounce-in {
+  animation: bounceIn 0.5s ease-out;
+}
