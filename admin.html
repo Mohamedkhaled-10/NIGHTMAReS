@@ -38,6 +38,7 @@
       <input id="title" type="text" placeholder="عنوان الخبر" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
       <input id="summary" type="text" placeholder="الخبر المختصر" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
       <textarea id="details" placeholder="تفاصيل الخبر (الجزء المخفي)" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"></textarea>
+      <input id="templateNumber" type="number" min="1" placeholder="رقم قالب الخبر (مثلاً 1 أو 2 أو 3)" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
       <button onclick="addNews()" class="bg-green-700 hover:bg-green-900 px-4 py-2 rounded">إضافة</button>
     </div>
 
@@ -62,18 +63,21 @@
       const title = document.getElementById("title").value.trim();
       const summary = document.getElementById("summary").value.trim();
       const details = document.getElementById("details").value.trim();
+      const templateNumber = document.getElementById("templateNumber").value.trim();
 
-      if (!image || !title || !summary || !details) return alert("يرجى تعبئة جميع الحقول");
+      if (!image || !title || !summary || !details || !templateNumber) {
+        return alert("يرجى تعبئة جميع الحقول");
+      }
 
       const newsId = dbRef.push().key;
+      dbRef.child(newsId).set({ image, title, summary, details, templateNumber });
 
-      dbRef.child(newsId).set({ image, title, summary, details });
-      
       // إعادة تعيين النموذج
       document.getElementById("image").value = "";
       document.getElementById("title").value = "";
       document.getElementById("summary").value = "";
       document.getElementById("details").value = "";
+      document.getElementById("templateNumber").value = "";
     }
 
     // عرض الأخبار
@@ -94,6 +98,7 @@
           <input value="${data.summary}" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="summary-${key}">
           <textarea class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="details-${key}">${data.details}</textarea>
           <input value="${data.image}" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="image-${key}">
+          <input value="${data.templateNumber || ''}" placeholder="رقم القالب" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="template-${key}">
           <div class="flex gap-4">
             <button onclick="updateNews('${key}')" class="bg-blue-700 hover:bg-blue-900 px-3 py-1 rounded">تعديل</button>
             <button onclick="deleteNews('${key}')" class="bg-red-700 hover:bg-red-900 px-3 py-1 rounded">حذف</button>
@@ -109,8 +114,9 @@
       const summary = document.getElementById(`summary-${id}`).value;
       const details = document.getElementById(`details-${id}`).value;
       const image = document.getElementById(`image-${id}`).value;
+      const templateNumber = document.getElementById(`template-${id}`).value;
 
-      dbRef.child(id).update({ title, summary, details, image });
+      dbRef.child(id).update({ title, summary, details, image, templateNumber });
     }
 
     function deleteNews(id) {
