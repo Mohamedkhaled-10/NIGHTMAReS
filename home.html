@@ -53,8 +53,9 @@
 
 </head>
 <body>
-  <!-- شريط التنقل -->
-  <nav class="navbar">
+  <!-- تعديل كلاس navbar ليكون ظاهر فقط على md وما فوق -->
+<nav class="navbar hidden md:block">
+
     <ul>
       <li class="active">
         <a href="#home">
@@ -88,51 +89,88 @@
       </li>
       <div id="marker"></div>
     </ul>
+
+     <!-- زر البحث -->
+  <div class="search-wrapper absolute top-1/2 right-6 -translate-y-1/2">
+    <button id="searchToggle" aria-label="فتح البحث" class="text-white text-2xl p-2 hover:text-red-500 transition">
+      <ion-icon name="search-outline"></ion-icon>
+    </button>
+    <form id="searchForm" class="absolute top-full right-0 mt-2 w-64 bg-[#130000] rounded-md shadow-lg overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out" style="max-height: 0; z-index: 999;">
+      <input type="search" placeholder="ابحث هنا..." class="w-full px-4 py-2 bg-[#1b0d0d] text-white focus:outline-none" />
+    </form>
+  </div>
   </nav>
 
+  <!-- أيقونة الهمبرجر -->
+<div id="hamburgerWrapper" class="md:hidden fixed top-4 right-4 z-50 transition-transform duration-300">
+  <button id="menuBtn" class="flex flex-col items-end gap-1 p-2 bg-[#130000] rounded-md shadow-md">
+    <span class="block w-6 h-0.5 bg-white"></span>
+    <span class="block w-5 h-0.5 bg-white"></span>
+    <span class="block w-4 h-0.5 bg-white"></span>
+  </button>
+</div>
+
+
+<!-- غطاء للخلفية -->
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30 md:hidden"></div>
+
+<!-- القائمة الجانبية المحسّنة -->
+<div id="sidebarMenu" class="fixed top-0 right-0 h-full w-72 bg-[#130000] transform translate-x-full transition-transform duration-300 z-40 md:hidden shadow-2xl rounded-l-2xl overflow-hidden">
+  <div class="p-5 h-full flex flex-col">
+    <h2 class="text-white text-2xl font-bold mb-4 pb-2 border-b border-[#2c1b1b]">القائمة</h2>
+    <ul class="text-white text-base divide-y divide-[#2c1b1b]">
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="home-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="#home" class="w-full">الرئيسية</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="book-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="#cards" class="w-full">القصص</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="newspaper-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="#news" class="w-full">الأخبار</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="play-circle-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="#video" class="w-full">الفيديو</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="call-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="#footer" class="w-full">اتصل بنا</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="person-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="profile.html" class="w-full">من نحن</a>
+      </li>
+    </ul>
+    
+    <!-- قسم إضافي للزينة أو مستقبلًا -->
+    <div class="mt-auto pt-6 border-t border-[#2c1b1b] text-center text-sm text-gray-400">
+      <p>NIGHTMAReS © 2025</p>
+    </div>
+  </div>
+</div>
+
   <!-- قسم الـ Hero -->
-  <section class="relative w-full min-h-screen flex flex-col justify-center items-center bg-gradient-to-b from-[#7f1d1d] to-[#000000] text-white font-['Cairo',sans-serif]" id="home">
-  <!-- Background Videos (بدل الصور) -->
-<video autoplay muted loop playsinline preload="none" poster="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg"
-class="absolute left-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacity-50 pointer-events-none select-none z-0">
-<source src="left-video.webm" type="video/webm" />
-<source src="videos/13427642-hd_1280_720_25fps.mp4" type="video/mp4" />
-المتصفح لا يدعم تشغيل الفيديو.
-</video>
-
-<video autoplay muted loop playsinline preload="none" poster="https://i.ytimg.com/vi/KnWzz0n60pE/hq720.jpg"
-class="absolute right-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacity-50 pointer-events-none select-none z-0">
-<source src="right-video.webm" type="video/webm" />
-<source src="videos/13427642-hd_1280_720_25fps.mp4" type="video/mp4" />
-المتصفح لا يدعم تشغيل الفيديو.
-</video>
-  <!-- Main Content -->
-  <div class="relative z-10 text-center px-4 py-6 sm:py-10">
-    <img id="heroImage" src="images/logo1.png" alt="Main Hero Image"
-  class="w-full max-w-4xl mx-auto rounded-3xl h-auto max-h-[80vh] object-cover transition-all duration-1000 ease-in-out border-[4px] border-[#dc2626] shadow-[0_0_25px_5px_#dc2626]" />
-    
-    <h1 class="mt-10 text-5xl md:text-6xl font-extrabold drop-shadow-md leading-tight">NIGHTMAReS</h1>
-    <p class="mt-4 text-lg md:text-2xl text-gray-200 drop-shadow-sm">حيث تختبئ الكوابيس خلف كل همسة</p>
-    
-    <a href="stories/fans-stories.html" class="mt-6 inline-block px-8 py-4 bg-gradient-to-r from-[#b91c1c] to-[#7f1d1d] text-white text-lg rounded-full shadow-lg hover:scale-105 transition duration-300">
-      قصص المتابعين
-    </a> 
-    <a href="download-page.html" class="mt-4 inline-block px-8 py-4 bg-[#7a0202] text-white text-lg rounded-full shadow-lg hover:bg-[#b50303] hover:scale-105 transition duration-300">
-  تحميل التطبيق
-</a> 
-  </div>
-
-  <!-- Waves Separator -->
-  <div class="absolute bottom-0 left-0 w-full overflow-hidden leading-[0] rotate-180">
-    <svg class="relative block w-full h-[100px]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 100" preserveAspectRatio="none">
-      <path fill="#320101" fill-opacity="1"
-        d="M0,32L60,37.3C120,43,240,53,360,74.7C480,96,600,128,720,128C840,128,960,96,1080,80C1200,64,1320,64,1380,64L1440,64V0H1380C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0H0Z">
-      </path>
-    </svg>
-  </div>
-</section>
-
-
+  <section class="hero-new" id="home">
+    <!-- canvas جزيئات -->
+    <canvas id="particles"></canvas>
+    <!-- طبقة ضباب -->
+    <div class="fog-overlay"></div>
+    <!-- المحتوى -->
+    <div class="hero-content-new">
+      <img src="images/logo1.png" alt="Logo" class="hero-logo" />
+      <h1 class="glitch-text" data-text="NIGHTMAReS">NIGHTMAReS</h1>
+      <p class="hero-description">حيث تختبئ الكوابيس خلف كل همسة</p>
+      <div class="buttons-new">
+        <a href="stories/fans-stories.html" class="btn-neon">قصص المتابعين</a>
+        <a href="download-page.html" class="btn-icon-neon" title="تحميل التطبيق">
+          <i class="fa-brands fa-android"></i>
+        </a>
+      </div>
+    </div>
+  </section>
 
 
 
@@ -170,13 +208,21 @@ class="absolute right-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacit
     </div>
   </section>
   
-<div class="story-button-container">
-  <a href="stories/stories-section.html" class="story-button">تصفح المزيد من القصص</a>
+<div class="story-button-container flex justify-center my-8">
+  <a href="stories/stories-section.html"
+     class="px-10 py-3 bg-gradient-to-r from-[#b91c1c] to-[#7f1d1d] text-white text-lg font-semibold rounded-full shadow-lg
+            hover:scale-105 hover:brightness-110 transition transform duration-300">
+    تصفح المزيد من القصص
+  </a>
 </div>
+
 
   <!-- قسم الأخبار والفعاليات -->
   <section class="news-section" id="news">
-    <h2>الأخبار والفعاليات</h2>
+    <h2 class="section-title text-3xl md:text-4xl font-extrabold text-[#b91c1c] mb-8 relative inline-block">
+  الأخبار والفعاليات
+  <span class="block w-20 h-1 bg-[#7f1d1d] rounded-full mt-2"></span>
+</h2>
     <div class="news-grid">
       <div class="news-card">
         <img src="https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/2124490/header.jpg?t=1744248682" alt="1">
@@ -269,7 +315,10 @@ class="absolute right-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacit
   </section>
 
 <section class="video-section" id="video">
-  <h2>أحدث الفيديوهات</h2>
+  <h2 class="section-title text-3xl md:text-4xl font-extrabold text-[#b91c1c] mb-8 relative inline-block">
+    أحدث الفيديوهات
+    <span class="block w-20 h-1 bg-[#7f1d1d] rounded-full mt-2"></span>
+  </h2>
   <div class="video-grid">
     <a href="videos/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.html" class="video-card">
       <img src="https://i.ytimg.com/vi/GcHcqyWxaW8/hqdefault.jpg?sqp=-oaymwEnCOADEI4CSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLCRvLYh0w_ugBR1346YQVGjHZZ6cw" alt="videos/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.html">
@@ -317,17 +366,9 @@ class="absolute right-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacit
   <div class="blur-overlay" onclick="toggleVideos()">إظهار المزيد</div>
 </section>
 
-<!-- شخصية مرعبة -->
-<div id="character" class="horror-character-container">
-  <img src="images/ChatGPT Image May 3, 2025, 10_23_30 PM.png" alt="شخصية مرعبة" class="horror-character">
-  <div class="speech-bubble" id="bubble">...</div>
-</div>
 
-<a href="profile.html" class="floating-icon">
-  <img src="images/high-1746479076.jpg" alt="Profile" oncontextmenu="return false;" draggable="false" />
-</a>
 
-  <!-- تذييل الصفحة مع روابط مواقع التواصل الاجتماعي -->
+   <!-- التذييل -->
   <footer id="footer">
     <div class="footer-content">
       <div class="footer-text">
@@ -336,9 +377,25 @@ class="absolute right-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacit
       </div>
       <div class="footer-social">
         <ul>
-          <li><a href="#" target="_blank"><i class="fa-brands fa-instagram instagram"></i></a></li>
-          <li><a href="https://whatsapp.com/channel/0029VbANLVm3mFXyyFhDCd3O" target="_blank"><i class="fa-brands fa-whatsapp whatsapp"></i></a></li>
-          <li><a href="#" target="_blank"><i class="fa-brands fa-twitter twitter"></i></a></li>
+          <li>
+  <a href="#" target="_blank">
+    <i class="fa-brands fa-instagram instagram"></i>
+  </a>
+</li>
+<li>
+  <a href="https://whatsapp.com/channel/0029VbANLVm3mFXyyFhDCd3O" target="_blank">
+    <i class="fa-brands fa-whatsapp whatsapp"></i>
+  </a>
+</li>
+<li>
+  <a href="https://x.com" target="_blank" aria-label="X (Twitter)">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 24 24" width="22" height="22">
+      <path d="M18.89 2H22L14.44 10.21L23.41 22H16.43L10.89 14.8L4.53 22H1.42L9.58 13.18L1 2H8.14L13.17 8.59L18.89 2ZM17.61 20H19.6L7.15 4H5.03L17.61 20Z"/>
+    </svg>
+  </a>
+</li>
+
+
         </ul>
       </div>
     </div>
@@ -511,6 +568,44 @@ dbRef.on("value", snapshot => {
   }
 </style>
 
-  
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const sidebarMenu = document.getElementById('sidebarMenu');
+const overlay = document.getElementById('overlay');
+const hamburgerWrapper = document.getElementById('hamburgerWrapper');
+const navbar = document.querySelector('.navbar'); // شريط التنقل
+
+// فتح القائمة
+menuBtn.addEventListener('click', () => {
+  sidebarMenu.classList.remove('translate-x-full');
+  overlay.classList.remove('hidden');
+  hamburgerWrapper.classList.add('hidden');
+});
+
+// إغلاق عند الضغط خارج القائمة
+overlay.addEventListener('click', () => {
+  sidebarMenu.classList.add('translate-x-full');
+  overlay.classList.add('hidden');
+  hamburgerWrapper.classList.remove('hidden');
+});
+
+let lastScrollTop = 0;
+
+window.addEventListener("scroll", () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  if (scrollTop > lastScrollTop && scrollTop > 100) {
+    // التمرير لأسفل: أخفي النافبار وزر الهامبرجر
+    if(navbar) navbar.style.top = '-80px'; // اخفاء النافبار للأعلى
+    if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(100px)"; // اخفاء زر الهامبرجر
+  } else {
+    // التمرير لأعلى: أظهر النافبار وزر الهامبرجر
+    if(navbar) navbar.style.top = '0'; // تعديل هنا لتكون ملتصقة بالأعلى
+    if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(0)";
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
+</script>
 </body>
 </html>
