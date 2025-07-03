@@ -1262,3 +1262,10 @@ button#enterBtn:hover:enabled {
 .animate-bounce-in {
   animation: bounceIn 0.5s ease-out;
 }
+
+.horror-character-container {
+  display: none;
+  position: absolute;
+  top: 0;
+  transition: top 2s ease, opacity 2s ease;
+}
