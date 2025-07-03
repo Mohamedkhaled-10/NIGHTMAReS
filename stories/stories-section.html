@@ -1,85 +1,297 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
+  <meta name="google-site-verification" content="eBq9l8CCfzBrXYArPr96pdVtWRutunbaLMa6WLUxlz0" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>صفحة القصص</title>
-  <link rel="stylesheet" href="stories-section.css"> <!-- ربط ملف الـ CSS -->
+  <title>NIGHTMAReS - قسم القصص</title>
+
+  <!-- تحسينات SEO -->
+  <meta name="description" content="NIGHTMAReS - قصص رعب وغموض حصرية ومخيفة حيث تختبئ الكوابيس خلف كل همسة. اكتشف أقوى القصص المرعبة مثل سفاح الجيزة والطريق 56.">
+  <meta name="keywords" content="قصص رعب, رعب, كوابيس, غموض, سفاح الجيزة, الطريق 56, فتاة الطريق, قصص مخيفة, قصص مرعبة">
+  <meta name="author" content="NIGHTMAReS Team">
+
+  <!-- Manifest و أيقونات -->
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../images/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../images/android-chrome-512x512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
+
+  <!-- Font Awesome و Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- CSS خارجي -->
+  <link rel="stylesheet" href="stories-section.css">
+
+  <!-- OneSignal -->
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: "69b97a9f-de81-41e4-ae6d-e7d582f3d33d",
+      });
+    });
+  </script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="NIGHTMAReS">
+  <meta property="og:description" content="NIGHTMAReS - حيث تختبئ الكوابيس خلف كل همسة">
+  <meta property="og:image" content="https://i.postimg.cc/BvmF6Pm8/Chat-GPT-Image-May-3-2025-10-23-30-PM.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://nightma-re-s.vercel.app/stories/stories-section">
 </head>
 <body>
 
   <!-- شريط التنقل -->
-  <nav class="navbar">
+  <!-- تعديل كلاس navbar ليكون ظاهر فقط على md وما فوق -->
+<nav class="navbar hidden md:block">
+
     <ul>
-      <li><a href="../home.html"><ion-icon name="home"></ion-icon><span>الرئيسية</span></a></li>
-      <li><a href="fans-stories.html"><ion-icon name="book"></ion-icon><span>قصص المتابعين</span></a></li>
-      <li><a href="form.html"><ion-icon name="mail"></ion-icon><span>ارسل قصتك</span></a></li>
-      <li><a href="#about"><ion-icon name="information-circle"></ion-icon><span>عن الموقع</span></a></li>
+      <li class="active">
+        <a href="../home.html#home">
+          <ion-icon name="home-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="../home.html#cards">
+          <ion-icon name="book-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="../home.html#news">
+          <ion-icon name="newspaper-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="../home.html#video">
+          <ion-icon name="play-circle-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="../home.html#footer">
+          <ion-icon name="call-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <div id="marker"></div>
     </ul>
-    <div id="marker"></div>
   </nav>
 
-  <section id="stories" class="stories-section">
-    <h2 class="story-title">
-        <span class="title-part white">قسم</span>
-        <span class="title-part yellow">القصص</span>
-      </h2>
-  
-      <!-- الفلاتر -->
-      <div class="filters">
-        <button class="filter-btn" data-filter="all">الكل</button>
-        <button class="filter-btn" data-filter="horror">رعب</button>
-        <button class="filter-btn" data-filter="mystery">غامض</button>
-        <button class="filter-btn" data-filter="weird">غريب</button>
-      </div>
-  
-      <!-- شبكة القصص -->
-      <div class="stories-grid">
-        <div class="story horror">
-          <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="قصة رعب" class="story-thumbnail">
-          <div class="category">رعب</div> <!-- التصنيف -->
-          <h3>قصة رعب في الليل</h3>
-          <p>في إحدى الليالي، كنت أسمع أصواتاً غريبة في المنزل...</p>
-          <a href="#">قراءة المزيد</a>
-        </div>
-  
-        <div class="story mystery">
-          <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="مغامرة غامضة" class="story-thumbnail">
-          <div class="category">غامض</div> <!-- التصنيف -->
-          <h3>مغامرة في الغابة</h3>
-          <p>أثناء رحلتنا في الغابة، اكتشفنا شيئاً غريباً...</p>
-          <a href="#">قراءة المزيد</a>
-        </div>
-        
-  
-        <div class="story weird">
-          <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="حادثة غريبة" class="story-thumbnail">
-          <div class="category">غريب</div> <!-- التصنيف -->
-          <h3>حادثة غير متوقعة</h3>
-          <p>في أحد الأيام، وقعت حادثة غير متوقعة تركت الجميع في حالة من الذهول...</p>
-          <a href="#">قراءة المزيد</a>
-        </div>
-      </div>
+  <!-- أيقونة الهمبرجر -->
+<div id="hamburgerWrapper" class="md:hidden fixed top-4 right-4 z-50 transition-transform duration-300">
+  <button id="menuBtn" class="flex flex-col items-end gap-1 p-2 bg-[#130000] rounded-md shadow-md">
+    <span class="block w-6 h-0.5 bg-white"></span>
+    <span class="block w-5 h-0.5 bg-white"></span>
+    <span class="block w-4 h-0.5 bg-white"></span>
+  </button>
+</div>
+
+
+<!-- غطاء للخلفية -->
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30 md:hidden"></div>
+
+<!-- القائمة الجانبية المحسّنة -->
+<div id="sidebarMenu" class="fixed top-0 right-0 h-full w-72 bg-[#130000] transform translate-x-full transition-transform duration-300 z-40 md:hidden shadow-2xl rounded-l-2xl overflow-hidden">
+  <div class="p-5 h-full flex flex-col">
+    <h2 class="text-white text-2xl font-bold mb-4 pb-2 border-b border-[#2c1b1b]">القائمة</h2>
+    <ul class="text-white text-base divide-y divide-[#2c1b1b]">
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="home-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="../home.html#home" class="w-full">الرئيسية</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="book-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="../home.html#cards" class="w-full">القصص</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="newspaper-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="../home.html#news" class="w-full">الأخبار</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="play-circle-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="../home.html#video" class="w-full">الفيديو</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="call-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="../home.html#footer" class="w-full">اتصل بنا</a>
+      </li>
+    </ul>
+    
+    <!-- قسم إضافي للزينة أو مستقبلًا -->
+    <div class="mt-auto pt-6 border-t border-[#2c1b1b] text-center text-sm text-gray-400">
+      <p>NIGHTMAReS © 2025</p>
     </div>
-  </section> 
+  </div>
+</div>
+
+
+
+
+ 
+  <main>
+  <!-- عنوان قسم القصص بتصميم احترافي -->
+<div class="relative text-center mt-20 mb-8 md:mt-28">
+  <h2 class="text-3xl sm:text-4xl md:text-5xl font-black tracking-wide text-white relative z-10">
+    <span class="text-white drop-shadow-md">قسم</span>
+    <span class="text-red-600 drop-shadow-[0_0_15px_rgba(255,0,0,0.7)]">القصص</span>
+  </h2>
+
+  <div class="w-28 h-1 bg-gradient-to-r from-red-700 via-red-500 to-red-700 mx-auto mt-3 rounded-full animate-pulse"></div>
+
+  <p class="mt-2 text-sm text-gray-400 italic">
+    حيث تنتهي الحقيقة... وتبدأ الكوابيس
+  </p>
+</div>
+
+
+<!-- مساحة إعلان -->
+<div class="mx-auto mt-6 mb-4 max-w-xl bg-[#1a0a0a] border border-red-800 text-white rounded-lg shadow-md p-4 text-center">
+  <h3 class="text-lg font-bold mb-2">إعلان خاص 🔥</h3>
+  <p class="text-sm text-gray-300 mb-3">
+    لا تفوّت قصتنا الجديدة "البيت المهجور" التي حذفت من الإنترنت بسبب رعبها الشديد...
+  </p>
+  <a href="#" class="inline-block px-4 py-2 bg-red-700 hover:bg-red-800 text-white rounded transition">
+    اقرأ الآن
+  </a>
+</div>
+
+
+
+    <!-- كروت القصص -->
+    <section class="cards-section" id="cards">
+      <div class="card" data-content="اكتب هنا">
+        <div class="card-inner">
+          <img src="../images/1.webp" alt="صورة القالب 1">
+          <div class="overlay"></div>
+          <div class="card-content">
+            <h3>سفاح الجيزة</h3>
+            <a href="1/1.html">اقرأ المزيد</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-content="اكتب هنا">
+        <div class="card-inner">
+          <img src="../images/2.webp" alt="صورة القالب 2">
+          <div class="overlay"></div>
+          <div class="card-content">
+            <h3>الطريق 56</h3>
+            <a href="2/2.html">اقرأ المزيد</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" data-content="اكتب هنا">
+        <div class="card-inner">
+          <img src="../images/3.webp" alt="صورة القالب 3">
+          <div class="overlay"></div>
+          <div class="card-content">
+            <h3>فتاة الطريق</h3>
+            <a href="3/3.html">اقرأ المزيد</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+</main>
   
   <!-- التذييل -->
-  <footer>
+  <footer id="footer">
     <div class="footer-content">
       <div class="footer-text">
-        <p>حقوق النشر &copy; 2025 جميع الحقوق محفوظة.</p>
+        <p>حقوق النشر © 2025. جميع الحقوق محفوظة.</p>
+        <p>تصميم وتطوير: NIGHTMAReS</p>
       </div>
       <div class="footer-social">
         <ul>
-          <li><a href="https://facebook.com"><ion-icon name="logo-facebook"></ion-icon></a></li>
-          <li><a href="https://instagram.com"><ion-icon name="logo-instagram"></ion-icon></a></li>
-          <li><a href="https://twitter.com"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li>
+  <a href="#" target="_blank">
+    <i class="fa-brands fa-instagram instagram"></i>
+  </a>
+</li>
+<li>
+  <a href="https://whatsapp.com/channel/0029VbANLVm3mFXyyFhDCd3O" target="_blank">
+    <i class="fa-brands fa-whatsapp whatsapp"></i>
+  </a>
+</li>
+<li>
+  <a href="https://x.com" target="_blank" aria-label="X (Twitter)">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 24 24" width="22" height="22">
+      <path d="M18.89 2H22L14.44 10.21L23.41 22H16.43L10.89 14.8L4.53 22H1.42L9.58 13.18L1 2H8.14L13.17 8.59L18.89 2ZM17.61 20H19.6L7.15 4H5.03L17.61 20Z"/>
+    </svg>
+  </a>
+</li>
+
+
         </ul>
       </div>
     </div>
   </footer>
 
-  <script src="https://unpkg.com/ionicons@5.5.4/dist/ionicons.js"></script> <!-- تحميل أيقونات Ionicons -->
-  <script src="stories-section.js"></script>
+  <!-- JS خارجي -->
+  <script src="../scripts.js"></script>
+
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const sidebarMenu = document.getElementById('sidebarMenu');
+const overlay = document.getElementById('overlay');
+const hamburgerWrapper = document.getElementById('hamburgerWrapper');
+const navbar = document.querySelector('.navbar'); // شريط التنقل
+
+// فتح القائمة
+menuBtn.addEventListener('click', () => {
+  sidebarMenu.classList.remove('translate-x-full');
+  overlay.classList.remove('hidden');
+  hamburgerWrapper.classList.add('hidden');
+});
+
+// إغلاق عند الضغط خارج القائمة
+overlay.addEventListener('click', () => {
+  sidebarMenu.classList.add('translate-x-full');
+  overlay.classList.add('hidden');
+  hamburgerWrapper.classList.remove('hidden');
+});
+
+let lastScrollTop = 0;
+
+window.addEventListener("scroll", () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  if (scrollTop > lastScrollTop && scrollTop > 100) {
+    // التمرير لأسفل: أخفي النافبار وزر الهامبرجر
+    if(navbar) navbar.style.top = '-80px'; // اخفاء النافبار للأعلى
+    if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(100px)"; // اخفاء زر الهامبرجر
+  } else {
+    // التمرير لأعلى: أظهر النافبار وزر الهامبرجر
+    if(navbar) navbar.style.top = '10px';
+    if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(0)";
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
+
+</script>
+
+
+
 </body>
 </html>
