@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم - NIGHTMAReS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body class="bg-black text-white p-6">
+
+  <h1 class="text-3xl font-bold mb-4">لوحة التحكم</h1>
+
+  <section class="mb-10">
+    <h2 class="text-2xl mb-2">🧩 تعديل الكروت</h2>
+    <div id="cardsContainer" class="space-y-4"></div>
+    <button onclick="addCard()" class="bg-green-600 px-4 py-2 rounded mt-4">➕ إضافة كرت جديد</button>
+  </section>
+
+  <section>
+    <h2 class="text-2xl mb-2">📰 تعديل الأخبار</h2>
+    <div id="newsContainer" class="space-y-4"></div>
+    <button onclick="addNews()" class="bg-green-600 px-4 py-2 rounded mt-4">➕ إضافة خبر جديد</button>
+  </section>
+
+  <script src="firebase-config.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>
