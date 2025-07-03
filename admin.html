@@ -2,165 +2,231 @@
 <html lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>لوحة تحكم الأدمن</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Firebase -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>لوحة تحكم NIGHTMAReS</title>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
-      authDomain: "night-ac2a0.firebaseapp.com",
-      databaseURL: "https://night-ac2a0-default-rtdb.europe-west1.firebasedatabase.app",
-      projectId: "night-ac2a0",
-      storageBucket: "night-ac2a0.appspot.com",
-      messagingSenderId: "202751732517",
-      appId: "1:202751732517:web:5d458d19aac8d7135848cc"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #130000; color: #fff; }
+    input, button, textarea { margin: 5px 0; width: 100%; padding: 8px; border-radius: 4px; border: none; }
+    button { background: #b91c1c; color: #fff; cursor: pointer; }
+    button:hover { background: #7f1d1d; }
+    .card, .news { border: 1px solid #7f1d1d; padding: 10px; margin-bottom: 15px; border-radius: 8px; }
+    .actions { margin-top: 10px; }
+    .actions button { width: 48%; margin-right: 2%; }
+    .actions button:last-child { margin-right: 0; background: #555; }
+  </style>
 </head>
-<body class="bg-[#0f0f0f] text-white font-sans p-6">
+<body>
 
-  <div class="max-w-3xl mx-auto">
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-bold">لوحة تحكم الأخبار</h1>
-      <button onclick="logout()" class="bg-red-700 hover:bg-red-900 px-4 py-2 rounded">تسجيل الخروج</button>
-    </div>
+  <h1>لوحة تحكم NIGHTMAReS</h1>
 
-    <div class="bg-[#1a1a1a] p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-semibold mb-4">إضافة خبر جديد</h2>
-      <input id="image" type="text" placeholder="رابط الصورة" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
-      <input id="title" type="text" placeholder="عنوان الخبر" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
-      <input id="summary" type="text" placeholder="الخبر المختصر" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
-      <textarea id="details" placeholder="تفاصيل الخبر (الجزء المخفي)" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600"></textarea>
-      <input id="templateNumber" type="number" min="1" placeholder="رقم قالب الخبر (مثلاً 1 أو 2 أو 3)" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
-      <button onclick="addNews()" class="bg-green-700 hover:bg-green-900 px-4 py-2 rounded">إضافة</button>
-    </div>
+  <h2>إدارة القصص (الكروت)</h2>
 
-    <div id="newsList" class="space-y-4">
-      <!-- الأخبار ستظهر هنا -->
-    </div>
-  </div>
+  <form id="storyForm">
+    <input type="hidden" id="storyId" />
+    <input type="text" id="storyTitle" placeholder="عنوان القصة" required />
+    <input type="url" id="storyImage" placeholder="رابط صورة القصة" required />
+    <input type="url" id="storyLink" placeholder="رابط القصة" required />
+    <button type="submit">حفظ القصة</button>
+  </form>
 
-  <div class="bg-[#1a1a1a] p-6 rounded-lg shadow-md mb-6">
-  <h2 class="text-xl font-semibold mb-4">إرسال إشعار</h2>
-  <input id="notifImage" type="text" placeholder="رابط الصورة" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
-  <input id="notifText" type="text" placeholder="نص الإشعار" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
-  <input id="notifLink" type="text" placeholder="رابط زر (اذهب إلى)" class="w-full mb-3 p-2 rounded bg-gray-800 border border-gray-600">
-  <button onclick="sendNotification()" class="bg-yellow-600 hover:bg-yellow-800 px-4 py-2 rounded">إرسال</button>
-</div>
+  <div id="storiesList"></div>
 
+  <hr />
 
-  <script>
-    // التحقق من تسجيل الدخول
-    firebase.auth().onAuthStateChanged(user => {
-      if (!user) {
-        window.location.href = "login.html";
-      }
-    });
+  <h2>إدارة الأخبار</h2>
 
-    const dbRef = firebase.database().ref("news");
+  <form id="newsForm">
+    <input type="hidden" id="newsId" />
+    <input type="text" id="newsTitle" placeholder="عنوان الخبر" required />
+    <input type="url" id="newsImage" placeholder="رابط صورة الخبر" required />
+    <textarea id="newsSummary" placeholder="ملخص الخبر" required></textarea>
+    <textarea id="newsDetails" placeholder="تفاصيل الخبر"></textarea>
+    <input type="url" id="newsLink" placeholder="رابط الخبر" />
+    <button type="submit">حفظ الخبر</button>
+  </form>
 
-    // إضافة خبر
-    function addNews() {
-      const image = document.getElementById("image").value.trim();
-      const title = document.getElementById("title").value.trim();
-      const summary = document.getElementById("summary").value.trim();
-      const details = document.getElementById("details").value.trim();
-      const templateNumber = document.getElementById("templateNumber").value.trim();
+  <div id="newsList"></div>
 
-      if (!image || !title || !summary || !details || !templateNumber) {
-        return alert("يرجى تعبئة جميع الحقول");
-      }
+<script>
+  // تهيئة Firebase
+  const firebaseConfig = {
+    apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
+    authDomain: "night-ac2a0.firebaseapp.com",
+    databaseURL: "https://night-ac2a0-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "night-ac2a0",
+    storageBucket: "night-ac2a0.appspot.com",
+    messagingSenderId: "202751732517",
+    appId: "1:202751732517:web:5d458d19aac8d7135848cc"
+  };
+  firebase.initializeApp(firebaseConfig);
 
-      const newsId = dbRef.push().key;
-      dbRef.child(newsId).set({ image, title, summary, details, templateNumber });
+  const storiesRef = firebase.database().ref('stories');
+  const newsRef = firebase.database().ref('news');
 
-      // إعادة تعيين النموذج
-      document.getElementById("image").value = "";
-      document.getElementById("title").value = "";
-      document.getElementById("summary").value = "";
-      document.getElementById("details").value = "";
-      document.getElementById("templateNumber").value = "";
-    }
+  const storyForm = document.getElementById('storyForm');
+  const newsForm = document.getElementById('newsForm');
 
-    // عرض الأخبار
-    dbRef.on("value", snapshot => {
-      const newsList = document.getElementById("newsList");
-      newsList.innerHTML = "";
+  const storiesList = document.getElementById('storiesList');
+  const newsList = document.getElementById('newsList');
 
-      snapshot.forEach(child => {
-        const data = child.val();
-        const key = child.key;
+  // --- دوال لإدارة القصص ---
 
-        const item = document.createElement("div");
-        item.className = "bg-[#1f1f1f] p-4 rounded shadow";
+  // عرض القصص
+  function displayStories() {
+    storiesRef.off(); // منع تكرار الحدث
+    storiesRef.on('value', snapshot => {
+      storiesList.innerHTML = '';
+      snapshot.forEach(childSnap => {
+        const story = childSnap.val();
+        const id = childSnap.key;
 
-        item.innerHTML = `
-          <img src="${data.image}" class="w-full h-48 object-cover rounded mb-2">
-          <input value="${data.title}" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="title-${key}">
-          <input value="${data.summary}" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="summary-${key}">
-          <textarea class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="details-${key}">${data.details}</textarea>
-          <input value="${data.image}" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="image-${key}">
-          <input value="${data.templateNumber || ''}" placeholder="رقم القالب" class="w-full mb-2 p-2 rounded bg-gray-800 border border-gray-600" id="template-${key}">
-          <div class="flex gap-4">
-            <button onclick="updateNews('${key}')" class="bg-blue-700 hover:bg-blue-900 px-3 py-1 rounded">تعديل</button>
-            <button onclick="deleteNews('${key}')" class="bg-red-700 hover:bg-red-900 px-3 py-1 rounded">حذف</button>
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+          <strong>${story.title}</strong><br/>
+          <img src="${story.image}" alt="${story.title}" width="150" /><br/>
+          <a href="${story.link}" target="_blank">${story.link}</a><br/>
+          <div class="actions">
+            <button onclick="editStory('${id}')">تعديل</button>
+            <button onclick="deleteStory('${id}')">حذف</button>
           </div>
         `;
-
-        newsList.appendChild(item);
+        storiesList.appendChild(div);
       });
     });
-
-    function updateNews(id) {
-      const title = document.getElementById(`title-${id}`).value;
-      const summary = document.getElementById(`summary-${id}`).value;
-      const details = document.getElementById(`details-${id}`).value;
-      const image = document.getElementById(`image-${id}`).value;
-      const templateNumber = document.getElementById(`template-${id}`).value;
-
-      dbRef.child(id).update({ title, summary, details, image, templateNumber });
-    }
-
-    function deleteNews(id) {
-      if (confirm("هل أنت متأكد من حذف هذا الخبر؟")) {
-        dbRef.child(id).remove();
-      }
-    }
-
-    function logout() {
-      firebase.auth().signOut().then(() => {
-        window.location.href = "login.html";
-      });
-    }
-  </script>
-
-  <script>
-const notifRef = firebase.database().ref("notifications");
-
-function sendNotification() {
-  const image = document.getElementById("notifImage").value.trim();
-  const text = document.getElementById("notifText").value.trim();
-  const link = document.getElementById("notifLink").value.trim();
-
-  if (!image || !text || !link) {
-    return alert("يرجى تعبئة كل بيانات الإشعار");
   }
 
-  notifRef.set({ image, text, link }); // نستبدل المحتوى الحالي لأنه إشعار واحد فقط
+  // إضافة أو تعديل قصة
+  storyForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const id = document.getElementById('storyId').value;
+    const title = document.getElementById('storyTitle').value;
+    const image = document.getElementById('storyImage').value;
+    const link = document.getElementById('storyLink').value;
 
-  document.getElementById("notifImage").value = "";
-  document.getElementById("notifText").value = "";
-  document.getElementById("notifLink").value = "";
+    if (id) {
+      // تعديل
+      storiesRef.child(id).set({ title, image, link })
+        .then(() => {
+          alert('تم تعديل القصة');
+          storyForm.reset();
+          document.getElementById('storyId').value = '';
+        });
+    } else {
+      // إضافة
+      storiesRef.push({ title, image, link })
+        .then(() => {
+          alert('تم إضافة القصة');
+          storyForm.reset();
+        });
+    }
+  });
 
-  alert("تم إرسال الإشعار بنجاح");
-}
+  // تعديل - تحميل بيانات القصة في الفورم
+  function editStory(id) {
+    storiesRef.child(id).get().then(snapshot => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        document.getElementById('storyId').value = id;
+        document.getElementById('storyTitle').value = data.title;
+        document.getElementById('storyImage').value = data.image;
+        document.getElementById('storyLink').value = data.link;
+      }
+    });
+  }
+
+  // حذف القصة
+  function deleteStory(id) {
+    if (confirm('هل أنت متأكد من حذف هذه القصة؟')) {
+      storiesRef.child(id).remove()
+        .then(() => alert('تم الحذف'));
+    }
+  }
+
+  // --- دوال لإدارة الأخبار ---
+
+  // عرض الأخبار
+  function displayNews() {
+    newsRef.off();
+    newsRef.on('value', snapshot => {
+      newsList.innerHTML = '';
+      snapshot.forEach(childSnap => {
+        const news = childSnap.val();
+        const id = childSnap.key;
+
+        const div = document.createElement('div');
+        div.className = 'news';
+        div.innerHTML = `
+          <strong>${news.title}</strong><br/>
+          <img src="${news.image}" alt="${news.title}" width="150" /><br/>
+          <p>${news.summary}</p>
+          <small>${news.details || ''}</small><br/>
+          <a href="${news.link || '#'}" target="_blank">${news.link || ''}</a><br/>
+          <div class="actions">
+            <button onclick="editNews('${id}')">تعديل</button>
+            <button onclick="deleteNews('${id}')">حذف</button>
+          </div>
+        `;
+        newsList.appendChild(div);
+      });
+    });
+  }
+
+  // إضافة أو تعديل خبر
+  newsForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const id = document.getElementById('newsId').value;
+    const title = document.getElementById('newsTitle').value;
+    const image = document.getElementById('newsImage').value;
+    const summary = document.getElementById('newsSummary').value;
+    const details = document.getElementById('newsDetails').value;
+    const link = document.getElementById('newsLink').value;
+
+    if (id) {
+      newsRef.child(id).set({ title, image, summary, details, link })
+        .then(() => {
+          alert('تم تعديل الخبر');
+          newsForm.reset();
+          document.getElementById('newsId').value = '';
+        });
+    } else {
+      newsRef.push({ title, image, summary, details, link })
+        .then(() => {
+          alert('تم إضافة الخبر');
+          newsForm.reset();
+        });
+    }
+  });
+
+  // تعديل - تحميل بيانات الخبر في الفورم
+  function editNews(id) {
+    newsRef.child(id).get().then(snapshot => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        document.getElementById('newsId').value = id;
+        document.getElementById('newsTitle').value = data.title;
+        document.getElementById('newsImage').value = data.image;
+        document.getElementById('newsSummary').value = data.summary;
+        document.getElementById('newsDetails').value = data.details || '';
+        document.getElementById('newsLink').value = data.link || '';
+      }
+    });
+  }
+
+  // حذف الخبر
+  function deleteNews(id) {
+    if (confirm('هل أنت متأكد من حذف هذا الخبر؟')) {
+      newsRef.child(id).remove()
+        .then(() => alert('تم الحذف'));
+    }
+  }
+
+  // تحميل البيانات أول مرة
+  displayStories();
+  displayNews();
+
 </script>
 
 </body>
