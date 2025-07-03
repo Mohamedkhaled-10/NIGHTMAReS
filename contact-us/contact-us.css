@@ -1,0 +1,261 @@
+/* استيراد الخطوط من Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rakkas&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sultan&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Droid+Arabic+Kufi&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap'); /* إضافة خط Cairo */
+
+/* تفعيل التمرير السلس */
+html {
+  scroll-behavior: smooth;
+}
+
+/* إعادة تعيين الأنماط */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+html, body {
+  height: 100%;
+  font-family: 'Cairo', sans-serif; /* استخدم الخط العربي Cairo */
+  direction: rtl;
+}
+
+body {
+  /* خلفية جديدة: تدرج عمودي بين الأخضر الداكن (#013220) والأسود */
+  background: linear-gradient(180deg, #320101, #000000);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* تطبيق اللون الأبيض لجميع النصوص العامة */
+body, p, li, span {
+  color: #fff;
+}
+
+/* تطبيق الخطوط الجديدة للعناوين */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Zilla Slab', 'Rakkas', 'Rock Salt', 'Amiri', 'Sultan', 'Droid Arabic Kufi', sans-serif; /* استخدام الخطوط الجديدة للإنجليزي */
+}
+
+body {
+    font-family: 'Cairo', sans-serif;
+    background: linear-gradient(180deg, #320101, #000000);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  
+  /* شريط التنقل (يُترك بألوانه الأصلية) */
+.navbar {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+/* شريط التنقل */
+.navbar ul {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 5px 15px; /* تقليل الحشو لتقليل ارتفاع الشريط */
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+}
+
+.navbar ul li a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5px;  /* تقليل الحشو داخل عناصر الرابط */
+  transition: 0.3s;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  font-family: 'Cairo', sans-serif;
+}
+
+.navbar ul li {
+  list-style: none;
+  margin: 0 15px;
+  position: relative;
+}
+.navbar ul li a {
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  transition: 0.3s;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  font-family: 'Cairo', sans-serif;
+}
+.navbar ul li a ion-icon {
+  font-size: 1.8em;
+  pointer-events: none;
+  opacity: 0.7;
+  transition: 0.3s;
+}
+.navbar ul li a span {
+  margin-top: 5px;
+  font-size: 0.9em;
+}
+.navbar ul li:hover a ion-icon,
+.navbar ul li.active a ion-icon {
+  opacity: 1;
+}
+
+/* عنصر marker */
+#marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0;
+  transition: 0.5s;
+  z-index: 0;
+}
+#marker::before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 40px;
+  border-radius: 8px;
+  background: #ff0000;
+  box-shadow: 0 0 15px #ff0000,
+              0 0 30px #ff0000,
+              0 0 40px #ff0000,
+              0 0 60px #ff0000;
+}
+
+/* تغيير ألوان marker بناءً على العنصر النشط */
+.navbar ul li:nth-child(1).active ~ #marker::before {
+  background: #5da6ff;
+  box-shadow: 0 0 15px #5da6ff,
+              0 0 30px #5da6ff,
+              0 0 40px #5da6ff,
+              0 0 60px #5da6ff;
+}
+.navbar ul li:nth-child(2).active ~ #marker::before {
+  background: #ff0;
+  box-shadow: 0 0 15px #ff0,
+              0 0 30px #ff0,
+              0 0 40px #ff0,
+              0 0 60px #ff0;
+}
+.navbar ul li:nth-child(3).active ~ #marker::before {
+  background: #df2fff;
+  box-shadow: 0 0 15px #df2fff,
+              0 0 30px #df2fff,
+              0 0 40px #df2fff,
+              0 0 60px #df2fff;
+}
+.navbar ul li:nth-child(4).active ~ #marker::before {
+  background: #0f0;
+  box-shadow: 0 0 15px #0f0,
+              0 0 30px #0f0,
+              0 0 40px #0f0,
+              0 0 60px #0f0;
+}
+
+/* Media Query لتعديل حجم القائمة على الأجهزة الصغيرة */
+@media (max-width: 768px) {
+  .navbar ul li {
+    margin: 0 10px;
+  }
+  .navbar ul li a ion-icon {
+    font-size: 1.5em;
+  }
+  .navbar ul li a span {
+    font-size: 0.8em;
+  }
+}
+  .container {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 600px;
+  }
+  
+  .form-title {
+    font-family: 'Creepster', cursive;
+    font-size: 2.5em;
+    text-align: center;
+    color: #ffeba7;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+  }
+  
+  input, select, textarea {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    color: white;
+    font-size: 1em;
+    transition: background 0.3s ease;
+  }
+  
+  input:focus, select:focus, textarea:focus {
+    background: rgba(255, 255, 255, 0.3);
+    outline: none;
+  }
+  
+  button.submit-btn {
+    background: #ffeba7;
+    color: #333;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  button.submit-btn:hover {
+    background-color: #ff6f00;
+    transform: scale(1.1);
+  }
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 90%;
+      max-width: 100%;
+    }
+  }
+  

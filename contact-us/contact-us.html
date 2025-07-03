@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>اتصل بنا</title>
+  <link rel="stylesheet" href="contact-us.css">
+</head>
+<body>
+
+  <!-- ✅ شريط التنقل -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="../home.html"><ion-icon name="home-outline"></ion-icon><span>الرئيسية</span></a></li>
+      <div id="marker"></div>
+    </ul>
+  </nav>
+  
+  <div class="container">
+    <h1 class="form-title">تواصل معنا </h1>
+    <!-- تعديل الرابط هنا ليكون رابط Formspree -->
+    <form action="https://formspree.io/f/xpwdponz" method="POST" id="story-form" class="story-form">
+      
+      <!-- اسم المرسل -->
+      <label for="name">اسمك</label>
+      <input type="text" id="name" name="name" placeholder="أدخل اسمك" required>
+
+      <!-- عنوان القصة -->
+      <label for="story-title">عنوان المشكلة</label>
+      <input type="text" id="story-title" name="story-title" placeholder="أدخل عنوان المشكلة" required>
+
+      <!-- اختيار الفئة -->
+      <label for="category">فئة المشكلة:</label>
+      <input type="text" id="category" name="category" placeholder="اكتب الفئة هنا" required><br>
+
+      <!-- نص القصة -->
+      <label for="story-content">اكتب المشكلة بالتفصيل</label>
+      <textarea id="story-content" name="story-content" rows="6" placeholder="اكتب مشكلتك هنا..." required></textarea>
+
+      <!-- زر إرسال -->
+      <button type="submit" class="submit-btn">إرسال</button>
+    </form>
+  </div>
+
+</body>
+</html>

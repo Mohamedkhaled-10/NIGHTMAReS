@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta name="google-site-verification" content="eBq9l8CCfzBrXYArPr96pdVtWRutunbaLMa6WLUxlz0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIGHTMAReS - قسم القصص</title>
+
+  <!-- تحسينات SEO -->
+  <meta name="description" content="NIGHTMAReS - قصص رعب وغموض حصرية ومخيفة حيث تختبئ الكوابيس خلف كل همسة. اكتشف أقوى القصص المرعبة مثل سفاح الجيزة والطريق 56.">
+  <meta name="keywords" content="قصص رعب, رعب, كوابيس, غموض, سفاح الجيزة, الطريق 56, فتاة الطريق, قصص مخيفة, قصص مرعبة">
+  <meta name="author" content="NIGHTMAReS Team">
+
+  <!-- Manifest و أيقونات -->
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="../images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="../images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../images/android-chrome-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../images/android-chrome-512x512.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../images/apple-touch-icon.png">
+
+  <!-- Font Awesome و Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- CSS خارجي -->
+  <link rel="stylesheet" href="Terms-of-Use-and-Privacy-Policy.css">
+
+  <!-- OneSignal -->
+  <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
+  <script>
+    window.OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: "69b97a9f-de81-41e4-ae6d-e7d582f3d33d",
+      });
+    });
+  </script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="NIGHTMAReS">
+  <meta property="og:description" content="NIGHTMAReS - حيث تختبئ الكوابيس خلف كل همسة">
+  <meta property="og:image" content="https://i.postimg.cc/BvmF6Pm8/Chat-GPT-Image-May-3-2025-10-23-30-PM.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://nightma-re-s.vercel.app/stories/stories-section">
+</head>
+<body>
+
+  <!-- شريط التنقل -->
+  <!-- تعديل كلاس navbar ليكون ظاهر فقط على md وما فوق -->
+<nav class="navbar hidden md:block">
+
+    <ul>
+      <li class="active">
+        <a href="home.html#home">
+          <ion-icon name="home-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="home.html#cards">
+          <ion-icon name="book-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="home.html#news">
+          <ion-icon name="newspaper-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="home.html#video">
+          <ion-icon name="play-circle-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="contact-us/contact-us.html">
+          <ion-icon name="call-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <div id="marker"></div>
+    </ul>
+  </nav>
+
+  <!-- أيقونة الهمبرجر -->
+<div id="hamburgerWrapper" class="md:hidden fixed top-4 right-4 z-50 transition-transform duration-300">
+  <button id="menuBtn" class="flex flex-col items-end gap-1 p-2 bg-[#130000] rounded-md shadow-md">
+    <span class="block w-6 h-0.5 bg-white"></span>
+    <span class="block w-5 h-0.5 bg-white"></span>
+    <span class="block w-4 h-0.5 bg-white"></span>
+  </button>
+</div>
+
+
+<!-- غطاء للخلفية -->
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30 md:hidden"></div>
+
+<!-- القائمة الجانبية المحسّنة -->
+<div id="sidebarMenu" class="fixed top-0 right-0 h-full w-72 bg-[#130000] transform translate-x-full transition-transform duration-300 z-40 md:hidden shadow-2xl rounded-l-2xl overflow-hidden">
+  <div class="p-5 h-full flex flex-col">
+    <h2 class="text-white text-2xl font-bold mb-4 pb-2 border-b border-[#2c1b1b]">القائمة</h2>
+    <ul class="text-white text-base divide-y divide-[#2c1b1b]">
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="home-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="home.html#home" class="w-full">الرئيسية</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="book-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="home.html#cards" class="w-full">القصص</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="newspaper-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="home.html#news" class="w-full">الأخبار</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="play-circle-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="home.html#video" class="w-full">الفيديو</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="call-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="contact-us/contact-us.html" class="w-full">اتصل بنا</a>
+      </li>
+    </ul>
+    
+    <!-- قسم إضافي للزينة أو مستقبلًا -->
+    <div class="mt-auto pt-6 border-t border-[#2c1b1b] text-center text-sm text-gray-400">
+      <p>NIGHTMAReS © 2025</p>
+    </div>
+  </div>
+</div>
+
+
+
+
+ <main>
+  <section id="terms">
+    <h1 class="text-3xl font-bold mb-6 text-center">سياسة الاستخدام</h1>
+    <p>
+      باستخدامك لموقع NIGHTMAReS، فإنك توافق على الالتزام بشروط الاستخدام التالية:
+    </p>
+    <ul class="list-disc list-inside space-y-2 mt-4">
+      <li>المحتوى المنشور هو لأغراض الترفيه فقط.</li>
+      <li>يحظر استخدام الموقع لنشر أو مشاركة محتوى غير قانوني أو مسيء.</li>
+      <li>نحتفظ بحق تعديل أو حذف أي محتوى دون إشعار مسبق.</li>
+      <li>الموقع غير مسؤول عن أي أضرار تنشأ من استخدام المحتوى.</li>
+      <li>يجب احترام حقوق الملكية الفكرية وعدم نسخ المحتوى بدون إذن.</li>
+    </ul>
+    <p class="mt-6">
+      لأي استفسار أو شكوى، يرجى التواصل معنا عبر صفحة 
+      <a href="contact-us/contact-us.html" style="color:#f87171;">اتصل بنا</a>.
+    </p>
+  </section>
+
+  <section id="privacy">
+    <h1 class="text-3xl font-bold mb-6 text-center">سياسة الخصوصية</h1>
+    <p>
+      نحن نحترم خصوصيتك ونلتزم بحماية بياناتك الشخصية أثناء استخدام موقعنا NIGHTMAReS.
+    </p>
+    <p class="mt-4">
+      <strong>جمع المعلومات:</strong> لا نقوم بجمع معلومات شخصية حساسة بدون موافقتك. قد يتم جمع معلومات عامة مثل نوع المتصفح، الصفحات التي تزورها، وعنوان الـ IP لتحسين تجربة المستخدم.
+    </p>
+    <p class="mt-4">
+      <strong>ملفات تعريف الارتباط (Cookies):</strong> نستخدم ملفات تعريف الارتباط لتحسين الموقع وتحليل الاستخدام. يمكنك تعطيل الكوكيز من إعدادات المتصفح، ولكن قد يؤثر ذلك على بعض وظائف الموقع.
+    </p>
+    <p class="mt-4">
+      <strong>مشاركة المعلومات:</strong> لا نشارك بياناتك الشخصية مع أطراف ثالثة إلا إذا تطلب القانون ذلك أو بموافقتك الصريحة.
+    </p>
+    <p class="mt-4">
+      لأي أسئلة أو استفسارات، يرجى التواصل معنا عبر صفحة 
+      <a href="contact-us/contact-us.html" style="color:#f87171;">اتصل بنا</a>.
+    </p>
+  </section>
+
+  <section id="about">
+    <h1 class="text-3xl font-bold mb-6 text-center">من نحن</h1>
+    <p>
+      موقع NIGHTMAReS هو منصة متخصصة في تقديم أفضل القصص والروايات في مجال الرعب والغموض. نعمل على تقديم محتوى فريد ومشوق لعشاق هذا النوع من القصص.
+    </p>
+    <p class="mt-4">
+      فريقنا مكون من مجموعة من المحبين للقصص المرعبة والغموض، نسعى دائمًا لتقديم محتوى ذو جودة عالية، ومساعدة مجتمع القراء في اكتشاف قصص جديدة وشيقة.
+    </p>
+    <p class="mt-4">
+      شكراً لزيارتك، ونتمنى لك تجربة مليئة بالتشويق والرعب الآمن.
+    </p>
+  </section>
+</main>
+
+  
+  <!-- التذييل -->
+  <footer id="footer">
+    <div class="footer-content">
+      <div class="footer-text">
+        <p>حقوق النشر © 2025. جميع الحقوق محفوظة.</p>
+        <p>تصميم وتطوير: NIGHTMAReS</p>
+      </div>
+      <div class="footer-social">
+        <ul>
+          <li>
+  <a href="#" target="_blank">
+    <i class="fa-brands fa-instagram instagram"></i>
+  </a>
+</li>
+<li>
+  <a href="https://whatsapp.com/channel/0029VbANLVm3mFXyyFhDCd3O" target="_blank">
+    <i class="fa-brands fa-whatsapp whatsapp"></i>
+  </a>
+</li>
+<li>
+  <a href="https://x.com" target="_blank" aria-label="X (Twitter)">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 24 24" width="22" height="22">
+      <path d="M18.89 2H22L14.44 10.21L23.41 22H16.43L10.89 14.8L4.53 22H1.42L9.58 13.18L1 2H8.14L13.17 8.59L18.89 2ZM17.61 20H19.6L7.15 4H5.03L17.61 20Z"/>
+    </svg>
+  </a>
+</li>
+
+
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JS خارجي -->
+ 
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const sidebarMenu = document.getElementById('sidebarMenu');
+const overlay = document.getElementById('overlay');
+const hamburgerWrapper = document.getElementById('hamburgerWrapper');
+const navbar = document.querySelector('.navbar'); // شريط التنقل
+
+// فتح القائمة
+menuBtn.addEventListener('click', () => {
+  sidebarMenu.classList.remove('translate-x-full');
+  overlay.classList.remove('hidden');
+  hamburgerWrapper.classList.add('hidden');
+});
+
+// إغلاق عند الضغط خارج القائمة
+overlay.addEventListener('click', () => {
+  sidebarMenu.classList.add('translate-x-full');
+  overlay.classList.add('hidden');
+  hamburgerWrapper.classList.remove('hidden');
+});
+
+let lastScrollTop = 0;
+
+window.addEventListener("scroll", () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  if (scrollTop > lastScrollTop && scrollTop > 100) {
+    // التمرير لأسفل: أخفي النافبار وزر الهامبرجر
+    if(navbar) navbar.style.top = '-80px'; // اخفاء النافبار للأعلى
+    if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(100px)"; // اخفاء زر الهامبرجر
+  } else {
+    // التمرير لأعلى: أظهر النافبار وزر الهامبرجر
+    if(navbar) navbar.style.top = '0px';
+    if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(0)";
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
+
+</script>
+
+
+
+</body>
+</html>
