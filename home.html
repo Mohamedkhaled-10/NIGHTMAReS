@@ -358,42 +358,53 @@ class="absolute right-0 top-0 h-full w-1/3 sm:w-1/4 xs:w-1/5 object-cover opacit
   }
 </script>
 <script>
-  const messages = [
-    "مرحبًا بك في عالم الظلام...",
-    "هل تظن أنك وحدك؟",
-    "راقب الاشياء من حولك جيدًا...",
-    "أنا هنا لأحكي لك قصة لن تنساها!"
-  ];
+const messages = [
+  "مرحبًا بك في عالم الظلام...",
+  "هل تظن أنك وحدك؟",
+  "راقب الاشياء من حولك جيدًا...",
+  "أنا هنا لأحكي لك قصة لن تنساها!"
+];
 
-  const bubble = document.getElementById("bubble");
-  const container = document.querySelector(".horror-character-container");
+const bubble = document.getElementById("bubble");
+const container = document.querySelector(".horror-character-container");
 
-  let index = 0;
+let index = 0;
 
-  function showNextMessage() {
-if (index >= messages.length) {
-  // إخفاء الشخصية بعد آخر رسالة
-  container.style.transition = "top 2s ease, opacity 2s ease";
-  container.style.top = "-300px";
-  container.style.opacity = "0"; // إضافة إخفاء بالتدريج
+function showNextMessage() {
+  if (index >= messages.length) {
+    container.style.transition = "top 2s ease, opacity 2s ease";
+    container.style.top = "-300px";
+    container.style.opacity = "0";
+    setTimeout(() => {
+      container.style.display = "none";
+    }, 2000);
+
+    // حفظ الحالة في localStorage إن الشخصية ظهرت
+    localStorage.setItem("horrorCharacterShown", "true");
+    return;
+  }
+
+  bubble.style.opacity = "0";
   setTimeout(() => {
-    container.style.display = "none"; // إزالة نهائية من الصفحة
-  }, 2000); // بعد انتهاء الأنيميشن
-  return;
+    bubble.textContent = messages[index];
+    bubble.style.opacity = "1";
+    index++;
+    setTimeout(showNextMessage, 3500);
+  }, 500);
 }
 
-bubble.style.opacity = "0";
-setTimeout(() => {
-  bubble.textContent = messages[index];
-  bubble.style.opacity = "1";
-  index++;
-  setTimeout(showNextMessage, 3500); // مدة كل رسالة
-}, 500);
-}
+// التحقق إذا كانت الشخصية ظهرت قبل كده
+const hasShown = localStorage.getItem("horrorCharacterShown");
 
-
-  // بدء التشغيل بعد نزول الشخصية
+if (!hasShown) {
+  // لو أول مرة، تظهر الشخصية وتبدأ الرسائل
+  container.style.display = "block"; // تأكد إن الشخصية بتظهر
   setTimeout(showNextMessage, 3000);
+} else {
+  // لو ظهرت قبل كده، اخفي الشخصية فورًا
+  container.style.display = "none";
+}
+
 </script>
 <script>
   const buttons = document.querySelectorAll(".read-more-btn");
