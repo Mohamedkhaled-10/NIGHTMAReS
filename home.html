@@ -613,5 +613,20 @@ window.addEventListener("scroll", () => {
   lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
 });
 </script>
+  <script>
+  const searchToggle = document.getElementById("searchToggle");
+  const searchForm = document.getElementById("searchForm");
+  let searchOpen = false;
+
+  searchToggle.addEventListener("click", () => {
+    if (searchOpen) {
+      searchForm.style.maxHeight = "0";
+    } else {
+      searchForm.style.maxHeight = "200px"; // تقدر تغير القيمة حسب الطول المناسب
+    }
+    searchOpen = !searchOpen;
+  });
+</script>
+
 </body>
 </html>
