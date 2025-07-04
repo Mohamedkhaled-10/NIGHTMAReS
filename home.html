@@ -108,6 +108,25 @@
   </div>
   </nav>
 
+  <!-- أيقونة البحث للهاتف -->
+<div class="md:hidden fixed top-4 left-4 z-50">
+  <button id="mobileSearchBtn" class="text-white text-2xl p-2 hover:text-red-500 transition">
+    <ion-icon name="search-outline"></ion-icon>
+  </button>
+</div>
+
+<!-- شريط البحث للهاتف -->
+<form id="mobileSearchForm" class="fixed top-14 left-4 right-4 bg-[#130000] rounded-lg overflow-hidden shadow-lg max-h-0 transition-all duration-300 md:hidden z-50">
+  <input
+    type="search"
+    id="searchInput"
+    placeholder="ابحث هنا..."
+    class="w-full px-4 py-3 text-white bg-[#1b0d0d] focus:outline-none placeholder:text-gray-300"
+  />
+  <!-- نتائج البحث المقترحة -->
+  <ul id="suggestionsList" class="bg-[#1b0d0d] text-white hidden"></ul>
+</form>
+
   <!-- أيقونة الهمبرجر -->
 <div id="hamburgerWrapper" class="md:hidden fixed top-4 right-4 z-50 transition-transform duration-300">
   <button id="menuBtn" class="flex flex-col items-end gap-1 p-2 bg-[#130000] rounded-md shadow-md">
@@ -657,6 +676,22 @@ window.addEventListener("scroll", () => {
     });
   });
 </script>
+
+  <script>
+    const mobileSearchBtn = document.getElementById("mobileSearchBtn");
+const mobileSearchForm = document.getElementById("mobileSearchForm");
+let isSearchOpen = false;
+
+mobileSearchBtn.addEventListener("click", () => {
+  if (isSearchOpen) {
+    mobileSearchForm.style.maxHeight = "0";
+  } else {
+    mobileSearchForm.style.maxHeight = "120px"; // أو حسب ارتفاعك
+  }
+  isSearchOpen = !isSearchOpen;
+});
+
+  </script>    
 <script>
 
   const searchInput = document.getElementById("searchInput");
