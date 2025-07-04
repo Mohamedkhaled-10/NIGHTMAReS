@@ -1292,3 +1292,17 @@ button#enterBtn:hover:enabled {
     display: none !important;
   }
 }
+
+@keyframes ticker {
+  0% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
+
+.animate-ticker {
+  animation: ticker 25s linear infinite;
+}
+
+#news-ticker:hover .animate-ticker {
+  animation-play-state: paused;
+}
+
