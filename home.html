@@ -627,6 +627,36 @@ window.addEventListener("scroll", () => {
     searchOpen = !searchOpen;
   });
 </script>
+  <script>
+  const searchInput = document.getElementById("searchInput");
+  const cards = document.querySelectorAll(".cards-section .card");
+  const newsCards = document.querySelectorAll(".news-section .news-card");
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase().trim();
+
+    // فلترة القصص
+    cards.forEach(card => {
+      const title = card.querySelector("h3").textContent.toLowerCase();
+      if (title.includes(query)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    // فلترة الأخبار
+    newsCards.forEach(card => {
+      const title = card.querySelector("h3").textContent.toLowerCase();
+      if (title.includes(query)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+</script>
+
 
 </body>
 </html>
