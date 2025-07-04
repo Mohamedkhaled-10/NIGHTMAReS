@@ -1286,3 +1286,9 @@ button#enterBtn:hover:enabled {
   font-size: 16px;
   border-radius: 6px;
 }
+
+@media (min-width: 768px) {
+  #mobileSearchForm {
+    display: none !important;
+  }
+}
