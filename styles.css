@@ -1292,3 +1292,13 @@ button#enterBtn:hover:enabled {
     display: none !important;
   }
 }
+
+/* يمكنك إضافته في ملف styles.css */
+#notificationBox li {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+#notificationBox li:hover {
+  background-color: #3c1a1a;
+}
