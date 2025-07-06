@@ -141,4 +141,21 @@ db.ref("news").once("value").then(snapshot => {
 
 
 
+  const notifBtn = document.getElementById("notifBtn");
+  const notifMenu = document.getElementById("notifMenu");
+  const notifDot = document.getElementById("notifDot");
+  const notifList = document.getElementById("notificationsList");
+
+  // فتح/إغلاق القائمة
+  notifBtn.addEventListener("click", () => {
+    notifMenu.classList.toggle("hidden");
+    notifDot.classList.add("hidden"); // إخفاء النقطة الحمراء عند فتح القائمة
+  });
+
+  // غلق القائمة عند الضغط خارجها
+  window.addEventListener("click", (e) => {
+    if (!notifBtn.contains(e.target) && !notifMenu.contains(e.target)) {
+      notifMenu.classList.add("hidden");
+    }
+  });
 
