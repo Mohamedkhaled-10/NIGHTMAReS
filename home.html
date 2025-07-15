@@ -452,19 +452,419 @@
       </div>
     </div>
   </footer>
-
-    <!-- تسجيل الـ Service Worker -->
-  <script>
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").then(() => {
-        console.log("Service Worker Registered");
-      }).catch(error => {
-        console.log("Service Worker registration failed:", error);
-      });
-    }
-  </script>
   
   <!-- ربط ملف JavaScript الخارجي -->
 <script src="scripts.js"></script>
+
+<!-- تسجيل الـ Service Worker -->
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js").then(() => {
+      console.log("Service Worker Registered");
+    }).catch(error => {
+      console.log("Service Worker registration failed:", error);
+    });
+  }
+</script>
+<script>
+const messages = [
+  "مرحبًا بك في عالم الظلام...",
+  "هل تظن أنك وحدك؟",
+  "راقب الأشياء من حولك جيدًا...",
+  "أنا هنا لأحكي لك قصة لن تنساها!"
+];
+
+const container = document.getElementById("character");
+const bubble = document.getElementById("bubble");
+let index = 0;
+
+function showNextMessage() {
+  if (index >= messages.length) {
+    container.style.bottom = "-200px";
+    container.style.opacity = "0";
+
+    setTimeout(() => {
+      container.style.display = "none";
+    }, 2000);
+
+    localStorage.setItem("horrorCharacterShown", "true");
+    return;
+  }
+
+  bubble.style.opacity = "0";
+  setTimeout(() => {
+    bubble.textContent = messages[index];
+    bubble.style.opacity = "1";
+    index++;
+    setTimeout(showNextMessage, 3500);
+  }, 500);
+}
+
+const hasShown = localStorage.getItem("horrorCharacterShown");
+
+if (!hasShown) {
+  container.style.display = "block";
+  setTimeout(showNextMessage, 1000);
+} else {
+  container.style.display = "none";
+}
+
+
+</script>
+<script>
+  const buttons = document.querySelectorAll(".read-more-btn");
+
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const textElement = this.previousElementSibling.querySelector(".more-text");
+
+      if (textElement.style.display === "none") {
+        textElement.style.display = "inline";
+        this.textContent = "إخفاء";
+      } else {
+        textElement.style.display = "none";
+        this.textContent = "اقرأ المزيد";
+      }
+    });
+  });
+</script>
+
+<script>
+const dbRef = firebase.database().ref("news");
+const newsSection = document.querySelector(".news-section .news-grid");
+
+dbRef.on("value", snapshot => {
+  // فقط نحذف الأخبار القادمة من Firebase، ونترك الثابتة
+  const existingDynamic = newsSection.querySelectorAll("[data-firebase]");
+  existingDynamic.forEach(el => el.remove());
+
+  snapshot.forEach(child => {
+    const data = child.val();
+
+    const card = document.createElement("div");
+    card.className = "news-card";
+    card.setAttribute("data-firebase", "true"); // تعريف أنها ديناميكية
+
+    card.innerHTML = `
+      <img src="${data.image}" alt="${data.title}">
+      <div class="news-content">
+        <h3>${data.title}</h3>
+        <p class="news-text">
+          ${data.summary}
+          <span class="more-text" style="display: none;">${data.details}</span>
+        </p>
+        <button class="read-more-btn">اقرأ المزيد</button>
+      </div>
+    `;
+
+    newsSection.appendChild(card);
+  });
+
+  // تفعيل أزرار اقرأ المزيد
+  const buttons = document.querySelectorAll(".read-more-btn");
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", function () {
+      const textElement = this.previousElementSibling.querySelector(".more-text");
+      if (textElement.style.display === "none") {
+        textElement.style.display = "inline";
+        this.textContent = "إخفاء";
+      } else {
+        textElement.style.display = "none";
+        this.textContent = "اقرأ المزيد";
+      }
+    });
+  });
+});
+
+</script>
+
+  <script>
+  const notifRef = firebase.database().ref("notifications");
+
+  notifRef.on("value", snapshot => {
+    const data = snapshot.val();
+    if (!data) return;
+
+    // لو في إشعار قديم ظاهر، امسحه
+    const oldNotif = document.getElementById("live-notification");
+    if (oldNotif) oldNotif.remove();
+
+    const notifBox = document.createElement("div");
+    notifBox.id = "live-notification";
+    notifBox.className = "fixed bottom-4 right-4 w-80 bg-[#1f1f1f] text-white rounded-lg shadow-lg p-4 z-50 animate-bounce-in";
+    notifBox.innerHTML = `
+      <div class="flex items-start gap-4">
+        <img src="${data.image}" class="w-16 h-16 object-cover rounded-md flex-shrink-0" alt="notif">
+        <div class="flex-1">
+          <p class="mb-2">${data.text}</p>
+          <div class="flex justify-between items-center">
+            <a href="${data.link}" class="bg-blue-600 hover:bg-blue-800 text-white px-3 py-1 rounded text-sm" target="_blank">اذهب إلى</a>
+            <button onclick="document.getElementById('live-notification')?.remove()" class="text-sm text-gray-400 hover:text-white">إغلاق</button>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(notifBox);
+  });
+</script>
+
+<style>
+  @keyframes bounceIn {
+    0% { opacity: 0; transform: translateY(100%); }
+    60% { opacity: 1; transform: translateY(-10px); }
+    80% { transform: translateY(5px); }
+    100% { transform: translateY(0); }
+  }
+  .animate-bounce-in {
+    animation: bounceIn 0.5s ease-out;
+  }
+</style>
+
+<script>
+const menuBtn = document.getElementById('menuBtn');
+const sidebarMenu = document.getElementById('sidebarMenu');
+const overlay = document.getElementById('overlay');
+const hamburgerWrapper = document.getElementById('hamburgerWrapper');
+const navbar = document.querySelector('.navbar'); // شريط التنقل
+
+// فتح القائمة
+menuBtn.addEventListener('click', () => {
+  sidebarMenu.classList.remove('translate-x-full');
+  overlay.classList.remove('hidden');
+  hamburgerWrapper.classList.add('hidden');
+});
+
+// إغلاق عند الضغط خارج القائمة
+overlay.addEventListener('click', () => {
+  sidebarMenu.classList.add('translate-x-full');
+  overlay.classList.add('hidden');
+  hamburgerWrapper.classList.remove('hidden');
+});
+
+let lastScrollTop = 0;
+
+window.addEventListener("scroll", () => {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  if (scrollTop > lastScrollTop && scrollTop > 100) {
+    // التمرير لأسفل: أخفي النافبار وزر الهامبرجر
+    if(navbar) navbar.style.top = '-80px'; // اخفاء النافبار للأعلى
+    if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(100px)"; // اخفاء زر الهامبرجر
+  } else {
+    // التمرير لأعلى: أظهر النافبار وزر الهامبرجر
+    if(navbar) navbar.style.top = '0'; // تعديل هنا لتكون ملتصقة بالأعلى
+    if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(0)";
+  }
+
+  lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+});
+</script>
+  <script>
+  const searchToggle = document.getElementById("searchToggle");
+  const searchForm = document.getElementById("searchForm");
+  let searchOpen = false;
+
+  searchToggle.addEventListener("click", () => {
+    if (searchOpen) {
+      searchForm.style.maxHeight = "0";
+    } else {
+      searchForm.style.maxHeight = "200px"; // تقدر تغير القيمة حسب الطول المناسب
+    }
+    searchOpen = !searchOpen;
+  });
+</script>
+  <script>
+  const searchInput = document.getElementById("searchInput");
+  const cards = document.querySelectorAll(".cards-section .card");
+  const newsCards = document.querySelectorAll(".news-section .news-card");
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase().trim();
+
+    // فلترة القصص
+    cards.forEach(card => {
+      const title = card.querySelector("h3").textContent.toLowerCase();
+      if (title.includes(query)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    // فلترة الأخبار
+    newsCards.forEach(card => {
+      const title = card.querySelector("h3").textContent.toLowerCase();
+      if (title.includes(query)) {
+        card.style.display = "block";
+      } else {
+        card.style.display = "none";
+      }
+    });
+  });
+</script>
+
+  <script>
+    const mobileSearchBtn = document.getElementById("mobileSearchBtn");
+const mobileSearchForm = document.getElementById("mobileSearchForm");
+let isSearchOpen = false;
+
+mobileSearchBtn.addEventListener("click", () => {
+  if (isSearchOpen) {
+    mobileSearchForm.style.maxHeight = "0";
+  } else {
+    mobileSearchForm.style.maxHeight = "120px"; // أو حسب ارتفاعك
+  }
+  isSearchOpen = !isSearchOpen;
+});
+
+  </script>    
+<script>
+
+  const searchInput = document.getElementById("searchInput");
+const suggestionsList = document.getElementById("suggestionsList");
+
+const titles = [
+  "سفاح الجيزة",
+  "الطريق 56",
+  "فتاة الطريق",
+  "Silent Hill 2",
+  "The Outlast Trials",
+  "Killing Floor 3",
+  "Ritual Tides",
+  "28 YEARS LATER",
+  "المداح",
+  "Hell House LLC",
+  "Final Destination"
+];
+
+function filterContent(query) {
+  const lowerQuery = query.toLowerCase().trim();
+
+  // فلترة القصص
+  cards.forEach(card => {
+    const title = card.querySelector("h3").textContent.toLowerCase();
+    card.style.display = title.includes(lowerQuery) ? "block" : "none";
+  });
+
+  // فلترة الأخبار
+  newsCards.forEach(card => {
+    const title = card.querySelector("h3").textContent.toLowerCase();
+    card.style.display = title.includes(lowerQuery) ? "block" : "none";
+  });
+}
+
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value;
+  filterContent(query);
+});
+
+// لما يضغط Enter أو على الزر
+document.getElementById("mobileSearchForm").addEventListener("submit", (e) => {
+  e.preventDefault(); // منع التحديث التلقائي
+  const query = searchInput.value;
+  filterContent(query);
+});
+
+  suggestionsList.innerHTML = "";
+
+  if (!query) {
+    suggestionsList.classList.add("hidden");
+    return;
+  }
+
+  const matched = titles.filter(title => title.toLowerCase().includes(query));
+  
+  if (matched.length === 0) {
+    suggestionsList.classList.add("hidden");
+    return;
+  }
+
+  matched.forEach(title => {
+    const li = document.createElement("li");
+    li.textContent = title;
+    li.className = "px-4 py-2 hover:bg-red-900 cursor-pointer";
+    li.onclick = () => {
+      searchInput.value = title;
+      suggestionsList.classList.add("hidden");
+      searchInput.dispatchEvent(new Event('input')); // لتفعيل الفلترة
+    };
+    suggestionsList.appendChild(li);
+  });
+
+  suggestionsList.classList.remove("hidden");
+});
+
+document.addEventListener("click", e => {
+  if (!searchInput.contains(e.target) && !suggestionsList.contains(e.target)) {
+    suggestionsList.classList.add("hidden");
+  }
+});
+
+</script>
+  <!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+
+<script>
+  // إعداد Firebase باستخدام بياناتك
+  const firebaseConfig = {
+    apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
+    authDomain: "night-ac2a0.firebaseapp.com",
+    databaseURL: "https://night-ac2a0-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "night-ac2a0",
+    storageBucket: "night-ac2a0.firebasestorage.app",
+    messagingSenderId: "202751732517",
+    appId: "1:202751732517:web:5d458d19aac8d7135848cc"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const messaging = firebase.messaging();
+
+  // طلب إذن واستقبال التوكن
+  messaging.requestPermission().then(() => {
+    return messaging.getToken();
+  }).then(token => {
+    console.log("FCM Token:", token);
+    // هنا ممكن تبعته للسيرفر الخاص بيك لو بتحفظ التوكنات
+  }).catch(err => {
+    console.error("خطأ في الإذن", err);
+  });
+
+  // استقبال الإشعارات أثناء التصفح
+  messaging.onMessage(payload => {
+    console.log("إشعار وارد:", payload);
+    const { title, body } = payload.notification;
+    addNotification(title, body);
+  });
+
+  // التحكم في القائمة المنسدلة
+  const notifBtn = document.getElementById("notifBtn");
+  const notifMenu = document.getElementById("notifMenu");
+  const notifDot = document.getElementById("notifDot");
+  const notifList = document.getElementById("notificationsList");
+
+  notifBtn.addEventListener("click", () => {
+    notifMenu.classList.toggle("hidden");
+    notifDot.classList.add("hidden");
+  });
+
+  window.addEventListener("click", (e) => {
+    if (!notifBtn.contains(e.target) && !notifMenu.contains(e.target)) {
+      notifMenu.classList.add("hidden");
+    }
+  });
+
+  function addNotification(title, body) {
+    const noNotifMsg = notifList.querySelector("li.text-center");
+    if (noNotifMsg) noNotifMsg.remove();
+
+    const li = document.createElement("li");
+    li.className = "px-4 py-3 text-sm text-white hover:bg-[#2c2c2e] cursor-pointer transition";
+    li.innerHTML = `<strong class="block text-red-500">${title}</strong><span class="text-gray-300">${body}</span>`;
+    notifList.prepend(li);
+    notifDot.classList.remove("hidden");
+  }
+</script>
+
 </body>
 </html>
