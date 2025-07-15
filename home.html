@@ -452,6 +452,17 @@
       </div>
     </div>
   </footer>
+
+    <!-- تسجيل الـ Service Worker -->
+  <script>
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").then(() => {
+        console.log("Service Worker Registered");
+      }).catch(error => {
+        console.log("Service Worker registration failed:", error);
+      });
+    }
+  </script>
   
   <!-- ربط ملف JavaScript الخارجي -->
 <script src="scripts.js"></script>
