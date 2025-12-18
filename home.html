@@ -198,14 +198,6 @@
     </div>
   </div>
 </div>
-
-  
- <div id="AD_CONTAINER_ID"></div>
-<script type="module">
-  import initAdEmbed from 'https://nightma-re-s.vercel.app/ad-embed.js';
-  initAdEmbed({ containerId: 'AD_CONTAINER_ID', templateId: 'preset_mobile' });
-</script>
-
   
   <!-- قسم الـ Hero -->
   <section class="hero-new" id="home">
@@ -227,11 +219,12 @@
     </div>
   </section>
 
-<!-- Ad Slot : After Hero -->
-<div class="ad-slot my-8"
-     data-ad-id="home_after_hero"
-     data-ad-size="horizontal">
-</div>
+<div id="AD_CONTAINER_ID"></div>
+<script type="module">
+  import initAdEmbed from 'https://nightma-re-s.vercel.app/ad-embed.js';
+  initAdEmbed({ containerId: 'AD_CONTAINER_ID', templateId: 'preset_mobile' });
+</script>
+<!-- تأكد إن ad-embed.js متاح في نفس المسار أو غيّر THIS_ASSETS_BASE -->
 
 
   <!-- قسم القوالب (الكروت) -->
@@ -883,6 +876,7 @@ document.addEventListener("click", e => {
 
 </body>
 </html>
+
 
 
 
