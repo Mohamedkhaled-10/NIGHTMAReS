@@ -219,14 +219,6 @@
     </div>
   </section>
 
-<div id="AD_CONTAINER_ID"></div>
-<script type="module">
-  import initAdEmbed from 'https://nightma-re-s.vercel.app/ad-embed.js';
-  initAdEmbed({ containerId: 'AD_CONTAINER_ID', templateId: 'preset_mobile' });
-</script>
-<!-- تأكد إن ad-embed.js متاح في نفس المسار أو غيّر THIS_ASSETS_BASE -->
-
-
   <!-- قسم القوالب (الكروت) -->
   <section class="cards-section" id="cards">
     <div class="card" data-content="اكتب هنا">
@@ -380,6 +372,13 @@
       </div>
     </a>
 
+    <div id="AD_CONTAINER_ID"></div>
+<script type="module">
+  import initAdEmbed from 'https://nightma-re-s.vercel.app/ad-embed.js';
+  initAdEmbed({ containerId: 'AD_CONTAINER_ID', templateId: 'preset_mobile' });
+</script>
+<!-- تأكد إن ad-embed.js متاح في نفس المسار أو غيّر THIS_ASSETS_BASE -->
+    
     <a href="videos/28 YEARS LATER/28 YEARS LATER.html" class="video-card">
       <img src="https://i.ytimg.com/vi/mcvLKldPM08/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLC1qf7BkSiD6w8qGc5zR7gfqEYaHw" alt="فيديو 2">
       <div class="video-content">
@@ -876,6 +875,7 @@ document.addEventListener("click", e => {
 
 </body>
 </html>
+
 
 
 
