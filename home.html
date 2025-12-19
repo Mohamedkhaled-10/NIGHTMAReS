@@ -15,24 +15,6 @@
 <link rel="icon" type="image/png" sizes="192x192" href="images/android-chrome-192x192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="images/android-chrome-512x512.png">
 
-  <style> #mobileAdWrapper {
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    animation: adSlideUp 0.45s ease-out;
-  }
-
-  @keyframes adSlideUp {
-    from {
-      transform: translateY(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-    </style>
 <!-- أيقونة خاصة بأجهزة Apple -->
 <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
 
@@ -470,26 +452,38 @@
     </div>
   </footer>
   
-    <!-- إعلان منبثق للموبايل -->
-<div id="mobileAdWrapper" class="fixed md:hidden z-50 hidden">
-  <div class="relative bg-[#0b0b0b] border-t-4 border-red-700 shadow-2xl">
+    <!-- تحذير محتوى إعلاني -->
+<div id="adWarningWrapper" class="fixed inset-0 bg-black/80 z-50 hidden flex items-center justify-center md:hidden">
+  <div class="bg-[#130000] text-white p-6 rounded-xl max-w-sm w-[90%] border border-red-700 text-center">
+    <h2 class="text-xl font-bold text-red-500 mb-3">⚠️ تحذير</h2>
+    <p class="text-sm mb-4">
+      قد يحتوي الإعلان التالي على محتوى غير مناسب لمن هم دون 18 عامًا.
+    </p>
+    <div class="flex gap-3 justify-center">
+      <button id="acceptAdWarning" class="bg-red-700 hover:bg-red-800 px-4 py-2 rounded">
+        موافق
+      </button>
+      <button id="رفض" class="bg-gray-700 hover:bg-gray-800 px-4 py-2 rounded">
+        إلغاء
+      </button>
+    </div>
+  </div>
+</div>
 
-    <!-- شريط علوي يوضح أنه إعلان -->
-    <div class="flex justify-between items-center px-3 py-1 bg-[#150000]">
-      <span class="text-xs text-red-400 font-bold uppercase tracking-wider">
-        إعلان ممول
-      </span>
+<!-- إعلان منبثق للموبايل -->
+<div id="mobileAdWrapper" class="fixed bottom-0 left-0 w-full z-50 hidden md:hidden">
+  <div class="bg-[#0b0b0b] border-t-4 border-red-700 shadow-2xl">
 
-      <!-- زر الإغلاق -->
+    <div class="flex justify-between items-center px-3 py-2 bg-[#150000]">
+      <span class="text-xs text-red-400 font-bold uppercase">إعلان</span>
+
       <button
         id="closeMobileAd"
-        class="bg-red-700 hover:bg-red-800 text-white w-8 h-8 rounded-full text-lg font-bold flex items-center justify-center"
-        aria-label="إغلاق الإعلان">
+        class="bg-red-700 hover:bg-red-800 text-white w-8 h-8 rounded-full text-lg font-bold">
         ✕
       </button>
     </div>
 
-    <!-- صورة الإعلان -->
     <a id="mobileAdLink" href="#" target="_blank" rel="sponsored">
       <img
         id="mobileAdImage"
@@ -501,6 +495,11 @@
 
   </div>
 </div>
+
+
+  </div>
+</div>
+
 
   <!-- ربط ملف JavaScript الخارجي -->
 <script src="scripts.js"></script>
@@ -923,8 +922,8 @@ document.addEventListener("click", e => {
     templateId: "preset_mobile"
   });
 </script>
-    <script>
-     const adImages = [
+<script>
+  const adImages = [
     {
       image: "https://i.postimg.cc/j236Z68Q/215434-image.png",
       link: "https://www.pornpics.com/galleries/schoolgirl-blaire-ivory-takes-a-facial-after-hardcore-sex-with-her-teacher-86588296/"
@@ -939,6 +938,10 @@ document.addEventListener("click", e => {
     }
   ];
 
+  const warningBox = document.getElementById("adWarningWrapper");
+  const acceptBtn = document.getElementById("acceptAdWarning");
+  const rejectBtn = document.getElementById("رفض");
+
   const adWrapper = document.getElementById("mobileAdWrapper");
   const adImage = document.getElementById("mobileAdImage");
   const adLink = document.getElementById("mobileAdLink");
@@ -946,22 +949,38 @@ document.addEventListener("click", e => {
 
   // اختيار إعلان عشوائي
   const randomAd = adImages[Math.floor(Math.random() * adImages.length)];
-
   adImage.src = randomAd.image;
   adLink.href = randomAd.link;
 
-  // إظهار الإعلان بعد 4 ثواني (موبايل فقط)
+  // إظهار التحذير بعد 3 ثواني (موبايل فقط)
   setTimeout(() => {
     if (window.innerWidth < 768) {
-      adWrapper.classList.remove("hidden");
+      warningBox.classList.remove("hidden");
     }
-  }, 4000);
+  }, 3000);
+
+  // موافق → عرض الإعلان
+  acceptBtn.addEventListener("click", () => {
+    warningBox.classList.add("hidden");
+    adWrapper.classList.remove("hidden");
+  });
+
+  // إلغاء → لا إعلان
+  rejectBtn.addEventListener("click", () => {
+    warningBox.classList.add("hidden");
+  });
 
   // إغلاق الإعلان
   closeAdBtn.addEventListener("click", () => {
     adWrapper.classList.add("hidden");
   });
-    </script>
+</script>
+
 </body>
 </html>
+
+
+
+
+
 
