@@ -15,6 +15,24 @@
 <link rel="icon" type="image/png" sizes="192x192" href="images/android-chrome-192x192.png">
 <link rel="icon" type="image/png" sizes="512x512" href="images/android-chrome-512x512.png">
 
+  <style> #mobileAdWrapper {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    animation: adSlideUp 0.45s ease-out;
+  }
+
+  @keyframes adSlideUp {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+    </style>
 <!-- أيقونة خاصة بأجهزة Apple -->
 <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
 
@@ -452,6 +470,38 @@
     </div>
   </footer>
   
+    <!-- إعلان منبثق للموبايل -->
+<div id="mobileAdWrapper" class="fixed md:hidden z-50 hidden">
+  <div class="relative bg-[#0b0b0b] border-t-4 border-red-700 shadow-2xl">
+
+    <!-- شريط علوي يوضح أنه إعلان -->
+    <div class="flex justify-between items-center px-3 py-1 bg-[#150000]">
+      <span class="text-xs text-red-400 font-bold uppercase tracking-wider">
+        إعلان ممول
+      </span>
+
+      <!-- زر الإغلاق -->
+      <button
+        id="closeMobileAd"
+        class="bg-red-700 hover:bg-red-800 text-white w-8 h-8 rounded-full text-lg font-bold flex items-center justify-center"
+        aria-label="إغلاق الإعلان">
+        ✕
+      </button>
+    </div>
+
+    <!-- صورة الإعلان -->
+    <a id="mobileAdLink" href="#" target="_blank" rel="sponsored">
+      <img
+        id="mobileAdImage"
+        src=""
+        alt="إعلان"
+        class="w-full h-auto block"
+      />
+    </a>
+
+  </div>
+</div>
+
   <!-- ربط ملف JavaScript الخارجي -->
 <script src="scripts.js"></script>
 
@@ -873,13 +923,44 @@ document.addEventListener("click", e => {
     templateId: "preset_mobile"
   });
 </script>
+    <script>
+     const adImages = [
+    {
+      image: "https://i.postimg.cc/j236Z68Q/215434-image.png",
+      link: "https://example.com/ad1"
+    },
+    {
+      image: "https://i.postimg.cc/Zq74VC8L/34972903-044-f386.png",
+      link: "https://example.com/ad2"
+    },
+    {
+      image: "https://cdni.pornpics.com/1280/7/157/54178918/54178918_027_85a7.jpg",
+      link: "https://example.com/ad3"
+    }
+  ];
 
+  const adWrapper = document.getElementById("mobileAdWrapper");
+  const adImage = document.getElementById("mobileAdImage");
+  const adLink = document.getElementById("mobileAdLink");
+  const closeAdBtn = document.getElementById("closeMobileAd");
+
+  // اختيار إعلان عشوائي
+  const randomAd = adImages[Math.floor(Math.random() * adImages.length)];
+
+  adImage.src = randomAd.image;
+  adLink.href = randomAd.link;
+
+  // إظهار الإعلان بعد 4 ثواني (موبايل فقط)
+  setTimeout(() => {
+    if (window.innerWidth < 768) {
+      adWrapper.classList.remove("hidden");
+    }
+  }, 4000);
+
+  // إغلاق الإعلان
+  closeAdBtn.addEventListener("click", () => {
+    adWrapper.classList.add("hidden");
+  });
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
