@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تسجيل الدخول - Nightmares</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+    body { font-family: 'Cairo', sans-serif; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+  <div class="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-sm border border-gray-700">
+    <div class="text-center mb-6">
+      <i class="fas fa-ghost text-4xl text-red-600 mb-2"></i>
+      <h2 class="text-2xl font-bold" id="form-title">تسجيل الدخول</h2>
+    </div>
+    
+    <!-- Auth Form -->
+    <form id="auth-form" class="space-y-4">
+      <div id="name-field" class="hidden">
+        <input type="text" id="displayName" placeholder="الاسم الشخصي" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+      </div>
+      <div>
+        <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      </div>
+      <div id="password-field">
+        <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+      </div>
+      <button type="submit" id="btn-submit" class="w-full bg-red-600 hover:bg-red-700 transition text-white font-bold p-3 rounded mt-2">
+        تسجيل الدخول <i class="fas fa-sign-in-alt mr-2"></i>
+      </button>
+    </form>
+    
+    <p id="error-msg" class="mt-4 text-red-500 text-center font-semibold text-sm hidden"></p>
+    <p id="success-msg" class="mt-4 text-green-500 text-center font-semibold text-sm hidden"></p>
+    
+    <div class="mt-6 text-center text-sm text-gray-400 space-y-2">
+      <p id="toggle-register">ليس لديك حساب؟ <a href="#" class="text-red-500 hover:underline">إنشاء حساب جديد</a></p>
+      <p id="toggle-login" class="hidden">لديك حساب بالفعل؟ <a href="#" class="text-red-500 hover:underline">تسجيل الدخول</a></p>
+      <p id="toggle-reset"><a href="#" class="text-gray-300 hover:underline">نسيت كلمة المرور؟</a></p>
+      <p class="mt-4"><a href="//" class="text-gray-500 hover:text-white"><i class="fas fa-arrow-right ml-1"></i> العودة للرئيسية</a></p>
+    </div>
+  </div>
+
+  
+  
+  
+  
+  <script type="module" src="/js/login.js"></script>
+</body>
+</html>

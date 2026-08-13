@@ -7,7 +7,7 @@ document.body.classList.add('hidden');
 
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
-    window.location.href = '/login.html';
+    window.location.href = '//login';
     return;
   }
   
@@ -19,7 +19,7 @@ onAuthStateChanged(auth, async (user) => {
   if (logoutBtn) {
     logoutBtn.addEventListener('click', () => {
       signOut(auth).then(() => {
-        window.location.href = '/login.html';
+        window.location.href = '//login';
       });
     });
   }

@@ -7,26 +7,26 @@
   <title>NIGHTMAReS</title>
 <link rel="manifest" href="/manifest.json">
   <!-- أيقونة المتصفح الأساسية -->
-<link rel="icon" type="image/x-icon" href="images/favicon.ico">
+<link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
 
 <!-- أيقونات مختلفة لحجم متعدد -->
-<link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="images/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="images/android-chrome-512x512.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/images/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/assets/images/android-chrome-512x512.png">
 
 <!-- أيقونة خاصة بأجهزة Apple -->
-<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
 
 <!-- ملف Web Manifest لتعريف الأيقونات على أنظمة التشغيل -->
-<link rel="manifest" href="images/site.webmanifest">
+<link rel="manifest" href="/assets/images/site.webmanifest">
   <!-- تضمين Font Awesome و Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- ربط ملف CSS الخارجي -->
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles/main.css">
 
   <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async=""></script>
 <script>
@@ -82,13 +82,13 @@
         </a>
       </li>
       <li>
-        <a href="contact-us/contact-us.html">
+        <a href="/contact-us">
           <ion-icon name="call-outline"></ion-icon>
           <span></span>
         </a>
       </li>
       <li>
-        <a href="Terms-of-Use-and-Privacy-Policy.html">
+        <a href="/Terms-of-Use-and-Privacy-Policy">
           <ion-icon name="information-circle-outline"></ion-icon>
           <span></span>
         </a>
@@ -184,11 +184,11 @@
       </li>
       <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
         <ion-icon name="call-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="contact-us/contact-us.html" class="w-full">اتصل بنا</a>
+        <a href="/contact-us" class="w-full">اتصل بنا</a>
       </li>
       <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
         <ion-icon name="person-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="Terms-of-Use-and-Privacy-Policy.html" class="w-full">ساياسة الاستخدام والخصوصية</a>
+        <a href="/Terms-of-Use-and-Privacy-Policy" class="w-full">ساياسة الاستخدام والخصوصية</a>
       </li>
     </ul>
     
@@ -207,12 +207,12 @@
     <div class="fog-overlay"></div>
     <!-- المحتوى -->
     <div class="hero-content-new">
-      <img src="images/logo1.png" alt="Logo" class="hero-logo" />
+      <img src="/assets/images/logo1.png" alt="Logo" class="hero-logo" />
       <h1 class="glitch-text" data-text="NIGHTMAReS">NIGHTMAReS</h1>
       <p class="hero-description">حيث تختبئ الكوابيس خلف كل همسة</p>
       <div class="buttons-new">
-        <a href="stories/fans-stories.html" class="btn-neon">قصص المتابعين</a>
-        <a href="download-page.html" class="btn-icon-neon" title="تحميل التطبيق">
+        <a href="/" class="btn-neon">قصص المتابعين</a>
+        <a href="/download-page" class="btn-icon-neon" title="تحميل التطبيق">
           <i class="fa-brands fa-android"></i>
         </a>
       </div>
@@ -225,7 +225,7 @@
   </section>
   
 <div class="story-button-container flex justify-center my-8">
-  <a href="stories/stories-section.html"
+  <a href="#cards"
      class="px-10 py-3 bg-gradient-to-r from-[#b91c1c] to-[#7f1d1d] text-white text-lg font-semibold rounded-full shadow-lg
             hover:scale-105 hover:brightness-110 transition transform duration-300">
     تصفح المزيد من القصص
@@ -344,7 +344,7 @@
   <footer id="footer">
 <!-- Horror Character Feature -->
 <div id="character" class="fixed bottom-[-200px] right-5 flex items-end gap-3 z-50 transition-all duration-1000 opacity-0 hidden">
-  <img src="images/creepy-character.png" alt="Creepy" class="w-32 h-auto" onerror="this.style.display='none'">
+  <img src="/assets/images/creepy-character.png" alt="Creepy" class="w-32 h-auto" onerror="this.style.display='none'">
   <div id="bubble" class="bg-red-900 text-white p-3 rounded-t-xl rounded-bl-xl border border-red-500 shadow-[0_0_15px_red] opacity-0 transition-opacity duration-500 max-w-[200px] text-sm">
     ...
   </div>
@@ -386,7 +386,7 @@
   </footer>
   
   <!-- ربط ملف JavaScript الخارجي -->
-<script src="scripts.js"></script>
+<script src="/js/main.js"></script>
 
 <!-- تسجيل الـ Service Worker -->
 <script>
@@ -559,7 +559,7 @@ window.addEventListener("scroll", () => {
     e.stopImmediatePropagation(); // Prevent the old listener from doing stuff
     const input = e.target.querySelector('input[type="search"]');
     if(input && input.value.trim()) {
-      window.location.href = '/search.html?q=' + encodeURIComponent(input.value.trim());
+      window.location.href = '/search?q=' + encodeURIComponent(input.value.trim());
     }
   };
 
@@ -575,7 +575,7 @@ window.addEventListener("scroll", () => {
 </script>
 
 <!-- Share Story Floating Button -->
-<a href="/submit.html" class="fixed bottom-6 right-6 bg-red-800 text-white px-4 py-3 rounded-full shadow-[0_0_15px_rgba(255,0,0,0.8)] hover:bg-red-600 transition flex items-center gap-2 z-50 animate-pulse hover:animate-none">
+<a href="/submit" class="fixed bottom-6 right-6 bg-red-800 text-white px-4 py-3 rounded-full shadow-[0_0_15px_rgba(255,0,0,0.8)] hover:bg-red-600 transition flex items-center gap-2 z-50 animate-pulse hover:animate-none">
   <ion-icon name="skull-outline" class="text-2xl"></ion-icon>
   <span class="font-bold hidden md:inline">شارك قصتك</span>
 </a>
@@ -586,7 +586,7 @@ window.addEventListener("scroll", () => {
 <div id="age-verification-popup" class="fixed inset-0 bg-black/90 backdrop-blur-sm z-[9999] hidden items-center justify-center">
   <div class="bg-gradient-to-b from-[#3b0000] to-black text-white p-8 rounded-3xl shadow-[0_0_40px_rgba(255,0,0,0.5)] w-[90%] max-w-[400px] text-center relative border border-red-900/50">
     <div class="mb-4">
-      <img src="images/ChatGPT Image May 3, 2025, 10_23_30 PM.png" alt="NIGHTMAReS Logo" class="w-[100px] mx-auto drop-shadow-[0_0_10px_crimson]">
+      <img src="/assets/images/ChatGPT Image May 3, 2025, 10_23_30 PM.png" alt="NIGHTMAReS Logo" class="w-[100px] mx-auto drop-shadow-[0_0_10px_crimson]">
     </div>
     <h2 class="text-3xl font-bold mb-4">تحذير!</h2>
     <p class="text-lg leading-relaxed mb-6 text-gray-200">
