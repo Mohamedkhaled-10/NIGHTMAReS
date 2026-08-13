@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nightmares</title>
+  <link rel="stylesheet" href="/css/article.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/css/ionicons.min.css">
+  <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+  <style>
+    .loading-spinner { display: flex; justify-content: center; align-items: center; height: 50vh; font-size: 2em; color: red; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="progress-bar" style="position: fixed; top: 0; left: 0; height: 5px; background-color: #ff0000; width: 0%; z-index: 1001; transition: width 0.1s;"></div>
+  
+  <div class="wrapper">
+    <nav class="navbar">
+      <ul>
+        <li><a href="/"><ion-icon name="home-outline"></ion-icon><span>الرئيسية</span></a></li>
+      </ul>
+    </nav>
+    
+    <div id="loading" class="loading-spinner">جارِ التحميل...</div>
+
+    <div id="content-area" class="hidden">
+      <h1 class="story-title" id="article-title"></h1>
+      <div class="story-separator"></div>
+      
+      <section class="article-container">
+        <div class="article-box" id="article-body">
+          <!-- Content goes here -->
+        </div>
+      </section>
+
+      <div class="share-buttons">
+        <a id="share-whatsapp" href="#" target="_blank" class="share-btn whatsapp" title="شارك على واتساب">
+          <img src="/images/whatsapp-512.png" alt="WhatsApp" />
+        </a>
+        <a id="share-facebook" href="#" target="_blank" class="share-btn facebook" title="شارك على فيسبوك">
+          <img src="/images/facebook-512.png" alt="Facebook" />
+        </a>
+      </div>
+    </div>
+    
+    <button id="scrollToTop" style="display: none;">عودة للأعلى</button>
+
+    <footer>
+      <div class="footer-content">
+        <p>حقوق النشر &copy; 2025. جميع الحقوق محفوظة.</p>
+        <p>تصميم وتطوير: NIGHTMAReS</p>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="/js/article.js"></script>
+</body>
+</html>

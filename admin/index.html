@@ -2,97 +2,252 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>لوحة التحكم</title>
+  <title>لوحة تحكم Nightmares</title>
+
+  <meta name="description" content="إدارة محتوى الكوابيس (خاص بالإدارة).">
+  <meta property="og:title" content="لوحة تحكم Nightmares">
+  <meta property="og:description" content="إدارة محتوى الكوابيس (خاص بالإدارة).">
+  <meta property="og:image" content="https://nightma-re-s.vercel.app/images/1.webp">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-
-  <!-- إعدادات خط وتحكم بالتنسيق -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      background-color: #f7f7f7;
-    }
-    input, textarea {
-      direction: rtl;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+    body { font-family: 'Cairo', sans-serif; background-color: #f3f4f6; }
+    .hidden { display: none !important; }
   </style>
 </head>
-<body class="p-6 max-w-4xl mx-auto">
+<body class="hidden hidden flex h-screen overflow-hidden">
+  
+  <!-- Sidebar -->
+  <aside class="w-64 bg-gray-900 text-white flex flex-col">
+    <div class="h-16 flex items-center justify-center border-b border-gray-800">
+      <h1 class="text-xl font-bold text-red-600">Nightmares CMS</h1>
+    </div>
+    <nav class="flex-1 overflow-y-auto py-4">
+      <a href="#" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-home ml-2"></i> لوحة القيادة</a>
+      <a href="#" id="menu-posts" class="block px-6 py-3 text-white bg-gray-800"><i class="fas fa-file-alt ml-2"></i> إدارة المحتوى</a>
+            <a href="#" id="menu-submissions" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-user-edit ml-2"></i> مراجعة القصص</a>
+      <a href="#" id="menu-ads" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-ad ml-2"></i> إدارة الإعلانات</a>
+      <a href="#" id="menu-notifications" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-bell ml-2"></i> إدارة الإشعارات</a>
+    </nav>
+    <div class="p-4 border-t border-gray-800">
+      <button id="btn-logout" class="w-full bg-gray-800 text-gray-300 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition text-right">
+        <i class="fas fa-sign-out-alt ml-2"></i> تسجيل الخروج
+      </button>
+    </div>
+  </aside>
 
-  <h1 class="text-3xl font-bold mb-6 text-red-700 text-center">لوحة التحكم</h1>
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col bg-gray-100 overflow-hidden">
+    <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6">
+      <h2 class="text-xl font-semibold text-gray-800">إدارة المحتوى</h2>
+      <button id="btn-new-post" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
+        <i class="fas fa-plus ml-2"></i> إضافة محتوى جديد
+      </button>
+    </header>
 
-  <!-- تحديث القوالب -->
-  <div class="bg-white p-6 rounded-lg shadow mb-10">
-    <h2 class="text-xl font-semibold mb-4">🖼️ تحديث قوالب القصص</h2>
-    <form id="cardForm" class="space-y-4">
-      <div>
-        <label class="block mb-1">رقم القالب:</label>
-        <input type="number" id="cardNumber" class="w-full border rounded p-2" required>
-      </div>
-      <div>
-        <label class="block mb-1">رابط الصورة:</label>
-        <input type="text" id="cardImageURL" class="w-full border rounded p-2" required>
-      </div>
-      <div>
-        <label class="block mb-1">عنوان القصة:</label>
-        <input type="text" id="cardTitle" class="w-full border rounded p-2">
-      </div>
-      <div>
-        <label class="block mb-1">رابط القصة:</label>
-        <input type="text" id="cardLink" class="w-full border rounded p-2">
-      </div>
-      <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition">تحديث القالب</button>
-    </form>
-  </div>
+    <div class="flex-1 overflow-y-auto p-6" id="main-container">
 
-  <!-- تحديث الأخبار -->
-  <div class="bg-white p-6 rounded-lg shadow">
-    <h2 class="text-xl font-semibold mb-4">📰 تحديث الأخبار</h2>
-    <form id="newsForm" class="space-y-4">
-      <div>
-        <label class="block mb-1">رقم الخبر:</label>
-        <input type="number" id="newsNumber" class="w-full border rounded p-2" required>
+      <!-- Ads View -->
+      <div id="view-ads" class="bg-white rounded-lg shadow p-6 hidden">
+        <h3 class="text-2xl font-bold mb-6">إدارة الإعلانات</h3>
+        <form id="ad-form" class="space-y-4 mb-8 p-4 bg-gray-50 border rounded">
+          <input type="hidden" id="ad-id">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-1 font-semibold">رابط صورة الإعلان</label>
+              <input type="url" id="ad-image" class="w-full border rounded p-2" required>
+            </div>
+            <div>
+              <label class="block mb-1 font-semibold">رابط التوجيه (URL)</label>
+              <input type="url" id="ad-link" class="w-full border rounded p-2" required>
+            </div>
+            <div>
+              <label class="block mb-1 font-semibold">نص الإعلان</label>
+              <input type="text" id="ad-text" class="w-full border rounded p-2">
+            </div>
+            <div class="flex items-center mt-6">
+              <label class="flex items-center cursor-pointer">
+                <input type="checkbox" id="ad-active" class="mr-2" checked>
+                <span class="mr-2 font-semibold">تفعيل الإعلان؟</span>
+              </label>
+            </div>
+          </div>
+          <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">حفظ الإعلان</button>
+        </form>
+        
+        <table class="w-full text-right border-collapse">
+          <thead>
+            <tr class="bg-gray-100 border-b">
+              <th class="p-3">صورة</th>
+              <th class="p-3">النص</th>
+              <th class="p-3">الحالة</th>
+              <th class="p-3">إجراءات</th>
+            </tr>
+          </thead>
+          <tbody id="ads-table-body"></tbody>
+        </table>
       </div>
-      <div>
-        <label class="block mb-1">رابط الصورة:</label>
-        <input type="text" id="newsImage" class="w-full border rounded p-2">
-      </div>
-      <div>
-        <label class="block mb-1">عنوان الخبر:</label>
-        <input type="text" id="newsTitle" class="w-full border rounded p-2">
-      </div>
-      <div>
-        <label class="block mb-1">محتوى مختصر:</label>
-        <textarea id="newsShort" rows="2" class="w-full border rounded p-2"></textarea>
-      </div>
-      <div>
-        <label class="block mb-1">تفاصيل إضافية:</label>
-        <textarea id="newsMore" rows="3" class="w-full border rounded p-2"></textarea>
-      </div>
-      <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700 transition">تحديث الخبر</button>
-    </form>
-  </div>
 
-  <!-- Firebase Config -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
-      authDomain: "night-ac2a0.firebaseapp.com",
-      databaseURL: "https://night-ac2a0-default-rtdb.firebaseio.com",
-      projectId: "night-ac2a0",
-      storageBucket: "night-ac2a0.appspot.com",
-      messagingSenderId: "202751732517",
-      appId: "1:202751732517:web:5d458d19aac8d7135848cc"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
+      <!-- Notifications View -->
+      <div id="view-notifications" class="bg-white rounded-lg shadow p-6 hidden">
+        <h3 class="text-2xl font-bold mb-6">إرسال إشعار عاجل</h3>
+        <form id="notif-form" class="space-y-4 max-w-lg">
+          <div>
+            <label class="block mb-1 font-semibold">محتوى الإشعار</label>
+            <textarea id="notif-text" class="w-full border rounded p-2" required rows="3"></textarea>
+          </div>
+          <div>
+            <label class="block mb-1 font-semibold">رابط التوجيه (اختياري)</label>
+            <input type="text" id="notif-link" class="w-full border rounded p-2">
+          </div>
+          <div>
+            <label class="block mb-1 font-semibold">رابط الصورة (اختياري)</label>
+            <input type="url" id="notif-image" class="w-full border rounded p-2">
+          </div>
+          <button type="submit" id="btn-send-notif" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700">إرسال الإشعار الآن</button>
+        </form>
+        <p id="notif-status" class="mt-4 text-green-600 font-bold hidden"></p>
+      </div>
 
-  <!-- كود التحكم -->
-  <script src="admin/admin.js"></script>
+
+      <!-- Submissions List View -->
+      <div id="view-submissions" class="bg-white rounded-lg shadow hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-right border-collapse">
+            <thead>
+              <tr class="bg-gray-50 border-b">
+                <th class="px-6 py-3 text-gray-500 font-semibold">الكاتب</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">العنوان</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">التاريخ</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="submissions-table-body">
+              <!-- JS Injected -->
+            </tbody>
+          </table>
+          <div id="loading-indicator-sub" class="p-8 text-center text-gray-500 hidden">جارِ تحميل البيانات...</div>
+        </div>
+      </div>
+      
+      <!-- Submission Reader View -->
+      <div id="view-submission-reader" class="bg-white rounded-lg shadow p-6 hidden">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold" id="reader-title"></h3>
+          <button id="btn-reader-back" class="text-gray-500 hover:text-gray-700"><i class="fas fa-arrow-right ml-1"></i> عودة</button>
+        </div>
+        <div class="mb-4 text-gray-600 font-semibold" id="reader-author"></div>
+        <div class="mb-6 p-4 bg-gray-50 rounded border text-lg leading-relaxed whitespace-pre-wrap" id="reader-content"></div>
+        <div class="flex space-x-4 space-x-reverse pt-4 border-t">
+          <button id="btn-sub-approve" class="px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition">نشر (Publish)</button>
+          <button id="btn-sub-reject" class="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">رفض وحذف</button>
+        </div>
+      </div>
+
+      
+      <!-- List View -->
+      <div id="view-list" class="bg-white rounded-lg shadow">
+        <div class="overflow-x-auto">
+          <table class="w-full text-right border-collapse">
+            <thead>
+              <tr class="bg-gray-50 border-b">
+                <th class="px-6 py-3 text-gray-500 font-semibold">العنوان</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">النوع</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">الحالة</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">التاريخ</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="posts-table-body">
+              <!-- JS Injected -->
+            </tbody>
+          </table>
+          <div id="loading-indicator" class="p-8 text-center text-gray-500">جارِ تحميل البيانات...</div>
+        </div>
+      </div>
+
+      <!-- Editor View -->
+      <div id="view-editor" class="bg-white rounded-lg shadow p-6 hidden">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold" id="editor-title">إضافة محتوى</h3>
+          <button id="btn-back" class="text-gray-500 hover:text-gray-700"><i class="fas fa-arrow-right ml-1"></i> عودة</button>
+        </div>
+        
+        <form id="post-form" class="space-y-6">
+          <input type="hidden" id="post-id">
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">عنوان المحتوى *</label>
+              <input type="text" id="post-title" class="w-full border rounded p-3 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">الرابط (Slug) *</label>
+              <input type="text" id="post-slug" class="w-full border rounded p-3 focus:outline-none focus:ring-2 focus:ring-red-500" dir="ltr" required placeholder="مثال: safah-el-giza">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">النوع *</label>
+              <select id="post-type" class="w-full border rounded p-3 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                <option value="story">قصة</option>
+                <option value="news">خبر</option>
+                <option value="video">فيديو</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">الحالة *</label>
+              <select id="post-status" class="w-full border rounded p-3 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+                <option value="published">منشور</option>
+                <option value="draft">مسودة</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-gray-700 font-semibold mb-2">رابط صورة الغلاف *</label>
+              <input type="url" id="post-cover" class="w-full border rounded p-3 focus:outline-none focus:ring-2 focus:ring-red-500" dir="ltr" required>
+            </div>
+          </div>
+
+          <div class="border-t border-gray-200 pt-6 mt-6">
+            <h4 class="text-lg font-bold text-gray-800 mb-4">البيانات الإضافية (حسب النوع)</h4>
+            
+            <!-- Story/News Content -->
+            <div id="field-content-html" class="mb-4">
+              <label class="block text-gray-700 font-semibold mb-2">المحتوى النصي (HTML)</label>
+              <textarea id="post-content-html" rows="10" class="w-full border rounded p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-red-500" dir="ltr" placeholder="<p>محتوى القصة أو الخبر هنا...</p>"></textarea>
+            </div>
+
+            <!-- Video Content -->
+            <div id="field-embed-code" class="mb-4 hidden">
+              <label class="block text-gray-700 font-semibold mb-2">كود التضمين (Embed Code للفيديو)</label>
+              <textarea id="post-embed-code" rows="4" class="w-full border rounded p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-red-500" dir="ltr" placeholder='<iframe src="..."></iframe>'></textarea>
+            </div>
+            
+            <!-- Story Extra -->
+            <div id="field-read-time" class="mb-4">
+              <label class="block text-gray-700 font-semibold mb-2">وقت القراءة (بالدقائق)</label>
+              <input type="number" id="post-read-time" class="w-full md:w-1/3 border rounded p-3 focus:outline-none focus:ring-2 focus:ring-red-500">
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-4 space-x-reverse pt-4 border-t">
+            <button type="button" id="btn-cancel" class="px-6 py-2 border rounded text-gray-700 hover:bg-gray-50 transition">إلغاء</button>
+            <button type="submit" id="btn-save" class="px-6 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">حفظ المحتوى</button>
+          </div>
+        </form>
+      </div>
+      
+    </div>
+  </main>
+
+  <script type="module" src="/admin/js/auth-guard.js"></script>
+  <script type="module" src="/admin/js/auth-guard.js"></script>
+  <script type="module" src="/admin/js/app.js"></script>
 </body>
 </html>

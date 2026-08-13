@@ -39,8 +39,8 @@
 </script>
 
   <!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+
 
   <!-- Open Graph meta tags -->
   <meta property="og:title" content="NIGHTMAReS">
@@ -221,36 +221,7 @@
 
   <!-- قسم القوالب (الكروت) -->
   <section class="cards-section" id="cards">
-    <div class="card" data-content="اكتب هنا">
-      <div class="card-inner">
-        <img src="images/1.webp" alt="صورة القالب 1">
-        <div class="overlay"></div>
-        <div class="card-content">
-          <h3>سفاح الجيزة</h3>
-          <a href="stories/1/1.html">اقرأ المزيد</a>
-        </div>
-      </div>
-    </div>
-    <div class="card" data-content="اكتب هنا">
-      <div class="card-inner">
-        <img src="images/2.webp" alt="صورة القالب 2">
-        <div class="overlay"></div>
-        <div class="card-content">
-          <h3>الطريق 56</h3>
-          <a href="stories/2/2.html">اقرأ المزيد</a>
-        </div>
-      </div>
-    </div>
-    <div class="card" data-content="اكتب هنا">
-      <div class="card-inner">
-        <img src="images/3.webp" alt="صورة القالب 3">
-        <div class="overlay"></div>
-        <div class="card-content">
-          <h3>فتاة الطريق</h3>
-          <a href="stories/3/3.html">اقرأ المزيد</a>
-        </div>
-      </div>
-    </div>
+    <div id="stories-loading" style="text-align:center; padding: 50px; color: #888;">جاري تحميل القصص...</div>
   </section>
   
 <div class="story-button-container flex justify-center my-8">
@@ -365,56 +336,11 @@
     أحدث الفيديوهات
     <span class="block w-20 h-1 bg-[#7f1d1d] rounded-full mt-2"></span>
   </h2>
-  <div class="video-grid">
-    <a href="videos/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/GcHcqyWxaW8/hqdefault.jpg?sqp=-oaymwEnCOADEI4CSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLCRvLYh0w_ugBR1346YQVGjHZZ6cw" alt="videos/المداح_ أسطورة العهد I البرومو الرسمي I رمضان معانا I شاهد.html">
-      <div class="video-content">
-        <h3>المداح - أسطورة العهد | البرومو الرسمي</h3>
-      </div>
-    </a>
+  <div class="video-grid" id="video-grid">
+      <div id="video-loading" style="text-align:center; padding: 50px; color: #888; grid-column: 1 / -1;">جاري تحميل الفيديوهات...</div>
+    </div>
+  </section>
 
-    <a href="videos/28 YEARS LATER/28 YEARS LATER.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/mcvLKldPM08/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLC1qf7BkSiD6w8qGc5zR7gfqEYaHw" alt="فيديو 2">
-      <div class="video-content">
-        <h3>28 YEARS LATER</h3>
-      </div>
-    </a>
-
-    <a href="videos/HEART EYES - Official Trailer (HD)/HEART EYES - Official Trailer (HD).html" class="video-card">
-      <img src="https://i.ytimg.com/vi/1cRzZcMlJh8/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&rs=AOn4CLAx3jS3ewyelOVnKUCbcW7egFNbqw" alt="فيديو 3">
-      <div class="video-content">
-        <h3>HEART EYES - Official Trailer (HD)</h3>
-      </div>
-    </a>
-
-    <a href="videos/THE MONKEY - Official Redband Trailer/THE MONKEY - Official Redband Trailer.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/husMGbXEIho/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLCoSkAGf-ri1HofJ6ZTeaZJj1xItQ" alt="فيديو 4">
-      <div class="video-content">
-        <h3>THE MONKEY - Official Redband Trailer</h3>
-      </div>
-    </a>
-
-    <a href="videos/Final Destination Bloodlines  Official Teaser Trailer/Final Destination Bloodlines  Official Teaser Trailer.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/KnWzz0n60pE/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLBTXF0aa7H5R1Ai_ixF0nnDREre5w" alt="فيديو 5">
-      <div class="video-content">
-        <h3>Final Destination Bloodlines | Official Teaser Trailer</h3>
-      </div>
-    </a>
-
-    <a href="videos/Hell House LLC Origins The Carmichael Manor  Official Trailer/Hell House LLC Origins The Carmichael Manor  Official Trailer.html" class="video-card">
-      <img src="https://i.ytimg.com/vi/Q_HLcTY15WY/hq720.jpg?sqp=-oaymwEnCNAFEJQDSFryq4qpAxkIARUAAIhCGAHYAQHiAQoIGBACGAY4AUAB&amp;rs=AOn4CLBsKxYgRUN_aqd9LTmjPXkR0jr1sg" alt="فيديو 6">
-      <div class="video-content">
-        <h3>Hell House LLC Origins The Carmichael Manor  Official Trailer</h3>
-      </div>
-    </a>
-  </div>
-  
-  <div class="blur-overlay" onclick="toggleVideos()">إظهار المزيد</div>
-</section>
-
-
-
-   <!-- التذييل -->
   <footer id="footer">
     <div class="footer-content">
       <div class="footer-text">
@@ -528,54 +454,7 @@ if (!hasShown) {
   });
 </script>
 
-<script>
-const dbRef = firebase.database().ref("news");
-const newsSection = document.querySelector(".news-section .news-grid");
 
-dbRef.on("value", snapshot => {
-  // فقط نحذف الأخبار القادمة من Firebase، ونترك الثابتة
-  const existingDynamic = newsSection.querySelectorAll("[data-firebase]");
-  existingDynamic.forEach(el => el.remove());
-
-  snapshot.forEach(child => {
-    const data = child.val();
-
-    const card = document.createElement("div");
-    card.className = "news-card";
-    card.setAttribute("data-firebase", "true"); // تعريف أنها ديناميكية
-
-    card.innerHTML = `
-      <img src="${data.image}" alt="${data.title}">
-      <div class="news-content">
-        <h3>${data.title}</h3>
-        <p class="news-text">
-          ${data.summary}
-          <span class="more-text" style="display: none;">${data.details}</span>
-        </p>
-        <button class="read-more-btn">اقرأ المزيد</button>
-      </div>
-    `;
-
-    newsSection.appendChild(card);
-  });
-
-  // تفعيل أزرار اقرأ المزيد
-  const buttons = document.querySelectorAll(".read-more-btn");
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", function () {
-      const textElement = this.previousElementSibling.querySelector(".more-text");
-      if (textElement.style.display === "none") {
-        textElement.style.display = "inline";
-        this.textContent = "إخفاء";
-      } else {
-        textElement.style.display = "none";
-        this.textContent = "اقرأ المزيد";
-      }
-    });
-  });
-});
-
-</script>
 
   <script>
   const notifRef = firebase.database().ref("notifications");
@@ -677,7 +556,7 @@ window.addEventListener("scroll", () => {
   const cards = document.querySelectorAll(".cards-section .card");
   const newsCards = document.querySelectorAll(".news-section .news-card");
 
-  searchInput.addEventListener("input", () => {
+  searchInput.addEventListener("none", () => {
     const query = searchInput.value.toLowerCase().trim();
 
     // فلترة القصص
@@ -752,7 +631,7 @@ function filterContent(query) {
   });
 }
 
-searchInput.addEventListener("input", () => {
+searchInput.addEventListener("none", () => {
   const query = searchInput.value;
   filterContent(query);
 });
@@ -801,23 +680,13 @@ document.addEventListener("click", e => {
 
 </script>
   <!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
+
+
 
 <script>
   // إعداد Firebase باستخدام بياناتك
-  const firebaseConfig = {
-    apiKey: "AIzaSyDMMu-QNPL6RlGYdGGQVJLzZqCC_hsLa8I",
-    authDomain: "night-ac2a0.firebaseapp.com",
-    databaseURL: "https://night-ac2a0-default-rtdb.europe-west1.firebasedatabase.app",
-    projectId: "night-ac2a0",
-    storageBucket: "night-ac2a0.firebasestorage.app",
-    messagingSenderId: "202751732517",
-    appId: "1:202751732517:web:5d458d19aac8d7135848cc"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const messaging = firebase.messaging();
+  
+  
 
   // طلب إذن واستقبال التوكن
   messaging.requestPermission().then(() => {
@@ -829,12 +698,7 @@ document.addEventListener("click", e => {
     console.error("خطأ في الإذن", err);
   });
 
-  // استقبال الإشعارات أثناء التصفح
-  messaging.onMessage(payload => {
-    console.log("إشعار وارد:", payload);
-    const { title, body } = payload.notification;
-    addNotification(title, body);
-  });
+  
 
   // التحكم في القائمة المنسدلة
   const notifBtn = document.getElementById("notifBtn");
@@ -865,16 +729,41 @@ document.addEventListener("click", e => {
   }
 </script>
 
-  <script src="https://nightma-re-s.vercel.app/ad-widget.js"></script>
+  
+
+
 
 <script>
-  initAdWidget({
-    containerId: "AD_CONTAINER_ID",
-    templateId: "preset_mobile"
-  });
+  // Redirect to Search Page Logic
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    e.stopImmediatePropagation(); // Prevent the old listener from doing stuff
+    const input = e.target.querySelector('input[type="search"]');
+    if(input && input.value.trim()) {
+      window.location.href = '/search.html?q=' + encodeURIComponent(input.value.trim());
+    }
+  };
+
+  const dtSearchForm = document.getElementById('searchForm');
+  if(dtSearchForm) {
+    dtSearchForm.addEventListener('submit', handleSearchSubmit, true); // Use capture phase
+  }
+
+  const mbSearchForm = document.getElementById('mobileSearchForm');
+  if(mbSearchForm) {
+    mbSearchForm.addEventListener('submit', handleSearchSubmit, true); // Use capture phase
+  }
 </script>
 
+<!-- Share Story Floating Button -->
+<a href="/submit.html" class="fixed bottom-6 right-6 bg-red-800 text-white px-4 py-3 rounded-full shadow-[0_0_15px_rgba(255,0,0,0.8)] hover:bg-red-600 transition flex items-center gap-2 z-50 animate-pulse hover:animate-none">
+  <ion-icon name="skull-outline" class="text-2xl"></ion-icon>
+  <span class="font-bold hidden md:inline">شارك قصتك</span>
+</a>
+<script type="module" src="/js/notifications-ads.js"></script>
+<script type="module" src="/js/home-feed.js"></script>
 </body>
+
 </html>
 
 

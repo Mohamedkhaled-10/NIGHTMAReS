@@ -1,6 +1,9 @@
 {
   "rewrites": [
-    { "source": "/admin", "destination": "/admin/index.html" }
+    { "source": "/admin", "destination": "/admin/index.html" },
+    { "source": "/story/:slug", "destination": "/article.html" },
+    { "source": "/news/:slug", "destination": "/article.html" },
+    { "source": "/video/:slug", "destination": "/article.html" }
   ],
   "cleanUrls": true,
   "trailingSlash": false

@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ---------------------------------------------------------
+    // Helper Functions
+    // ---------------------------------------------------------
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && request.auth.token.admin == true;
+    }
+
+    // ---------------------------------------------------------
+    // Collection Rules
+    // ---------------------------------------------------------
+
+    // 1. Unified Posts Collection
+    match /posts/{postId} {
+      // Public can read published posts. Admins can read everything.
+      allow read: if resource.data.status == "published" || isAdmin();
+      // Only Admins can create/update/delete.
+      allow create, update, delete: if isAdmin();
+    }
+
+    // 2. User Submissions Collection
+    match /user_submissions/{submissionId} {
+      // Anyone can submit a story (Rate Limiting could be added later)
+      allow create: if true;
+      // Only Admins can read/manage submissions.
+      allow read, update, delete: if isAdmin();
+    }
+    
+    // 3. Ads Templates Collection
+    match /ads_templates/{adId} {
+      // Public can view active ads. Admins can view all.
+      allow read: if resource.data.isActive == true || isAdmin();
+      // Only Admins can manage ads.
+      allow write: if isAdmin();
+    }
+    
+    // 4. Users Collection (Roles)
+    match /users/{userId} {
+      // Users can read their own profile, Admins can read all
+      allow read: if request.auth.uid == userId || isAdmin();
+      allow write: if isAdmin();
+    }
+  
+    // 5. System Collection (Notifications)
+    match /system/{docId} {
+      // Public can read system notifications
+      allow read: if true;
+      // Only Admins can manage system
+      allow write: if isAdmin();
+    }
+  }
+}

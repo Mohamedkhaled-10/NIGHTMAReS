@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>البحث في الكوابيس - Nightmares</title>
+
+  <meta name="description" content="ابحث عن قصص الرعب، ألعاب، أو الأخبار المرعبة.">
+  <meta property="og:title" content="البحث في الكوابيس - Nightmares">
+  <meta property="og:description" content="ابحث عن قصص الرعب، ألعاب، أو الأخبار المرعبة.">
+  <meta property="og:image" content="https://nightma-re-s.vercel.app/images/1.webp">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/css/ionicons.min.css">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body {
+      background: linear-gradient(180deg, #320101, #000000);
+      background-attachment: fixed;
+      font-family: 'Cairo', sans-serif;
+      color: white;
+    }
+    .loading-spinner {
+      display: flex; justify-content: center; align-items: center; height: 30vh; font-size: 1.5em; color: red;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+  
+  <div class="wrapper flex-1">
+    <!-- Navbar -->
+    <nav class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-black/50 backdrop-blur-md px-6 py-2 rounded-full shadow-lg">
+      <ul class="flex gap-4">
+        <li><a href="/" class="text-white hover:text-red-500 transition flex items-center gap-2"><ion-icon name="home-outline"></ion-icon><span>الرئيسية</span></a></li>
+      </ul>
+    </nav>
+    
+    <div class="container mx-auto px-4 pt-32 pb-12">
+      <h1 class="text-4xl font-bold text-center mb-4 text-red-600 drop-shadow-md">نتائج البحث</h1>
+      <div class="max-w-2xl mx-auto mb-10">
+        <form id="search-page-form" class="relative">
+          <input type="search" id="search-page-input" placeholder="ابحث عن قصص، أخبار، أفلام..." class="w-full px-6 py-4 rounded-full bg-black/70 border border-red-900 text-white focus:outline-none focus:border-red-500 text-lg shadow-lg">
+          <button type="submit" class="absolute left-2 top-1/2 -translate-y-1/2 bg-red-700 text-white rounded-full p-3 hover:bg-red-600 transition">
+            <ion-icon name="search-outline" class="text-xl"></ion-icon>
+          </button>
+        </form>
+      </div>
+
+      <div id="loading" class="loading-spinner">جاري البحث...</div>
+
+      <div id="search-stats" class="text-gray-400 mb-6 hidden"></div>
+
+      <!-- Results Grid -->
+      <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        <!-- Results will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-black/80 py-6 text-center mt-auto">
+    <p>حقوق النشر &copy; 2025. جميع الحقوق محفوظة.</p>
+    <p class="text-red-500 text-sm mt-1">تصميم وتطوير: NIGHTMAReS</p>
+  </footer>
+
+  <script type="module" src="/js/search.js"></script>
+</body>
+</html>

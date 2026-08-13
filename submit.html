@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>شارك قصتك المرعبة - Nightmares</title>
+
+  <meta name="description" content="شاركنا قصتك المرعبة وسنقوم بنشرها في قسم قصص المتابعين.">
+  <meta property="og:title" content="شارك قصتك المرعبة - Nightmares">
+  <meta property="og:description" content="شاركنا قصتك المرعبة وسنقوم بنشرها في قسم قصص المتابعين.">
+  <meta property="og:image" content="https://nightma-re-s.vercel.app/images/1.webp">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/css/ionicons.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+    body {
+      background: linear-gradient(180deg, #1a0000, #000000);
+      background-attachment: fixed;
+      font-family: 'Cairo', sans-serif;
+      color: white;
+    }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+  
+  <div class="wrapper flex-1">
+    <nav class="fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-black/80 backdrop-blur-md px-6 py-2 rounded-full shadow-[0_0_15px_rgba(255,0,0,0.3)]">
+      <ul class="flex gap-4">
+        <li><a href="/" class="text-white hover:text-red-500 transition flex items-center gap-2"><ion-icon name="home-outline"></ion-icon><span>الرئيسية</span></a></li>
+      </ul>
+    </nav>
+    
+    <div class="container mx-auto px-4 pt-32 pb-12 max-w-3xl">
+      <div class="text-center mb-10">
+        <ion-icon name="skull-outline" class="text-6xl text-red-600 mb-4 drop-shadow-[0_0_10px_rgba(255,0,0,0.8)]"></ion-icon>
+        <h1 class="text-4xl font-bold text-red-600 drop-shadow-md mb-2">شارك قصتك المرعبة</h1>
+        <p class="text-gray-400">هل عشت تجربة لا تُنسى؟ شاركها معنا، وبعد مراجعتها سيتم نشرها ليقرأها الجميع.</p>
+      </div>
+
+      <div class="bg-black/60 border border-red-900/50 p-8 rounded-lg shadow-2xl">
+        <form id="submit-form" class="space-y-6">
+          <div>
+            <label class="block text-gray-300 font-semibold mb-2">اسمك (أو اسم مستعار) *</label>
+            <input type="text" id="author-name" class="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600" required>
+          </div>
+          <div>
+            <label class="block text-gray-300 font-semibold mb-2">عنوان القصة *</label>
+            <input type="text" id="story-title" class="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600" required>
+          </div>
+          <div>
+            <label class="block text-gray-300 font-semibold mb-2">تفاصيل القصة *</label>
+            <textarea id="story-content" rows="10" class="w-full px-4 py-3 bg-[#111] border border-gray-800 rounded text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600" placeholder="اسرد تفاصيل رعبك هنا..." required></textarea>
+          </div>
+          
+          <button type="submit" id="btn-submit" class="w-full bg-red-700 text-white font-bold py-4 rounded hover:bg-red-600 transition shadow-[0_0_15px_rgba(255,0,0,0.5)]">
+            إرسال القصة للمراجعة
+          </button>
+        </form>
+
+        <div id="status-msg" class="mt-6 text-center font-bold text-lg hidden"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-black/90 border-t border-red-900/30 py-6 text-center mt-auto">
+    <p>حقوق النشر &copy; 2025. جميع الحقوق محفوظة.</p>
+    <p class="text-red-500 text-sm mt-1">NIGHTMAReS</p>
+  </footer>
+
+  <script type="module" src="/js/submit.js"></script>
+</body>
+</html>
