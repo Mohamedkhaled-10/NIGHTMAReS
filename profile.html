@@ -1,65 +1,82 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بروفايل المستخدم</title>
-  <link rel="stylesheet" href="profile.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+  <title>حسابي - Nightmares</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+    body { font-family: 'Cairo', sans-serif; }
+    .hidden { display: none !important; }
+  </style>
 </head>
-<body>
-   <!-- شريط التنقل -->
-  <!-- شريط التنقل -->
-    <nav class="navbar">
-      <ul>
-        <li><a href="home.html"><ion-icon name="home-outline"></ion-icon><span>الرئيسية</span></a></li>
-      </ul>
-    </nav>
-
-  <!-- بروفايل المستخدم -->
-<section class="profile-section">
-  <img src="images/high-1746479076.jpg" alt="صورة البروفايل">
-  <h2>محمد خالد <i class="fas fa-check-circle verified-icon" onclick="showVerifiedMessage()"></i></h2>
-  <!-- إضافة زر يوجه إلى قناة اليوتيوب -->
-  <a href="https://www.youtube.com/@horror9266" class="youtube-btn" target="_blank">زيارة قناتي على يوتيوب</a>
+<body class="bg-gray-900 text-white min-h-screen">
   
-  <!-- إشعار التوثيق -->
-  <div id="verified-message" class="verified-message">موثق</div>
-</section>
+  <nav class="bg-gray-800 p-4 shadow-lg sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <h1 class="text-xl font-bold text-red-600"><i class="fas fa-ghost mr-2"></i> حسابي</h1>
+      <a href="/index.html" class="text-gray-300 hover:text-white transition"><i class="fas fa-home"></i> الرئيسية</a>
+    </div>
+  </nav>
 
-
-
-  <!-- بايو المستخدم -->
-  <section class="bio-section">
-    <h3>نبذة</h3>
-    <p>صانع محتوى في مجال الرعب على الإنترنت. يختص بإنتاج وتقديم القصص الغامضة والمرعبة التي تجمع بين التشويق والإثارة. يتميز أسلوبه بالتعمق في النظريات الغامضة والأحداث الغريبة، مما يخلق جوًا مليئًا بالترقب والرعب لدى متابعيه. يقدم محمد محتوى متنوع يتراوح بين القصص المخيفة والتحليلات النفسية للأحداث المظلمة، بالإضافة إلى تقديم تفسيرات لأسرار مجهولة. يهتم دائمًا بتقديم معلومات من مصادر متنوعة، مما يجعل قصصه واقعية وأحيانًا مبنية على أساطير شعبية قديمة.</p>
-  </section>
-
-  <!-- أبرز القصص -->
-  <section class="stories-section">
-    <h3>أبرز القصص</h3>
-    <ul class="stories-list">
-      <li><a href="stories/سفاح الجيزة/سفاح الجيزة.html">سفاح الجيزة</a></li>
-      <li><a href="stories/الطريق 56/الطريق 56.html">الطريق 56</a></li>
-      <li><a href="stories/فتاة الطريق/فتاة الطريق.html">فتاة الطريق</a></li>
-    </ul>
-  </section>
-
-  <!-- متابعة على مواقع التواصل -->
-  <section class="social-media-section">
-    <h3>تابعني على مواقع التواصل</h3>
-    <ul>
-      <li><a href="#" class="fa-brands fa-instagram"></a></li>
-    </ul>
-  </section>
-
-  <footer id="footer">
-      <div class="footer-content">
-        <p>حقوق النشر &copy; 2025. جميع الحقوق محفوظة.</p>
-        <p>تصميم وتطوير: NIGHTMAReS</p>
+  <main class="container mx-auto p-4 max-w-2xl mt-8">
+    <div class="bg-gray-800 p-8 rounded-lg shadow-xl border border-gray-700">
+      
+      <div id="loader" class="text-center py-8">
+        <i class="fas fa-spinner fa-spin text-4xl text-red-500"></i>
+        <p class="mt-4 text-gray-400">جاري تحميل البيانات...</p>
       </div>
-    </footer>
-  </div>
+
+      <div id="profile-content" class="hidden">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-8 mb-8 border-b border-gray-700 pb-8">
+          <div class="relative group">
+            <img id="profile-img" src="https://ui-avatars.com/api/?name=User&background=random" class="w-32 h-32 rounded-full object-cover border-4 border-gray-700">
+            <label for="img-upload" class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition">
+              <i class="fas fa-camera text-2xl"></i>
+            </label>
+            <input type="file" id="img-upload" class="hidden" accept="image/*">
+          </div>
+          <div class="flex-1 text-center md:text-right">
+            <h2 id="display-name-text" class="text-2xl font-bold mb-2"></h2>
+            <p id="email-text" class="text-gray-400 mb-2"></p>
+            <div id="status-badges" class="flex gap-2 justify-center md:justify-start">
+              <span id="role-badge" class="px-2 py-1 text-xs rounded bg-blue-900 text-blue-200"></span>
+              <span id="status-badge" class="px-2 py-1 text-xs rounded bg-green-900 text-green-200"></span>
+            </div>
+          </div>
+        </div>
+
+        <form id="profile-form" class="space-y-4">
+          <div>
+            <label class="block mb-1 text-gray-400">الاسم الشخصي</label>
+            <input type="text" id="input-display-name" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-400">البريد الإلكتروني (غير قابل للتعديل المباشر)</label>
+            <input type="email" id="input-email" class="w-full p-3 rounded bg-gray-600 text-gray-300 border border-gray-600 cursor-not-allowed" disabled>
+          </div>
+          <p id="profile-msg" class="text-sm font-semibold hidden"></p>
+          <div class="flex gap-4 pt-4">
+            <button type="submit" id="btn-save" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold p-3 rounded transition">
+              حفظ التعديلات
+            </button>
+            <button type="button" id="btn-logout" class="bg-gray-700 hover:bg-gray-600 text-white font-bold p-3 rounded transition">
+              <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  
+  
+  
+  
+  
+  <script type="module" src="/js/profile.js"></script>
 </body>
 </html>

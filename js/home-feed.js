@@ -15,36 +15,38 @@ async function loadHomeContent() {
   if(videoGrid) videoGrid.innerHTML = '<div style="text-align:center; padding:50px; color:#888; width:100%; grid-column:1/-1;">جاري تحميل الفيديوهات...</div>';
 
   try {
-    const q = query(
-      collection(db, "posts"),
-      where("status", "==", "published")
-    );
-    const snapshot = await getDocs(q);
+    // Run parallel queries to limit Firebase reads
+    const [storiesSnap, newsSnap, videosSnap] = await Promise.all([
+      getDocs(query(
+        collection(db, "posts"),
+        where("status", "==", "published"),
+        where("type", "==", "story"),
+        orderBy("createdAt", "desc"),
+        limit(6)
+      )),
+      getDocs(query(
+        collection(db, "posts"),
+        where("status", "==", "published"),
+        where("type", "==", "news"),
+        orderBy("createdAt", "desc"),
+        limit(6)
+      )),
+      getDocs(query(
+        collection(db, "posts"),
+        where("status", "==", "published"),
+        where("type", "==", "video"),
+        orderBy("createdAt", "desc"),
+        limit(3)
+      ))
+    ]);
     
-    const stories = [];
-    const news = [];
-    const videos = [];
+    const stories = storiesSnap.docs.map(d => d.data());
+    const news = newsSnap.docs.map(d => d.data());
+    const videos = videosSnap.docs.map(d => d.data());
     
-    snapshot.forEach(doc => {
-      const data = doc.data();
-      if(data.type === 'story') stories.push(data);
-      else if(data.type === 'news') news.push(data);
-      else if(data.type === 'video') videos.push(data);
-    });
-    
-    // Sort logic (if createdAt exists)
-    const sortDesc = (a, b) => {
-      const ta = a.createdAt?.toMillis ? a.createdAt.toMillis() : 0;
-      const tb = b.createdAt?.toMillis ? b.createdAt.toMillis() : 0;
-      return tb - ta;
-    };
-    stories.sort(sortDesc);
-    news.sort(sortDesc);
-    videos.sort(sortDesc);
-    
-    renderStories(stories.slice(0, 6), storiesGrid);
-    renderNews(news.slice(0, 6), newsGrid);
-    renderVideos(videos.slice(0, 3), videoGrid);
+    renderStories(stories, storiesGrid);
+    renderNews(news, newsGrid);
+    renderVideos(videos, videoGrid);
     
   } catch(e) {
     console.error("Error loading home feed:", e);
@@ -68,7 +70,7 @@ function renderStories(items, container) {
     card.className = 'card';
     card.innerHTML = `
       <div class="card-inner">
-        <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}">
+        <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}" loading="lazy" decoding="async">
         <div class="overlay"></div>
         <div class="card-content">
           <h3>${item.title}</h3>
@@ -102,7 +104,7 @@ function renderNews(items, container) {
     const card = document.createElement('div');
     card.className = 'news-card';
     card.innerHTML = `
-      <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}">
+      <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}" loading="lazy" decoding="async">
       <div class="news-content">
         <h3>${item.title}</h3>
         <p class="news-text">${snippet}</p>
@@ -127,7 +129,7 @@ function renderVideos(items, container) {
     card.href = link;
     card.className = 'video-card';
     card.innerHTML = `
-      <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}">
+      <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}" loading="lazy" decoding="async">
       <div class="video-content">
         <h3>${item.title}</h3>
       </div>

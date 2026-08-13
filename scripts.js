@@ -30,19 +30,21 @@ listItems.forEach(item => {
 let heroImg = document.querySelector('.hero-image img');
 let currentHeroIndex = 0;
 
-setInterval(() => {
-  heroImg.classList.add('fade-out');
-  setTimeout(() => {
-    currentHeroIndex = (currentHeroIndex + 1) % [
-      "images/1.webp",
-      "images/2.webp",
-      "images/3.webp"
-    ].length;
-    heroImg.src = [
-      "images/1.webp",
-      "images/2.webp",
-      "images/3.webp"
-    ][currentHeroIndex];
-    heroImg.classList.remove('fade-out');
-  }, 500);
-}, 4000);
+if (heroImg) {
+  setInterval(() => {
+    heroImg.classList.add('fade-out');
+    setTimeout(() => {
+      currentHeroIndex = (currentHeroIndex + 1) % [
+        "images/1.webp",
+        "images/2.webp",
+        "images/3.webp"
+      ].length;
+      heroImg.src = [
+        "images/1.webp",
+        "images/2.webp",
+        "images/3.webp"
+      ][currentHeroIndex];
+      heroImg.classList.remove('fade-out');
+    }, 500);
+  }, 4000);
+}

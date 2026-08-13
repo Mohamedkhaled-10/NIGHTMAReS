@@ -1,59 +1,89 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
-    // ---------------------------------------------------------
     // Helper Functions
-    // ---------------------------------------------------------
-    
     function isAuthenticated() {
       return request.auth != null;
     }
     
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
     function isAdmin() {
-      return isAuthenticated() && request.auth.token.admin == true;
+      return isAuthenticated() && getUserData().role == 'admin';
+    }
+    
+    function isActiveUser() {
+      return isAuthenticated() && (getUserData().accountStatus == 'active' || getUserData().accountStatus == 'pending_verification');
     }
 
-    // ---------------------------------------------------------
-    // Collection Rules
-    // ---------------------------------------------------------
+    // Users Collection
+    match /users/{uid} {
+      allow read: if true; // Public profiles (for comments)
+      allow create: if isOwner(uid) 
+                    && request.resource.data.role == 'user'
+                    && request.resource.data.accountStatus in ['active', 'pending_verification'];
+      allow update: if (isOwner(uid) 
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['displayName', 'photoURL', 'updatedAt', 'lastLoginAt', 'emailVerified']))
+                    || isAdmin();
+      allow delete: if isAdmin(); // Soft delete preferred, but allow admin delete
+    }
 
-    // 1. Unified Posts Collection
+    // Audit Logs Collection
+    match /audit_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAdmin();
+      allow update, delete: if false; // Immutable
+    }
+
+    // Comments Collection
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if isActiveUser() && request.resource.data.authorUid == request.auth.uid;
+      allow update: if (isActiveUser() && resource.data.authorUid == request.auth.uid && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text', 'updatedAt', 'status']))
+                    || isAdmin();
+      allow delete: if isAdmin() || (isActiveUser() && resource.data.authorUid == request.auth.uid);
+    }
+    
+    // Comment Reports
+    match /comment_reports/{reportId} {
+      allow read, update, delete: if isAdmin();
+      allow create: if isActiveUser() && request.resource.data.reporterUid == request.auth.uid;
+    }
+
+    // Content Likes Collection (Document ID: {contentId}_{userUid})
+    match /content_likes/{likeId} {
+      allow read: if true;
+      allow create: if isActiveUser() && request.resource.data.userUid == request.auth.uid;
+      allow delete: if isActiveUser() && resource.data.userUid == request.auth.uid;
+    }
+
+    // Content Stats (Aggregated like counts)
+    match /content_stats/{contentId} {
+      allow read: if true;
+      allow create: if isActiveUser();
+      allow update: if isActiveUser(); // In a real production app, use Cloud Functions to aggregate, but for now allow client increment
+    }
+    // Posts Collection
     match /posts/{postId} {
-      // Public can read published posts. Admins can read everything.
-      allow read: if resource.data.status == "published" || isAdmin();
-      // Only Admins can create/update/delete.
+      allow read: if true;
       allow create, update, delete: if isAdmin();
     }
 
-    // 2. User Submissions Collection
-    match /user_submissions/{submissionId} {
-      // Anyone can submit a story (Rate Limiting could be added later)
-      allow create: if true;
-      // Only Admins can read/manage submissions.
-      allow read, update, delete: if isAdmin();
-    }
-    
-    // 3. Ads Templates Collection
-    match /ads_templates/{adId} {
-      // Public can view active ads. Admins can view all.
-      allow read: if resource.data.isActive == true || isAdmin();
-      // Only Admins can manage ads.
-      allow write: if isAdmin();
-    }
-    
-    // 4. Users Collection (Roles)
-    match /users/{userId} {
-      // Users can read their own profile, Admins can read all
-      allow read: if request.auth.uid == userId || isAdmin();
-      allow write: if isAdmin();
-    }
-  
-    // 5. System Collection (Notifications)
+    // System Collection
     match /system/{docId} {
-      // Public can read system notifications
       allow read: if true;
-      // Only Admins can manage system
+      allow write: if isAdmin();
+    }
+
+    // Ads Templates Collection
+    match /ads_templates/{adId} {
+      allow read: if true;
       allow write: if isAdmin();
     }
   }

@@ -49,13 +49,22 @@ function renderContent(data) {
   // Render HTML Content (depending on type, but generally it's in data.data.contentHtml or similar)
   const articleBody = document.getElementById('article-body');
   
+  // Process content HTML to add lazy loading for performance
+  let rawHtml = data.data?.contentHtml || '';
+  
+  if (rawHtml) {
+    // Basic regex replacement to add loading="lazy" to imgs and iframes if not already present
+    rawHtml = rawHtml.replace(/<(img|iframe)(?![^>]*loading=)/gi, '<$1 loading="lazy" decoding="async"');
+  }
+
   if (data.type === 'video' && data.data && data.data.embedCode) {
-    articleBody.innerHTML = `<div class="video-container">${data.data.embedCode}</div>`;
-    if (data.data.contentHtml) {
-      articleBody.innerHTML += data.data.contentHtml;
+    let embed = data.data.embedCode.replace(/<iframe(?![^>]*loading=)/gi, '<iframe loading="lazy"');
+    articleBody.innerHTML = `<div class="video-container">${embed}</div>`;
+    if (rawHtml) {
+      articleBody.innerHTML += rawHtml;
     }
-  } else if (data.data && data.data.contentHtml) {
-    articleBody.innerHTML = data.data.contentHtml;
+  } else if (rawHtml) {
+    articleBody.innerHTML = rawHtml;
   } else {
     articleBody.innerHTML = "<p>لا يوجد محتوى متاح.</p>";
   }

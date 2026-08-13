@@ -455,6 +455,212 @@ if(menuSubmissions) {
   });
 }
 
+// --- Dashboard New Views (Users, Comments, Audit) ---
+const menuOverview = document.getElementById('menu-overview');
+const menuUsers = document.getElementById('menu-users');
+const menuComments = document.getElementById('menu-comments');
+const menuAudit = document.getElementById('menu-audit');
+
+const viewUsers = document.getElementById('view-users');
+const viewComments = document.getElementById('view-comments');
+const viewAudit = document.getElementById('view-audit');
+
+function overrideHideAllViews() {
+  hideAllViews();
+  if(viewUsers) viewUsers.classList.add('hidden');
+  if(viewComments) viewComments.classList.add('hidden');
+  if(viewAudit) viewAudit.classList.add('hidden');
+  
+  [menuOverview, menuUsers, menuComments, menuAudit].forEach(m => {
+    if(m) {
+      m.classList.remove('bg-gray-800', 'text-white');
+      m.classList.add('text-gray-300');
+    }
+  });
+}
+
+if(menuUsers) {
+  menuUsers.addEventListener('click', () => {
+    overrideHideAllViews();
+    menuUsers.classList.add('bg-gray-800', 'text-white');
+    menuUsers.classList.remove('text-gray-300');
+    viewUsers.classList.remove('hidden');
+    document.querySelector('header h2').textContent = 'إدارة المستخدمين (Users)';
+    loadUsersAdmin();
+  });
+}
+
+if(menuComments) {
+  menuComments.addEventListener('click', () => {
+    overrideHideAllViews();
+    menuComments.classList.add('bg-gray-800', 'text-white');
+    menuComments.classList.remove('text-gray-300');
+    viewComments.classList.remove('hidden');
+    document.querySelector('header h2').textContent = 'إدارة التعليقات (Comments)';
+    loadCommentsAdmin();
+  });
+}
+
+if(menuAudit) {
+  menuAudit.addEventListener('click', () => {
+    overrideHideAllViews();
+    menuAudit.classList.add('bg-gray-800', 'text-white');
+    menuAudit.classList.remove('text-gray-300');
+    viewAudit.classList.remove('hidden');
+    document.querySelector('header h2').textContent = 'سجلات النظام (Audit Logs)';
+    loadAuditAdmin();
+  });
+}
+
+// Users Admin Logic
+async function loadUsersAdmin() {
+  const tbody = document.getElementById('users-table-body');
+  tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+  try {
+    const { collection, getDocs } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    const snapshot = await getDocs(collection(db, "users"));
+    tbody.innerHTML = '';
+    
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const tr = document.createElement('tr');
+      tr.className = 'border-b hover:bg-gray-50';
+      tr.innerHTML = `
+        <td class="px-6 py-4">${data.displayName || 'بدون اسم'}</td>
+        <td class="px-6 py-4" dir="ltr" style="text-align: right;">${data.email}</td>
+        <td class="px-6 py-4">${data.role === 'admin' ? '<span class="text-red-600 font-bold">Admin</span>' : 'User'}</td>
+        <td class="px-6 py-4">${data.accountStatus === 'banned' ? '<span class="text-red-600">محظور</span>' : data.accountStatus === 'deleted' ? '<span class="text-gray-500">محذوف</span>' : '<span class="text-green-600">نشط</span>'}</td>
+        <td class="px-6 py-4 space-x-2 space-x-reverse">
+          <button class="bg-gray-200 text-gray-800 px-2 py-1 rounded hover:bg-gray-300 text-xs" onclick="changeUserStatus('${data.uid}', 'active')">تنشيط</button>
+          <button class="bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200 text-xs" onclick="changeUserStatus('${data.uid}', 'banned')">حظر</button>
+          <button class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded hover:bg-yellow-200 text-xs" onclick="changeUserRole('${data.uid}', '${data.role === 'admin' ? 'user' : 'admin'}')">تغيير Role</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+window.changeUserStatus = async (uid, newStatus) => {
+  if(!confirm(`هل أنت متأكد من تغيير حالة المستخدم إلى ${newStatus}؟`)) return;
+  try {
+    const { doc, updateDoc, addDoc, collection, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    await updateDoc(doc(db, "users", uid), { accountStatus: newStatus });
+    
+    // Log Audit
+    await addDoc(collection(db, "audit_logs"), {
+      adminUid: auth.currentUser.uid,
+      action: 'CHANGE_USER_STATUS',
+      targetUid: uid,
+      targetType: 'user',
+      timestamp: serverTimestamp(),
+      metadata: { newStatus }
+    });
+    
+    loadUsersAdmin();
+  } catch(e) { alert("حدث خطأ."); console.error(e); }
+};
+
+window.changeUserRole = async (uid, newRole) => {
+  if(!confirm(`هل أنت متأكد من تغيير صلاحية المستخدم إلى ${newRole}؟`)) return;
+  try {
+    const { doc, updateDoc, addDoc, collection, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    await updateDoc(doc(db, "users", uid), { role: newRole });
+    
+    // Log Audit
+    await addDoc(collection(db, "audit_logs"), {
+      adminUid: auth.currentUser.uid,
+      action: 'CHANGE_USER_ROLE',
+      targetUid: uid,
+      targetType: 'user',
+      timestamp: serverTimestamp(),
+      metadata: { newRole }
+    });
+    
+    loadUsersAdmin();
+  } catch(e) { alert("حدث خطأ."); console.error(e); }
+};
+
+// Comments Admin Logic
+async function loadCommentsAdmin() {
+  const tbody = document.getElementById('comments-table-body');
+  tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+  try {
+    const { collection, getDocs, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    const snapshot = await getDocs(query(collection(db, "comments"), orderBy('createdAt', 'desc')));
+    tbody.innerHTML = '';
+    
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const tr = document.createElement('tr');
+      tr.className = 'border-b hover:bg-gray-50';
+      tr.innerHTML = `
+        <td class="px-6 py-4">${data.authorName}</td>
+        <td class="px-6 py-4">${data.contentId}</td>
+        <td class="px-6 py-4 truncate max-w-xs" title="${data.text}">${data.text}</td>
+        <td class="px-6 py-4">${data.status === 'visible' ? '<span class="text-green-600">مرئي</span>' : '<span class="text-red-600">مخفي/محذوف</span>'}</td>
+        <td class="px-6 py-4 space-x-2 space-x-reverse">
+          <button class="text-red-600 hover:underline text-sm" onclick="moderateComment('${docSnap.id}', 'deleted')">حذف</button>
+          <button class="text-green-600 hover:underline text-sm" onclick="moderateComment('${docSnap.id}', 'visible')">إظهار</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+window.moderateComment = async (commentId, newStatus) => {
+  if(!confirm(`تأكيد تغيير حالة التعليق؟`)) return;
+  try {
+    const { doc, updateDoc, addDoc, collection, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    await updateDoc(doc(db, "comments", commentId), { status: newStatus });
+    
+    // Log Audit
+    await addDoc(collection(db, "audit_logs"), {
+      adminUid: auth.currentUser.uid,
+      action: 'MODERATE_COMMENT',
+      targetUid: commentId,
+      targetType: 'comment',
+      timestamp: serverTimestamp(),
+      metadata: { newStatus }
+    });
+    
+    loadCommentsAdmin();
+  } catch(e) { alert("حدث خطأ."); console.error(e); }
+};
+
+// Audit Logs Logic
+async function loadAuditAdmin() {
+  const tbody = document.getElementById('audit-table-body');
+  tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+  try {
+    const { collection, getDocs, query, orderBy, limit } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    const snapshot = await getDocs(query(collection(db, "audit_logs"), orderBy('timestamp', 'desc'), limit(50)));
+    tbody.innerHTML = '';
+    
+    snapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const tr = document.createElement('tr');
+      tr.className = 'border-b hover:bg-gray-50';
+      const dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString('ar-EG') : '';
+      tr.innerHTML = `
+        <td class="px-6 py-4 text-sm">${dateStr}</td>
+        <td class="px-6 py-4 text-xs font-mono">${data.adminUid}</td>
+        <td class="px-6 py-4 font-bold text-red-600">${data.action}</td>
+        <td class="px-6 py-4 text-xs font-mono">${data.targetUid}</td>
+        <td class="px-6 py-4 text-sm text-gray-500">${JSON.stringify(data.metadata || {})}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (error) {
+    console.error(error);
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500 p-4">لا تملك صلاحية قراءة السجلات.</td></tr>';
+  }
+}
 // Ads Logic
 async function loadAds() {
   const tbody = document.getElementById('ads-table-body');

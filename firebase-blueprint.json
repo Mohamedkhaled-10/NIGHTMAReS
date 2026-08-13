@@ -1,0 +1,69 @@
+{
+  "collections": {
+    "users": {
+      "description": "User profiles and metadata.",
+      "fields": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" },
+        "role": { "type": "string", "description": "admin or user" },
+        "accountStatus": { "type": "string", "description": "active, pending_verification, suspended, banned, deleted" },
+        "emailVerified": { "type": "boolean" },
+        "lastLoginAt": { "type": "timestamp" }
+      }
+    },
+    "audit_logs": {
+      "description": "Admin audit log of sensitive actions.",
+      "fields": {
+        "adminUid": { "type": "string" },
+        "action": { "type": "string" },
+        "targetUid": { "type": "string" },
+        "targetType": { "type": "string" },
+        "timestamp": { "type": "timestamp" },
+        "reason": { "type": "string" },
+        "metadata": { "type": "map" }
+      }
+    },
+    "comments": {
+      "description": "User comments on articles/videos/stories.",
+      "fields": {
+        "contentId": { "type": "string", "description": "Slug or ID of the content being commented on." },
+        "authorUid": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorPhoto": { "type": "string" },
+        "text": { "type": "string" },
+        "status": { "type": "string", "description": "visible, hidden, deleted, flagged" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    },
+    "comment_reports": {
+      "description": "Reports on comments.",
+      "fields": {
+        "commentId": { "type": "string" },
+        "reporterUid": { "type": "string" },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "description": "pending, reviewed, dismissed" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "content_likes": {
+      "description": "Like records. Document ID is contentId_userUid.",
+      "fields": {
+        "contentId": { "type": "string" },
+        "userUid": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "content_stats": {
+      "description": "Aggregated stats for content (likes count).",
+      "fields": {
+        "contentId": { "type": "string" },
+        "likesCount": { "type": "number" }
+      }
+    }
+  }
+}

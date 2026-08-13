@@ -28,11 +28,13 @@
       <h1 class="text-xl font-bold text-red-600">Nightmares CMS</h1>
     </div>
     <nav class="flex-1 overflow-y-auto py-4">
-      <a href="#" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-home ml-2"></i> لوحة القيادة</a>
-      <a href="#" id="menu-posts" class="block px-6 py-3 text-white bg-gray-800"><i class="fas fa-file-alt ml-2"></i> إدارة المحتوى</a>
-            <a href="#" id="menu-submissions" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-user-edit ml-2"></i> مراجعة القصص</a>
-      <a href="#" id="menu-ads" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-ad ml-2"></i> إدارة الإعلانات</a>
-      <a href="#" id="menu-notifications" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-bell ml-2"></i> إدارة الإشعارات</a>
+      <a href="#" id="menu-overview" class="block px-6 py-3 text-white bg-gray-800"><i class="fas fa-home ml-2 w-5 text-center"></i> Overview</a>
+      <a href="#" id="menu-users" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-users ml-2 w-5 text-center"></i> Users</a>
+      <a href="#" id="menu-comments" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-comments ml-2 w-5 text-center"></i> Comments</a>
+      <a href="#" id="menu-posts" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-file-alt ml-2 w-5 text-center"></i> Content</a>
+      <a href="#" id="menu-audit" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-history ml-2 w-5 text-center"></i> Audit Logs</a>
+      <a href="#" id="menu-ads" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-ad ml-2 w-5 text-center"></i> Ads</a>
+      <a href="#" id="menu-notifications" class="block px-6 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition"><i class="fas fa-bell ml-2 w-5 text-center"></i> Notifications</a>
     </nav>
     <div class="p-4 border-t border-gray-800">
       <button id="btn-logout" class="w-full bg-gray-800 text-gray-300 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition text-right">
@@ -44,13 +46,67 @@
   <!-- Main Content -->
   <main class="flex-1 flex flex-col bg-gray-100 overflow-hidden">
     <header class="h-16 bg-white shadow-sm flex items-center justify-between px-6">
-      <h2 class="text-xl font-semibold text-gray-800">إدارة المحتوى</h2>
-      <button id="btn-new-post" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition">
-        <i class="fas fa-plus ml-2"></i> إضافة محتوى جديد
-      </button>
+      <h2 class="text-xl font-semibold text-gray-800" id="header-title">Overview</h2>
     </header>
 
     <div class="flex-1 overflow-y-auto p-6" id="main-container">
+
+      <!-- Users View -->
+      <div id="view-users" class="bg-white rounded-lg shadow hidden">
+        <div class="p-4 border-b flex justify-between">
+          <input type="text" id="search-users" placeholder="بحث عن مستخدم..." class="border p-2 rounded w-1/3 focus:outline-none focus:ring-2 focus:ring-red-500">
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-right border-collapse">
+            <thead>
+              <tr class="bg-gray-50 border-b">
+                <th class="px-6 py-3 text-gray-500 font-semibold">الاسم</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">البريد</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">الصلاحية (Role)</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">الحالة (Status)</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="users-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Comments View -->
+      <div id="view-comments" class="bg-white rounded-lg shadow hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-right border-collapse">
+            <thead>
+              <tr class="bg-gray-50 border-b">
+                <th class="px-6 py-3 text-gray-500 font-semibold">الكاتب</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">المحتوى</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">نص التعليق</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">الحالة</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">إجراءات</th>
+              </tr>
+            </thead>
+            <tbody id="comments-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Audit Logs View -->
+      <div id="view-audit" class="bg-white rounded-lg shadow hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-right border-collapse">
+            <thead>
+              <tr class="bg-gray-50 border-b">
+                <th class="px-6 py-3 text-gray-500 font-semibold">الوقت</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">المشرف (Admin UID)</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">الإجراء</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">المتأثر (Target)</th>
+                <th class="px-6 py-3 text-gray-500 font-semibold">السبب</th>
+              </tr>
+            </thead>
+            <tbody id="audit-table-body"></tbody>
+          </table>
+        </div>
+      </div>
 
       <!-- Ads View -->
       <div id="view-ads" class="bg-white rounded-lg shadow p-6 hidden">

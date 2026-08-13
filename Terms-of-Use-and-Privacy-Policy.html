@@ -43,8 +43,8 @@
   </script>
 
   <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  
+  
 
   <!-- Open Graph -->
   <meta property="og:title" content="NIGHTMAReS">
@@ -63,25 +63,25 @@
 
     <ul>
       <li class="active">
-        <a href="home.html#home">
+        <a href="index.html#home">
           <ion-icon name="home-outline"></ion-icon>
           <span></span>
         </a>
       </li>
       <li>
-        <a href="home.html#cards">
+        <a href="index.html#cards">
           <ion-icon name="book-outline"></ion-icon>
           <span></span>
         </a>
       </li>
       <li>
-        <a href="home.html#news">
+        <a href="index.html#news">
           <ion-icon name="newspaper-outline"></ion-icon>
           <span></span>
         </a>
       </li>
       <li>
-        <a href="home.html#video">
+        <a href="index.html#video">
           <ion-icon name="play-circle-outline"></ion-icon>
           <span></span>
         </a>
@@ -116,19 +116,19 @@
     <ul class="text-white text-base divide-y divide-[#2c1b1b]">
       <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
         <ion-icon name="home-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="home.html#home" class="w-full">الرئيسية</a>
+        <a href="index.html#home" class="w-full">الرئيسية</a>
       </li>
       <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
         <ion-icon name="book-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="home.html#cards" class="w-full">القصص</a>
+        <a href="index.html#cards" class="w-full">القصص</a>
       </li>
       <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
         <ion-icon name="newspaper-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="home.html#news" class="w-full">الأخبار</a>
+        <a href="index.html#news" class="w-full">الأخبار</a>
       </li>
       <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
         <ion-icon name="play-circle-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="home.html#video" class="w-full">الفيديو</a>
+        <a href="index.html#video" class="w-full">الفيديو</a>
       </li>
       <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
         <ion-icon name="call-outline" class="text-xl text-red-500"></ion-icon>
@@ -243,17 +243,17 @@ const hamburgerWrapper = document.getElementById('hamburgerWrapper');
 const navbar = document.querySelector('.navbar'); // شريط التنقل
 
 // فتح القائمة
-menuBtn.addEventListener('click', () => {
-  sidebarMenu.classList.remove('translate-x-full');
-  overlay.classList.remove('hidden');
-  hamburgerWrapper.classList.add('hidden');
+if(menuBtn) menuBtn.addEventListener('click', () => {
+  if(sidebarMenu) sidebarMenu.classList.remove('translate-x-full');
+  if(overlay) overlay.classList.remove('hidden');
+  if(hamburgerWrapper) hamburgerWrapper.classList.add('hidden');
 });
 
 // إغلاق عند الضغط خارج القائمة
-overlay.addEventListener('click', () => {
-  sidebarMenu.classList.add('translate-x-full');
-  overlay.classList.add('hidden');
-  hamburgerWrapper.classList.remove('hidden');
+if(overlay) overlay.addEventListener('click', () => {
+  if(sidebarMenu) sidebarMenu.classList.add('translate-x-full');
+  if(overlay) overlay.classList.add('hidden');
+  if(hamburgerWrapper) hamburgerWrapper.classList.remove('hidden');
 });
 
 let lastScrollTop = 0;

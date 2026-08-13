@@ -42,6 +42,34 @@
           <img src="/images/facebook-512.png" alt="Facebook" />
         </a>
       </div>
+      
+      <!-- Interactions Section (Likes & Comments) -->
+      <section id="interactions-section" class="article-container" style="margin-top: 30px; font-family: 'Cairo', sans-serif;">
+        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 20px;">
+          <h3 style="font-size: 1.5em;">التعليقات</h3>
+          <button id="btn-like" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2em; display: flex; align-items: center; gap: 8px;">
+            <i class="fas fa-heart" id="like-icon"></i>
+            <span id="likes-count">0</span> إعجاب
+          </button>
+        </div>
+        
+        <!-- Add Comment Form -->
+        <div id="comment-form-container" style="display: none; margin-bottom: 30px;">
+          <form id="comment-form" style="display: flex; flex-direction: column; gap: 10px;">
+            <textarea id="comment-text" rows="3" placeholder="أضف تعليقاً..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #555; font-family: inherit; resize: vertical;" required></textarea>
+            <button type="submit" style="align-self: flex-end; background: #e50914; color: #fff; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">تعليق</button>
+          </form>
+        </div>
+        <div id="login-prompt" style="text-align: center; margin-bottom: 30px; color: #aaa;">
+          يجب <a href="/login.html" style="color: #e50914; text-decoration: underline;">تسجيل الدخول</a> لإضافة إعجاب أو تعليق.
+        </div>
+
+        <!-- Comments List -->
+        <div id="comments-list" style="display: flex; flex-direction: column; gap: 20px;">
+          <div style="text-align: center; color: #888;">جاري تحميل التعليقات...</div>
+        </div>
+      </section>
+      
     </div>
     
     <button id="scrollToTop" style="display: none;">عودة للأعلى</button>
@@ -54,6 +82,15 @@
     </footer>
   </div>
 
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  
+  
+  
+  
+  
   <script type="module" src="/js/article.js"></script>
+  <script type="module" src="/js/interactions.js"></script>
 </body>
 </html>
