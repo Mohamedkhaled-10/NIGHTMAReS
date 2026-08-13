@@ -1,0 +1,144 @@
+<nav class="navbar hidden md:block">
+    <ul>
+      <li class="active">
+        <a href="/#home">
+          <ion-icon name="home-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="/#cards">
+          <ion-icon name="book-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="/#news">
+          <ion-icon name="newspaper-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="/#video">
+          <ion-icon name="play-circle-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="/contact-us">
+          <ion-icon name="call-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <li>
+        <a href="/Terms-of-Use-and-Privacy-Policy">
+          <ion-icon name="information-circle-outline"></ion-icon>
+          <span></span>
+        </a>
+      </li>
+      <div id="marker"></div>
+    </ul>
+
+  <!-- زر الإشعارات + القائمة المنسدلة -->
+  <div class="absolute top-1/2 right-20 -translate-y-1/2">
+    <div class="relative inline-block text-left">
+      <button id="notifBtn" aria-label="الإشعارات" class="text-white text-2xl p-2 hover:text-red-500 transition relative">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span id="notifDot" class="absolute top-1 right-1 bg-red-600 rounded-full w-2 h-2 hidden"></span>
+      </button>
+
+      <!-- القائمة المنسدلة -->
+      <div id="notifMenu" class="hidden absolute right-0 mt-2 w-72 bg-[#1c1c1e] border border-[#7f1d1d] rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
+        <ul id="notificationsList" class="divide-y divide-[#7f1d1d]">
+          <li class="px-4 py-3 text-sm text-gray-400 text-center">لا توجد إشعارات بعد</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- زر البحث -->
+  <div class="search-wrapper absolute top-1/2 right-6 -translate-y-1/2">
+    <button id="searchToggle" aria-label="فتح البحث" class="text-white text-2xl p-2 hover:text-red-500 transition">
+      <ion-icon name="search-outline"></ion-icon>
+    </button>
+    <form id="searchForm" class="absolute top-full right-0 mt-2 w-64 bg-[#130000] rounded-md shadow-lg overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out" style="max-height: 0; z-index: 999;">
+      <input id="searchInput" type="search" placeholder="ابحث هنا..." class="w-full px-4 py-2 bg-[#1b0d0d] text-white focus:outline-none" />
+      <ul id="suggestionsList" class="absolute top-full right-0 mt-1 w-64 bg-[#1b0d0d] text-white rounded shadow-lg hidden z-[1000]"></ul>
+    </form>
+  </div>
+</nav>
+
+<!-- أيقونة البحث للهاتف -->
+<div class="md:hidden fixed top-4 left-4 z-50">
+  <button id="mobileSearchBtn" class="text-white text-2xl p-2 hover:text-red-500 transition">
+    <ion-icon name="search-outline"></ion-icon>
+  </button>
+</div>
+
+<!-- شريط البحث للهاتف -->
+<form id="mobileSearchForm" class="fixed top-14 left-4 right-4 bg-[#130000] rounded-lg overflow-hidden shadow-lg max-h-0 transition-all duration-300 md:hidden z-50">
+  <div class="flex">
+  <input
+    type="search"
+    id="searchInputMobile"
+    placeholder="ابحث هنا..."
+    class="flex-1 px-4 py-3 text-white bg-[#1b0d0d] focus:outline-none placeholder:text-gray-300"
+  />
+  <button type="submit" class="bg-red-800 hover:bg-red-900 px-4 text-white">بحث</button>
+</div>
+  <ul id="suggestionsListMobile" class="bg-[#1b0d0d] text-white hidden"></ul>
+</form>
+
+<!-- أيقونة الهمبرجر -->
+<div id="hamburgerWrapper" class="md:hidden fixed top-4 right-4 z-50 transition-transform duration-300">
+  <button id="menuBtn" class="flex flex-col items-end gap-1 p-2 bg-[#130000] rounded-md shadow-md">
+    <span class="block w-6 h-0.5 bg-white"></span>
+    <span class="block w-5 h-0.5 bg-white"></span>
+    <span class="block w-4 h-0.5 bg-white"></span>
+  </button>
+</div>
+
+<!-- غطاء للخلفية -->
+<div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30 md:hidden"></div>
+
+<!-- القائمة الجانبية المحسّنة -->
+<div id="sidebarMenu" class="fixed top-0 right-0 h-full w-72 bg-[#130000] transform translate-x-full transition-transform duration-300 z-40 md:hidden shadow-2xl rounded-l-2xl overflow-hidden">
+  <div class="p-5 h-full flex flex-col">
+    <h2 class="text-white text-2xl font-bold mb-4 pb-2 border-b border-[#2c1b1b]">القائمة</h2>
+    <ul class="text-white text-base divide-y divide-[#2c1b1b]">
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="home-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="/#home" class="w-full">الرئيسية</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="book-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="/#cards" class="w-full">القصص</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="newspaper-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="/#news" class="w-full">الأخبار</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="play-circle-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="/#video" class="w-full">الفيديو</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="call-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="/contact-us" class="w-full">اتصل بنا</a>
+      </li>
+      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="person-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="/Terms-of-Use-and-Privacy-Policy" class="w-full">سياسة الاستخدام والخصوصية</a>
+      </li>
+      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+        <ion-icon name="person-circle-outline" class="text-xl text-red-500"></ion-icon>
+        <a href="/profile" class="w-full">حسابي</a>
+      </li>
+    </ul>
+    
+    <div class="mt-auto pt-6 border-t border-[#2c1b1b] text-center text-sm text-gray-400">
+      <p>NIGHTMAReS © 2025</p>
+    </div>
+  </div>
+</div>
+<script src="/js/navbar.js" defer></script>
