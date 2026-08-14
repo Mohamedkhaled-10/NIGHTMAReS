@@ -94,7 +94,7 @@ document.getElementById('img-upload').addEventListener('change', async (e) => {
   
   try {
     const user = auth.currentUser;
-    const storageRef = ref(storage, \`profile_images/\${user.uid}_\${Date.now()}\`);
+    const storageRef = ref(storage, `profile_images/${user.uid}_${Date.now()}`);
     
     document.getElementById('profile-img').style.opacity = '0.5';
     

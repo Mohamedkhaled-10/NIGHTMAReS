@@ -55,7 +55,7 @@ onAuthStateChanged(auth, async (user) => {
 
 async function checkLikeStatus() {
   if (!currentUser) return;
-  const likeRef = doc(db, 'content_likes', \`\${contentId}_\${currentUser.uid}\`);
+  const likeRef = doc(db, 'content_likes', `${contentId}_${currentUser.uid}`);
   const snap = await getDoc(likeRef);
   hasLiked = snap.exists();
   updateLikeUI();
@@ -85,7 +85,7 @@ btnLike.addEventListener('click', async () => {
     return;
   }
   
-  const likeRef = doc(db, 'content_likes', \`\${contentId}_\${currentUser.uid}\`);
+  const likeRef = doc(db, 'content_likes', `${contentId}_${currentUser.uid}`);
   const statsRef = doc(db, 'content_stats', contentId);
   
   // Optimistic UI
@@ -204,22 +204,22 @@ async function loadComments(loadMore = false) {
       
       // Delete button for author
       const delBtn = (currentUser && currentUser.uid === data.authorUid) 
-        ? \`<button onclick="deleteComment('\${docSnap.id}')" style="background:none; border:none; color:#e50914; cursor:pointer; font-size: 0.9em;"><i class="fas fa-trash"></i> حذف</button>\` 
+        ? `<button onclick="deleteComment('${docSnap.id}')" style="background:none; border:none; color:#e50914; cursor:pointer; font-size: 0.9em;"><i class="fas fa-trash"></i> حذف</button>` 
         : '';
         
-      el.innerHTML = \`
-        <img src="\${data.authorPhoto}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=User'" loading="lazy" decoding="async">
+      el.innerHTML = `
+        <img src="${data.authorPhoto}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=User'" loading="lazy" decoding="async">
         <div style="flex: 1;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-            <strong style="color: #fff;">\${data.authorName}</strong>
+            <strong style="color: #fff;">${data.authorName}</strong>
             <div style="display: flex; gap: 10px; align-items: center;">
-              <span style="color: #777; font-size: 0.8em;">\${dateStr}</span>
-              \${delBtn}
+              <span style="color: #777; font-size: 0.8em;">${dateStr}</span>
+              ${delBtn}
             </div>
           </div>
-          <p style="color: #ddd; margin: 0; line-height: 1.5; white-space: pre-wrap;">\${data.text}</p>
+          <p style="color: #ddd; margin: 0; line-height: 1.5; white-space: pre-wrap;">${data.text}</p>
         </div>
-      \`;
+      `;
       
       commentsList.appendChild(el);
     });
