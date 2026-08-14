@@ -1,20 +1,25 @@
 // js/firebase-init.js
 // Firebase v10 Modular SDK Initialization
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getAuth, browserLocalPersistence, setPersistence } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-// Fetch config dynamically
-const response = await fetch('/api/firebase-config');
-const firebaseConfig = await response.json();
+let firebaseConfig;
+const cachedConfig = sessionStorage.getItem('firebaseConfig');
+if (cachedConfig) {
+  firebaseConfig = JSON.parse(cachedConfig);
+} else {
+  const response = await fetch('/api/firebase-config');
+  firebaseConfig = await response.json();
+  sessionStorage.setItem('firebaseConfig', JSON.stringify(firebaseConfig));
+}
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Initialize Services
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId || "(default)");
 export const auth = getAuth(app);
 export const storage = getStorage(app);
 export const config = firebaseConfig;
+
+setPersistence(auth, browserLocalPersistence).catch(console.error);

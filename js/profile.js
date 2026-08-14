@@ -42,7 +42,14 @@ onAuthStateChanged(auth, async (user) => {
       alert('خطأ في الاتصال بقاعدة البيانات.');
     }
   } else {
-    window.location.href = '/login';
+    window.location.replace('/login');
+  }
+});
+
+// Handle BFCache navigation
+window.addEventListener("pageshow", (event) => {
+  if (event.persisted && auth.currentUser === null) {
+    window.location.replace('/login');
   }
 });
 

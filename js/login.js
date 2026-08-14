@@ -3,9 +3,18 @@ import {
   signInWithEmailAndPassword, 
   createUserWithEmailAndPassword, 
   sendPasswordResetEmail, 
-  sendEmailVerification 
+  sendEmailVerification,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Auto-redirect if already logged in
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    window.location.replace('/profile');
+  }
+});
+
 
 const form = document.getElementById('auth-form');
 const nameField = document.getElementById('name-field');
