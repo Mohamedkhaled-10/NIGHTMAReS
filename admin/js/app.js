@@ -778,3 +778,4 @@ document.getElementById('notif-form')?.addEventListener('submit', async (e) => {
     btn.textContent = 'إرسال الإشعار الآن';
   }
 });
+

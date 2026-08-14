@@ -105,14 +105,6 @@
 <script type="module" src="js/notifications-ads.js"></script>
 <script type="module" src="js/home-feed.js"></script>
 <script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js").then(() => {
-      console.log("Service Worker Registered");
-    }).catch(error => {
-      console.log("Service Worker registration failed:", error);
-    });
-  }
-
   document.addEventListener("DOMContentLoaded", () => {
     // Dynamic cards don't have read-more-btn by default in index.html anymore, 
     // it's handled when rendering them dynamically.
