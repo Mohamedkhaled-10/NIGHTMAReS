@@ -90,10 +90,10 @@ form.addEventListener('submit', async (e) => {
         if (data.role === 'admin') {
           window.location.href = '/admin';
         } else {
-          window.location.href = '//profile';
+          window.location.href = '/profile';
         }
       } else {
-        window.location.href = '//profile';
+        window.location.href = '/profile';
       }
       
     } else if (currentMode === 'register') {

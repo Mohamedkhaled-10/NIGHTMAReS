@@ -1,12 +1,9 @@
 {
-  "projectId": "mesmerizing-mission-9t8c4",
-  "appId": "1:1037017589374:web:3f5cd8b07ec8fbf9491a2f",
-  "apiKey": "AIzaSyB_02QEIttsmC2mtgvCn4J0cgOHzQ9LZD0",
-  "authDomain": "mesmerizing-mission-9t8c4.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-nightmares-3eef5533-4f7d-4c04-be06-1ecd26c06808",
-  "storageBucket": "mesmerizing-mission-9t8c4.firebasestorage.app",
-  "messagingSenderId": "1037017589374",
-  "measurementId": "",
-  "oAuthClientId": "1037017589374-ntun4fnhv8qn2dqqq6ku1kerrpu53i0t.apps.googleusercontent.com",
-  "recaptchaSiteKey": ""
+  "apiKey": "AIzaSyCmy-Q609xWxD6pOM5W5rsUUBZY4YTqcr0",
+  "authDomain": "nightmare-9a1a0.firebaseapp.com",
+  "databaseURL": "https://nightmare-9a1a0-default-rtdb.europe-west1.firebasedatabase.app",
+  "projectId": "nightmare-9a1a0",
+  "storageBucket": "nightmare-9a1a0.firebasestorage.app",
+  "messagingSenderId": "870740601884",
+  "appId": "1:870740601884:web:060bff457343d9"
 }
