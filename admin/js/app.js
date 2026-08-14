@@ -222,8 +222,8 @@ if (menuSubmissions) {
   menuSubmissions.addEventListener('click', () => {
     menuPosts.classList.remove('bg-gray-800', 'text-white');
     menuPosts.classList.add('text-gray-300');
-    menuSubmissions.classList.add('bg-gray-800', 'text-white');
-    menuSubmissions.classList.remove('text-gray-300');
+    menuSubmissions?.classList.add('bg-gray-800', 'text-white');
+    menuSubmissions?.classList.remove('text-gray-300');
     
     viewList.classList.add('hidden');
     viewEditor.classList.add('hidden');
@@ -237,8 +237,8 @@ if (menuSubmissions) {
 }
 
 menuPosts.addEventListener('click', () => {
-  menuSubmissions.classList.remove('bg-gray-800', 'text-white');
-  menuSubmissions.classList.add('text-gray-300');
+  menuSubmissions?.classList.remove('bg-gray-800', 'text-white');
+  menuSubmissions?.classList.add('text-gray-300');
   menuPosts.classList.add('bg-gray-800', 'text-white');
   menuPosts.classList.remove('text-gray-300');
   
@@ -447,8 +447,8 @@ if(menuPosts) {
 if(menuSubmissions) {
   menuSubmissions.addEventListener('click', () => {
     hideAllViews();
-    menuSubmissions.classList.add('bg-gray-800', 'text-white');
-    menuSubmissions.classList.remove('text-gray-300');
+    menuSubmissions?.classList.add('bg-gray-800', 'text-white');
+    menuSubmissions?.classList.remove('text-gray-300');
     viewSubmissions.classList.remove('hidden');
     document.querySelector('header h2').textContent = 'مراجعة قصص المتابعين';
     loadSubmissions();
