@@ -46,6 +46,19 @@ function renderContent(data) {
   document.title = `${data.title} - Nightmares`;
   document.getElementById('article-title').textContent = data.title;
 
+  // Render Cover Image
+  const coverImageContainer = document.getElementById('cover-image-container');
+  const coverImageEl = document.getElementById('article-cover-image');
+  
+  if (data.coverImage) {
+    coverImageEl.src = data.coverImage;
+    coverImageEl.alt = data.title;
+    coverImageContainer.style.display = 'block';
+  } else {
+    // Hide if there's no cover image to avoid broken images
+    coverImageContainer.style.display = 'none';
+  }
+
   // Render HTML Content (depending on type, but generally it's in data.data.contentHtml or similar)
   const articleBody = document.getElementById('article-body');
   

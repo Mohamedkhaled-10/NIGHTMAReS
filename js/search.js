@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         card.innerHTML = `
           <div class="h-48 overflow-hidden relative">
-            <img src="${post.coverImage || '/images/default-cover.jpg'}" alt="${post.title}" class="w-full h-full object-cover">
+            <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" class="w-full h-full object-cover">
             <span class="absolute top-2 right-2 ${typeColor} text-white text-xs px-2 py-1 rounded shadow">${typeLabel}</span>
           </div>
           <div class="p-5">

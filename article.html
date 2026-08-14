@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="/styles/article.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/css/ionicons.min.css">
   <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .loading-spinner { display: flex; justify-content: center; align-items: center; height: 50vh; font-size: 2em; color: red; }
     .hidden { display: none !important; }
@@ -22,7 +23,12 @@
     <div id="loading" class="loading-spinner">جارِ التحميل...</div>
 
     <div id="content-area" class="hidden">
-      <h1 class="story-title" id="article-title"></h1>
+      <!-- Article Cover Image -->
+      <div id="cover-image-container" style="display: none; max-width: 900px; width: 80%; margin: 100px auto 10px; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+        <img id="article-cover-image" src="" alt="Cover Image" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;">
+      </div>
+
+      <h1 class="story-title" id="article-title" style="margin-top: 20px;"></h1>
       <div class="story-separator"></div>
       
       <section class="article-container">

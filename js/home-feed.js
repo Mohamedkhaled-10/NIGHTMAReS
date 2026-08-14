@@ -70,7 +70,7 @@ function renderStories(items, container) {
     card.className = 'card';
     card.innerHTML = `
       <div class="card-inner">
-        <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}" loading="lazy" decoding="async">
+        <img src="${item.coverImage || '/assets/images/icon-white.png'}" alt="${item.title}" loading="lazy" decoding="async">
         <div class="overlay"></div>
         <div class="card-content">
           <h3>${item.title}</h3>
@@ -104,7 +104,7 @@ function renderNews(items, container) {
     const card = document.createElement('div');
     card.className = 'news-card';
     card.innerHTML = `
-      <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}" loading="lazy" decoding="async">
+      <img src="${item.coverImage || '/assets/images/icon-white.png'}" alt="${item.title}" loading="lazy" decoding="async">
       <div class="news-content">
         <h3>${item.title}</h3>
         <p class="news-text">${snippet}</p>
@@ -129,7 +129,7 @@ function renderVideos(items, container) {
     card.href = link;
     card.className = 'video-card';
     card.innerHTML = `
-      <img src="${item.coverImage || 'images/default.jpg'}" alt="${item.title}" loading="lazy" decoding="async">
+      <img src="${item.coverImage || '/assets/images/icon-white.png'}" alt="${item.title}" loading="lazy" decoding="async">
       <div class="video-content">
         <h3>${item.title}</h3>
       </div>
