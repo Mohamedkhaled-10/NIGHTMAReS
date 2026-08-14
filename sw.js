@@ -6,3 +6,7 @@ self.addEventListener("install", function (event) {
 self.addEventListener("activate", function (event) {
   event.waitUntil(clients.claim());
 });
+
+self.addEventListener("fetch", function (event) {
+  // No debug logs in production
+});
