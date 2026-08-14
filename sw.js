@@ -20,9 +20,3 @@ self.addEventListener('activate', (event) => {
     })
   );
 });
-
-self.addEventListener('fetch', (event) => {
-  // We leave this empty on purpose. 
-  // No event.respondWith() means the browser handles the request normally.
-  // This satisfies PWA installability without breaking Firebase/Firestore or spamming the console.
-});
