@@ -46,6 +46,11 @@ function servePage(res, pagePath) {
   res.send(html);
 }
 
+app.get('/manifest.json', (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.sendFile(path.join(__dirname, 'manifest.json'));
+});
+
 // Serve static files from the current directory, EXCEPT html files (which need layout injection)
 app.use((req, res, next) => {
   if (req.path.endsWith('.html') && req.path !== '/admin/index.html') {
