@@ -7,6 +7,26 @@ document.addEventListener("DOMContentLoaded", () => {
     marker.style.left = element.offsetLeft + "px";
     marker.style.width = element.offsetWidth + "px";
   }
+  
+  // Set active state based on current URL
+  const currentPath = window.location.pathname;
+  const currentHash = window.location.hash;
+  
+  listItems.forEach(item => {
+    item.classList.remove('active');
+    const link = item.querySelector('a');
+    if (link) {
+      const href = link.getAttribute('href');
+      if (href === currentPath || href === currentPath + currentHash || (currentPath === '/' && href === '/#home' && !currentHash)) {
+        item.classList.add('active');
+      }
+    }
+  });
+  
+  // Set initial marker position
+  let active = document.querySelector('.navbar ul li.active');
+  if (active) moveIndicator(active);
+
   listItems.forEach(item => {
     item.addEventListener('mousemove', function() {
       moveIndicator(this);

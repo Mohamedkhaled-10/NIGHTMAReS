@@ -33,8 +33,14 @@ function servePage(res, pagePath) {
   if (!html.includes('tailwindcss.com')) {
     html = html.replace('</head>', '  <script src="https://cdn.tailwindcss.com"></script>\n</head>');
   }
-  if (!html.includes('/styles/main.css')) {
+  if (!html.includes('/styles/main.css') && !html.includes('"styles/main.css"')) {
     html = html.replace('</head>', '  <link rel="stylesheet" href="/styles/main.css">\n</head>');
+  }
+  if (!html.includes('unpkg.com/ionicons')) {
+    html = html.replace('</head>', '  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>\n  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>\n</head>');
+  }
+  if (!html.includes('font-awesome')) {
+    html = html.replace('</head>', '  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">\n</head>');
   }
   
   res.send(html);
