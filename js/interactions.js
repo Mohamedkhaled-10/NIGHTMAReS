@@ -81,7 +81,7 @@ async function loadLikesCount() {
 
 btnLike.addEventListener('click', async () => {
   if (!currentUser) {
-    window.location.href = '//login';
+    window.location.href = '/login';
     return;
   }
   

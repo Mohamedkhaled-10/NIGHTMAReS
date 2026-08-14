@@ -57,12 +57,16 @@ app.get(['/story/:slug', '/news/:slug', '/video/:slug'], (req, res) => {
 });
 
 // Serve specific static HTML pages without .html extension
-const pages = ['login', 'dashboard', 'profile', 'search', 'submit', 'download-page', 'character', 'Terms-of-Use-and-Privacy-Policy', 'contact-us'];
+const pages = ['login', 'profile', 'search', 'submit', 'download-page', 'character', 'Terms-of-Use-and-Privacy-Policy', 'contact-us'];
 
 pages.forEach(page => {
   app.get(`/${page}`, (req, res) => {
     servePage(res, path.join(__dirname, 'pages', `${page}.html`));
   });
+});
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin', 'index.html'));
 });
 
 app.get('/', (req, res) => {
@@ -81,9 +85,7 @@ app.use((req, res) => {
 // Export app for Vercel Serverless Functions
 module.exports = app;
 
-// Listen on port 3000 only if not in Vercel
-if (!process.env.VERCEL) {
-  app.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}
+// Listen on port 3000
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
+});

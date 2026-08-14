@@ -66,6 +66,22 @@
       <ul id="suggestionsList" class="absolute top-full right-0 mt-1 w-64 bg-[#1b0d0d] text-white rounded shadow-lg hidden z-[1000]"></ul>
     </form>
   </div>
+
+  <!-- User Auth UI (Desktop) -->
+  <div class="absolute top-1/2 left-6 -translate-y-1/2 flex items-center gap-4" id="desktop-auth-container">
+    <div id="desktop-auth-unauthenticated" class="flex gap-2">
+      <a href="/login" class="text-white text-sm font-semibold hover:text-red-500 transition px-3 py-1 bg-[#2c1b1b] rounded shadow hover:bg-red-950">تسجيل الدخول</a>
+    </div>
+    <div id="desktop-auth-authenticated" class="hidden flex items-center gap-3">
+      <a href="/profile" class="flex items-center gap-2 group">
+        <img src="/assets/images/icon-white.png" id="desktop-user-avatar" class="w-8 h-8 rounded-full border border-red-900 shadow-[0_0_5px_crimson] group-hover:scale-105 transition" onerror="this.src='/assets/images/icon-white.png'">
+        <span id="desktop-user-name" class="text-sm font-semibold text-white group-hover:text-red-500 transition"></span>
+      </a>
+      <a href="/admin" id="desktop-admin-link" class="hidden text-red-500 text-sm font-semibold hover:text-red-400 transition bg-[#2c1b1b] px-2 py-1 rounded border border-red-900 shadow">الإدارة</a>
+      <button id="desktop-logout-btn" class="text-gray-400 text-sm font-semibold hover:text-red-500 transition">خروج</button>
+    </div>
+  </div>
+
 </nav>
 
 <!-- أيقونة البحث للهاتف -->
@@ -130,10 +146,26 @@
         <ion-icon name="person-outline" class="text-xl text-red-500"></ion-icon>
         <a href="/Terms-of-Use-and-Privacy-Policy" class="w-full">سياسة الاستخدام والخصوصية</a>
       </li>
-      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-        <ion-icon name="person-circle-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="/profile" class="w-full">حسابي</a>
-      </li>
+      <div id="mobile-auth-container">
+        <li id="mobile-auth-unauthenticated" class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+          <ion-icon name="log-in-outline" class="text-xl text-red-500"></ion-icon>
+          <a href="/login" class="w-full">تسجيل الدخول</a>
+        </li>
+        <div id="mobile-auth-authenticated" class="hidden">
+          <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+            <ion-icon name="person-circle-outline" class="text-xl text-red-500"></ion-icon>
+            <a href="/profile" class="w-full">حسابي</a>
+          </li>
+          <li id="mobile-admin-link" class="hidden bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+            <ion-icon name="shield-checkmark-outline" class="text-xl text-red-500"></ion-icon>
+            <a href="/admin" class="w-full text-red-500">لوحة الإدارة</a>
+          </li>
+          <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
+            <ion-icon name="log-out-outline" class="text-xl text-red-500"></ion-icon>
+            <button id="mobile-logout-btn" class="w-full text-right text-gray-400 hover:text-white">تسجيل الخروج</button>
+          </li>
+        </div>
+      </div>
     </ul>
     
     <div class="mt-auto pt-6 border-t border-[#2c1b1b] text-center text-sm text-gray-400">
@@ -142,3 +174,4 @@
   </div>
 </div>
 <script src="/js/navbar.js" defer></script>
+<script type="module" src="/js/auth-ui.js"></script>

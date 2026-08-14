@@ -27,7 +27,7 @@ onAuthStateChanged(auth, async (user) => {
         if (currentUserDoc.accountStatus === 'banned' || currentUserDoc.accountStatus === 'deleted') {
           await signOut(auth);
           alert('هذا الحساب محظور أو محذوف.');
-          window.location.href = '//login';
+          window.location.href = '/login';
           return;
         }
 
@@ -35,14 +35,14 @@ onAuthStateChanged(auth, async (user) => {
       } else {
         alert('حدث خطأ في جلب بيانات الحساب.');
         await signOut(auth);
-        window.location.href = '//login';
+        window.location.href = '/login';
       }
     } catch (err) {
       console.error(err);
       alert('خطأ في الاتصال بقاعدة البيانات.');
     }
   } else {
-    window.location.href = '//login';
+    window.location.href = '/login';
   }
 });
 
