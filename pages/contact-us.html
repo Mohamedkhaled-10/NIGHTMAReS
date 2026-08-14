@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>تواصل معنا - Nightmares</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+    body { font-family: 'Cairo', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-900 text-white min-h-screen flex flex-col">
+<!-- NAVBAR_PLACEHOLDER -->
+<main class="flex-1 flex items-center justify-center p-4 my-10">
+  <div class="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-lg border border-gray-700">
+    <div class="text-center mb-6">
+      <i class="fas fa-envelope text-4xl text-red-600 mb-2"></i>
+      <h2 class="text-2xl font-bold" id="form-title">تواصل معنا</h2>
+      <p class="text-gray-400 mt-2 text-sm">إذا كان لديك أي مشكلة أو استفسار، لا تتردد في مراسلتنا.</p>
+    </div>
+    
+    <!-- Contact Form (Formspree) -->
+    <form action="https://formspree.io/f/xpwdponz" method="POST" id="story-form" class="space-y-4">
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-300 mb-1">اسمك</label>
+        <input type="text" id="name" name="name" placeholder="أدخل اسمك" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      </div>
+      <div>
+        <label for="story-title" class="block text-sm font-medium text-gray-300 mb-1">عنوان المشكلة</label>
+        <input type="text" id="story-title" name="story-title" placeholder="أدخل عنوان المشكلة" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      </div>
+      <div>
+        <label for="category" class="block text-sm font-medium text-gray-300 mb-1">فئة المشكلة</label>
+        <input type="text" id="category" name="category" placeholder="اكتب الفئة هنا (مثال: مشكلة تقنية، اقتراح)" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      </div>
+      <div>
+        <label for="story-content" class="block text-sm font-medium text-gray-300 mb-1">اكتب المشكلة بالتفصيل</label>
+        <textarea id="story-content" name="story-content" rows="6" placeholder="اكتب مشكلتك أو استفسارك هنا..." class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 resize-y" required></textarea>
+      </div>
+      <button type="submit" class="w-full bg-red-600 hover:bg-red-700 transition text-white font-bold p-3 rounded mt-4">
+        إرسال <i class="fas fa-paper-plane mr-2"></i>
+      </button>
+    </form>
+  </div>
+</main>
+<!-- FOOTER_PLACEHOLDER -->
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "nightmares",
+  "version": "1.0.0",
+  "description": "NIGHTMAReS",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo \"No build required\""
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

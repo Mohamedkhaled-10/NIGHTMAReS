@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حسابي - Nightmares</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+    body {
+      background: linear-gradient(180deg, #1a0000, #000000);
+      background-attachment: fixed;
+      font-family: 'Cairo', sans-serif;
+      color: white;
+    }
+    
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- NAVBAR_PLACEHOLDER -->
+
+<div class="wrapper flex-1 pt-32 pb-12">
+  <main class="container mx-auto p-4 max-w-2xl">
+    <div class="bg-black/60 border border-red-900/50 p-8 rounded-lg shadow-2xl">
+      
+      <div id="loader" class="text-center py-8">
+        <i class="fas fa-spinner fa-spin text-4xl text-red-500"></i>
+        <p class="mt-4 text-gray-400">جاري تحميل البيانات...</p>
+      </div>
+
+      <div id="profile-content" class="hidden">
+        <div class="flex flex-col md:flex-row items-center md:items-start gap-8 mb-8 border-b border-red-900/50 pb-8">
+          <div class="relative group">
+            <img id="profile-img" src="https://ui-avatars.com/api/?name=User&background=random" class="w-32 h-32 rounded-full object-cover border-4 border-red-900/50 shadow-[0_0_15px_rgba(255,0,0,0.3)]">
+            <label for="img-upload" class="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition">
+              <i class="fas fa-camera text-2xl text-white"></i>
+            </label>
+            <input type="file" id="img-upload" class="hidden" accept="image/*">
+          </div>
+          <div class="flex-1 text-center md:text-right">
+            <h2 id="display-name-text" class="text-2xl font-bold mb-2 drop-shadow-md"></h2>
+            <p id="email-text" class="text-gray-400 mb-4"></p>
+            <div id="status-badges" class="flex gap-2 justify-center md:justify-start">
+              <span id="role-badge" class="px-2 py-1 text-xs rounded bg-red-900 text-white shadow"></span>
+              <span id="status-badge" class="px-2 py-1 text-xs rounded bg-green-900 text-white shadow"></span>
+            </div>
+          </div>
+        </div>
+
+        <form id="profile-form" class="space-y-6">
+          <div>
+            <label class="block mb-2 font-semibold text-gray-300">الاسم الشخصي</label>
+            <input type="text" id="input-display-name" class="w-full p-3 rounded bg-[#111] text-white border border-gray-800 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600" required>
+          </div>
+          <div>
+            <label class="block mb-2 font-semibold text-gray-300">البريد الإلكتروني <span class="text-xs text-gray-500">(غير قابل للتعديل)</span></label>
+            <input type="email" id="input-email" class="w-full p-3 rounded bg-[#0a0a0a] text-gray-500 border border-gray-800 cursor-not-allowed" disabled>
+          </div>
+
+          <p id="profile-msg" class="text-sm font-semibold hidden"></p>
+          
+          <div class="flex flex-col md:flex-row gap-4 pt-4">
+            <button type="submit" id="btn-save" class="flex-1 bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-4 rounded transition shadow-[0_0_15px_rgba(255,0,0,0.5)]">
+              حفظ التعديلات
+            </button>
+            <button type="button" id="btn-logout" class="bg-[#111] hover:bg-gray-800 border border-red-900/30 text-white font-bold py-3 px-4 rounded transition">
+              <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script type="module" src="/js/profile.js"></script>
+<!-- FOOTER_PLACEHOLDER -->
+</body>
+</html>

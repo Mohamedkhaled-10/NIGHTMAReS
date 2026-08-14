@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta name="google-site-verification" content="eBq9l8CCfzBrXYArPr96pdVtWRutunbaLMa6WLUxlz0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NIGHTMAReS</title>
+<link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
+  <!-- أيقونة المتصفح الأساسية -->
+<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+
+<!-- أيقونات مختلفة لحجم متعدد -->
+<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="assets/images/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/images/android-chrome-512x512.png">
+
+<!-- أيقونة خاصة بأجهزة Apple -->
+<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+
+<!-- ملف Web Manifest لتعريف الأيقونات على أنظمة التشغيل -->
+  <!-- تضمين Font Awesome و Ionicons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- ربط ملف CSS الخارجي -->
+  <link rel="stylesheet" href="styles/main.css">
+
+  <!-- Firebase -->
+
+
+
+  <!-- Open Graph meta tags -->
+  <meta property="og:title" content="NIGHTMAReS">
+  <meta property="og:description" content="NIGHTMAReS - حيث تختبئ الكوابيس خلف كل همسة">
+  <meta property="og:image" content="https://nightma-re-s.vercel.app/assets/images/icon-white.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url" content="https://nightma-re-s.vercel.app/home">
+
+</head>
+<body>
+<!-- NAVBAR_PLACEHOLDER -->
+<!-- قسم الـ Hero -->
+  <section class="hero-new" id="home">
+    <!-- canvas جزيئات -->
+    <canvas id="particles"></canvas>
+    <!-- طبقة ضباب -->
+    <div class="fog-overlay"></div>
+    <!-- المحتوى -->
+    <div class="hero-content-new">
+      <img src="assets/images/icon-white.png" alt="Logo" class="hero-logo" />
+      <h1 class="glitch-text" data-text="NIGHTMAReS">NIGHTMAReS</h1>
+      <p class="hero-description">حيث تختبئ الكوابيس خلف كل همسة</p>
+      <div class="buttons-new">
+        <a href="/" class="btn-neon">قصص المتابعين</a>
+        <a href="download-page" class="btn-icon-neon" title="تحميل التطبيق">
+          <i class="fa-brands fa-android"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم القوالب (الكروت) -->
+  <section class="cards-section" id="cards">
+    <div id="stories-loading" style="text-align:center; padding: 50px; color: #888;">جاري تحميل القصص...</div>
+  </section>
+  
+<div class="story-button-container flex justify-center my-8">
+  <a href="#cards"
+     class="px-10 py-3 bg-gradient-to-r from-[#b91c1c] to-[#7f1d1d] text-white text-lg font-semibold rounded-full shadow-lg
+            hover:scale-105 hover:brightness-110 transition transform duration-300">
+    تصفح المزيد من القصص
+  </a>
+</div>
+
+<div id="AD_CONTAINER_ID"></div>
+
+  <!-- قسم الأخبار والفعاليات -->
+  <section class="news-section" id="news">
+    <h2 class="section-title text-3xl md:text-4xl font-extrabold text-[#b91c1c] mb-8 relative inline-block">
+  الأخبار والفعاليات
+  <span class="block w-20 h-1 bg-[#7f1d1d] rounded-full mt-2"></span>
+</h2>
+    <div class="news-grid" id="news-grid">
+      <div id="news-loading" style="text-align:center; padding: 50px; color: #888; grid-column: 1 / -1;">جاري تحميل الأخبار...</div>
+    </div>
+  </section>
+
+<section class="video-section" id="video">
+  <h2 class="section-title text-3xl md:text-4xl font-extrabold text-[#b91c1c] mb-8 relative inline-block">
+    أحدث الفيديوهات
+    <span class="block w-20 h-1 bg-[#7f1d1d] rounded-full mt-2"></span>
+  </h2>
+  <div class="video-grid" id="video-grid">
+      <div id="video-loading" style="text-align:center; padding: 50px; color: #888; grid-column: 1 / -1;">جاري تحميل الفيديوهات...</div>
+    </div>
+  </section>
+
+  
+<!-- FOOTER_PLACEHOLDER -->
+<script src="js/main.js"></script>
+<script type="module" src="js/notifications-ads.js"></script>
+<script type="module" src="js/home-feed.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    // Dynamic cards don't have read-more-btn by default in index.html anymore, 
+    // it's handled when rendering them dynamically.
+  });
+</script>
+</body>
+</html>

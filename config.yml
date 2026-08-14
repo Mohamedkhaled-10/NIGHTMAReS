@@ -1,0 +1,18 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "images/uploads"
+public_folder: "/images/uploads"
+
+collections:
+  - name: "stories"
+    label: "قصص"
+    folder: "stories"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "العنوان", name: "title", widget: "string" }
+      - { label: "الصورة", name: "image", widget: "image" }
+      - { label: "الوصف", name: "description", widget: "text" }
+      - { label: "رابط الصفحة", name: "link", widget: "string" }
