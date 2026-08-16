@@ -1,6 +1,7 @@
 // js/article.js
-import { db } from './firebase-init.js';
-import { collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { db, auth } from './firebase-init.js';
+import { collection, query, where, getDocs, orderBy, limit, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
   const pathParts = window.location.pathname.split('/').filter(p => p);
@@ -12,40 +13,100 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const type = pathParts[0]; // e.g., 'story', 'news', 'video'
   const slug = decodeURIComponent(pathParts[1]);
+  const urlParams = new URLSearchParams(window.location.search);
+  const isPreview = urlParams.get('preview') === 'true';
 
-  try {
-    const q = query(
-      collection(db, "posts"),
-      where("type", "==", type),
-      where("slug", "==", slug),
-      where("status", "==", "published")
-    );
+  const fetchPost = async () => {
+    try {
+      let q;
+      if (isPreview) {
+        q = query(
+          collection(db, "posts"),
+          where("type", "==", type),
+          where("slug", "==", slug)
+        );
+      } else {
+        q = query(
+          collection(db, "posts"),
+          where("type", "==", type),
+          where("slug", "==", slug),
+          where("status", "==", "published")
+        );
+      }
 
-    const querySnapshot = await getDocs(q);
-    
-    if (querySnapshot.empty) {
-      showError("عذراً، لم يتم العثور على المحتوى أو أنه غير متاح حالياً.");
-      return;
+      const querySnapshot = await getDocs(q);
+      
+      if (querySnapshot.empty) {
+        showError("عذراً، لم يتم العثور على المحتوى أو أنه غير متاح حالياً.");
+        return;
+      }
+
+      // Assuming slug is unique per type
+      const docSnap = querySnapshot.docs[0];
+      const docData = { id: docSnap.id, ...docSnap.data() };
+      
+      if (isPreview && docData.status !== 'published') {
+        // Add a preview banner
+        const banner = document.createElement('div');
+        banner.className = 'bg-orange-500 text-white text-center py-2 font-bold';
+        banner.textContent = 'وضع المعاينة: هذا المحتوى غير منشور (مسودة).';
+        document.body.prepend(banner);
+      }
+      
+      renderContent(docData);
+      
+    } catch (error) {
+      console.error("Error fetching content:", error);
+      showError("حدث خطأ أثناء جلب البيانات أو ليس لديك صلاحية لمعاينتها.");
     }
+  };
 
-    // Assuming slug is unique per type
-    const doc = querySnapshot.docs[0];
-    const docData = { id: doc.id, ...doc.data() };
-    renderContent(docData);
-    
-  } catch (error) {
-    console.error("Error fetching content:", error);
-    showError("حدث خطأ أثناء جلب البيانات.");
+  if (isPreview) {
+    // Wait for auth to settle
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      unsubscribe();
+      fetchPost();
+    });
+  } else {
+    fetchPost();
   }
 });
 
-function renderContent(data) {
+async function renderContent(data) {
   document.getElementById('loading').classList.add('hidden');
   document.getElementById('content-area').classList.remove('hidden');
 
-  // Update Title
+  // Update Title and SEO
   document.title = `${data.title} - Nightmares`;
   document.getElementById('article-title').textContent = data.title;
+  
+  if (data.seoDescription) {
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.name = "description";
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.content = data.seoDescription;
+  }
+
+  // Resolve Author
+  if (data.authorUid) {
+    try {
+      const authorDoc = await getDoc(doc(db, 'users', data.authorUid));
+      if (authorDoc.exists()) {
+        const authorData = authorDoc.data();
+        document.getElementById('article-author-name').textContent = authorData.displayName || 'مستخدم';
+        if (authorData.photoURL) {
+          document.getElementById('article-author-avatar').src = authorData.photoURL;
+        }
+        document.getElementById('article-author-link').href = `/author/${data.authorUid}`;
+        document.getElementById('article-author').classList.remove('hidden');
+      }
+    } catch(e) {
+      console.error("Error fetching author details:", e);
+    }
+  }
 
   // Render Taxonomy (Category and Tags)
   const taxonomyContainer = document.getElementById('article-taxonomy');

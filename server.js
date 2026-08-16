@@ -67,6 +67,10 @@ app.get(['/story/:slug', '/news/:slug', '/video/:slug'], (req, res) => {
   servePage(res, path.join(__dirname, 'article.html'));
 });
 
+app.get('/author/:id', (req, res) => {
+  servePage(res, path.join(__dirname, 'pages', 'author.html'));
+});
+
 // Serve specific static HTML pages without .html extension
 const pages = ['login', 'explore', 'profile', 'search', 'submit', 'download-page', 'character', 'Terms-of-Use-and-Privacy-Policy', 'contact-us'];
 

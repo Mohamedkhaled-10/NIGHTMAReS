@@ -109,12 +109,15 @@ async function recordHistorySafe() {
     sessionStorage.setItem(historyKey, 'true');
     try {
       const title = document.title.split(' - ')[0] || 'مقال';
+      const coverImg = document.getElementById('article-cover-image');
+      const image = coverImg ? coverImg.src : '';
       const historyRef = doc(db, 'user_history', `${currentUser.uid}_${contentId}`);
       await setDoc(historyRef, {
         userId: currentUser.uid,
-        postId: contentId, // slug
-        postType: contentType,
-        postTitle: title,
+        contentId: contentId,
+        contentType: contentType,
+        title: title,
+        image: image,
         viewedAt: serverTimestamp()
       }, { merge: true });
     } catch(e) {
@@ -163,6 +166,7 @@ async function recordViewSafe() {
 if(btnSavePost) {
   btnSavePost.addEventListener('click', async () => {
     if (!currentUser) {
+      alert('يجب تسجيل الدخول لحفظ المحتوى.');
       window.location.href = '/login';
       return;
     }
@@ -175,12 +179,15 @@ if(btnSavePost) {
     try {
       if (hasSaved) {
         const title = document.title.split(' - ')[0] || 'مقال';
+        const coverImg = document.getElementById('article-cover-image');
+        const image = coverImg ? coverImg.src : '';
         await setDoc(saveRef, {
           userId: currentUser.uid,
-          postId: contentId,
-          postType: contentType,
-          postTitle: title,
-          savedAt: serverTimestamp()
+          contentId: contentId,
+          contentType: contentType,
+          title: title,
+          image: image,
+          createdAt: serverTimestamp()
         });
       } else {
         await deleteDoc(saveRef);
@@ -197,6 +204,7 @@ if(btnSavePost) {
 if(btnLike) {
   btnLike.addEventListener('click', async () => {
     if (!currentUser) {
+      alert('يجب تسجيل الدخول للإعجاب بالمحتوى.');
       window.location.href = '/login';
       return;
     }
@@ -276,6 +284,23 @@ if(commentForm) {
       
       try {
         await updateDoc(doc(db, 'posts', contentId), { commentsCount: increment(1) });
+        
+        // Notify the author if it's not the same user
+        const postSnap = await getDoc(doc(db, 'posts', contentId));
+        if (postSnap.exists()) {
+          const postData = postSnap.data();
+          if (postData.authorUid && postData.authorUid !== currentUser.uid) {
+            await addDoc(collection(db, 'notifications'), {
+              userId: postData.authorUid,
+              type: 'comment_reply',
+              title: 'تعليق جديد على قصتك',
+              message: `قام ${currentUserProfile.displayName || 'مستخدم'} بالتعليق على قصتك "${postData.title || ''}".`,
+              link: `/${postData.type}/${contentId}#comments`,
+              read: false,
+              createdAt: serverTimestamp()
+            });
+          }
+        }
       } catch(e){}
       
       textInput.value = '';
@@ -343,13 +368,17 @@ async function loadComments(loadMore = false) {
       
       const delBtn = (currentUser && currentUser.uid === data.authorUid) 
          ? `<button onclick="deleteComment('${docSnap.id}')" style="background:none; border:none; color:#e50914; cursor:pointer; font-size: 0.9em;"><i class="fas fa-trash"></i> حذف</button>` 
-         : '';
+         : `<button onclick="openReportModal('comment', '${docSnap.id}')" style="background:none; border:none; color:#777; cursor:pointer; font-size: 0.9em;" class="hover:text-red-500 transition-colors"><i class="fas fa-flag"></i> إبلاغ</button>`;
         
       el.innerHTML = `
-        <img src="${data.authorPhoto}" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=User'" loading="lazy" decoding="async">
+        <a href="/author/${data.authorUid}" style="display: block; width: 40px; height: 40px; flex-shrink: 0;">
+          <img src="${data.authorPhoto}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=User'" loading="lazy" decoding="async">
+        </a>
         <div style="flex: 1;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-            <strong style="color: #fff;">${data.authorName}</strong>
+            <a href="/author/${data.authorUid}" style="text-decoration: none;">
+              <strong style="color: #fff;" class="hover:text-red-500 transition-colors">${data.authorName}</strong>
+            </a>
             <div style="display: flex; gap: 10px; align-items: center;">
               <span style="color: #777; font-size: 0.8em;">${dateStr}</span>
               ${delBtn}
@@ -398,3 +427,100 @@ window.deleteComment = async (commentId) => {
     alert('حدث خطأ أثناء الحذف.');
   }
 };
+
+// --- Report Logic ---
+let currentReportTargetType = null;
+let currentReportTargetId = null;
+
+window.openReportModal = (type, targetId) => {
+  if (!currentUser) {
+    alert('يجب تسجيل الدخول للإبلاغ.');
+    window.location.href = '/login';
+    return;
+  }
+  currentReportTargetType = type;
+  currentReportTargetId = targetId;
+  const modal = document.getElementById('report-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    document.getElementById('report-details').value = '';
+    const msgEl = document.getElementById('report-msg');
+    msgEl.classList.add('hidden');
+    msgEl.textContent = '';
+  }
+};
+
+const btnReportPost = document.getElementById('btn-report-post');
+if (btnReportPost) {
+  btnReportPost.addEventListener('click', () => {
+    openReportModal('content', contentId);
+  });
+}
+
+const btnCancelReport = document.getElementById('btn-cancel-report');
+if (btnCancelReport) {
+  btnCancelReport.addEventListener('click', () => {
+    document.getElementById('report-modal').classList.add('hidden');
+  });
+}
+
+const btnSubmitReport = document.getElementById('btn-submit-report');
+if (btnSubmitReport) {
+  btnSubmitReport.addEventListener('click', async () => {
+    if (!currentUser || !currentReportTargetType || !currentReportTargetId) return;
+    
+    const reason = document.getElementById('report-reason').value;
+    const details = document.getElementById('report-details').value.trim();
+    const msgEl = document.getElementById('report-msg');
+    
+    btnSubmitReport.disabled = true;
+    btnSubmitReport.textContent = 'جاري الإرسال...';
+    
+    try {
+      // Check for existing report from this user to prevent spam
+      const reportsRef = collection(db, 'reports');
+      const q = query(
+        reportsRef,
+        where('targetId', '==', currentReportTargetId),
+        where('reporterUid', '==', currentUser.uid)
+      );
+      const snap = await getDocs(q);
+      
+      if (!snap.empty) {
+        msgEl.textContent = 'لقد قمت بالإبلاغ عن هذا المحتوى مسبقاً.';
+        msgEl.className = 'text-sm mb-4 font-bold text-center text-yellow-500 block';
+        setTimeout(() => {
+          document.getElementById('report-modal').classList.add('hidden');
+        }, 2000);
+        return;
+      }
+      
+      // Submit new report
+      await addDoc(reportsRef, {
+        targetType: currentReportTargetType,
+        targetId: currentReportTargetId,
+        reporterUid: currentUser.uid,
+        reason: reason,
+        details: details,
+        status: 'pending',
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp()
+      });
+      
+      msgEl.textContent = 'تم إرسال الإبلاغ بنجاح. شكراً لك.';
+      msgEl.className = 'text-sm mb-4 font-bold text-center text-green-500 block';
+      
+      setTimeout(() => {
+        document.getElementById('report-modal').classList.add('hidden');
+      }, 2000);
+      
+    } catch (error) {
+      console.error("Report error:", error);
+      msgEl.textContent = 'حدث خطأ. يرجى المحاولة لاحقاً.';
+      msgEl.className = 'text-sm mb-4 font-bold text-center text-red-500 block';
+    } finally {
+      btnSubmitReport.disabled = false;
+      btnSubmitReport.textContent = 'إرسال الإبلاغ';
+    }
+  });
+}

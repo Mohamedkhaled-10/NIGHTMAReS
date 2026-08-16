@@ -1,6 +1,6 @@
 import { auth, db, storage } from './firebase-init.js';
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { doc, getDoc, updateDoc, serverTimestamp, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
 const loader = document.getElementById('loader');
@@ -99,7 +99,151 @@ function populateUI(user, data) {
     if (joinDateText) joinDateText.textContent = dateString;
     if (sidebarJoinDate) sidebarJoinDate.textContent = dateString;
   }
+
+  // Load Bookmarks and History
+  loadUserBookmarks(user.uid);
+  loadUserHistory(user.uid);
+  loadUserSubmissions(user.uid);
 }
+
+async function loadUserSubmissions(uid) {
+  const container = document.getElementById('submissions-list');
+  try {
+    const q = query(collection(db, 'user_submissions'), where('uid', '==', uid), orderBy('createdAt', 'desc'), limit(50));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      container.innerHTML = '<div class="text-center text-gray-500 py-8"><p>لا توجد مساهمات لك بعد.</p></div>';
+      return;
+    }
+    
+    container.innerHTML = '';
+    querySnapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      const dateStr = data.createdAt ? data.createdAt.toDate().toLocaleDateString('ar-EG') : '';
+      
+      let statusHtml = '';
+      if (data.status === 'submitted' || data.status === 'pending') statusHtml = '<span class="text-yellow-500 bg-yellow-900/30 px-2 py-0.5 rounded text-xs">قيد المراجعة</span>';
+      else if (data.status === 'approved' || data.status === 'published') statusHtml = '<span class="text-green-500 bg-green-900/30 px-2 py-0.5 rounded text-xs">منشورة</span>';
+      else if (data.status === 'rejected') statusHtml = '<span class="text-red-500 bg-red-900/30 px-2 py-0.5 rounded text-xs">مرفوضة</span>';
+      else if (data.status === 'needs_edit') statusHtml = '<span class="text-orange-400 bg-orange-900/30 px-2 py-0.5 rounded text-xs">تحتاج تعديل</span>';
+      else statusHtml = `<span class="text-gray-400 bg-gray-900 px-2 py-0.5 rounded text-xs">${data.status}</span>`;
+
+      const reasonHtml = data.rejectionReason ? `<p class="mt-2 text-xs text-red-400 p-2 bg-red-950/30 rounded border border-red-900/50"><strong>سبب الرفض/التعديل:</strong> ${data.rejectionReason}</p>` : '';
+
+      let actionBtnHtml = '';
+      if (data.status === 'needs_edit') {
+        actionBtnHtml = `<button onclick="editSubmission('${docSnap.id}')" class="mt-2 text-orange-400 border border-orange-900/50 bg-orange-950/20 px-4 py-1.5 rounded-lg text-xs hover:bg-orange-900/40 transition">تعديل التقديم</button>`;
+      }
+
+      container.innerHTML += `
+        <div class="p-4 bg-black/40 border border-gray-800/50 rounded-xl hover:border-red-900/50 transition-colors">
+          <div class="flex justify-between items-start mb-2">
+            <h4 class="font-bold text-gray-200">${data.title || 'بدون عنوان'}</h4>
+            ${statusHtml}
+          </div>
+          <div class="text-xs text-gray-500 mb-2">${dateStr}</div>
+          ${reasonHtml}
+          ${actionBtnHtml}
+        </div>
+      `;
+    });
+  } catch (error) {
+    console.error("Error loading submissions:", error);
+    container.innerHTML = '<div class="text-center text-red-500 py-8"><p>حدث خطأ في جلب المساهمات.</p></div>';
+  }
+}
+
+window.editSubmission = (id) => {
+  // Store the submission ID to be edited in sessionStorage and redirect to submit page
+  sessionStorage.setItem('editSubmissionId', id);
+  window.location.href = '/submit.html';
+};
+
+async function loadUserBookmarks(uid) {
+  const container = document.getElementById('saved-content-list');
+  try {
+    const q = query(collection(db, 'user_bookmarks'), where('userId', '==', uid), orderBy('createdAt', 'desc'), limit(50));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      container.innerHTML = '<div class="text-center text-gray-500 py-8"><p>لا توجد عناصر محفوظة.</p></div>';
+      return;
+    }
+    
+    container.innerHTML = '';
+    querySnapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      container.innerHTML += renderMiniCard(data.contentId, data, false, docSnap.id);
+    });
+  } catch (error) {
+    console.error("Error loading bookmarks:", error);
+    container.innerHTML = '<div class="text-center text-red-500 py-8"><p>حدث خطأ في جلب المحفوظات.</p></div>';
+  }
+}
+
+async function loadUserHistory(uid) {
+  const container = document.getElementById('history-content-list');
+  try {
+    const q = query(collection(db, 'user_history'), where('userId', '==', uid), orderBy('viewedAt', 'desc'), limit(50));
+    const querySnapshot = await getDocs(q);
+    
+    if (querySnapshot.empty) {
+      container.innerHTML = '<div class="text-center text-gray-500 py-8"><p>سجل القراءة فارغ.</p></div>';
+      return;
+    }
+    
+    container.innerHTML = '';
+    querySnapshot.forEach(docSnap => {
+      const data = docSnap.data();
+      container.innerHTML += renderMiniCard(data.contentId, data, true);
+    });
+  } catch (error) {
+    console.error("Error loading history:", error);
+    container.innerHTML = '<div class="text-center text-red-500 py-8"><p>حدث خطأ في جلب السجل.</p></div>';
+  }
+}
+
+function renderMiniCard(id, data, isHistory = false, docId = null) {
+  const dateObj = isHistory && data.viewedAt ? data.viewedAt.toDate() : 
+                  (!isHistory && data.createdAt ? data.createdAt.toDate() : null);
+  const dateStr = dateObj ? dateObj.toLocaleDateString('ar-EG') : '';
+  const typeText = data.contentType === 'story' ? 'قصة' : data.contentType === 'news' ? 'خبر' : data.contentType === 'video' ? 'فيديو' : 'محتوى';
+  const url = `/${data.contentType}/${data.contentId}`;
+  
+  const actionHtml = isHistory ? 
+    `<i class="fas fa-chevron-left text-gray-600 group-hover:text-red-500 transition-colors pl-2"></i>` :
+    `<button onclick="removeBookmark('${docId}', event)" class="p-2 text-gray-500 hover:text-red-500 transition-colors" title="إزالة من المحفوظات"><i class="fas fa-trash"></i></button>`;
+
+  return `
+    <a href="${url}" class="flex items-center gap-4 p-3 bg-black/40 border border-gray-800/50 rounded-xl hover:border-red-900/50 transition-colors group">
+      <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-gray-900">
+        <img src="${data.image || '/assets/images/logo1.png'}" alt="cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='/assets/images/logo1.png'">
+      </div>
+      <div class="flex-1 min-w-0">
+        <h4 class="font-bold text-gray-200 truncate group-hover:text-red-400 transition-colors">${data.title || 'بدون عنوان'}</h4>
+        <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
+          <span class="px-2 py-0.5 rounded bg-gray-900 border border-gray-800">${typeText}</span>
+          <span>${dateStr}</span>
+        </div>
+      </div>
+      ${actionHtml}
+    </a>
+  `;
+}
+
+window.removeBookmark = async (bookmarkId, event) => {
+  event.preventDefault();
+  if (!confirm('هل أنت متأكد من إزالة هذا المحتوى من المحفوظات؟')) return;
+  try {
+    const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    await deleteDoc(doc(db, 'user_bookmarks', bookmarkId));
+    loadUserBookmarks(auth.currentUser.uid);
+  } catch (error) {
+    console.error("Error removing bookmark:", error);
+    alert('حدث خطأ أثناء الإزالة.');
+  }
+};
 
 // Upload Profile Image
 document.getElementById('img-upload').addEventListener('change', async (e) => {

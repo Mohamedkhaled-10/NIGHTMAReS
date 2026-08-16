@@ -1,0 +1,8 @@
+{
+  "name": "NIGHTMAReS",
+  "description": "NIGHTMAReS - منصة محتوى الرعب والقصص والظواهر الغامضة",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
