@@ -8,10 +8,52 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
+// Helper to get safe redirect URL
+function getSafeReturnUrl() {
+  const url = sessionStorage.getItem('returnUrl');
+  if (!url) return '/'; // Default fallback to Home
+  
+  try {
+    // This handles relative paths (e.g., /news) and absolute URLs
+    const parsedUrl = new URL(url, window.location.origin);
+    // Ensure the origin strictly matches to prevent Open Redirects
+    if (parsedUrl.origin === window.location.origin) {
+      return parsedUrl.pathname + parsedUrl.search + parsedUrl.hash;
+    }
+  } catch(e) {
+    console.error("Invalid return URL format", e);
+  }
+  
+  return '/';
+}
+
+function redirectAndClear(url) {
+  sessionStorage.removeItem('returnUrl');
+  window.location.replace(url);
+}
+
 // Auto-redirect if already logged in
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user) {
-    window.location.replace('/profile');
+    const returnUrl = getSafeReturnUrl();
+    
+    try {
+      const docSnap = await getDoc(doc(db, 'users', user.uid));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.accountStatus === 'banned' || data.accountStatus === 'deleted') {
+          await auth.signOut();
+          return; // don't redirect, let them see they are logged out
+        }
+        if (data.role === 'admin') {
+          redirectAndClear('/admin');
+          return;
+        }
+      }
+      redirectAndClear(returnUrl);
+    } catch(e) {
+      redirectAndClear(returnUrl);
+    }
   }
 });
 
@@ -90,6 +132,9 @@ form.addEventListener('submit', async (e) => {
       
       // Check role/status
       const docSnap = await getDoc(doc(db, 'users', userCredential.user.uid));
+      
+      const returnUrl = getSafeReturnUrl();
+      
       if (docSnap.exists()) {
         const data = docSnap.data();
         if (data.accountStatus === 'banned' || data.accountStatus === 'deleted') {
@@ -97,12 +142,12 @@ form.addEventListener('submit', async (e) => {
           throw new Error('هذا الحساب محظور أو محذوف.');
         }
         if (data.role === 'admin') {
-          window.location.href = '/admin';
+          redirectAndClear('/admin');
         } else {
-          window.location.href = '/profile';
+          redirectAndClear(returnUrl);
         }
       } else {
-        window.location.href = '/profile';
+        redirectAndClear(returnUrl);
       }
       
     } else if (currentMode === 'register') {

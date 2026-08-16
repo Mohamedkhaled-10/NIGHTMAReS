@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>استكشف - Nightmares</title>
+  <meta name="description" content="استكشف محتوى الكوابيس: قصص، أخبار، فيديوهات وغيرها الكثير.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles/main.css">
+  <style>
+    body {
+      background: linear-gradient(180deg, #320101, #000000);
+      background-attachment: fixed;
+      font-family: 'Cairo', sans-serif;
+      color: white;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen">
+<!-- NAVBAR_PLACEHOLDER -->
+
+  <div class="wrapper flex-1">
+    <div class="container mx-auto px-4 pt-32 pb-12 max-w-7xl">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-center mb-8 text-[#b91c1c] drop-shadow-md">اكتشف المحتوى</h1>
+      
+      <!-- Filters Section -->
+      <div class="bg-black/40 border border-red-900/30 rounded-2xl p-6 mb-10 shadow-lg backdrop-blur-sm">
+        <form id="explore-filters" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <!-- Type Filter -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-400 mb-2">النوع</label>
+            <select id="filter-type" class="w-full px-4 py-2 bg-[#1b0d0d] border border-red-900/50 rounded-lg text-white focus:outline-none focus:border-red-500">
+              <option value="">الكل</option>
+              <option value="story">قصص</option>
+              <option value="news">أخبار</option>
+              <option value="video">فيديوهات</option>
+            </select>
+          </div>
+          
+          <!-- Category Filter -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-400 mb-2">التصنيف</label>
+            <select id="filter-category" class="w-full px-4 py-2 bg-[#1b0d0d] border border-red-900/50 rounded-lg text-white focus:outline-none focus:border-red-500">
+              <option value="">الكل</option>
+              <option value="horror">رعب (Horror)</option>
+              <option value="mystery">غموض (Mystery)</option>
+              <option value="true_crime">جرائم حقيقية (True Crime)</option>
+              <option value="paranormal">ما وراء الطبيعة (Paranormal)</option>
+              <option value="legends">أساطير (Legends)</option>
+              <option value="movies">أفلام (Movies)</option>
+              <option value="games">ألعاب (Games)</option>
+            </select>
+          </div>
+          
+          <!-- Tag Filter (Text input for simple matching or specific tags) -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-400 mb-2">كلمة دلالية (Tag)</label>
+            <input type="text" id="filter-tag" placeholder="أدخل كلمة دلالية..." class="w-full px-4 py-2 bg-[#1b0d0d] border border-red-900/50 rounded-lg text-white focus:outline-none focus:border-red-500">
+          </div>
+          
+          <!-- Search / Apply -->
+          <div class="flex items-end">
+            <button type="submit" class="w-full px-6 py-2 bg-red-800 hover:bg-red-700 text-white font-bold rounded-lg transition-colors border border-red-600 shadow-[0_0_10px_rgba(220,38,38,0.3)]">تطبيق الفلاتر</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- State Indicators -->
+      <div id="explore-loading" class="flex flex-col items-center justify-center py-12">
+        <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
+        <p class="text-gray-400 font-semibold">نبحث في الظلام...</p>
+      </div>
+      
+      <div id="explore-error" class="hidden text-center py-12">
+        <p class="text-red-500 font-bold text-xl mb-2">حدث خطأ أثناء جلب المحتوى.</p>
+        <button id="retry-btn" class="text-gray-400 hover:text-white underline">حاول مرة أخرى</button>
+      </div>
+
+      <div id="explore-empty" class="hidden text-center py-16 bg-black/30 rounded-2xl border border-gray-800">
+        <p class="text-gray-400 text-xl font-semibold mb-2">لا يوجد محتوى يطابق بحثك.</p>
+        <p class="text-gray-500 text-sm">حاول تغيير الفلاتر لتوسيع نطاق البحث.</p>
+      </div>
+
+      <!-- Content Grid -->
+      <div id="explore-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
+        <!-- Cards will be injected here -->
+      </div>
+      
+      <!-- Load More -->
+      <div id="load-more-container" class="mt-12 text-center hidden">
+        <button id="load-more-btn" class="px-8 py-3 bg-transparent border border-red-900 text-red-500 hover:bg-red-900/20 hover:text-white rounded-full transition-colors font-bold">تحميل المزيد</button>
+      </div>
+      
+    </div>
+  </div>
+
+  <!-- FOOTER_PLACEHOLDER -->
+  <script type="module" src="/js/explore.js"></script>
+</body>
+</html>

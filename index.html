@@ -41,37 +41,67 @@
   <meta property="og:url" content="https://nightma-re-s.vercel.app/home">
 
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-[#050000] text-white">
 <!-- NAVBAR_PLACEHOLDER -->
-<!-- قسم الـ Hero -->
-  <section class="hero-new" id="home">
+<!-- قسم الـ Hero الحديث السنيمائي -->
+  <section class="hero-new cinematic-hero" id="home">
     <!-- canvas جزيئات -->
     <canvas id="particles"></canvas>
-    <!-- طبقة ضباب -->
+    <!-- طبقة ضباب و Ambient Lighting -->
     <div class="fog-overlay"></div>
+    <div class="hero-ambient-light"></div>
+    
     <!-- المحتوى -->
-    <div class="hero-content-new">
-      <img src="assets/images/icon-white.png" alt="Logo" class="hero-logo" />
-      <h1 class="glitch-text" data-text="NIGHTMAReS">NIGHTMAReS</h1>
-      <p class="hero-description">حيث تختبئ الكوابيس خلف كل همسة</p>
-      <div class="buttons-new">
-        <a href="/" class="btn-neon">قصص المتابعين</a>
-        <a href="download-page" class="btn-icon-neon" title="تحميل التطبيق">
-          <i class="fa-brands fa-android"></i>
-        </a>
+    <div class="cinematic-content">
+      <img src="assets/images/logo1.png" alt="NIGHTMAReS Logo" class="hero-logo" />
+      <h1 class="cinematic-title">حيث يختبئ الرعب <span>خلف كل قصة</span></h1>
+      <p class="cinematic-description">
+        منصة المحتوى الأولى للقصص، الأخبار، أفلام الرعب، والظواهر الغامضة.
+      </p>
+      <div class="cinematic-buttons">
+        <a href="#cards" class="btn-primary-cinematic">استكشف المحتوى</a>
+        <a href="/search?type=story" class="btn-secondary-cinematic">قصص المتابعين</a>
       </div>
     </div>
   </section>
 
   <!-- قسم القوالب (الكروت) -->
-  <section class="cards-section" id="cards">
-    <div id="stories-loading" style="text-align:center; padding: 50px; color: #888;">جاري تحميل القصص...</div>
+  <!-- Discover Strip -->
+  <section class="discover-strip py-12 px-4 relative z-10 bg-gradient-to-b from-[#0a0000] to-transparent">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-lg md:text-xl font-bold text-gray-400 mb-6 tracking-wide">ماذا تريد أن تكتشف؟</h2>
+      <div class="flex flex-wrap justify-center gap-3 md:gap-5">
+        <a href="#cards" class="px-6 py-2 rounded-full border border-red-900/50 text-red-500 hover:bg-red-900/30 hover:border-red-500 transition-all duration-300 backdrop-blur-sm bg-black/40 text-sm md:text-base font-semibold">قصص رعب</a>
+        <a href="#news" class="px-6 py-2 rounded-full border border-red-900/50 text-red-500 hover:bg-red-900/30 hover:border-red-500 transition-all duration-300 backdrop-blur-sm bg-black/40 text-sm md:text-base font-semibold">أخبار وفعاليات</a>
+        <a href="#video" class="px-6 py-2 rounded-full border border-red-900/50 text-red-500 hover:bg-red-900/30 hover:border-red-500 transition-all duration-300 backdrop-blur-sm bg-black/40 text-sm md:text-base font-semibold">فيديوهات</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- قسم القصص -->
+  <section class="cards-section px-4 md:px-8 lg:px-16 py-16 max-w-7xl mx-auto" id="cards">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[#b91c1c] relative inline-block">
+        أحدث القصص
+        <span class="block w-16 h-1 bg-[#7f1d1d] rounded-full mt-3 mx-auto"></span>
+      </h2>
+    </div>
+    
+    <div class="cards-section-grid" id="stories-grid">
+      <div id="stories-loading" class="col-span-full">
+        <!-- Skeleton Loading -->
+        <div class="flex flex-col items-center justify-center py-12">
+           <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
+           <p class="text-gray-400 font-semibold">جاري تحضير الكوابيس...</p>
+        </div>
+      </div>
+    </div>
   </section>
   
-<div class="story-button-container flex justify-center my-8">
+<div class="story-button-container flex justify-center mb-16">
   <a href="#cards"
      class="px-10 py-3 bg-gradient-to-r from-[#b91c1c] to-[#7f1d1d] text-white text-lg font-semibold rounded-full shadow-lg
-            hover:scale-105 hover:brightness-110 transition transform duration-300">
+            hover:scale-105 hover:shadow-red-900/50 transition transform duration-300">
     تصفح المزيد من القصص
   </a>
 </div>
@@ -79,23 +109,81 @@
 <div id="AD_CONTAINER_ID"></div>
 
   <!-- قسم الأخبار والفعاليات -->
-  <section class="news-section" id="news">
-    <h2 class="section-title text-3xl md:text-4xl font-extrabold text-[#b91c1c] mb-8 relative inline-block">
-  الأخبار والفعاليات
-  <span class="block w-20 h-1 bg-[#7f1d1d] rounded-full mt-2"></span>
-</h2>
+  <section class="news-section px-4 md:px-8 lg:px-16 py-16 max-w-7xl mx-auto" id="news">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[#b91c1c] relative inline-block">
+        الأخبار والفعاليات
+        <span class="block w-16 h-1 bg-[#7f1d1d] rounded-full mt-3 mx-auto"></span>
+      </h2>
+    </div>
     <div class="news-grid" id="news-grid">
-      <div id="news-loading" style="text-align:center; padding: 50px; color: #888; grid-column: 1 / -1;">جاري تحميل الأخبار...</div>
+      <div id="news-loading" class="col-span-full">
+        <!-- Skeleton Loading -->
+        <div class="flex flex-col items-center justify-center py-12">
+           <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
+           <p class="text-gray-400 font-semibold">نجمع الأخبار المروعة...</p>
+        </div>
+      </div>
     </div>
   </section>
 
-<section class="video-section" id="video">
-  <h2 class="section-title text-3xl md:text-4xl font-extrabold text-[#b91c1c] mb-8 relative inline-block">
-    أحدث الفيديوهات
-    <span class="block w-20 h-1 bg-[#7f1d1d] rounded-full mt-2"></span>
-  </h2>
+  <!-- Content Analytics Section -->
+  <section class="analytics-section px-4 md:px-8 lg:px-16 py-16 max-w-7xl mx-auto bg-black/40 border-y border-red-900/30">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[#b91c1c] relative inline-block">
+        الأكثر تفاعلاً
+        <span class="block w-16 h-1 bg-[#7f1d1d] rounded-full mt-3 mx-auto"></span>
+      </h2>
+    </div>
+    
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" id="analytics-grids">
+      <!-- Most Read -->
+      <div class="bg-[#1b0d0d] p-6 rounded-2xl border border-gray-800 shadow-lg">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2 border-b border-red-900/30 pb-3">
+          <i class="fas fa-fire text-orange-500"></i> الأكثر قراءة
+        </h3>
+        <div id="most-read-list" class="space-y-4">
+          <p class="text-gray-500 text-sm text-center py-4">جاري التحميل...</p>
+        </div>
+      </div>
+
+      <!-- Trending / Most Liked -->
+      <div class="bg-[#1b0d0d] p-6 rounded-2xl border border-gray-800 shadow-lg">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2 border-b border-red-900/30 pb-3">
+          <i class="fas fa-heart text-red-500"></i> الأفضل تقييماً
+        </h3>
+        <div id="trending-list" class="space-y-4">
+          <p class="text-gray-500 text-sm text-center py-4">جاري التحميل...</p>
+        </div>
+      </div>
+
+      <!-- Most Discussed -->
+      <div class="bg-[#1b0d0d] p-6 rounded-2xl border border-gray-800 shadow-lg">
+        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2 border-b border-red-900/30 pb-3">
+          <i class="fas fa-comments text-blue-400"></i> الأكثر نقاشاً
+        </h3>
+        <div id="most-discussed-list" class="space-y-4">
+          <p class="text-gray-500 text-sm text-center py-4">جاري التحميل...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section class="video-section px-4 md:px-8 lg:px-16 py-16 max-w-7xl mx-auto" id="video">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-extrabold text-[#b91c1c] relative inline-block">
+        أحدث الفيديوهات
+        <span class="block w-16 h-1 bg-[#7f1d1d] rounded-full mt-3 mx-auto"></span>
+      </h2>
+    </div>
   <div class="video-grid" id="video-grid">
-      <div id="video-loading" style="text-align:center; padding: 50px; color: #888; grid-column: 1 / -1;">جاري تحميل الفيديوهات...</div>
+      <div id="video-loading" class="col-span-full">
+        <!-- Skeleton Loading -->
+        <div class="flex flex-col items-center justify-center py-12">
+           <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
+           <p class="text-gray-400 font-semibold">جاري جلب الفيديوهات...</p>
+        </div>
+      </div>
     </div>
   </section>
 

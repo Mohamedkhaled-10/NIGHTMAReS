@@ -14,36 +14,67 @@
 </head>
 <body class="bg-gray-900 text-white min-h-screen flex flex-col">
 <!-- NAVBAR_PLACEHOLDER -->
-<main class="flex-1 flex items-center justify-center p-4 my-10">
-  <div class="bg-gray-800 p-8 rounded-lg shadow-xl w-full max-w-sm border border-gray-700">
-    <div class="text-center mb-6">
-      <i class="fas fa-ghost text-4xl text-red-600 mb-2"></i>
-      <h2 class="text-2xl font-bold" id="form-title">تسجيل الدخول</h2>
+<main class="flex-1 flex items-center justify-center p-4 sm:p-8 my-4 md:my-10 relative">
+  
+  <!-- Background Ambient for the whole page -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(220,38,38,0.03)_0%,_transparent_70%)] pointer-events-none"></div>
+
+  <div class="flex flex-col lg:flex-row w-full max-w-5xl bg-[#050000] rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(220,38,38,0.1)] border border-red-900/30 relative z-10">
+    
+    <!-- Visual Panel -->
+    <div class="lg:w-1/2 relative min-h-[250px] lg:min-h-full flex flex-col justify-center items-center p-8 lg:p-12 overflow-hidden border-b lg:border-b-0 lg:border-l border-red-900/30">
+      <div class="absolute inset-0 bg-black/60 z-10"></div>
+      <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-l from-[#050000] via-transparent to-transparent z-10"></div>
+      <img src="/assets/images/1.webp" alt="NIGHTMAReS Background" class="absolute inset-0 w-full h-full object-cover opacity-50 filter grayscale-[20%] transition-transform duration-1000 hover:scale-105">
+      
+      <div class="relative z-20 text-center flex flex-col items-center">
+        <img src="/assets/images/logo1.png" alt="Logo" class="w-24 md:w-32 mb-6 filter drop-shadow-[0_0_15px_rgba(220,38,38,0.7)] animate-pulse">
+        <h2 class="text-3xl md:text-4xl font-black text-white mb-4 tracking-wider" style="text-shadow: 0 4px 15px rgba(220,38,38,0.6);">NIGHTMAReS</h2>
+        <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-sm font-medium drop-shadow-md">
+          بوابتك نحو عوالم الرعب والغموض.<br>سجل دخولك لتكتشف الكوابيس التي تنتظرك.
+        </p>
+      </div>
     </div>
-    
-    <!-- Auth Form -->
-    <form id="auth-form" class="space-y-4">
-      <div id="name-field" class="hidden">
-        <input type="text" id="displayName" placeholder="الاسم الشخصي" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
+
+    <!-- Auth Panel -->
+    <div class="lg:w-1/2 p-6 md:p-10 lg:p-14 flex flex-col justify-center relative bg-[#0a0505]">
+      <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(ellipse_at_top_right,_rgba(220,38,38,0.05),_transparent_60%)] pointer-events-none"></div>
+      
+      <div class="text-center mb-8 relative z-10">
+        <i class="fas fa-ghost text-4xl text-red-600 mb-3 drop-shadow-[0_0_8px_rgba(220,38,38,0.5)]"></i>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-100 tracking-wide" id="form-title">تسجيل الدخول</h2>
       </div>
-      <div>
-        <input type="email" id="email" placeholder="البريد الإلكتروني" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500" required>
+      
+      <!-- Auth Form -->
+      <form id="auth-form" class="space-y-5 relative z-10">
+        <div id="name-field" class="hidden">
+          <label class="block text-gray-400 text-sm mb-1.5 font-semibold">الاسم الشخصي</label>
+          <input type="text" id="displayName" placeholder="الاسم الشخصي" class="w-full p-3.5 rounded-lg bg-gray-900/60 text-white border border-gray-700 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-colors placeholder-gray-600">
+        </div>
+        <div>
+          <label class="block text-gray-400 text-sm mb-1.5 font-semibold">البريد الإلكتروني</label>
+          <input type="email" id="email" placeholder="example@nightmares.com" class="w-full p-3.5 rounded-lg bg-gray-900/60 text-white border border-gray-700 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-colors placeholder-gray-600" required>
+        </div>
+        <div id="password-field">
+          <label class="block text-gray-400 text-sm mb-1.5 font-semibold">كلمة المرور</label>
+          <input type="password" id="password" placeholder="••••••••" class="w-full p-3.5 rounded-lg bg-gray-900/60 text-white border border-gray-700 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600 transition-colors placeholder-gray-600">
+        </div>
+        
+        <button type="submit" id="btn-submit" class="w-full bg-red-700 hover:bg-red-600 text-white font-bold py-3.5 rounded-lg mt-6 shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] transition-all duration-300 transform hover:-translate-y-0.5 flex items-center justify-center">
+          تسجيل الدخول <i class="fas fa-sign-in-alt mr-2"></i>
+        </button>
+      </form>
+      
+      <div class="relative z-10">
+        <p id="error-msg" class="mt-5 text-red-400 text-center font-bold text-sm hidden bg-red-900/20 py-2.5 px-4 rounded border border-red-900/50"></p>
+        <p id="success-msg" class="mt-5 text-green-400 text-center font-bold text-sm hidden bg-green-900/20 py-2.5 px-4 rounded border border-green-900/50"></p>
+        
+        <div class="mt-8 text-center text-sm text-gray-400 space-y-3">
+          <p id="toggle-register" class="transition-colors">ليس لديك حساب؟ <a href="#" class="text-red-500 hover:text-red-400 font-semibold hover:underline">إنشاء حساب جديد</a></p>
+          <p id="toggle-login" class="hidden transition-colors">لديك حساب بالفعل؟ <a href="#" class="text-red-500 hover:text-red-400 font-semibold hover:underline">تسجيل الدخول</a></p>
+          <p id="toggle-reset" class="transition-colors"><a href="#" class="text-gray-500 hover:text-gray-300 hover:underline">نسيت كلمة المرور؟</a></p>
+        </div>
       </div>
-      <div id="password-field">
-        <input type="password" id="password" placeholder="كلمة المرور" class="w-full p-3 rounded bg-gray-700 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500">
-      </div>
-      <button type="submit" id="btn-submit" class="w-full bg-red-600 hover:bg-red-700 transition text-white font-bold p-3 rounded mt-2">
-        تسجيل الدخول <i class="fas fa-sign-in-alt mr-2"></i>
-      </button>
-    </form>
-    
-    <p id="error-msg" class="mt-4 text-red-500 text-center font-semibold text-sm hidden"></p>
-    <p id="success-msg" class="mt-4 text-green-500 text-center font-semibold text-sm hidden"></p>
-    
-    <div class="mt-6 text-center text-sm text-gray-400 space-y-2">
-      <p id="toggle-register">ليس لديك حساب؟ <a href="#" class="text-red-500 hover:underline">إنشاء حساب جديد</a></p>
-      <p id="toggle-login" class="hidden">لديك حساب بالفعل؟ <a href="#" class="text-red-500 hover:underline">تسجيل الدخول</a></p>
-      <p id="toggle-reset"><a href="#" class="text-gray-300 hover:underline">نسيت كلمة المرور؟</a></p>
     </div>
   </div>
 </main>

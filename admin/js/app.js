@@ -15,9 +15,45 @@ const fSlug = document.getElementById('post-slug');
 const fType = document.getElementById('post-type');
 const fStatus = document.getElementById('post-status');
 const fCover = document.getElementById('post-cover');
+const fCategory = document.getElementById('post-category');
+const fTagsInput = document.getElementById('post-tags-input');
+const tagsContainer = document.getElementById('tags-container');
 const fContentHtml = document.getElementById('post-content-html');
 const fEmbedCode = document.getElementById('post-embed-code');
 const fReadTime = document.getElementById('post-read-time');
+
+let currentTags = [];
+
+// Tags logic
+fTagsInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault();
+    const tag = fTagsInput.value.trim().replace(/^,+|,+$/g, '');
+    if (tag && !currentTags.includes(tag)) {
+      currentTags.push(tag);
+      renderTags();
+    }
+    fTagsInput.value = '';
+  }
+});
+
+function renderTags() {
+  tagsContainer.innerHTML = '';
+  currentTags.forEach(tag => {
+    const el = document.createElement('span');
+    el.className = 'bg-gray-200 text-gray-800 px-2 py-1 rounded text-sm flex items-center gap-1';
+    el.innerHTML = `
+      ${tag}
+      <button type="button" class="text-red-500 hover:text-red-700" onclick="removeTag('${tag}')">&times;</button>
+    `;
+    tagsContainer.appendChild(el);
+  });
+}
+
+window.removeTag = function(tag) {
+  currentTags = currentTags.filter(t => t !== tag);
+  renderTags();
+};
 
 // UI Toggles for fields based on type
 fType.addEventListener('change', () => {
@@ -86,6 +122,8 @@ function showEditor(isNew = true) {
   if (isNew) {
     postForm.reset();
     fId.value = '';
+    currentTags = [];
+    renderTags();
     // trigger change to hide/show fields
     fType.dispatchEvent(new Event('change'));
   }
@@ -112,6 +150,10 @@ async function editPost(id) {
       fType.value = data.type || 'story';
       fStatus.value = data.status || 'draft';
       fCover.value = data.coverImage || '';
+      fCategory.value = data.category || '';
+      
+      currentTags = Array.isArray(data.tags) ? data.tags : [];
+      renderTags();
       
       if (data.data) {
         fContentHtml.value = data.data.contentHtml || '';
@@ -150,6 +192,8 @@ postForm.addEventListener('submit', async (e) => {
     id: id,
     slug: fSlug.value,
     type: fType.value,
+    category: fCategory.value,
+    tags: currentTags,
     status: fStatus.value,
     title: fTitle.value,
     coverImage: fCover.value,

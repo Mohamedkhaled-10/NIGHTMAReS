@@ -1,5 +1,5 @@
 import { auth, db, storage } from './firebase-init.js';
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, updateDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
@@ -9,6 +9,7 @@ const form = document.getElementById('profile-form');
 const btnLogout = document.getElementById('btn-logout');
 const btnSave = document.getElementById('btn-save');
 const profileMsg = document.getElementById('profile-msg');
+const btnResetPassword = document.getElementById('btn-reset-password');
 
 let currentUserDoc = null;
 
@@ -68,7 +69,7 @@ function populateUI(user, data) {
   document.getElementById('input-email').value = user.email || '';
   
   const roleBadge = document.getElementById('role-badge');
-  roleBadge.textContent = data.role === 'admin' ? 'مدير (Admin)' : 'مستخدم (User)';
+  roleBadge.innerHTML = `<i class="fas fa-shield-alt"></i> ${data.role === 'admin' ? 'مدير (Admin)' : 'مستخدم (User)'}`;
   
   const statusBadge = document.getElementById('status-badge');
   const statuses = {
@@ -78,9 +79,25 @@ function populateUI(user, data) {
     'banned': 'محظور',
     'deleted': 'محذوف'
   };
-  statusBadge.textContent = statuses[data.accountStatus] || 'غير معروف';
+  statusBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${statuses[data.accountStatus] || 'غير معروف'}`;
+  
   if (data.accountStatus !== 'active') {
-    statusBadge.className = 'px-2 py-1 text-xs rounded bg-red-900 text-red-200';
+    statusBadge.className = 'px-3 py-1.5 text-sm font-bold rounded-lg bg-red-950/30 text-red-400 border border-red-900/50 shadow-sm flex items-center gap-2';
+    statusBadge.innerHTML = `<i class="fas fa-times-circle"></i> ${statuses[data.accountStatus] || 'غير معروف'}`;
+  }
+
+  // Populate join date if available
+  if (data.createdAt) {
+    const dateObj = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
+    const dateString = dateObj.toLocaleDateString('ar-EG', { year: 'numeric', month: 'short', day: 'numeric' });
+    
+    const joinDateBadge = document.getElementById('join-date-badge');
+    const joinDateText = document.getElementById('join-date-text');
+    const sidebarJoinDate = document.getElementById('sidebar-join-date');
+    
+    if (joinDateBadge) joinDateBadge.classList.remove('hidden');
+    if (joinDateText) joinDateText.textContent = dateString;
+    if (sidebarJoinDate) sidebarJoinDate.textContent = dateString;
   }
 }
 
@@ -133,6 +150,7 @@ form.addEventListener('submit', async (e) => {
   btnSave.disabled = true;
   btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
   profileMsg.classList.add('hidden');
+  profileMsg.classList.remove('bg-green-900/20', 'border-green-900/50', 'text-green-400', 'bg-red-900/20', 'border-red-900/50', 'text-red-400');
   
   try {
     const user = auth.currentUser;
@@ -142,17 +160,42 @@ form.addEventListener('submit', async (e) => {
     });
     
     document.getElementById('display-name-text').textContent = newName;
-    profileMsg.textContent = 'تم حفظ التعديلات بنجاح!';
-    profileMsg.className = 'text-sm font-semibold text-green-500 mt-2 block';
+    profileMsg.innerHTML = '<i class="fas fa-check-circle mr-1"></i> تم حفظ التعديلات بنجاح!';
+    profileMsg.classList.add('bg-green-900/20', 'border-green-900/50', 'text-green-400');
+    profileMsg.classList.remove('hidden');
   } catch (error) {
     console.error(error);
-    profileMsg.textContent = 'فشل في حفظ التعديلات.';
-    profileMsg.className = 'text-sm font-semibold text-red-500 mt-2 block';
+    profileMsg.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> فشل في حفظ التعديلات.';
+    profileMsg.classList.add('bg-red-900/20', 'border-red-900/50', 'text-red-400');
+    profileMsg.classList.remove('hidden');
   } finally {
     btnSave.disabled = false;
-    btnSave.textContent = 'حفظ التعديلات';
+    btnSave.innerHTML = '<i class="fas fa-save"></i> حفظ التعديلات';
   }
 });
+
+// Password Reset
+if (btnResetPassword) {
+  btnResetPassword.addEventListener('click', async () => {
+    const user = auth.currentUser;
+    if (!user || !user.email) return;
+    
+    const originalText = btnResetPassword.innerHTML;
+    btnResetPassword.disabled = true;
+    btnResetPassword.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الإرسال...';
+    
+    try {
+      await sendPasswordResetEmail(auth, user.email);
+      alert('تم إرسال رابط تغيير كلمة المرور إلى بريدك الإلكتروني.');
+    } catch (error) {
+      console.error(error);
+      alert('حدث خطأ أثناء إرسال الرابط. يرجى المحاولة لاحقاً.');
+    } finally {
+      btnResetPassword.disabled = false;
+      btnResetPassword.innerHTML = originalText;
+    }
+  });
+}
 
 btnLogout.addEventListener('click', async () => {
   await signOut(auth);

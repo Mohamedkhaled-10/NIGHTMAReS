@@ -48,6 +48,18 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // User Bookmarks
+    match /user_bookmarks/{bookmarkId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      allow read, delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+
+    // User History
+    match /user_history/{historyId} {
+      allow read, write: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      allow read, delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+
     // Comments Collection
     match /comments/{commentId} {
       allow read: if true;
@@ -73,13 +85,15 @@ service cloud.firestore {
     // Content Stats (Aggregated like counts)
     match /content_stats/{contentId} {
       allow read: if true;
-      allow create: if isActiveUser();
-      allow update: if isActiveUser(); // In a real production app, use Cloud Functions to aggregate, but for now allow client increment
+      allow create, update: if true; // Allow client increment for views, likes, comments
     }
     // Posts Collection
     match /posts/{postId} {
       allow read: if true;
-      allow create, update, delete: if isAdmin();
+      allow create, delete: if isAdmin();
+      allow update: if isAdmin() || (
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'likesCount', 'commentsCount'])
+      );
     }
 
     // System Collection

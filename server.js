@@ -68,7 +68,7 @@ app.get(['/story/:slug', '/news/:slug', '/video/:slug'], (req, res) => {
 });
 
 // Serve specific static HTML pages without .html extension
-const pages = ['login', 'profile', 'search', 'submit', 'download-page', 'character', 'Terms-of-Use-and-Privacy-Policy', 'contact-us'];
+const pages = ['login', 'explore', 'profile', 'search', 'submit', 'download-page', 'character', 'Terms-of-Use-and-Privacy-Policy', 'contact-us'];
 
 pages.forEach(page => {
   app.get(`/${page}`, (req, res) => {

@@ -177,287 +177,216 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ========================= */
-/* قسم الـ Hero */
+/* قسم الهيرو الجديد السنيمائي */
 /* ========================= */
-/* Tailwind classes already provide the necessary styling, just adding custom style */
-/* قسم الهيرو */
-/* قسم الهيرو الجديد */
-    .hero-new {
-      position: relative;
-      width: 100%;
-      height: 100vh;
-      overflow: hidden;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 1rem;
-      background: radial-gradient(circle at center, #1b0303 0%, #080808 80%);
-      z-index: 1;
-    }
+.hero-new {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #050000;
+}
 
-    /* خلفية جزيئات */
-    #particles {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: 0;
-      background: transparent;
-    }
+/* خلفية جزيئات */
+#particles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  background: transparent;
+}
 
-    /* طبقة الضباب */
-    .fog-overlay {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: url('https://i.postimg.cc/BvmF6Pm8/Chat-GPT-Image-May-3-2025-10-23-30-PM.png') repeat;
-      opacity: 0.15;
-      animation: fogMove 60s linear infinite;
-      z-index: 1;
-    }
+/* طبقة الضباب */
+.fog-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('https://i.postimg.cc/BvmF6Pm8/Chat-GPT-Image-May-3-2025-10-23-30-PM.png') repeat;
+  opacity: 0.15;
+  animation: fogMove 60s linear infinite;
+  z-index: 1;
+}
 
-    @keyframes fogMove {
-      from { background-position: 0 0; }
-      to { background-position: 1000px 0; }
-    }
+@keyframes fogMove {
+  from { background-position: 0 0; }
+  to { background-position: 1000px 0; }
+}
 
-    /* محتوى الهيرو */
-    .hero-content-new {
-      position: relative;
-      z-index: 10;
-      max-width: 600px;
-      width: 100%;
-      padding: 0 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2rem;
-    }
+/* Ambient Red Lighting */
+.hero-ambient-light {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(139, 0, 0, 0.25) 0%, rgba(0, 0, 0, 0) 70%);
+  z-index: 2;
+  pointer-events: none;
+}
 
-    /* شعار مع تأثير توهج */
-    .hero-logo {
-      max-width: 180px;
-      margin-bottom: 1.2rem;
-      filter: drop-shadow(0 0 10px #dc2626);
-      animation: pulseGlow 3s infinite alternate;
-      border-radius: 1.5rem;
-      transition: transform 0.3s ease;
-    }
-    .hero-logo:hover {
-      transform: scale(1.05);
-    }
-    @keyframes pulseGlow {
-      0% { filter: drop-shadow(0 0 6px #dc2626); }
-      100% { filter: drop-shadow(0 0 20px #ff3a3a); }
-    }
+/* المحتوى */
+.cinematic-content {
+  position: relative;
+  z-index: 10;
+  max-width: 800px;
+  width: 100%;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 
-    /* نص العنوان مع تأثير glitch */
-    .glitch-text {
-      font-size: 4.5rem;
-      font-weight: 900;
-      letter-spacing: 0.2em;
-      color: #dc2626;
-      position: relative;
-      user-select: none;
-      text-transform: uppercase;
-      margin: 0;
-      line-height: 1.1;
-      max-width: 100%;
-      white-space: nowrap;
-    }
+.hero-logo {
+  max-width: 140px;
+  margin-bottom: 2rem;
+  filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.5));
+  animation: pulseGlow 4s infinite alternate;
+}
 
-    .glitch-text::before,
-    .glitch-text::after {
-      content: attr(data-text);
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      overflow: hidden;
-      clip: rect(0, 900px, 0, 0);
-    }
+@keyframes pulseGlow {
+  0% { filter: drop-shadow(0 0 5px rgba(220, 38, 38, 0.4)); transform: scale(1); }
+  100% { filter: drop-shadow(0 0 15px rgba(220, 38, 38, 0.8)); transform: scale(1.02); }
+}
 
-    .glitch-text::before {
-      animation: glitchTop 2s infinite linear alternate-reverse;
-      color: #ff3a3a;
-      z-index: -1;
-    }
+.cinematic-title {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.2;
+  text-shadow: 0 4px 20px rgba(220, 38, 38, 0.5);
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
 
-    .glitch-text::after {
-      animation: glitchBottom 2s infinite linear alternate;
-      color: #a31212;
-      z-index: -1;
-    }
+.cinematic-title span {
+  color: #dc2626;
+  display: inline-block;
+}
 
-    @keyframes glitchTop {
-      0% {
-        clip: rect(0, 900px, 40px, 0);
-        transform: translate(-2px, -2px);
-      }
-      50% {
-        clip: rect(10px, 900px, 60px, 0);
-        transform: translate(2px, 0);
-      }
-      100% {
-        clip: rect(0, 900px, 40px, 0);
-        transform: translate(-2px, -2px);
-      }
-    }
+.cinematic-description {
+  font-size: 1.25rem;
+  color: #a1a1aa;
+  max-width: 600px;
+  line-height: 1.7;
+  font-weight: 500;
+  margin-bottom: 2.5rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
 
-    @keyframes glitchBottom {
-      0% {
-        clip: rect(40px, 900px, 80px, 0);
-        transform: translate(2px, 2px);
-      }
-      50% {
-        clip: rect(50px, 900px, 80px, 0);
-        transform: translate(-2px, 0);
-      }
-      100% {
-        clip: rect(40px, 900px, 80px, 0);
-        transform: translate(2px, 2px);
-      }
-    }
+.cinematic-buttons {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
 
-    /* وصف */
-    .hero-description {
-      font-size: 1.3rem;
-      color: #eee;
-      margin-bottom: 2rem;
-      letter-spacing: 0.03em;
-      line-height: 1.5;
-      text-shadow: 0 0 5px #660000;
-    }
+.btn-primary-cinematic {
+  background: rgba(220, 38, 38, 0.1);
+  color: #fff;
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.2);
+}
 
-    /* الأزرار */
-    .buttons-new {
-      display: flex;
-      justify-content: center;
-      gap: 2.4rem;
-      flex-wrap: wrap;
-      width: 100%;
-    }
+.btn-primary-cinematic:hover {
+  background: rgba(220, 38, 38, 0.8);
+  border-color: #dc2626;
+  box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+  transform: translateY(-3px);
+  color: #fff;
+}
 
-    .btn-neon {
-      display: inline-block;
-      padding: 1rem 3rem;
-      border-radius: 50px;
-      background: transparent;
-      border: 2.5px solid #dc2626;
-      color: #dc2626;
-      font-weight: 800;
-      font-size: 1.25rem;
-      text-decoration: none;
-      box-shadow:
-        0 0 8px #dc2626,
-        0 0 16px #dc2626,
-        0 0 30px #ff3a3a,
-        0 0 60px #ff3a3a;
-      transition: all 0.35s ease;
-      user-select: none;
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-      text-align: center;
-      min-width: 180px;
-    }
-    .btn-neon:hover {
-      color: #fff;
-      background: #dc2626;
-      box-shadow:
-        0 0 15px #ff5a5a,
-        0 0 30px #ff5a5a,
-        0 0 60px #ff7a7a,
-        0 0 120px #ff7a7a;
-      transform: translateY(-4px);
-      letter-spacing: 0.05em;
-    }
+.btn-secondary-cinematic {
+  background: rgba(0, 0, 0, 0.5);
+  color: #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
 
-    .btn-icon-neon {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      border: 2.5px solid #dc2626;
-      color: #dc2626;
-      font-size: 2rem;
-      background: transparent;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.35s ease;
-      box-shadow:
-        0 0 8px #dc2626,
-        0 0 16px #dc2626;
-    }
-    .btn-icon-neon:hover {
-      color: #fff;
-      background: #dc2626;
-      box-shadow:
-        0 0 25px #ff5a5a,
-        0 0 40px #ff5a5a;
-      transform: scale(1.25);
-    }
+.btn-secondary-cinematic:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+  transform: translateY(-3px);
+}
 
-    /* استجابة الهواتف */
-    @media (max-width: 600px) {
-  .glitch-text {
-    font-size: 3rem;
-    letter-spacing: 0.16em;
-    transform: translateX(11%);
+/* استجابة الهواتف للهيرو السنيمائي */
+@media (max-width: 600px) {
+  .cinematic-title {
+    font-size: 2.2rem;
   }
-      .buttons-new {
-        gap: 1.5rem;
-      }
-      .btn-neon {
-        padding: 0.8rem 2rem;
-        font-size: 1.1rem;
-        min-width: 140px;
-      }
-      .btn-icon-neon {
-        width: 50px;
-        height: 50px;
-        font-size: 1.6rem;
-      }
-      .hero-logo {
-        max-width: 140px;
-      }
-    }
+  .cinematic-description {
+    font-size: 1.1rem;
+    padding: 0 1rem;
+  }
+  .cinematic-buttons {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0 2rem;
+  }
+  .btn-primary-cinematic, .btn-secondary-cinematic {
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+  }
+  .hero-logo {
+    max-width: 100px;
+  }
+}
 
 /* ========================= */
 /* قسم القوالب (الكروت) */
 /* ========================= */
-.cards-section {
-  padding: 60px 20px;
+.cards-section-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 40px;
+  gap: 32px;
 }
 @media (max-width: 1024px) {
-  .cards-section {
+  .cards-section-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
 }
-@media (max-width: 600px) {
-  .cards-section {
+@media (max-width: 640px) {
+  .cards-section-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 
 .card {
   position: relative;
-  height: 280px;
+  height: 300px;
   overflow: hidden;
-  border-radius: 15px;
-  background: #131313;
-  box-shadow: 0 0 20px rgba(255, 0, 0, 0.1);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
+  border-radius: 12px;
+  background: #111;
+  border: 1px solid rgba(220, 38, 38, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   cursor: pointer;
 }
 .card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 0 25px crimson, 0 0 10px #ff0040 inset;
+  transform: translateY(-5px);
+  border-color: rgba(220, 38, 38, 0.4);
+  box-shadow: 0 10px 30px rgba(220, 38, 38, 0.15), 0 0 15px rgba(220, 38, 38, 0.1) inset;
 }
 
 .card-inner {
@@ -497,28 +426,31 @@ h1, h2, h3, h4, h5, h6 {
 
 .card-inner .card-content h3 {
   margin-bottom: 12px;
-  font-size: 1.4em;
-  color: crimson;
-  text-shadow: 0 0 10px crimson;
-  letter-spacing: 1px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  letter-spacing: 0.5px;
 }
 
-.card-inner .card-content a {
+.card-inner .card-content .fake-btn {
   display: inline-block;
-  padding: 10px 18px;
-  background: #0f0f0f;
-  border: 1px solid crimson;
+  padding: 8px 20px;
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid rgba(220, 38, 38, 0.5);
   color: #fff;
-  border-radius: 8px;
+  border-radius: 20px;
   text-decoration: none;
-  font-size: 0.9em;
+  font-size: 0.85rem;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
   transition: all 0.3s ease;
-  box-shadow: 0 0 8px rgba(220, 20, 60, 0.5);
 }
-.card-inner .card-content a:hover {
-  background: crimson;
-  color: #0f0f0f;
-  box-shadow: 0 0 12px crimson, 0 0 20px #ff0040;
+.card-inner .card-content .fake-btn:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
 }
 
 /* ========================= */
@@ -573,20 +505,13 @@ h1, h2, h3, h4, h5, h6 {
 /* قسم الأخبار والفعاليات */
 /* ========================= */
 .news-section {
-  padding: 50px 20px;
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.news-section h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 2em;
+  background: transparent;
 }
 
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* حد أقصى 3 قوالب في الصف */
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
 }
 
 /* إخفاء القوالب الزائدة عن 6 */
@@ -594,6 +519,7 @@ h1, h2, h3, h4, h5, h6 {
   display: none;
 }
 
+/* Legacy News Card Design Restoration */
 .news-card {
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(5px);
@@ -602,6 +528,7 @@ h1, h2, h3, h4, h5, h6 {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   transform: perspective(1000px) rotateX(0deg);
   transition: transform 0.3s;
+  cursor: pointer; /* New clickable feature */
 }
 
 .news-card:hover {
@@ -621,6 +548,42 @@ h1, h2, h3, h4, h5, h6 {
 .news-card .news-content h3 {
   font-size: 1.2em;
   margin-bottom: 10px;
+  color: #fff;
+}
+
+.news-card .news-content p.news-text {
+  font-size: 0.9rem;
+  color: #ddd;
+  line-height: 1.5;
+  margin-bottom: 15px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* زر "إظهار المزيد" (Legacy Style Refined) */
+.news-card .read-more-btn {
+  display: inline-block;
+  padding: 8px 24px;
+  background: rgba(220, 38, 38, 0.1);
+  color: #f3f4f6;
+  border: 1px solid rgba(220, 38, 38, 0.5);
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+  text-align: center;
+}
+.news-card .read-more-btn:hover {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.5);
+  transform: translateY(-2px);
 }
 
 /* زر "إظهار المزيد" */
@@ -683,22 +646,13 @@ h1, h2, h3, h4, h5, h6 {
 
 /* قسم الفيديوهات */
 .video-section {
-  padding: 50px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden;
-}
-
-.video-section h2 {
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 2em;
+  background: transparent;
 }
 
 .video-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 فيديوهات في الصف */
-  gap: 30px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
 }
 
 /* إخفاء الفيديوهات الزائدة عن 6 */
@@ -707,18 +661,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .video-card {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(5px);
-  border-radius: 15px;
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  transform: perspective(1000px) rotateX(0deg);
-  transition: transform 0.3s, opacity 0.5s ease-in-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
   opacity: 0;
   animation: fadeIn 0.6s forwards;
-  text-decoration: none; /* منع أي تأثيرات على النص */
-  color: inherit; /* يجعل لون النص يبقى كما هو */
-  display: block; /* يجعل الرابط يشمل القالب بالكامل */
+  text-decoration: none;
+  color: inherit;
+  display: block;
 }
 
 .video-card {
@@ -746,39 +700,39 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .video-card:hover {
-  background: rgba(0, 0, 0, 0.5); /* تعتيم عند التمرير */
+  transform: translateY(-5px);
+  border-color: rgba(220, 38, 38, 0.3);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
 }
 
 .video-card img {
-    width: 100%; /* يضمن أن الصورة لا تتجاوز القالب */
-    height: 330px; /* يثبت ارتفاع الصورة لمنع التمدد الزائد */
-    object-fit: cover; /* يضمن أن الصورة لا تتشوه */
-    transition: transform 0.3s ease-in-out; /* إضافة تأثير سلس */
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    transition: transform 0.4s ease-in-out;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .video-card:hover img {
-  transform: scale(1.05); /* تكبير الصورة عند تمرير الماوس */
-}
-
-.video-card:hover {
-  transform: perspective(1000px) rotateX(5deg);
+  transform: scale(1.03);
 }
 
 .video-card iframe {
   width: 100%;
-  height: 330px;
+  height: 220px;
   border: none;
 }
 
 .video-card .video-content {
-  padding: 15px;
+  padding: 20px;
 }
 
 .video-card .video-content h3 {
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  text-decoration: none; /* منع الخط السفلي */
-  color: inherit; /* الحفاظ على لون العنوان */
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  color: #f3f4f6;
+  line-height: 1.4;
 }
 
 
@@ -811,52 +765,17 @@ h1, h2, h3, h4, h5, h6 {
     transform: translateY(0);
   }
 }
-@media (max-width: 768px) {
-  .news-grid, .videos-grid {
-    grid-template-columns: repeat(2, 1fr); /* تقليل عدد الأعمدة إلى 2 على الشاشات الصغيرة */
-  }
-
-  .news-card, .video-card {
-    height: auto; /* جعل القوالب تتكيف بدون زيادة الطول المبالغ فيه */
-  }
-
-  .news-card img, .video-card img {
-    height: 180px; /* تثبيت ارتفاع الصور */
-    object-fit: cover; /* الحفاظ على جودة الصورة بدون تمدد غير مرغوب */
+@media (max-width: 1024px) {
+  .news-grid, .video-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
   }
 }
 
-@media (max-width: 480px) {
-  .news-grid, .videos-grid {
-    grid-template-columns: repeat(1, 1fr); /* عمود واحد فقط على الشاشات الأصغر */
-  }
-
-  .news-card img, .video-card img {
-    height: 150px; /* تصغير الصور أكثر للشاشات الأصغر */
-  }
-}
-@media (max-width: 768px) {
-  .videos-grid {
-    grid-template-columns: repeat(2, 1fr); /* تقليل الأعمدة إلى 2 */
-  }
-
-  .video-card {
-    height: auto; /* السماح للقالب بالتكيف */
-  }
-
-  .video-card iframe {
-    width: 100%; /* التأكد من أن الفيديو لا يتجاوز حدود القالب */
-    height: 180px; /* تحديد ارتفاع ثابت لمنع التمدد */
-  }
-}
-
-@media (max-width: 480px) {
-  .videos-grid {
-    grid-template-columns: repeat(1, 1fr); /* جعل القوالب في عمود واحد */
-  }
-
-  .video-card iframe {
-    height: 150px; /* تقليل ارتفاع الفيديو أكثر */
+@media (max-width: 640px) {
+  .news-grid, .video-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 
@@ -1104,15 +1023,11 @@ footer ul li a {
 }
 
 @media (max-width: 1024px) {
-  .video-grid {
-    grid-template-columns: repeat(2, 1fr); /* عمودان للأجهزة اللوحية */
-  }
+  /* No additional video-grid styles needed here as they are combined above */
 }
 
 @media (max-width: 600px) {
-  .video-grid {
-    grid-template-columns: repeat(1, 1fr); /* عمود واحد للهواتف */
-  }
+  /* No additional video-grid styles needed here */
 }
 
 /* تنسيق زر تصفح القصص */

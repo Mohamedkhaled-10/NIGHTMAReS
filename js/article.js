@@ -1,6 +1,6 @@
 // js/article.js
 import { db } from './firebase-init.js';
-import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
   const pathParts = window.location.pathname.split('/').filter(p => p);
@@ -29,7 +29,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // Assuming slug is unique per type
-    const docData = querySnapshot.docs[0].data();
+    const doc = querySnapshot.docs[0];
+    const docData = { id: doc.id, ...doc.data() };
     renderContent(docData);
     
   } catch (error) {
@@ -45,6 +46,38 @@ function renderContent(data) {
   // Update Title
   document.title = `${data.title} - Nightmares`;
   document.getElementById('article-title').textContent = data.title;
+
+  // Render Taxonomy (Category and Tags)
+  const taxonomyContainer = document.getElementById('article-taxonomy');
+  const categoryEl = document.getElementById('article-category');
+  const tagsContainer = document.getElementById('article-tags');
+  
+  let hasTaxonomy = false;
+  
+  if (data.category) {
+    categoryEl.textContent = getCategoryName(data.category);
+    categoryEl.style.display = 'inline-block';
+    hasTaxonomy = true;
+  } else {
+    categoryEl.style.display = 'none';
+  }
+
+  tagsContainer.innerHTML = '';
+  if (Array.isArray(data.tags) && data.tags.length > 0) {
+    data.tags.forEach(tag => {
+      const tagEl = document.createElement('span');
+      tagEl.className = 'bg-[#1b0d0d] text-gray-400 px-3 py-1 rounded-full text-xs font-semibold border border-red-900/30 hover:text-white hover:border-red-600 transition-colors cursor-pointer';
+      tagEl.textContent = '#' + tag;
+      tagsContainer.appendChild(tagEl);
+    });
+    hasTaxonomy = true;
+  }
+
+  if (hasTaxonomy) {
+    taxonomyContainer.classList.remove('hidden');
+  } else {
+    taxonomyContainer.classList.add('hidden');
+  }
 
   // Render Cover Image
   const coverImageContainer = document.getElementById('cover-image-container');
@@ -90,6 +123,87 @@ function renderContent(data) {
   // Show navbar after loading
   const navbar = document.querySelector('.navbar');
   if (navbar) navbar.classList.add('show');
+
+  // Load related content
+  loadRelatedContent(data);
+}
+
+async function loadRelatedContent(currentArticle) {
+  const relatedSection = document.getElementById('related-content-section');
+  const relatedGrid = document.getElementById('related-grid');
+  if (!relatedSection || !relatedGrid) return;
+
+  try {
+    let qConstraints = [where("status", "==", "published")];
+    
+    // Prioritize by Category, fallback to Type
+    if (currentArticle.category) {
+      qConstraints.push(where("category", "==", currentArticle.category));
+    } else {
+      qConstraints.push(where("type", "==", currentArticle.type));
+    }
+    
+    qConstraints.push(orderBy("createdAt", "desc"));
+    qConstraints.push(limit(7)); // Fetch one extra in case the current article is included
+
+    const qRef = query(collection(db, "posts"), ...qConstraints);
+    const snapshot = await getDocs(qRef);
+    
+    let results = [];
+    snapshot.forEach(doc => {
+      if (doc.id !== currentArticle.id) {
+        results.push({ id: doc.id, ...doc.data() });
+      }
+    });
+
+    // If we didn't find enough items by category and there was a category, try filling up by type
+    if (results.length < 3 && currentArticle.category) {
+       const fallbackQRef = query(
+         collection(db, "posts"),
+         where("status", "==", "published"),
+         where("type", "==", currentArticle.type),
+         orderBy("createdAt", "desc"),
+         limit(7)
+       );
+       const fallbackSnapshot = await getDocs(fallbackQRef);
+       fallbackSnapshot.forEach(doc => {
+         if (doc.id !== currentArticle.id && !results.find(r => r.id === doc.id)) {
+           results.push({ id: doc.id, ...doc.data() });
+         }
+       });
+    }
+
+    results = results.slice(0, 6); // Max 6 items
+
+    if (results.length === 0) {
+      return; // Keep hidden
+    }
+
+    relatedGrid.innerHTML = '';
+    results.forEach(post => {
+      const link = `/${post.type}/${post.slug}`;
+      const typeLabel = post.type === 'story' ? 'قصة' : post.type === 'video' ? 'فيديو' : 'خبر';
+      const typeColor = post.type === 'story' ? 'bg-red-900' : post.type === 'video' ? 'bg-blue-900' : 'bg-green-900';
+      
+      const card = document.createElement('a');
+      card.href = link;
+      card.className = 'bg-black/60 border border-gray-800 rounded-lg overflow-hidden shadow-lg hover:border-red-600 hover:shadow-red-900/50 transition transform hover:-translate-y-1 block';
+      card.innerHTML = `
+        <div class="h-40 overflow-hidden relative">
+          <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" class="w-full h-full object-cover" loading="lazy" decoding="async">
+          <span class="absolute top-2 right-2 ${typeColor} text-white text-xs px-2 py-1 rounded shadow">${typeLabel}</span>
+        </div>
+        <div class="p-4">
+          <h3 class="text-lg font-bold text-white mb-1 line-clamp-2">${post.title}</h3>
+        </div>
+      `;
+      relatedGrid.appendChild(card);
+    });
+
+    relatedSection.classList.remove('hidden');
+  } catch (error) {
+    console.error("Error loading related content:", error);
+  }
 }
 
 function showError(message) {
@@ -125,3 +239,17 @@ if (scrollToTopBtn) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 }
+
+function getCategoryName(id) {
+  const categories = {
+    'horror': 'رعب (Horror)',
+    'mystery': 'غموض (Mystery)',
+    'true_crime': 'جرائم حقيقية (True Crime)',
+    'paranormal': 'ما وراء الطبيعة (Paranormal)',
+    'legends': 'أساطير (Legends)',
+    'movies': 'أفلام (Movies)',
+    'games': 'ألعاب (Games)'
+  };
+  return categories[id] || id;
+}
+

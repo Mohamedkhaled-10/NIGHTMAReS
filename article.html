@@ -13,7 +13,7 @@
     .hidden { display: none !important; }
   </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col bg-[#050000] text-white">
   <div id="progress-bar" style="position: fixed; top: 0; left: 0; height: 5px; background-color: #ff0000; width: 0%; z-index: 1001; transition: width 0.1s;"></div>
   
   <div class="wrapper">
@@ -25,10 +25,17 @@
     <div id="content-area" class="hidden">
       <!-- Article Cover Image -->
       <div id="cover-image-container" style="display: none; max-width: 900px; width: 80%; margin: 100px auto 10px; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
-        <img id="article-cover-image" src="" alt="Cover Image" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;">
+        <img id="article-cover-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Cover Image" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;">
       </div>
 
       <h1 class="story-title" id="article-title" style="margin-top: 20px;"></h1>
+      
+      <!-- Category and Tags -->
+      <div id="article-taxonomy" class="hidden" style="max-width: 900px; width: 80%; margin: 10px auto; text-align: center;">
+        <span id="article-category" class="inline-block bg-red-900/40 text-red-300 px-3 py-1 rounded-full text-sm font-semibold border border-red-900/50 mb-2"></span>
+        <div id="article-tags" class="flex flex-wrap justify-center gap-2 mt-2"></div>
+      </div>
+
       <div class="story-separator"></div>
       
       <section class="article-container">
@@ -45,15 +52,34 @@
           <img src="/assets/images/facebook-512.png" alt="Facebook" />
         </a>
       </div>
-      
+
+      <!-- Related Content Section -->
+      <section id="related-content-section" class="article-container hidden" style="margin-top: 40px; margin-bottom: 20px;">
+        <h3 class="text-2xl font-bold text-red-600 mb-6 drop-shadow-md border-b border-red-900/30 pb-2">قد يعجبك أيضًا</h3>
+        <div id="related-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Related cards will be injected here -->
+        </div>
+      </section>
+
       <!-- Interactions Section (Likes & Comments) -->
       <section id="interactions-section" class="article-container" style="margin-top: 30px; font-family: 'Cairo', sans-serif;">
         <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 20px;">
-          <h3 style="font-size: 1.5em;">التعليقات</h3>
-          <button id="btn-like" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2em; display: flex; align-items: center; gap: 8px;">
-            <i class="fas fa-heart" id="like-icon"></i>
-            <span id="likes-count">0</span> إعجاب
-          </button>
+          <h3 style="font-size: 1.5em;">التفاعلات والتعليقات</h3>
+          <div style="display: flex; gap: 20px; align-items: center;">
+            <span style="color: #aaa; font-size: 1em; display: flex; align-items: center; gap: 8px;" title="المشاهدات">
+              <i class="fas fa-eye"></i> <span id="views-count">0</span>
+            </span>
+            <span style="color: #aaa; font-size: 1em; display: flex; align-items: center; gap: 8px;" title="التعليقات">
+              <i class="fas fa-comment"></i> <span id="comments-count">0</span>
+            </span>
+            <button id="btn-save-post" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2em; display: flex; align-items: center; gap: 8px;" title="حفظ المقال">
+              <i class="far fa-bookmark" id="save-icon"></i>
+            </button>
+            <button id="btn-like" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2em; display: flex; align-items: center; gap: 8px;">
+              <i class="fas fa-heart" id="like-icon"></i>
+              <span id="likes-count">0</span>
+            </button>
+          </div>
         </div>
         
         <!-- Add Comment Form -->
