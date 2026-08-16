@@ -76,23 +76,35 @@ fType.addEventListener('change', () => {
   }
 });
 
+let currentPostsLoadToken = 0;
+
 // Load Posts
 async function loadPosts() {
+  const token = ++currentPostsLoadToken;
   loadingIndicator.classList.remove('hidden');
-  tableBody.innerHTML = '';
+  
   try {
     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
     const querySnapshot = await getDocs(q);
+    
+    if (token !== currentPostsLoadToken) return;
+    
     loadingIndicator.classList.add('hidden');
+    tableBody.innerHTML = '';
     
     if (querySnapshot.empty) {
       tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">لا يوجد محتوى حالياً.</td></tr>';
       return;
     }
     
+    const renderedIds = new Set();
+    
     querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
       const id = docSnap.id;
+      if (renderedIds.has(id)) return;
+      renderedIds.add(id);
+      
+      const data = docSnap.data();
       
       const tr = document.createElement('tr');
       tr.className = 'border-b hover:bg-gray-50';
@@ -114,6 +126,7 @@ async function loadPosts() {
     document.querySelectorAll('.btn-delete').forEach(btn => btn.addEventListener('click', (e) => deletePost(e.target.dataset.id)));
     
   } catch (error) {
+    if (token !== currentPostsLoadToken) return;
     console.error("Error loading posts:", error);
     loadingIndicator.innerHTML = '<span class="text-red-500 font-bold p-4 block">حدث خطأ أثناء جلب البيانات. (تأكد أن حسابك لديه صلاحيات الأدمن).</span>';
   }
@@ -341,23 +354,35 @@ menuPosts.addEventListener('click', () => {
   loadPosts();
 });
 
+let currentSubLoadToken = 0;
+
 async function loadSubmissions() {
+  const token = ++currentSubLoadToken;
   loadingIndicatorSub.classList.remove('hidden');
-  submissionsTableBody.innerHTML = '';
+  
   try {
     const { collection, getDocs, query, where, orderBy } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
     const q = query(collection(db, "user_submissions"), where("status", "==", "submitted"), orderBy("createdAt", "asc"));
     const querySnapshot = await getDocs(q);
+    
+    if (token !== currentSubLoadToken) return;
+    
     loadingIndicatorSub.classList.add('hidden');
+    submissionsTableBody.innerHTML = '';
     
     if (querySnapshot.empty) {
       submissionsTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">لا يوجد قصص بانتظار المراجعة.</td></tr>';
       return;
     }
     
+    const renderedIds = new Set();
+    
     querySnapshot.forEach((docSnap) => {
-      const data = docSnap.data();
       const id = docSnap.id;
+      if (renderedIds.has(id)) return;
+      renderedIds.add(id);
+      
+      const data = docSnap.data();
       
       const tr = document.createElement('tr');
       tr.className = 'border-b hover:bg-gray-50 cursor-pointer btn-read-sub';
@@ -376,6 +401,7 @@ async function loadSubmissions() {
     });
     
   } catch (error) {
+    if (token !== currentSubLoadToken) return;
     console.error("Error loading submissions:", error);
     loadingIndicatorSub.innerHTML = '<span class="text-red-500 font-bold p-4 block">حدث خطأ أثناء جلب البيانات. (تأكد أنك أدمن).</span>';
   }
@@ -1147,6 +1173,13 @@ async function loadOverviewData() {
     }
     if (startDate) {
       constraints.push(where("createdAt", ">=", startDate));
+      
+      // Use existing indexed directions based on firestore.indexes.json
+      let dir = 'desc';
+      if (colName === 'user_submissions') {
+        dir = 'asc';
+      }
+      constraints.push(orderBy("createdAt", dir));
     }
     return query(collection(db, colName), ...constraints);
   };
@@ -1163,9 +1196,9 @@ async function loadOverviewData() {
       document.getElementById('stat-users').textContent = usersSnap.data().count;
     } catch(e) { document.getElementById('stat-users').textContent = '-'; console.log("Users count error:", e.message); }
 
-    // Submissions
+    // Submissions (Use 'user_submissions' instead of 'submissions' and correct status 'submitted')
     try {
-      const subSnap = await getCountFromServer(getQ('submissions', 'status', 'pending'));
+      const subSnap = await getCountFromServer(getQ('user_submissions', 'status', 'submitted'));
       document.getElementById('stat-submissions').textContent = subSnap.data().count;
     } catch(e) { document.getElementById('stat-submissions').textContent = '-'; console.log("Submissions count error:", e.message); }
 

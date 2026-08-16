@@ -17,7 +17,7 @@ function initAuthUI() {
   const mobileAdmin = document.getElementById("mobile-admin-link");
   const mobileLogout = document.getElementById("mobile-logout-btn");
 
-  const updateUI = async (user) => {
+  const updateUI = (user) => {
     if (user) {
       if (desktopUnauth) desktopUnauth.classList.add("hidden");
       if (desktopAuth) desktopAuth.classList.remove("hidden");
@@ -29,8 +29,18 @@ function initAuthUI() {
         dropdownEmail.textContent = user.email;
       }
 
-      try {
-        const userDoc = await getDoc(doc(db, "users", user.uid));
+      // 1. Initial quick render using Firebase Auth data
+      const initialName = user.displayName || "مستخدم";
+      if (desktopName) desktopName.textContent = initialName;
+      if (mobileName) mobileName.textContent = initialName;
+      
+      if (user.photoURL) {
+        if (desktopAvatar) desktopAvatar.src = user.photoURL;
+        if (mobileAvatar) mobileAvatar.src = user.photoURL;
+      }
+
+      // 2. Fetch additional metadata in the background
+      getDoc(doc(db, "users", user.uid)).then(userDoc => {
         if (userDoc.exists()) {
           const userData = userDoc.data();
           
@@ -51,24 +61,10 @@ function initAuthUI() {
             if (desktopAdmin) desktopAdmin.classList.add("hidden");
             if (mobileAdmin) mobileAdmin.classList.add("hidden");
           }
-        } else {
-          // Fallback if no Firestore doc
-          const displayName = user.displayName || "مستخدم";
-          if (desktopName) desktopName.textContent = displayName;
-          if (mobileName) mobileName.textContent = displayName;
-          
-          if (user.photoURL) {
-            if (desktopAvatar) desktopAvatar.src = user.photoURL;
-            if (mobileAvatar) mobileAvatar.src = user.photoURL;
-          }
         }
-      } catch (err) {
+      }).catch(err => {
         console.error("Error fetching user data", err);
-        // Fallback
-        const displayName = user.displayName || "مستخدم";
-        if (desktopName) desktopName.textContent = displayName;
-        if (mobileName) mobileName.textContent = displayName;
-      }
+      });
     } else {
       if (desktopUnauth) desktopUnauth.classList.remove("hidden");
       if (desktopAuth) desktopAuth.classList.add("hidden");

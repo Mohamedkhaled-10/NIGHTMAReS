@@ -1,7 +1,7 @@
 import { db } from './firebase-init.js';
 import { collection, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', async () => {
+const initHomeFeed = async () => {
   await loadHomeContent();
   
   // Defer analytics loading to free up network for main content and stop tab spinner
@@ -13,52 +13,56 @@ document.addEventListener('DOMContentLoaded', async () => {
       setTimeout(loadAnalyticsContent, 500);
     });
   }
-});
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initHomeFeed);
+} else {
+  initHomeFeed();
+}
 
 async function loadHomeContent() {
   const storiesGrid = document.getElementById('stories-grid');
   const newsGrid = document.getElementById('news-grid');
   const videoGrid = document.getElementById('video-grid');
   
-  try {
-    // Single query to fetch recent published posts, reducing connection contention
-    const recentPostsSnap = await getDocs(query(
-      collection(db, "posts"),
-      where("status", "==", "published"),
-      orderBy("createdAt", "desc"),
-      limit(25)
-    ));
-    
-    const now = new Date();
-    const filterPublished = (d) => {
-      if (!d.publishAt) return true;
-      const pDate = d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt);
-      return pDate <= now;
-    };
+  const now = new Date();
+  
+  // Independent async fetches so one doesn't block the other
+  const fetchStories = async () => {
+    try {
+      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "story"), orderBy("createdAt", "desc"), limit(10)));
+      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 6);
+      renderStories(items, storiesGrid);
+    } catch(e) {
+      if(storiesGrid) storiesGrid.innerHTML = '<p class="text-red-500">تعذر تحميل القصص</p>';
+    }
+  };
 
-    const allRecent = recentPostsSnap.docs.map(d => d.data()).filter(filterPublished);
-    
-    const stories = allRecent.filter(p => p.type === 'story').slice(0, 6);
-    const news = allRecent.filter(p => p.type === 'news').slice(0, 6);
-    const videos = allRecent.filter(p => p.type === 'video').slice(0, 3);
-    
-    renderStories(stories, storiesGrid);
-    renderNews(news, newsGrid);
-    renderVideos(videos, videoGrid);
-    
-  } catch(e) {
-    console.error("Error loading home feed:", e);
-    const errorHtml = `
-      <div class="col-span-full flex flex-col items-center justify-center py-16 bg-black/40 rounded-xl border border-red-900/30">
-        <i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 mb-4"></i>
-        <h3 class="text-xl font-bold text-gray-200 mb-2">تعذر تحميل المحتوى</h3>
-        <p class="text-gray-400">يبدو أن هناك خطأ في الاتصال. يرجى المحاولة لاحقاً.</p>
-      </div>
-    `;
-    if(storiesGrid) storiesGrid.innerHTML = errorHtml;
-    if(newsGrid) newsGrid.innerHTML = errorHtml;
-    if(videoGrid) videoGrid.innerHTML = errorHtml;
-  }
+  const fetchNews = async () => {
+    try {
+      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "news"), orderBy("createdAt", "desc"), limit(10)));
+      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 6);
+      renderNews(items, newsGrid);
+    } catch(e) {
+      if(newsGrid) newsGrid.innerHTML = '<p class="text-red-500">تعذر تحميل الأخبار</p>';
+    }
+  };
+
+  const fetchVideos = async () => {
+    try {
+      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "video"), orderBy("createdAt", "desc"), limit(5)));
+      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 3);
+      renderVideos(items, videoGrid);
+    } catch(e) {
+      if(videoGrid) videoGrid.innerHTML = '<p class="text-red-500">تعذر تحميل الفيديوهات</p>';
+    }
+  };
+
+  // Run them without awaiting them here so they load independently
+  fetchStories();
+  fetchNews();
+  fetchVideos();
 }
 
 async function loadAnalyticsContent() {
@@ -72,27 +76,26 @@ async function loadAnalyticsContent() {
     const [mostReadSnap, trendingSnap, mostDiscussedSnap] = await Promise.all([
       getDocs(query(
         collection(db, "posts"),
-        where("status", "==", "published"),
         orderBy("views", "desc"),
-        limit(5)
+        limit(20)
       )),
       getDocs(query(
         collection(db, "posts"),
-        where("status", "==", "published"),
         orderBy("likesCount", "desc"),
-        limit(5)
+        limit(20)
       )),
       getDocs(query(
         collection(db, "posts"),
-        where("status", "==", "published"),
         orderBy("commentsCount", "desc"),
-        limit(5)
+        limit(20)
       ))
     ]);
 
-    renderList(mostReadSnap.docs.map(d => d.data()), mostReadList, 'views');
-    renderList(trendingSnap.docs.map(d => d.data()), trendingList, 'likes');
-    renderList(mostDiscussedSnap.docs.map(d => d.data()), mostDiscussedList, 'comments');
+    const filterPublished = (docs) => docs.map(d => d.data()).filter(d => d.status === 'published').slice(0, 5);
+
+    renderList(filterPublished(mostReadSnap.docs), mostReadList, 'views');
+    renderList(filterPublished(trendingSnap.docs), trendingList, 'likes');
+    renderList(filterPublished(mostDiscussedSnap.docs), mostDiscussedList, 'comments');
 
   } catch(e) {
     console.error("Error loading analytics:", e);

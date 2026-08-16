@@ -3,7 +3,7 @@ import { db, auth } from './firebase-init.js';
 import { collection, query, where, getDocs, orderBy, limit, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-document.addEventListener('DOMContentLoaded', async () => {
+const initArticle = async () => {
   const pathParts = window.location.pathname.split('/').filter(p => p);
   
   if (pathParts.length < 2) {
@@ -79,7 +79,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   } else {
     fetchPost();
   }
-});
+};
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initArticle);
+} else {
+  initArticle();
+}
 
 async function renderContent(data) {
   document.getElementById('loading').classList.add('hidden');
@@ -171,10 +177,9 @@ async function renderContent(data) {
   
   schemaScript.textContent = JSON.stringify(schemaObj);
 
-  // Resolve Author
+  // Resolve Author Non-Blocking
   if (data.authorUid) {
-    try {
-      const authorDoc = await getDoc(doc(db, 'users', data.authorUid));
+    getDoc(doc(db, 'users', data.authorUid)).then(authorDoc => {
       if (authorDoc.exists()) {
         const authorData = authorDoc.data();
         document.getElementById('article-author-name').textContent = authorData.displayName || 'مستخدم';
@@ -183,10 +188,10 @@ async function renderContent(data) {
         }
         document.getElementById('article-author-link').href = `/author/${data.authorUid}`;
         document.getElementById('article-author').classList.remove('hidden');
+        
+        // Update schema non-blocking too if needed
       }
-    } catch(e) {
-      console.error("Error fetching author details:", e);
-    }
+    }).catch(e => console.error("Error fetching author details:", e));
   }
 
   // Render Taxonomy (Category and Tags)

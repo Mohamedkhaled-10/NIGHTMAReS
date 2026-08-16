@@ -22,8 +22,8 @@ onAuthStateChanged(auth, async (user) => {
       if (docSnap.exists()) {
         currentUserDoc = docSnap.data();
         
-        // Update last login
-        await updateDoc(docRef, { lastLoginAt: serverTimestamp() });
+        // Update last login in background (non-blocking)
+        updateDoc(docRef, { lastLoginAt: serverTimestamp() }).catch(e => console.error("Error updating login time:", e));
         
         if (currentUserDoc.accountStatus === 'banned' || currentUserDoc.accountStatus === 'deleted') {
           await signOut(auth);

@@ -31,7 +31,7 @@ function servePage(res, pagePath) {
   
   // Ensure Tailwind and main styles are loaded
   if (!html.includes('tailwindcss.com')) {
-    html = html.replace('</head>', '  <script src="https://cdn.tailwindcss.com"></script>\n</head>');
+    html = html.replace('</head>', '  <script src="https://cdn.tailwindcss.com" defer></script>\n</head>');
   }
   if (!html.includes('/styles/main.css') && !html.includes('"styles/main.css"')) {
     html = html.replace('</head>', '  <link rel="stylesheet" href="/styles/main.css">\n</head>');
@@ -53,8 +53,12 @@ app.get('/manifest.json', (req, res) => {
 
 // Serve static files from the current directory, EXCEPT html files (which need layout injection)
 app.use((req, res, next) => {
-  if (req.path.endsWith('.html') && req.path !== '/admin/index.html') {
-    // Intercept .html direct accesses and serve with layout
+  if (req.path.endsWith('.html')) {
+    // Intercept .html direct accesses and serve with layout (or config injection for admin)
+    if (req.path === '/admin/index.html') {
+       let html = fs.readFileSync(path.join(__dirname, req.path), 'utf8');
+       return res.send(html);
+    }
     const pagePath = path.join(__dirname, req.path);
     return servePage(res, pagePath);
   }
@@ -81,7 +85,8 @@ pages.forEach(page => {
 });
 
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin', 'index.html'));
+  let html = fs.readFileSync(path.join(__dirname, 'admin', 'index.html'), 'utf8');
+  res.send(html);
 });
 
 app.get('/', (req, res) => {
