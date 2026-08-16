@@ -1,5 +1,6 @@
 import { db } from './firebase-init.js';
 import { collection, getDocs, query, where, orderBy, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { UILoadingSkeleton, UIEmptyState, UIErrorState } from './ui-utils.js';
 
 const form = document.getElementById('explore-filters');
 const filterType = document.getElementById('filter-type');
@@ -7,9 +8,6 @@ const filterCategory = document.getElementById('filter-category');
 const filterTag = document.getElementById('filter-tag');
 
 const grid = document.getElementById('explore-grid');
-const loading = document.getElementById('explore-loading');
-const errorState = document.getElementById('explore-error');
-const emptyState = document.getElementById('explore-empty');
 const loadMoreBtn = document.getElementById('load-more-btn');
 const loadMoreContainer = document.getElementById('load-more-container');
 
@@ -53,16 +51,12 @@ async function loadData(isLoadMore = false) {
   isLoading = true;
 
   if (!isLoadMore) {
-    grid.innerHTML = '';
-    grid.classList.add('hidden');
-    emptyState.classList.add('hidden');
-    errorState.classList.add('hidden');
+    grid.innerHTML = UILoadingSkeleton(12);
     loadMoreContainer.classList.add('hidden');
-    loading.classList.remove('hidden');
     lastVisible = null;
     isEndOfData = false;
   } else {
-    loadMoreBtn.textContent = 'جاري التحميل...';
+    loadMoreBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...';
     loadMoreBtn.disabled = true;
   }
 
@@ -97,13 +91,13 @@ async function loadData(isLoadMore = false) {
     const snapshot = await getDocs(qRef);
 
     if (!isLoadMore) {
-      loading.classList.add('hidden');
+      grid.innerHTML = '';
     }
 
     if (snapshot.empty) {
       isEndOfData = true;
       if (!isLoadMore) {
-        emptyState.classList.remove('hidden');
+        grid.innerHTML = UIEmptyState("لا توجد نتائج تطابق بحثك... جرب استخدام فلاتر مختلفة أو كلمات دلالية أبسط.", "fa-ghost");
       } else {
         loadMoreContainer.classList.add('hidden');
       }
@@ -187,8 +181,6 @@ async function loadData(isLoadMore = false) {
 
 
       });
-
-      grid.classList.remove('hidden');
       
       if (snapshot.docs.length < PAGE_SIZE) {
         isEndOfData = true;
@@ -200,34 +192,23 @@ async function loadData(isLoadMore = false) {
 
   } catch (error) {
     console.error("Explore fetch error:", error);
-    if (error.code === 'failed-precondition') {
-       const msgEl = document.getElementById('error-message-text');
-       if (msgEl) msgEl.innerText = 'فهرس قاعدة البيانات غير مكتمل لتلك التركيبة من الفلاتر. حاول فلترة تصنيف واحد (النوع أو التصنيف أو التاج) حتى يتم بناء الفهارس.';
-       else errorState.innerHTML = '<p class="text-red-500 font-bold text-xl mb-2">فهرس قاعدة البيانات غير مكتمل لتلك التركيبة من الفلاتر.</p><p class="text-gray-400 text-sm">حاول فلترة تصنيف واحد (النوع أو التصنيف أو التاج) حتى يتم بناء الفهارس.</p>';
-    } else {
-       const msgEl = document.getElementById('error-message-text');
-       if (msgEl) {
-           msgEl.innerText = 'حدث خطأ أثناء جلب المحتوى.';
-           const retryBtn = document.getElementById('retry-btn');
-           if (retryBtn) {
-               // Remove old listeners by cloning
-               const newBtn = retryBtn.cloneNode(true);
-               retryBtn.parentNode.replaceChild(newBtn, retryBtn);
-               newBtn.addEventListener('click', () => { loadData(false); });
-           }
-       } else {
-           errorState.innerHTML = '<p class="text-red-500 font-bold text-xl mb-2">حدث خطأ أثناء جلب المحتوى.</p><button id="retry-btn" class="text-gray-400 hover:text-white underline">حاول مرة أخرى</button>';
-           document.getElementById('retry-btn').addEventListener('click', () => { loadData(false); });
-       }
-    }
     if (!isLoadMore) {
-      loading.classList.add('hidden');
-      errorState.classList.remove('hidden');
+      if (error.code === 'failed-precondition') {
+        grid.innerHTML = UIErrorState("فهرس قاعدة البيانات غير مكتمل لتلك التركيبة من الفلاتر. حاول فلترة تصنيف واحد حتى يتم بناء الفهارس.", "retry-explore");
+      } else {
+        grid.innerHTML = UIErrorState("حدث خطأ في قراءة الأرشيف. قد تكون هناك مشكلة في الاتصال.", "retry-explore");
+      }
+      document.getElementById('retry-explore')?.addEventListener('click', () => loadData(false));
     }
   } finally {
     isLoading = false;
     if (isLoadMore) {
-      loadMoreBtn.textContent = 'تحميل المزيد';
+      loadMoreBtn.innerHTML = `
+        <span class="relative z-10 flex items-center gap-2">
+          تحميل المزيد <i class="fa-solid fa-chevron-down text-sm group-hover:translate-y-1 transition-transform"></i>
+        </span>
+        <div class="absolute inset-0 bg-red-900/20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
+      `;
       loadMoreBtn.disabled = false;
     }
   }

@@ -62,13 +62,37 @@ const form = document.getElementById('auth-form');
 const nameField = document.getElementById('name-field');
 const passwordField = document.getElementById('password-field');
 const btnSubmit = document.getElementById('btn-submit');
-const formTitle = document.getElementById('form-title');
+const formTitleText = document.getElementById('form-title-text');
 const errorMsg = document.getElementById('error-msg');
+const errorText = document.getElementById('error-text');
 const successMsg = document.getElementById('success-msg');
+const successText = document.getElementById('success-text');
+const btnText = document.getElementById('btn-text');
+const btnIcon = document.getElementById('btn-icon');
+const btnSpinner = document.getElementById('btn-spinner');
 
 const toggleRegister = document.getElementById('toggle-register');
 const toggleLogin = document.getElementById('toggle-login');
 const toggleReset = document.getElementById('toggle-reset');
+
+// Password Visibility Toggle
+const togglePasswordBtn = document.getElementById('toggle-password');
+const passwordInput = document.getElementById('password');
+const eyeIcon = document.getElementById('eye-icon');
+
+if (togglePasswordBtn && passwordInput && eyeIcon) {
+  togglePasswordBtn.addEventListener('click', () => {
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    eyeIcon.classList.toggle('fa-eye');
+    eyeIcon.classList.toggle('fa-eye-slash');
+  });
+}
+
+// Input error hints
+const nameError = document.getElementById('name-error');
+const emailError = document.getElementById('email-error');
+const passwordError = document.getElementById('password-error');
 
 let currentMode = 'login'; // login, register, reset
 
@@ -76,42 +100,82 @@ function setMode(mode) {
   currentMode = mode;
   errorMsg.classList.add('hidden');
   successMsg.classList.add('hidden');
+  clearInputErrors();
   
   if (mode === 'login') {
-    formTitle.textContent = 'تسجيل الدخول';
+    formTitleText.textContent = 'تسجيل الدخول';
     nameField.classList.add('hidden');
     passwordField.classList.remove('hidden');
     document.getElementById('password').required = true;
-    btnSubmit.innerHTML = 'تسجيل الدخول <i class="fas fa-sign-in-alt mr-2"></i>';
+    btnText.textContent = 'تسجيل الدخول';
+    btnIcon.className = 'fa-solid fa-arrow-left-to-bracket transition-transform group-hover:-translate-x-1';
+    
     toggleRegister.classList.remove('hidden');
     toggleLogin.classList.add('hidden');
     toggleReset.classList.remove('hidden');
   } else if (mode === 'register') {
-    formTitle.textContent = 'إنشاء حساب جديد';
+    formTitleText.textContent = 'إنشاء حساب جديد';
     nameField.classList.remove('hidden');
     passwordField.classList.remove('hidden');
     document.getElementById('displayName').required = true;
     document.getElementById('password').required = true;
-    btnSubmit.innerHTML = 'إنشاء حساب <i class="fas fa-user-plus mr-2"></i>';
+    btnText.textContent = 'إنشاء حساب';
+    btnIcon.className = 'fa-solid fa-user-plus transition-transform group-hover:-translate-x-1';
+    
     toggleRegister.classList.add('hidden');
     toggleLogin.classList.remove('hidden');
     toggleReset.classList.add('hidden');
   } else if (mode === 'reset') {
-    formTitle.textContent = 'استعادة كلمة المرور';
+    formTitleText.textContent = 'استعادة كلمة المرور';
     nameField.classList.add('hidden');
     passwordField.classList.add('hidden');
     document.getElementById('password').required = false;
     document.getElementById('displayName').required = false;
-    btnSubmit.innerHTML = 'إرسال رابط الاستعادة <i class="fas fa-envelope mr-2"></i>';
+    btnText.textContent = 'إرسال رابط الاستعادة';
+    btnIcon.className = 'fa-solid fa-envelope transition-transform group-hover:-translate-x-1';
+    
     toggleRegister.classList.add('hidden');
     toggleLogin.classList.remove('hidden');
     toggleReset.classList.add('hidden');
   }
 }
 
-toggleRegister.querySelector('a').addEventListener('click', (e) => { e.preventDefault(); setMode('register'); });
-toggleLogin.querySelector('a').addEventListener('click', (e) => { e.preventDefault(); setMode('login'); });
-toggleReset.querySelector('a').addEventListener('click', (e) => { e.preventDefault(); setMode('reset'); });
+function clearInputErrors() {
+  nameError.classList.add('hidden');
+  emailError.classList.add('hidden');
+  passwordError.classList.add('hidden');
+}
+
+function validateInputs(email, password, displayName) {
+  let isValid = true;
+  clearInputErrors();
+  
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || !emailRegex.test(email)) {
+    emailError.classList.remove('hidden');
+    isValid = false;
+  }
+  
+  if (currentMode === 'register' || currentMode === 'login') {
+    if (!password || password.length < 6) {
+      passwordError.classList.remove('hidden');
+      isValid = false;
+    }
+  }
+  
+  if (currentMode === 'register') {
+    if (!displayName || displayName.length < 3) {
+      nameError.classList.remove('hidden');
+      isValid = false;
+    }
+  }
+  
+  return isValid;
+}
+
+toggleRegister.querySelector('button').addEventListener('click', (e) => { e.preventDefault(); setMode('register'); });
+toggleLogin.querySelector('button').addEventListener('click', (e) => { e.preventDefault(); setMode('login'); });
+toggleReset.addEventListener('click', (e) => { e.preventDefault(); setMode('reset'); });
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -120,11 +184,19 @@ form.addEventListener('submit', async (e) => {
   const password = document.getElementById('password').value.trim();
   const displayName = document.getElementById('displayName').value.trim();
   
+  if (!validateInputs(email, password, displayName)) {
+    return;
+  }
+  
   errorMsg.classList.add('hidden');
   successMsg.classList.add('hidden');
+  
+  // Loading State
   btnSubmit.disabled = true;
-  const originalText = btnSubmit.innerHTML;
-  btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+  btnIcon.classList.add('hidden');
+  btnSpinner.classList.remove('hidden');
+  const originalText = btnText.textContent;
+  btnText.textContent = 'جاري المعالجة...';
 
   try {
     if (currentMode === 'login') {
@@ -169,28 +241,33 @@ form.addEventListener('submit', async (e) => {
       });
       
       await sendEmailVerification(user);
-      successMsg.textContent = 'تم إنشاء الحساب بنجاح. يرجى مراجعة بريدك الإلكتروني لتفعيل الحساب.';
+      successText.textContent = 'تم إنشاء الحساب بنجاح. يرجى مراجعة بريدك الإلكتروني لتفعيل الحساب.';
       successMsg.classList.remove('hidden');
       setMode('login');
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
       
     } else if (currentMode === 'reset') {
       await sendPasswordResetEmail(auth, email);
-      successMsg.textContent = 'تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني.';
+      successText.textContent = 'تم إرسال رابط استعادة كلمة المرور إلى بريدك الإلكتروني.';
       successMsg.classList.remove('hidden');
       setMode('login');
+      document.getElementById('email').value = '';
     }
   } catch (error) {
     console.error(error);
-    errorMsg.textContent = error.message || 'حدث خطأ أثناء العملية.';
+    errorText.textContent = error.message || 'حدث خطأ أثناء العملية.';
     
-    if (error.code === 'auth/email-already-in-use') errorMsg.textContent = 'هذا البريد مستخدم بالفعل.';
-    if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') errorMsg.textContent = 'بيانات الدخول غير صحيحة.';
-    if (error.code === 'auth/weak-password') errorMsg.textContent = 'كلمة المرور ضعيفة.';
+    if (error.code === 'auth/email-already-in-use') errorText.textContent = 'هذا البريد مستخدم بالفعل.';
+    if (error.code === 'auth/invalid-credential' || error.code === 'auth/user-not-found') errorText.textContent = 'بيانات الدخول غير صحيحة.';
+    if (error.code === 'auth/weak-password') errorText.textContent = 'كلمة المرور ضعيفة.';
     
     errorMsg.classList.remove('hidden');
   } finally {
     btnSubmit.disabled = false;
-    btnSubmit.innerHTML = originalText;
+    btnIcon.classList.remove('hidden');
+    btnSpinner.classList.add('hidden');
+    btnText.textContent = originalText;
   }
 });
 

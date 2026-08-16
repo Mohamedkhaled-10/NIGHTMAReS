@@ -2,8 +2,12 @@
 import { db, auth } from './firebase-init.js';
 import { collection, query, where, getDocs, orderBy, limit, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { UISpinner, UIErrorState } from './ui-utils.js';
 
 const initArticle = async () => {
+  const loadingEl = document.getElementById('loading');
+  loadingEl.innerHTML = UISpinner("جاري تحميل المحتوى...");
+
   const pathParts = window.location.pathname.split('/').filter(p => p);
   
   if (pathParts.length < 2) {
@@ -370,8 +374,11 @@ async function loadRelatedContent(currentArticle) {
 
 function showError(message) {
   const loadingEl = document.getElementById('loading');
-  loadingEl.textContent = message;
-  loadingEl.style.color = '#ff0000';
+  loadingEl.innerHTML = UIErrorState(message, "retry-article");
+  document.getElementById('retry-article')?.addEventListener('click', () => {
+    loadingEl.innerHTML = UISpinner("جاري تحميل المحتوى...");
+    initArticle();
+  });
 }
 
 // Scroll Progress and Scroll-to-Top Logic

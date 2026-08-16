@@ -2,6 +2,7 @@ import { auth, db, storage } from './firebase-init.js';
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, updateDoc, serverTimestamp, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+import { UILoadingSkeleton, UIEmptyState, UIErrorState, UISpinner } from './ui-utils.js';
 
 const loader = document.getElementById('loader');
 const content = document.getElementById('profile-content');
@@ -12,6 +13,8 @@ const profileMsg = document.getElementById('profile-msg');
 const btnResetPassword = document.getElementById('btn-reset-password');
 
 let currentUserDoc = null;
+
+loader.innerHTML = UISpinner("استحضار بيانات الحساب...");
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -113,7 +116,7 @@ async function loadUserSubmissions(uid) {
     const querySnapshot = await getDocs(q);
     
     if (querySnapshot.empty) {
-      container.innerHTML = '<div class="text-center text-gray-500 py-8"><p>لا توجد مساهمات لك بعد.</p></div>';
+      container.innerHTML = UIEmptyState("لا توجد مساهمات لك بعد.", "fa-pen-nib");
       return;
     }
     
@@ -150,7 +153,12 @@ async function loadUserSubmissions(uid) {
     });
   } catch (error) {
     console.error("Error loading submissions:", error);
-    container.innerHTML = '<div class="text-center text-red-500 py-8"><p>حدث خطأ في جلب المساهمات.</p></div>';
+    if (error.code === 'failed-precondition') {
+       container.innerHTML = UIErrorState("فهرس قاعدة البيانات لم يكتمل بعد. يرجى المحاولة لاحقاً.", "retry-submissions");
+    } else {
+       container.innerHTML = UIErrorState("تعذر تحميل المساهمات. يرجى المحاولة لاحقاً.", "retry-submissions");
+    }
+    document.getElementById('retry-submissions')?.addEventListener('click', () => loadUserSubmissions(uid));
   }
 }
 
@@ -162,12 +170,13 @@ window.editSubmission = (id) => {
 
 async function loadUserBookmarks(uid) {
   const container = document.getElementById('saved-content-list');
+  container.innerHTML = UILoadingSkeleton(1);
   try {
     const q = query(collection(db, 'user_bookmarks'), where('userId', '==', uid), orderBy('createdAt', 'desc'), limit(50));
     const querySnapshot = await getDocs(q);
     
     if (querySnapshot.empty) {
-      container.innerHTML = '<div class="text-center text-gray-500 py-8"><p>لا توجد عناصر محفوظة.</p></div>';
+      container.innerHTML = UIEmptyState("لا توجد عناصر محفوظة.", "fa-bookmark");
       return;
     }
     
@@ -178,18 +187,20 @@ async function loadUserBookmarks(uid) {
     });
   } catch (error) {
     console.error("Error loading bookmarks:", error);
-    container.innerHTML = '<div class="text-center text-red-500 py-8"><p>حدث خطأ في جلب المحفوظات.</p></div>';
+    container.innerHTML = UIErrorState("حدث خطأ في جلب المحفوظات.", "retry-bookmarks");
+    document.getElementById('retry-bookmarks')?.addEventListener('click', () => loadUserBookmarks(uid));
   }
 }
 
 async function loadUserHistory(uid) {
   const container = document.getElementById('history-content-list');
+  container.innerHTML = UILoadingSkeleton(1);
   try {
     const q = query(collection(db, 'user_history'), where('userId', '==', uid), orderBy('viewedAt', 'desc'), limit(50));
     const querySnapshot = await getDocs(q);
     
     if (querySnapshot.empty) {
-      container.innerHTML = '<div class="text-center text-gray-500 py-8"><p>سجل القراءة فارغ.</p></div>';
+      container.innerHTML = UIEmptyState("سجل القراءة فارغ.", "fa-clock-rotate-left");
       return;
     }
     
@@ -200,7 +211,8 @@ async function loadUserHistory(uid) {
     });
   } catch (error) {
     console.error("Error loading history:", error);
-    container.innerHTML = '<div class="text-center text-red-500 py-8"><p>حدث خطأ في جلب السجل.</p></div>';
+    container.innerHTML = UIErrorState("حدث خطأ في جلب السجل.", "retry-history");
+    document.getElementById('retry-history')?.addEventListener('click', () => loadUserHistory(uid));
   }
 }
 

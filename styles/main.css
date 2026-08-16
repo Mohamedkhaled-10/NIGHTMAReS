@@ -35,7 +35,6 @@ html {
   box-sizing: border-box;
 }
 html, body {
-  height: 100%;
   font-family: 'Cairo', sans-serif; /* استخدم الخط العربي Cairo */
   direction: rtl;
 }
@@ -447,9 +446,7 @@ h1, h2, h3, h4, h5, h6 {
 /* ========================= */
 /* قسم الأخبار والفعاليات */
 /* ========================= */
-.news-section {
-  background: transparent;
-}
+
 
 .news-grid {
   display: grid;
@@ -546,46 +543,8 @@ h1, h2, h3, h4, h5, h6 {
 .show-more-btn:hover {
   background: #0056b3;
 }
-.news-section {
-  padding: 50px 20px;
-  background: rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden; /* يمنع خروج البلور خارج القسم */
-}
 
-.blur-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100px; /* ارتفاع البلور */
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(12px);
-  color: white;
-  text-align: center;
-  font-size: 1.2em;
-  font-weight: bold;
-  line-height: 100px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 10;
 
-  /* تأثير التلاشي التدريجي للأطراف العلوية فقط */
-  mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 70%, rgba(0, 0, 0, 0.4) 90%, rgba(0, 0, 0, 0) 100%);
-  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 0.9) 70%, rgba(0, 0, 0, 0.4) 90%, rgba(0, 0, 0, 0) 100%);
-}
-
-/* عند التوسع، يصبح أصغر ويرتفع قليلاً */
-.blur-overlay.expanded {
-  height: 60px; /* تقليل الارتفاع */
-  background: rgba(0, 0, 0, 0.75);
-  transform: translateY(-15px); /* رفعه للأعلى */
-  line-height: 60px;
-
-  /* إبقاء التلاشي بشكل أخف */
-  mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0.6) 90%, rgba(0, 0, 0, 0) 100%);
-  -webkit-mask-image: linear-gradient(to top, rgba(0, 0, 0, 1) 75%, rgba(0, 0, 0, 0.6) 90%, rgba(0, 0, 0, 0) 100%);
-}
 
 /* قسم الفيديوهات */
 .video-section {

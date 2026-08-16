@@ -13,14 +13,14 @@
     .hidden { display: none !important; }
   </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#050000] text-white">
+<body class="min-h-screen flex flex-col bg-[#050202] text-white overflow-x-hidden">
   <div id="progress-bar" style="position: fixed; top: 0; left: 0; height: 5px; background-color: #ff0000; width: 0%; z-index: 1001; transition: width 0.1s;"></div>
   
   <div class="wrapper">
     <!-- NAVBAR_PLACEHOLDER -->
 
     
-    <div id="loading" class="loading-spinner">جارِ التحميل...</div>
+    <div id="loading" class="col-span-full"></div>
 
     <div id="content-area" class="hidden">
       <!-- Article Cover Image -->
@@ -33,14 +33,14 @@
       <!-- Author Info (Injected dynamically if available) -->
       <div id="article-author" class="hidden flex justify-center items-center gap-3 mt-4 mb-2">
         <a id="article-author-link" href="#" class="flex items-center gap-2 text-gray-300 hover:text-red-400 transition">
-          <img id="article-author-avatar" src="/assets/images/logo1.png" class="w-8 h-8 rounded-full border border-gray-700 object-cover" alt="Author">
+          <img id="article-author-avatar" src="/assets/images/logo1.png" class="w-8 h-8 rounded-full border border-red-900/30 object-cover" alt="Author">
           <span id="article-author-name" class="font-bold"></span>
         </a>
       </div>
       
       <!-- Category and Tags -->
       <div id="article-taxonomy" class="hidden" style="max-width: 900px; width: 80%; margin: 10px auto; text-align: center;">
-        <span id="article-category" class="inline-block bg-red-900/40 text-red-300 px-3 py-1 rounded-full text-sm font-semibold border border-red-900/50 mb-2"></span>
+        <span id="article-category" class="inline-block bg-red-900/40 text-red-300 px-3 py-1 rounded-full text-sm font-semibold border border-red-900/30 mb-2"></span>
         <div id="article-tags" class="flex flex-wrap justify-center gap-2 mt-2"></div>
       </div>
 
@@ -113,20 +113,20 @@
       <!-- Report Modal -->
       <div id="report-modal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex justify-center items-center backdrop-blur-sm">
         <div class="bg-[#111] border border-red-900/30 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
-          <h3 class="text-xl font-bold text-white mb-4 border-b border-gray-800 pb-2">تقديم إبلاغ</h3>
+          <h3 class="text-xl font-bold text-white mb-4 border-b border-red-900/30 pb-2">تقديم إبلاغ</h3>
           <p class="text-gray-400 text-sm mb-4">يرجى تحديد سبب الإبلاغ. نحن نأخذ جميع الإبلاغات على محمل الجد.</p>
-          <select id="report-reason" class="w-full bg-[#222] border border-gray-700 rounded p-2 text-white mb-4 outline-none focus:border-red-600">
+          <select id="report-reason" class="w-full bg-[#222] border border-red-900/30 rounded p-2 text-white mb-4 outline-none focus:border-red-600">
             <option value="spam">محتوى مزعج (Spam)</option>
             <option value="harassment">مضايقة أو تنمر</option>
             <option value="inappropriate">محتوى غير لائق</option>
             <option value="hate_speech">خطاب كراهية</option>
             <option value="other">أخرى</option>
           </select>
-          <textarea id="report-details" rows="3" class="w-full bg-[#222] border border-gray-700 rounded p-2 text-white mb-4 outline-none focus:border-red-600" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
+          <textarea id="report-details" rows="3" class="w-full bg-[#222] border border-red-900/30 rounded p-2 text-white mb-4 outline-none focus:border-red-600" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
           <div id="report-msg" class="hidden text-sm mb-4 font-bold text-center"></div>
           <div class="flex gap-3 justify-end mt-2">
-            <button id="btn-cancel-report" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded transition">إلغاء</button>
-            <button id="btn-submit-report" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition">إرسال الإبلاغ</button>
+            <button id="btn-cancel-report" class="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded transition">إلغاء</button>
+            <button id="btn-submit-report" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded transition">إرسال الإبلاغ</button>
           </div>
         </div>
       </div>

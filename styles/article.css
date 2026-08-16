@@ -87,6 +87,26 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto 20px;
 }
 
+@media (max-width: 768px) {
+  .story-title {
+    font-size: 2em !important;
+    margin-top: 90px !important;
+  }
+  .article-container {
+    width: 95% !important;
+    padding: 15px !important;
+  }
+  .story-separator {
+    width: 80% !important;
+  }
+  #cover-image-container, #article-taxonomy {
+    width: 95% !important;
+  }
+  .article-box p {
+    font-size: 1.1em !important;
+  }
+}
+
 /* تنسيق فقرات القصة */
 .article-box p {
   margin-bottom: 15px;

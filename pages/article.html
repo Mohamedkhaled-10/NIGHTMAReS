@@ -97,13 +97,13 @@
     }
   </style>
 </head>
-<body class="bg-[#050202] text-white font-sans overflow-x-hidden selection:bg-red-900 selection:text-white min-h-screen flex flex-col">
+<body class="bg-[#050202] text-white overflow-x-hidden selection:bg-red-900 selection:text-white min-h-screen flex flex-col">
   <!-- Progress Bar -->
   <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-red-600 z-[1001] transition-all duration-150" style="width: 0%;"></div>
 
   <!-- NAVBAR_PLACEHOLDER -->
   
-  <div id="loading" class="flex-1 flex flex-col items-center justify-center pt-32 pb-20">
+  <div id="loading" class="grow flex flex-col items-center justify-center pt-32 pb-20">
     <div class="relative w-16 h-16 mb-6">
       <div class="absolute inset-0 rounded-full border-4 border-red-900/30"></div>
       <div class="absolute inset-0 rounded-full border-4 border-red-600 border-t-transparent animate-spin"></div>
@@ -111,7 +111,7 @@
     <p class="text-gray-400 font-bold tracking-wider animate-pulse">جاري تحضير المحتوى...</p>
   </div>
 
-  <main id="content-area" class="flex-1 hidden w-full flex-col">
+  <main id="content-area" class="grow hidden w-full flex-col">
     <!-- Premium Header & Cover -->
     <header class="w-full relative mb-12">
       <!-- Cover Image -->
@@ -136,7 +136,7 @@
         <div class="flex flex-wrap items-center gap-6 text-sm text-gray-400 border-b border-red-900/30 pb-6">
           <div id="article-author" class="hidden">
             <a id="article-author-link" href="#" class="flex items-center gap-3 group">
-              <img id="article-author-avatar" src="" class="w-11 h-11 rounded-full border-2 border-red-900/50 object-cover group-hover:border-red-500 transition-colors shadow-lg">
+              <img id="article-author-avatar" src="" class="w-11 h-11 rounded-full border-2 border-red-900/30 object-cover group-hover:border-red-500 transition-colors shadow-lg">
               <div>
                 <span class="block text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">بواسطة</span>
                 <span id="article-author-name" class="font-bold text-gray-200 group-hover:text-white transition-colors text-base"></span>
@@ -144,7 +144,7 @@
             </a>
           </div>
           
-          <div class="flex items-center gap-2 text-gray-400 bg-black/40 px-3 py-1.5 rounded-lg border border-gray-800 backdrop-blur-sm hidden">
+          <div class="flex items-center gap-2 text-gray-400 bg-black/40 px-3 py-1.5 rounded-lg border border-red-900/30 backdrop-blur-sm hidden">
             <!-- Reserved for publish date if needed -->
           </div>
         </div>
@@ -155,7 +155,7 @@
     <div class="container mx-auto px-4 md:px-8 max-w-7xl flex flex-col lg:flex-row gap-12 pb-20">
       
       <!-- Article Body -->
-      <article class="flex-1 max-w-3xl mx-auto w-full">
+      <article class="grow max-w-3xl mx-auto w-full">
         <div id="article-body" class="font-sans"></div>
         
         <!-- Desktop Share & Actions -->
@@ -173,10 +173,10 @@
           </div>
           
           <div class="flex gap-3">
-             <button id="btn-save-post" class="px-4 py-2 rounded-xl bg-gray-900 border border-gray-800 flex items-center gap-2 text-gray-400 hover:text-white hover:border-gray-600 transition-colors font-semibold text-sm" title="حفظ المقال">
+             <button id="btn-save-post" class="px-4 py-2.5 rounded-xl bg-gray-900 border border-red-900/30 flex items-center gap-2 text-gray-400 hover:text-white hover:border-gray-600 transition-colors font-semibold text-sm" title="حفظ المقال">
                 <i class="far fa-bookmark" id="save-icon"></i> <span>حفظ</span>
              </button>
-             <button id="btn-report-post" class="px-4 py-2 rounded-xl bg-gray-900 border border-gray-800 flex items-center gap-2 text-gray-400 hover:text-red-500 hover:border-red-900 hover:bg-red-950/20 transition-colors font-semibold text-sm" title="الإبلاغ">
+             <button id="btn-report-post" class="px-4 py-2.5 rounded-xl bg-gray-900 border border-red-900/30 flex items-center gap-2 text-gray-400 hover:text-red-500 hover:border-red-900 hover:bg-red-950/20 transition-colors font-semibold text-sm" title="الإبلاغ">
                 <i class="fas fa-flag"></i> <span>إبلاغ</span>
              </button>
           </div>
@@ -189,7 +189,7 @@
               <i class="fa-solid fa-comments text-red-600"></i> النقاشات
             </h3>
             
-            <div class="flex items-center gap-6 text-gray-400 font-semibold bg-black/40 px-4 py-2 rounded-xl border border-gray-800">
+            <div class="flex items-center gap-6 text-gray-400 font-semibold bg-black/40 px-4 py-2.5 rounded-xl border border-red-900/30">
               <span class="flex items-center gap-2" title="المشاهدات">
                 <i class="fa-solid fa-eye text-red-900"></i> <span id="views-count">0</span>
               </span>
@@ -209,11 +209,11 @@
           <div id="comment-form-container" class="mb-10 hidden">
             <form id="comment-form" class="space-y-4">
               <div class="relative flex gap-4">
-                <img src="/assets/images/icon-white.png" class="w-10 h-10 rounded-full border border-gray-700 shrink-0 hidden sm:block">
+                <img src="/assets/images/icon-white.png" class="w-10 h-10 rounded-full border border-red-900/30 shrink-0 hidden sm:block">
                 <textarea id="comment-text" rows="3" placeholder="أضف تعليقاً... شاركنا رأيك في هذا المحتوى المظلم." class="w-full bg-[#110808] border border-red-900/30 rounded-xl p-4 text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all resize-y shadow-inner" required></textarea>
               </div>
               <div class="flex justify-end">
-                <button type="submit" class="px-6 py-2.5 bg-red-800 hover:bg-red-700 text-white font-bold rounded-lg transition-colors shadow-lg flex items-center gap-2">
+                <button type="submit" class="px-6 py-2.5.5 bg-red-700 hover:bg-red-600 text-white font-bold rounded-lg transition-colors shadow-lg flex items-center gap-2">
                   <i class="fa-solid fa-paper-plane"></i> نشر التعليق
                 </button>
               </div>
@@ -254,21 +254,21 @@
 
   <!-- Report Modal -->
   <div id="report-modal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex justify-center items-center backdrop-blur-sm px-4">
-    <div class="bg-[#110808] border border-red-900/50 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-[0_0_40px_rgba(220,38,38,0.2)]">
+    <div class="bg-[#110808] border border-red-900/30 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-[0_0_40px_rgba(220,38,38,0.2)]">
       <h3 class="text-2xl font-black text-white mb-2 flex items-center gap-2 text-red-500"><i class="fa-solid fa-triangle-exclamation"></i> تقديم إبلاغ</h3>
-      <p class="text-gray-400 text-sm mb-6 pb-4 border-b border-gray-800">يرجى تحديد سبب الإبلاغ بدقة. نحن نأخذ جميع البلاغات بجدية لحماية مجتمعنا.</p>
-      <select id="report-reason" class="w-full bg-[#1b0d0d] border border-gray-700 rounded-xl p-3 text-white mb-4 outline-none focus:border-red-600">
+      <p class="text-gray-400 text-sm mb-6 pb-4 border-b border-red-900/30">يرجى تحديد سبب الإبلاغ بدقة. نحن نأخذ جميع البلاغات بجدية لحماية مجتمعنا.</p>
+      <select id="report-reason" class="w-full bg-[#1b0d0d] border border-red-900/30 rounded-xl p-3 text-white mb-4 outline-none focus:border-red-600">
         <option value="spam">محتوى مزعج (Spam)</option>
         <option value="harassment">مضايقة أو تنمر</option>
         <option value="inappropriate">محتوى غير لائق</option>
         <option value="hate_speech">خطاب كراهية</option>
         <option value="other">أخرى</option>
       </select>
-      <textarea id="report-details" rows="3" class="w-full bg-[#1b0d0d] border border-gray-700 rounded-xl p-3 text-white mb-6 outline-none focus:border-red-600 resize-y" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
+      <textarea id="report-details" rows="3" class="w-full bg-[#1b0d0d] border border-red-900/30 rounded-xl p-3 text-white mb-6 outline-none focus:border-red-600 resize-y" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
       <div id="report-msg" class="hidden text-sm mb-4 font-bold text-center"></div>
       <div class="flex gap-3 justify-end">
-        <button id="btn-cancel-report" class="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors">إلغاء</button>
-        <button id="btn-submit-report" class="px-6 py-2.5 bg-red-800 hover:bg-red-700 text-white font-bold rounded-lg transition-colors shadow-lg">إرسال الإبلاغ</button>
+        <button id="btn-cancel-report" class="px-6 py-2.5.5 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors">إلغاء</button>
+        <button id="btn-submit-report" class="px-6 py-2.5.5 bg-red-700 hover:bg-red-600 text-white font-bold rounded-lg transition-colors shadow-lg">إرسال الإبلاغ</button>
       </div>
     </div>
   </div>

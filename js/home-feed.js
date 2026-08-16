@@ -1,5 +1,6 @@
 import { db } from './firebase-init.js';
 import { collection, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { UILoadingSkeleton, UISpinner, UIEmptyState, UIErrorState } from './ui-utils.js';
 
 const initHomeFeed = async () => {
   await loadHomeContent();
@@ -30,32 +31,44 @@ async function loadHomeContent() {
   
   // Independent async fetches so one doesn't block the other
   const fetchStories = async () => {
+    if(storiesGrid) storiesGrid.innerHTML = UILoadingSkeleton(6);
     try {
       const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "story"), orderBy("createdAt", "desc"), limit(10)));
       const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 6);
       renderStories(items, storiesGrid);
     } catch(e) {
-      if(storiesGrid) storiesGrid.innerHTML = '<p class="text-red-500">تعذر تحميل القصص</p>';
+      if(storiesGrid) {
+        storiesGrid.innerHTML = UIErrorState("لم نتمكن من استحضار القصص. تحقق من اتصالك.", "retry-stories");
+        document.getElementById('retry-stories')?.addEventListener('click', fetchStories);
+      }
     }
   };
 
   const fetchNews = async () => {
+    if(newsGrid) newsGrid.innerHTML = UILoadingSkeleton(3);
     try {
       const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "news"), orderBy("createdAt", "desc"), limit(10)));
       const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 6);
       renderNews(items, newsGrid);
     } catch(e) {
-      if(newsGrid) newsGrid.innerHTML = '<p class="text-red-500">تعذر تحميل الأخبار</p>';
+      if(newsGrid) {
+        newsGrid.innerHTML = UIErrorState("لم نتمكن من استحضار الأخبار. تحقق من اتصالك.", "retry-news");
+        document.getElementById('retry-news')?.addEventListener('click', fetchNews);
+      }
     }
   };
 
   const fetchVideos = async () => {
+    if(videoGrid) videoGrid.innerHTML = UILoadingSkeleton(3);
     try {
       const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "video"), orderBy("createdAt", "desc"), limit(5)));
       const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 3);
       renderVideos(items, videoGrid);
     } catch(e) {
-      if(videoGrid) videoGrid.innerHTML = '<p class="text-red-500">تعذر تحميل الفيديوهات</p>';
+      if(videoGrid) {
+        videoGrid.innerHTML = UIErrorState("لم نتمكن من استحضار الفيديوهات. تحقق من اتصالك.", "retry-videos");
+        document.getElementById('retry-videos')?.addEventListener('click', fetchVideos);
+      }
     }
   };
 
@@ -71,6 +84,10 @@ async function loadAnalyticsContent() {
   const mostDiscussedList = document.getElementById('most-discussed-list');
   
   if (!mostReadList || !trendingList || !mostDiscussedList) return;
+  
+  mostReadList.innerHTML = UISpinner();
+  trendingList.innerHTML = UISpinner();
+  mostDiscussedList.innerHTML = UISpinner();
 
   try {
     const [mostReadSnap, trendingSnap, mostDiscussedSnap] = await Promise.all([
@@ -99,16 +116,20 @@ async function loadAnalyticsContent() {
 
   } catch(e) {
     console.error("Error loading analytics:", e);
-    const err = `<p class="text-red-500 text-sm text-center py-4">تعذر التحميل</p>`;
+    const err = UIErrorState("تعذر تحميل الإحصائيات", "retry-analytics");
     mostReadList.innerHTML = err;
     trendingList.innerHTML = err;
     mostDiscussedList.innerHTML = err;
+    
+    document.querySelectorAll('#retry-analytics').forEach(btn => {
+      btn.addEventListener('click', loadAnalyticsContent);
+    });
   }
 }
 
 function renderList(items, container, type) {
   if (items.length === 0) {
-    container.innerHTML = '<p class="text-gray-500 text-sm text-center py-4">لا توجد بيانات حالياً</p>';
+    container.innerHTML = UIEmptyState("لا توجد بيانات حالياً", "fa-chart-simple");
     return;
   }
   
@@ -133,21 +154,36 @@ function renderList(items, container, type) {
     
     const div = document.createElement('a');
     div.href = link;
-    div.className = 'flex items-center gap-3 p-3 bg-black/40 hover:bg-red-900/20 border border-transparent hover:border-red-900/50 rounded-lg transition group';
     
-    div.innerHTML = `
-      <div class="text-2xl font-black text-gray-700 group-hover:text-red-600 transition w-6 text-center">
-        ${index + 1}
-      </div>
-      <img src="${item.coverImage || '/assets/images/icon-white.png'}" class="w-12 h-12 rounded object-cover border border-gray-800" alt="${item.title}" loading="lazy">
-      <div class="flex-1 min-w-0">
-        <h4 class="text-white text-sm font-bold truncate group-hover:text-red-400 transition">${item.title}</h4>
-        <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">
-          <span class="bg-gray-800 px-2 py-0.5 rounded text-[10px]">${typeLabel}</span>
-          <span class="flex items-center gap-1">${statIcon} ${statValue}</span>
+    if (index === 0) {
+      div.className = 'group relative block overflow-hidden rounded-xl border border-red-900/30 mb-4 bg-[#050202]';
+      div.innerHTML = `
+        <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-[#050202]/60 to-transparent z-10 group-hover:from-red-950/80 transition-colors"></div>
+        <img src="${item.coverImage || '/assets/images/icon-white.png'}" class="w-full h-48 object-cover opacity-60 group-hover:opacity-80 transition-opacity" alt="${item.title}" loading="lazy">
+        <div class="absolute inset-x-0 bottom-0 p-4 z-20 flex flex-col gap-2">
+          <div class="flex items-center gap-3 text-[11px] text-gray-400 font-bold tracking-wider">
+            <span class="bg-red-900/40 text-red-300 px-2 py-0.5 rounded">${typeLabel}</span>
+            <span class="flex items-center gap-1.5">${statIcon} ${statValue}</span>
+          </div>
+          <h4 class="text-white text-base font-bold leading-snug group-hover:text-red-400 transition-colors line-clamp-2">${item.title}</h4>
         </div>
-      </div>
-    `;
+      `;
+    } else {
+      div.className = 'flex items-start gap-4 p-3 bg-transparent hover:bg-black/40 rounded-lg transition group border-b border-red-900/10 last:border-0';
+      div.innerHTML = `
+        <div class="text-xl font-black text-red-950/40 group-hover:text-red-900 transition w-4 text-center mt-0.5">
+          ${index + 1}
+        </div>
+        <div class="flex-1 min-w-0 flex flex-col gap-1.5">
+          <h4 class="text-gray-300 text-sm font-bold line-clamp-2 group-hover:text-white transition-colors leading-snug">${item.title}</h4>
+          <div class="flex items-center gap-3 text-[11px] text-gray-500 font-medium">
+            <span>${typeLabel}</span>
+            <span class="flex items-center gap-1">${statIcon} ${statValue}</span>
+          </div>
+        </div>
+      `;
+    }
+    
     container.appendChild(div);
   });
 }
@@ -156,13 +192,7 @@ function renderStories(items, container) {
   if(!container) return;
   container.innerHTML = '';
   if(items.length === 0) {
-    container.innerHTML = `
-      <div class="col-span-full flex flex-col items-center justify-center py-16 bg-black/20 rounded-xl border border-gray-800">
-        <i class="fa-solid fa-ghost text-4xl text-gray-600 mb-4"></i>
-        <h3 class="text-xl font-bold text-gray-300 mb-2">لا توجد قصص حالياً</h3>
-        <p class="text-gray-500">ترقبوا المزيد من الكوابيس قريباً...</p>
-      </div>
-    `;
+    container.innerHTML = UIEmptyState("لا توجد قصص حالياً، ترقبوا المزيد من الكوابيس قريباً...", "fa-ghost");
     return;
   }
   
@@ -189,13 +219,7 @@ function renderNews(items, container) {
   if(!container) return;
   container.innerHTML = '';
   if(items.length === 0) {
-    container.innerHTML = `
-      <div class="col-span-full flex flex-col items-center justify-center py-16 bg-black/20 rounded-xl border border-gray-800">
-        <i class="fa-solid fa-newspaper text-4xl text-gray-600 mb-4"></i>
-        <h3 class="text-xl font-bold text-gray-300 mb-2">لا توجد أخبار حالياً</h3>
-        <p class="text-gray-500">الأحداث المروعة في طريقها إليكم...</p>
-      </div>
-    `;
+    container.innerHTML = UIEmptyState("لا توجد أخبار حالياً، الأحداث المروعة في طريقها إليكم...", "fa-newspaper");
     return;
   }
   
@@ -229,13 +253,7 @@ function renderVideos(items, container) {
   if(!container) return;
   container.innerHTML = '';
   if(items.length === 0) {
-    container.innerHTML = `
-      <div class="col-span-full flex flex-col items-center justify-center py-16 bg-black/20 rounded-xl border border-gray-800">
-        <i class="fa-solid fa-video-slash text-4xl text-gray-600 mb-4"></i>
-        <h3 class="text-xl font-bold text-gray-300 mb-2">لا توجد فيديوهات حالياً</h3>
-        <p class="text-gray-500">المشاهد المرعبة يتم تحضيرها...</p>
-      </div>
-    `;
+    container.innerHTML = UIEmptyState("لا توجد فيديوهات حالياً، المشاهد المرعبة يتم تحضيرها...", "fa-video-slash");
     return;
   }
   

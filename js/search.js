@@ -1,5 +1,6 @@
 import { db } from './firebase-init.js';
 import { collection, getDocs, query, where, orderBy, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { UILoadingSkeleton, UIEmptyState, UIErrorState } from './ui-utils.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('search-page-input');
@@ -8,10 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const filterCategory = document.getElementById('filter-category');
   const filterTag = document.getElementById('filter-tag');
 
-  const loading = document.getElementById('loading');
   const resultsContainer = document.getElementById('results-container');
   const statsContainer = document.getElementById('search-stats');
-  const emptyState = document.getElementById('empty-state');
   
   const loadMoreContainer = document.getElementById('load-more-container');
   const loadMoreBtn = document.getElementById('load-more-btn');
@@ -66,16 +65,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchQuery = searchInput.value.trim().toLowerCase();
 
     if (!isLoadMore) {
-      resultsContainer.innerHTML = '';
-      resultsContainer.classList.add('hidden');
-      emptyState.classList.add('hidden');
+      resultsContainer.innerHTML = UILoadingSkeleton(12);
       statsContainer.classList.add('hidden');
       loadMoreContainer.classList.add('hidden');
-      loading.classList.remove('hidden');
       lastVisible = null;
       isEndOfData = false;
     } else {
-      loadMoreBtn.textContent = 'جاري المسح...';
+      loadMoreBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري المسح...';
       loadMoreBtn.disabled = true;
     }
 
@@ -100,12 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const qRef = query(collection(db, "posts"), ...qConstraints);
       const snapshot = await getDocs(qRef);
 
-      if (!isLoadMore) loading.classList.add('hidden');
+      if (!isLoadMore) resultsContainer.innerHTML = '';
 
       if (snapshot.empty) {
         isEndOfData = true;
         if (!isLoadMore && resultsContainer.children.length === 0) {
-          emptyState.classList.remove('hidden');
+          resultsContainer.innerHTML = UIEmptyState("لم يتم العثور على أي نتائج تطابق بحثك. جرب كلمات مختلفة.", "fa-search-minus");
         }
         loadMoreContainer.classList.add('hidden');
       } else {
@@ -220,28 +216,30 @@ document.addEventListener('DOMContentLoaded', () => {
           loadMoreContainer.classList.remove('hidden');
         }
 
-        // If no matches found in this batch, inform user but keep load more active
         if (matchesFound === 0 && !isEndOfData && resultsContainer.children.length === 0) {
-           statsContainer.innerHTML = `لم نجد نتائج في هذه الدفعة من المحتوى. <button onclick="document.getElementById('load-more-btn').click()" class="text-red-500 underline hover:text-red-400">ابحث في الدفعة الأقدم</button>`;
-           statsContainer.classList.remove('hidden');
-        } else if (resultsContainer.children.length > 0) {
-           statsContainer.classList.add('hidden'); // Hide if we have some results
+           resultsContainer.innerHTML = UIEmptyState("لم نجد نتائج في هذه الدفعة من المحتوى. جرب مسح الدفعة الأقدم.", "fa-search-minus");
         }
       }
 
     } catch (error) {
       console.error("Search error:", error);
-      if (error.code === 'failed-precondition') {
-        statsContainer.innerHTML = `<span class="text-red-500">فهرس قاعدة البيانات غير مكتمل لتلك التركيبة من الفلاتر. حاول استخدام فلتر واحد فقط حتى يتم بناء الفهارس.</span>`;
-      } else {
-        statsContainer.textContent = "حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.";
+      if (!isLoadMore) {
+        if (error.code === 'failed-precondition') {
+          resultsContainer.innerHTML = UIErrorState("فهرس قاعدة البيانات غير مكتمل لتلك التركيبة من الفلاتر. حاول استخدام فلتر واحد فقط.", "retry-search");
+        } else {
+          resultsContainer.innerHTML = UIErrorState("حدث خطأ أثناء البحث. يرجى المحاولة مرة أخرى.", "retry-search");
+        }
+        document.getElementById('retry-search')?.addEventListener('click', () => performSearch(false));
       }
-      statsContainer.classList.remove('hidden');
-      if (!isLoadMore) loading.classList.add('hidden');
     } finally {
       isLoading = false;
       if (isLoadMore) {
-        loadMoreBtn.textContent = 'مسح الدفعة الأقدم';
+        loadMoreBtn.innerHTML = `
+          <span class="relative z-10 flex items-center gap-2">
+            البحث في الدفعة الأقدم <i class="fa-solid fa-clock-rotate-left text-sm group-hover:-rotate-90 transition-transform duration-500"></i>
+          </span>
+          <div class="absolute inset-0 bg-red-900/20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
+        `;
         loadMoreBtn.disabled = false;
       }
     }

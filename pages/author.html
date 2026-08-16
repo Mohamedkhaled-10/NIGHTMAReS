@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>الملف الشخصي للكاتب - NIGHTMAReS</title>
 </head>
-<body class="bg-[#050202] text-white font-sans overflow-x-hidden selection:bg-red-900 selection:text-white min-h-screen flex flex-col">
+<body class="bg-[#050202] text-white overflow-x-hidden selection:bg-red-900 selection:text-white min-h-screen flex flex-col">
 
   <!-- NAVBAR_PLACEHOLDER -->
 
@@ -21,7 +21,7 @@
         </div>
         
         <!-- Author Info -->
-        <div class="flex-1 text-center md:text-right pt-4">
+        <div class="grow text-center md:text-right pt-4">
           <h1 id="author-name" class="text-3xl md:text-5xl font-bold mb-3 font-serif">جاري التحميل...</h1>
           
           <div class="flex items-center justify-center md:justify-start gap-6 mt-6">
@@ -30,7 +30,7 @@
               <span class="text-gray-400 text-sm">مقال منشور</span>
             </div>
             
-            <button id="btn-report-author" class="mt-2 flex items-center gap-2 px-4 py-2 bg-red-900/20 text-red-400 border border-red-900/50 rounded-lg hover:bg-red-900/40 hover:text-red-300 transition-colors hidden">
+            <button id="btn-report-author" class="mt-2 flex items-center gap-2 px-4 py-2.5 bg-red-900/20 text-red-400 border border-red-900/30 rounded-lg hover:bg-red-900/40 hover:text-red-300 transition-colors hidden">
               <i class="fas fa-flag"></i> إبلاغ عن الكاتب
             </button>
           </div>
@@ -42,19 +42,19 @@
   <!-- Report Modal -->
   <div id="report-modal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex justify-center items-center backdrop-blur-sm">
     <div class="bg-[#111] border border-red-900/30 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
-      <h3 class="text-xl font-bold text-white mb-4 border-b border-gray-800 pb-2">تقديم إبلاغ عن مستخدم</h3>
+      <h3 class="text-xl font-bold text-white mb-4 border-b border-red-900/30 pb-2">تقديم إبلاغ عن مستخدم</h3>
       <p class="text-gray-400 text-sm mb-4">يرجى تحديد سبب الإبلاغ.</p>
-      <select id="report-reason" class="w-full bg-[#222] border border-gray-700 rounded p-2 text-white mb-4 outline-none focus:border-red-600">
+      <select id="report-reason" class="w-full bg-[#222] border border-red-900/30 rounded p-2 text-white mb-4 outline-none focus:border-red-600">
         <option value="spam">حساب مزيف / مزعج</option>
         <option value="harassment">مضايقة أو تنمر</option>
         <option value="inappropriate">محتوى غير لائق عام</option>
         <option value="other">أخرى</option>
       </select>
-      <textarea id="report-details" rows="3" class="w-full bg-[#222] border border-gray-700 rounded p-2 text-white mb-4 outline-none focus:border-red-600" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
+      <textarea id="report-details" rows="3" class="w-full bg-[#222] border border-red-900/30 rounded p-2 text-white mb-4 outline-none focus:border-red-600" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
       <div id="report-msg" class="hidden text-sm mb-4 font-bold text-center"></div>
       <div class="flex gap-3 justify-end mt-2">
-        <button id="btn-cancel-report" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded transition">إلغاء</button>
-        <button id="btn-submit-report" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded transition">إرسال الإبلاغ</button>
+        <button id="btn-cancel-report" class="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded transition">إلغاء</button>
+        <button id="btn-submit-report" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded transition">إرسال الإبلاغ</button>
       </div>
     </div>
   </div>

@@ -1,4 +1,4 @@
-<nav id="desktopNavbar" class="navbar hidden md:flex fixed top-0 w-full z-50 bg-[#050000]/90 backdrop-blur-md border-b border-red-900/20 h-16 items-center justify-between px-6 lg:px-12 transition-all duration-300">
+<nav id="desktopNavbar" class="navbar hidden md:flex fixed top-0 w-full z-50 bg-[#050202]/90 backdrop-blur-md border-b border-red-900/20 h-16 items-center justify-between px-6 lg:px-12 transition-all duration-300">
   <!-- Right (Start) - Logo -->
   <div class="flex items-center">
     <a href="/#home" class="flex items-center gap-3 group">
@@ -49,7 +49,7 @@
         <ion-icon name="search-outline"></ion-icon>
       </button>
       <form id="searchForm" class="absolute top-full left-0 mt-3 w-64 bg-[#0a0505] border border-red-900/30 rounded-lg shadow-xl overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out" style="max-height: 0; z-index: 999;">
-        <div class="flex items-center px-3 py-2 border-b border-red-900/20">
+        <div class="flex items-center px-3 py-2.5 border-b border-red-900/20">
           <ion-icon name="search-outline" class="text-gray-500"></ion-icon>
           <input id="searchInput" type="search" placeholder="ابحث عن كابوس..." class="w-full bg-transparent px-3 text-sm text-white focus:outline-none placeholder-gray-600" />
         </div>
@@ -80,35 +80,35 @@
     <div id="desktop-auth-container" class="flex items-center">
       <!-- Unauthenticated -->
       <div id="desktop-auth-unauthenticated" class="flex">
-        <a href="/login" class="group relative flex items-center gap-2 px-4 py-1.5 bg-transparent border border-red-900/50 hover:border-red-600 text-gray-300 hover:text-white text-sm font-bold rounded transition-all duration-300 overflow-hidden">
+        <a href="/login" class="group relative flex items-center gap-2 px-4 py-1.5 bg-transparent border border-red-900/30 hover:border-red-600 text-gray-300 hover:text-white text-sm font-bold rounded transition-all duration-300 overflow-hidden">
           <span class="relative z-10">تسجيل الدخول</span>
           <div class="absolute inset-0 bg-red-900/20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
         </a>
       </div>
       <!-- Authenticated -->
       <div id="desktop-auth-authenticated" class="hidden relative">
-        <button id="desktop-user-dropdown-btn" class="flex items-center gap-2 group bg-transparent border border-transparent hover:border-red-900/40 px-2 py-1 rounded-full transition-all duration-300">
-          <img src="/assets/images/icon-white.png" width="28" height="28" id="desktop-user-avatar" class="w-8 h-8 rounded-full border border-red-900/50 object-cover" onerror="this.src='/assets/images/icon-white.png'">
+        <button id="desktop-user-dropdown-btn" class="flex items-center gap-2 group bg-transparent border border-transparent hover:border-red-900/30 px-2 py-1 rounded-full transition-all duration-300">
+          <img src="/assets/images/icon-white.png" width="28" height="28" id="desktop-user-avatar" class="w-8 h-8 rounded-full border border-red-900/30 object-cover" onerror="this.src='/assets/images/icon-white.png'">
           <span id="desktop-user-name" class="text-sm font-bold text-gray-300 group-hover:text-white transition-colors truncate max-w-[100px] pointer-events-none"></span>
           <ion-icon name="chevron-down-outline" class="text-gray-500 group-hover:text-white transition-transform text-sm pointer-events-none" id="desktop-dropdown-chevron"></ion-icon>
         </button>
         <!-- Dropdown Menu -->
-        <div id="desktop-user-dropdown-menu" class="absolute left-0 top-full mt-3 w-56 bg-[#0a0505]/95 backdrop-blur-md border border-red-900/30 rounded-lg shadow-xl flex flex-col py-2 z-50 origin-top-left transform transition-all duration-200 opacity-0 scale-95 pointer-events-none">
+        <div id="desktop-user-dropdown-menu" class="absolute left-0 top-full mt-3 w-56 bg-[#0a0505]/95 backdrop-blur-md border border-red-900/30 rounded-lg shadow-xl flex flex-col py-2.5 z-50 origin-top-left transform transition-all duration-200 opacity-0 scale-95 pointer-events-none">
           <div class="px-4 py-3 border-b border-red-900/20 mb-1 bg-black/20">
             <span class="block text-xs text-gray-500 mb-1">مسجل الدخول كـ</span>
             <span id="desktop-dropdown-user-email" class="block text-sm font-bold text-gray-300 truncate"></span>
           </div>
-          <a href="/profile" class="px-4 py-2.5 text-sm font-semibold text-gray-400 hover:text-white hover:bg-red-950/30 hover:border-r-2 hover:border-red-600 transition-all flex items-center gap-3">
+          <a href="/profile" class="px-4 py-2.5.5 text-sm font-semibold text-gray-400 hover:text-white hover:bg-red-950/30 hover:border-r-2 hover:border-red-600 transition-all flex items-center gap-3">
             <ion-icon name="person-outline" class="text-red-500"></ion-icon> إدارة حسابي
           </a>
-          <a href="/submit" class="px-4 py-2.5 text-sm font-semibold text-gray-400 hover:text-white hover:bg-red-950/30 hover:border-r-2 hover:border-red-600 transition-all flex items-center gap-3">
+          <a href="/submit" class="px-4 py-2.5.5 text-sm font-semibold text-gray-400 hover:text-white hover:bg-red-950/30 hover:border-r-2 hover:border-red-600 transition-all flex items-center gap-3">
             <ion-icon name="create-outline" class="text-red-500"></ion-icon> إرسال قصتك
           </a>
-          <a href="/admin" id="desktop-admin-link" class="hidden px-4 py-2.5 text-sm font-bold text-red-400 hover:text-red-300 hover:bg-red-950/50 hover:border-r-2 hover:border-red-500 transition-all flex items-center gap-3 bg-red-900/10 mt-1">
+          <a href="/admin" id="desktop-admin-link" class="hidden px-4 py-2.5.5 text-sm font-bold text-red-400 hover:text-red-300 hover:bg-red-950/50 hover:border-r-2 hover:border-red-500 transition-all flex items-center gap-3 bg-red-900/10 mt-1">
             <ion-icon name="shield-checkmark-outline"></ion-icon> لوحة الإدارة
           </a>
           <div class="h-px bg-red-900/20 my-2 mx-4"></div>
-          <button id="desktop-logout-btn" class="w-full text-right px-4 py-2.5 text-sm font-bold text-gray-500 hover:text-red-500 hover:bg-red-950/20 transition-colors flex items-center gap-3">
+          <button id="desktop-logout-btn" class="w-full text-right px-4 py-2.5.5 text-sm font-bold text-gray-500 hover:text-red-500 hover:bg-red-950/20 transition-colors flex items-center gap-3">
             <ion-icon name="log-out-outline"></ion-icon> تسجيل الخروج
           </button>
         </div>
@@ -118,7 +118,7 @@
 </nav>
 
 <!-- Mobile Navbar Header -->
-<div class="navbar md:hidden fixed top-0 left-0 w-full z-40 bg-[#050000]/90 backdrop-blur-md border-b border-red-900/20 h-16 flex items-center justify-between px-4 transition-all duration-300">
+<div class="navbar md:hidden fixed top-0 left-0 w-full z-40 bg-[#050202]/90 backdrop-blur-md border-b border-red-900/20 h-16 flex items-center justify-between px-4 transition-all duration-300">
   <a href="/#home" class="flex items-center gap-2">
     <img src="/assets/images/icon-white.png" alt="Logo" class="w-7 h-7">
     <span class="text-white font-black tracking-wider text-base">NIGHTMAReS</span>
@@ -139,12 +139,12 @@
 
 <!-- شريط البحث للهاتف -->
 <form id="mobileSearchForm" class="fixed top-16 left-0 right-0 bg-[#0a0505] border-b border-red-900/30 overflow-hidden shadow-xl max-h-0 transition-[max-height] duration-300 md:hidden z-30">
-  <div class="flex items-center px-4 py-2 bg-black/20">
+  <div class="flex items-center px-4 py-2.5 bg-black/20">
     <input
       type="search"
       id="searchInputMobile"
       placeholder="ابحث عن كابوس..."
-      class="flex-1 bg-transparent py-2 text-white focus:outline-none placeholder-gray-600 text-sm"
+      class="flex-1 bg-transparent py-2.5 text-white focus:outline-none placeholder-gray-600 text-sm"
     />
     <button type="submit" class="text-red-500 hover:text-red-400 p-2"><ion-icon name="search-outline" class="text-xl"></ion-icon></button>
   </div>
@@ -163,7 +163,7 @@
     </button>
   </div>
   
-  <div class="flex-1 overflow-y-auto py-2">
+  <div class="flex-1 overflow-y-auto py-2.5">
     <ul class="text-gray-300 text-sm font-semibold flex flex-col gap-1 px-3">
       <li>
         <a href="/#home" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white transition-colors">
@@ -206,14 +206,14 @@
     
     <div id="mobile-auth-container" class="px-3">
       <div id="mobile-auth-unauthenticated" class="mb-4">
-        <a href="/login" class="flex justify-center items-center gap-2 w-full py-3 bg-red-900/10 text-white font-bold rounded-lg border border-red-900/50 hover:bg-red-900/30 transition-colors">
+        <a href="/login" class="flex justify-center items-center gap-2 w-full py-3 bg-red-900/10 text-white font-bold rounded-lg border border-red-900/30 hover:bg-red-900/30 transition-colors">
           <ion-icon name="log-in-outline" class="text-xl"></ion-icon> تسجيل الدخول
         </a>
       </div>
       
       <div id="mobile-auth-authenticated" class="hidden flex-col gap-1">
         <div class="flex items-center gap-3 px-4 py-3 bg-black/30 rounded-lg border border-red-900/20 mb-2">
-          <img src="/assets/images/icon-white.png" width="36" height="36" id="mobile-user-avatar" class="w-9 h-9 rounded-full border border-red-900/50 object-cover" onerror="this.src='/assets/images/icon-white.png'">
+          <img src="/assets/images/icon-white.png" width="36" height="36" id="mobile-user-avatar" class="w-9 h-9 rounded-full border border-red-900/30 object-cover" onerror="this.src='/assets/images/icon-white.png'">
           <div class="flex flex-col min-w-0">
             <span class="text-[10px] text-gray-500 uppercase tracking-wider">الحساب</span>
             <span id="mobile-user-name" class="text-sm font-bold text-gray-200 truncate"></span>
