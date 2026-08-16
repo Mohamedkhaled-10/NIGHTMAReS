@@ -87,7 +87,7 @@ async function loadData(isLoadMore = false) {
     }
 
     qConstraints.push(orderBy("createdAt", "desc"));
-    qConstraints.push(limit(PAGE_SIZE));
+    qConstraints.push(limit(PAGE_SIZE * 2)); // Fetch extra to account for potential scheduled posts
 
     if (isLoadMore && lastVisible) {
       qConstraints.push(startAfter(lastVisible));
@@ -110,8 +110,21 @@ async function loadData(isLoadMore = false) {
     } else {
       lastVisible = snapshot.docs[snapshot.docs.length - 1];
       
+      const now = new Date();
+      let displayedCount = 0;
+
       snapshot.forEach(doc => {
         const post = doc.data();
+        
+        let isPublished = true;
+        if (post.publishAt) {
+          const pDate = post.publishAt.toDate ? post.publishAt.toDate() : new Date(post.publishAt);
+          if (pDate > now) isPublished = false;
+        }
+        
+        if (!isPublished || displayedCount >= PAGE_SIZE) return;
+        displayedCount++;
+
         const link = `/${post.type}/${post.slug}`;
         const typeLabel = post.type === 'story' ? 'قصة' : post.type === 'video' ? 'فيديو' : 'خبر';
         const typeColor = post.type === 'story' ? 'bg-red-900' : post.type === 'video' ? 'bg-blue-900' : 'bg-green-900';

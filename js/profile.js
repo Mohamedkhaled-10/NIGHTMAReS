@@ -218,7 +218,7 @@ function renderMiniCard(id, data, isHistory = false, docId = null) {
   return `
     <a href="${url}" class="flex items-center gap-4 p-3 bg-black/40 border border-gray-800/50 rounded-xl hover:border-red-900/50 transition-colors group">
       <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-gray-900">
-        <img src="${data.image || '/assets/images/logo1.png'}" alt="cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" onerror="this.src='/assets/images/logo1.png'">
+        <img src="${data.image || '/assets/images/logo1.png'}" alt="cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" onerror="this.src='/assets/images/logo1.png'">
       </div>
       <div class="flex-1 min-w-0">
         <h4 class="font-bold text-gray-200 truncate group-hover:text-red-400 transition-colors">${data.title || 'بدون عنوان'}</h4>

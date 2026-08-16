@@ -85,7 +85,7 @@
     <div id="desktop-auth-authenticated" class="hidden relative">
       <!-- Trigger Button -->
       <button id="desktop-user-dropdown-btn" class="flex items-center gap-2 group bg-[#0a0000] border border-red-900/40 px-3 py-1.5 rounded-full hover:border-red-600 transition-all duration-300 shadow-sm hover:shadow-[0_0_10px_rgba(220,38,38,0.3)] focus:outline-none">
-        <img src="/assets/images/icon-white.png" id="desktop-user-avatar" class="w-7 h-7 rounded-full border border-red-900/50 object-cover" onerror="this.src='/assets/images/icon-white.png'">
+        <img src="/assets/images/icon-white.png" width="28" height="28" id="desktop-user-avatar" class="w-7 h-7 rounded-full border border-red-900/50 object-cover" onerror="this.src='/assets/images/icon-white.png'">
         <span id="desktop-user-name" class="text-sm font-bold text-gray-200 group-hover:text-white transition-colors tracking-wide max-w-[120px] truncate pointer-events-none"></span>
         <ion-icon name="chevron-down-outline" class="text-gray-400 group-hover:text-white transition-transform duration-300 pointer-events-none" id="desktop-dropdown-chevron"></ion-icon>
       </button>
@@ -117,7 +117,7 @@
 
 <!-- أيقونة البحث للهاتف -->
 <div class="md:hidden fixed top-4 left-4 z-50">
-  <button id="mobileSearchBtn" class="text-white text-2xl p-2 hover:text-red-500 transition">
+  <button id="mobileSearchBtn" aria-label="بحث موبايل" class="text-white text-2xl p-2 hover:text-red-500 transition">
     <ion-icon name="search-outline"></ion-icon>
   </button>
 </div>
@@ -138,7 +138,7 @@
 
 <!-- أيقونة الهمبرجر -->
 <div id="hamburgerWrapper" class="md:hidden fixed top-4 right-4 z-50 transition-transform duration-300">
-  <button id="menuBtn" class="flex flex-col items-end gap-1 p-2 bg-[#130000] rounded-md shadow-md">
+  <button id="menuBtn" aria-label="القائمة الجانبية" class="flex flex-col items-end gap-1 p-2 bg-[#130000] rounded-md shadow-md">
     <span class="block w-6 h-0.5 bg-white"></span>
     <span class="block w-5 h-0.5 bg-white"></span>
     <span class="block w-4 h-0.5 bg-white"></span>
@@ -191,7 +191,7 @@
         </li>
         <div id="mobile-auth-authenticated" class="hidden">
           <li class="bg-[#0a0000] border-t border-b border-red-900/30 px-4 py-4 flex items-center gap-4 my-2">
-            <img src="/assets/images/icon-white.png" id="mobile-user-avatar" class="w-10 h-10 rounded-full border border-red-900/60 object-cover shadow-[0_0_8px_rgba(220,38,38,0.2)]" onerror="this.src='/assets/images/icon-white.png'">
+            <img src="/assets/images/icon-white.png" width="40" height="40" id="mobile-user-avatar" class="w-10 h-10 rounded-full border border-red-900/60 object-cover shadow-[0_0_8px_rgba(220,38,38,0.2)]" onerror="this.src='/assets/images/icon-white.png'">
             <div class="flex flex-col">
               <span class="text-xs text-gray-500 mb-0.5">مرحباً بك،</span>
               <span id="mobile-user-name" class="text-base font-bold text-gray-200 truncate max-w-[200px]"></span>

@@ -45,6 +45,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       const docSnap = querySnapshot.docs[0];
       const docData = { id: docSnap.id, ...docSnap.data() };
       
+      // Handle Scheduled Posts
+      if (!isPreview && docData.publishAt) {
+        const publishDate = docData.publishAt.toDate ? docData.publishAt.toDate() : new Date(docData.publishAt);
+        if (publishDate > new Date()) {
+          showError("عذراً، هذا المحتوى غير متاح حالياً (مجدول للنشر لاحقاً).");
+          return;
+        }
+      }
+      
       if (isPreview && docData.status !== 'published') {
         // Add a preview banner
         const banner = document.createElement('div');
@@ -80,15 +89,87 @@ async function renderContent(data) {
   document.title = `${data.title} - Nightmares`;
   document.getElementById('article-title').textContent = data.title;
   
-  if (data.seoDescription) {
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = "description";
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.content = data.seoDescription;
+  // Update Meta Description
+  let metaDesc = document.querySelector('meta[name="description"]');
+  if (!metaDesc) {
+    metaDesc = document.createElement('meta');
+    metaDesc.name = "description";
+    document.head.appendChild(metaDesc);
   }
+  metaDesc.content = data.seoDescription || data.title;
+
+  // Open Graph / Twitter Card
+  const currentUrl = window.location.href.split('?')[0]; // clean url without preview param
+  
+  const setMeta = (name, content, isProperty = false) => {
+    if (!content) return;
+    let meta = document.querySelector(`meta[${isProperty ? 'property' : 'name'}="${name}"]`);
+    if (!meta) {
+      meta = document.createElement('meta');
+      if (isProperty) meta.setAttribute('property', name);
+      else meta.setAttribute('name', name);
+      document.head.appendChild(meta);
+    }
+    meta.content = content;
+  };
+
+  setMeta('og:title', data.title, true);
+  setMeta('og:description', data.seoDescription || data.title, true);
+  setMeta('og:image', data.coverImage || (window.location.origin + '/assets/images/icon-white.png'), true);
+  setMeta('og:url', currentUrl, true);
+  setMeta('og:type', 'article', true);
+  
+  setMeta('twitter:card', 'summary_large_image');
+  setMeta('twitter:title', data.title);
+  setMeta('twitter:description', data.seoDescription || data.title);
+  setMeta('twitter:image', data.coverImage || (window.location.origin + '/assets/images/icon-white.png'));
+
+  // Canonical URL
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.rel = 'canonical';
+    document.head.appendChild(canonical);
+  }
+  canonical.href = currentUrl;
+
+  // Structured Data (JSON-LD Schema)
+  let schemaScript = document.querySelector('#schema-article');
+  if (!schemaScript) {
+    schemaScript = document.createElement('script');
+    schemaScript.id = 'schema-article';
+    schemaScript.type = 'application/ld+json';
+    document.head.appendChild(schemaScript);
+  }
+  
+  const schemaObj = {
+    "@context": "https://schema.org",
+    "@type": data.type === 'video' ? "VideoObject" : "Article",
+    "headline": data.title,
+    "description": data.seoDescription || data.title,
+    "image": data.coverImage ? [data.coverImage] : [],
+    "datePublished": data.publishAt ? new Date(data.publishAt.seconds * 1000).toISOString() : (data.createdAt ? new Date(data.createdAt.seconds * 1000).toISOString() : new Date().toISOString()),
+    "dateModified": data.updatedAt ? new Date(data.updatedAt.seconds * 1000).toISOString() : undefined,
+    "author": {
+      "@type": "Person",
+      "name": "Nightmares" // will update after fetching author
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Nightmares",
+      "logo": {
+        "@type": "ImageObject",
+        "url": window.location.origin + "/assets/images/icon-white.png"
+      }
+    }
+  };
+  
+  if (data.type === 'video') {
+    schemaObj.name = data.title;
+    schemaObj.uploadDate = schemaObj.datePublished;
+  }
+  
+  schemaScript.textContent = JSON.stringify(schemaObj);
 
   // Resolve Author
   if (data.authorUid) {
@@ -177,9 +258,9 @@ async function renderContent(data) {
   }
 
   // Setup sharing links
-  const currentUrl = encodeURIComponent(window.location.href);
-  document.getElementById('share-whatsapp').href = `https://wa.me/?text=${currentUrl}`;
-  document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
+  const shareUrl = encodeURIComponent(window.location.href);
+  document.getElementById('share-whatsapp').href = `https://wa.me/?text=${shareUrl}`;
+  document.getElementById('share-facebook').href = `https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`;
 
   // Show navbar after loading
   const navbar = document.querySelector('.navbar');
@@ -205,15 +286,22 @@ async function loadRelatedContent(currentArticle) {
     }
     
     qConstraints.push(orderBy("createdAt", "desc"));
-    qConstraints.push(limit(7)); // Fetch one extra in case the current article is included
+    qConstraints.push(limit(15)); // Fetch more to allow client-side filtering of scheduled posts
 
     const qRef = query(collection(db, "posts"), ...qConstraints);
     const snapshot = await getDocs(qRef);
     
     let results = [];
+    const now = new Date();
     snapshot.forEach(doc => {
-      if (doc.id !== currentArticle.id) {
-        results.push({ id: doc.id, ...doc.data() });
+      const data = doc.data();
+      let isPublished = true;
+      if (data.publishAt) {
+        const pDate = data.publishAt.toDate ? data.publishAt.toDate() : new Date(data.publishAt);
+        if (pDate > now) isPublished = false;
+      }
+      if (doc.id !== currentArticle.id && isPublished) {
+        results.push({ id: doc.id, ...data });
       }
     });
 
@@ -224,12 +312,18 @@ async function loadRelatedContent(currentArticle) {
          where("status", "==", "published"),
          where("type", "==", currentArticle.type),
          orderBy("createdAt", "desc"),
-         limit(7)
+         limit(15)
        );
        const fallbackSnapshot = await getDocs(fallbackQRef);
        fallbackSnapshot.forEach(doc => {
-         if (doc.id !== currentArticle.id && !results.find(r => r.id === doc.id)) {
-           results.push({ id: doc.id, ...doc.data() });
+         const data = doc.data();
+         let isPublished = true;
+         if (data.publishAt) {
+           const pDate = data.publishAt.toDate ? data.publishAt.toDate() : new Date(data.publishAt);
+           if (pDate > now) isPublished = false;
+         }
+         if (doc.id !== currentArticle.id && isPublished && !results.find(r => r.id === doc.id)) {
+           results.push({ id: doc.id, ...data });
          }
        });
     }

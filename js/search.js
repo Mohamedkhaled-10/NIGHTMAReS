@@ -125,9 +125,16 @@ document.addEventListener('DOMContentLoaded', () => {
             snippetText = tempDiv.textContent || tempDiv.innerText || '';
           }
 
+          let isPublished = true;
+          if (post.publishAt) {
+            const now = new Date();
+            const pDate = post.publishAt.toDate ? post.publishAt.toDate() : new Date(post.publishAt);
+            if (pDate > now) isPublished = false;
+          }
+
           // Text Matching
-          let isMatch = true;
-          if (searchQuery) {
+          let isMatch = isPublished;
+          if (isMatch && searchQuery) {
              const titleMatch = titleRaw.toLowerCase().includes(searchQuery);
              const contentMatch = snippetText.toLowerCase().includes(searchQuery);
              isMatch = titleMatch || contentMatch;

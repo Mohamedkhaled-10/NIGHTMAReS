@@ -1233,3 +1233,15 @@ button#enterBtn:hover:enabled {
 #notificationBox li:hover {
   background-color: #3c1a1a;
 }
+
+/* Global Accessibility Focus Styles */
+*:focus-visible {
+  outline: 2px solid #dc2626 !important; /* Tailwind red-600 */
+  outline-offset: 2px !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  outline: none !important;
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 8px rgba(220, 38, 38, 0.4) !important;
+}

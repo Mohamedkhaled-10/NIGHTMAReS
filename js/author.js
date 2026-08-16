@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       card.innerHTML = `
         <div class="relative h-48 overflow-hidden">
           <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 z-10"></div>
-          <img src="${coverImage}" alt="${post.title}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
+          <img src="${coverImage}" alt="${post.title}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" loading="lazy">
           <div class="absolute top-4 right-4 z-20">
             <span class="bg-red-900/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm border border-red-500/30">${post.category || defaultCategory}</span>
           </div>

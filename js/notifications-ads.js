@@ -26,7 +26,7 @@ async function loadAds() {
       <a href="${randomAd.link}" target="_blank" class="block bg-[#111] border border-gray-800 hover:border-red-600 rounded-xl overflow-hidden shadow-lg transition transform hover:scale-[1.02]">
         <div class="relative">
           <span class="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded shadow z-10">إعلان</span>
-          <img src="${randomAd.image}" alt="إعلان" class="w-full h-auto object-cover max-h-64">
+          <img src="${randomAd.image}" alt="إعلان" class="w-full h-auto object-cover max-h-64" loading="lazy">
         </div>
         ${randomAd.text ? `<div class="p-3 text-center text-gray-300 font-semibold">${randomAd.text}</div>` : ''}
       </a>
@@ -37,10 +37,12 @@ async function loadAds() {
   }
 }
 
-// Ensure it loads after the DOM is ready
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', loadAds);
+// Ensure it loads after the DOM is ready but defer it to stop tab loading spinner
+if (document.readyState === 'complete') {
+  setTimeout(loadAds, 1000);
 } else {
-  loadAds();
+  window.addEventListener('load', () => {
+    setTimeout(loadAds, 1000);
+  });
 }
 

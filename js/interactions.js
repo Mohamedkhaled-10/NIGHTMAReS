@@ -33,14 +33,19 @@ const COMMENTS_LIMIT = 10;
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    const docSnap = await getDoc(doc(db, 'users', user.uid));
-    if (docSnap.exists()) {
-      currentUserProfile = docSnap.data();
-      if (currentUserProfile.accountStatus === 'banned' || currentUserProfile.accountStatus === 'deleted') {
-        currentUser = null;
-      } else {
-        currentUser = user;
+    try {
+      const docSnap = await getDoc(doc(db, 'users', user.uid));
+      if (docSnap.exists()) {
+        currentUserProfile = docSnap.data();
+        if (currentUserProfile.accountStatus === 'banned' || currentUserProfile.accountStatus === 'deleted') {
+          currentUser = null;
+        } else {
+          currentUser = user;
+        }
       }
+    } catch (e) {
+      console.warn("Could not fetch user profile:", e);
+      currentUser = user;
     }
   } else {
     currentUser = null;
@@ -65,8 +70,13 @@ onAuthStateChanged(auth, async (user) => {
 async function checkLikeStatus() {
   if (!currentUser || contentId === 'home') return;
   const likeRef = doc(db, 'content_likes', `${contentId}_${currentUser.uid}`);
-  const snap = await getDoc(likeRef);
-  hasLiked = snap.exists();
+  try {
+    const snap = await getDoc(likeRef);
+    hasLiked = snap.exists();
+  } catch (e) {
+    console.warn("Could not fetch like status:", e);
+    hasLiked = false;
+  }
   updateLikeUI();
 }
 
@@ -82,8 +92,13 @@ function updateLikeUI() {
 async function checkSaveStatus() {
   if (!currentUser || contentId === 'home' || !btnSavePost) return;
   const saveRef = doc(db, 'user_bookmarks', `${currentUser.uid}_${contentId}`);
-  const snap = await getDoc(saveRef);
-  hasSaved = snap.exists();
+  try {
+    const snap = await getDoc(saveRef);
+    hasSaved = snap.exists();
+  } catch (e) {
+    console.warn("Could not fetch save status:", e);
+    hasSaved = false;
+  }
   updateSaveUI();
 }
 
@@ -129,13 +144,20 @@ async function recordHistorySafe() {
 async function loadStats() {
   if (contentId === 'home') return;
   const statsRef = doc(db, 'content_stats', contentId);
-  const snap = await getDoc(statsRef);
-  if (snap.exists()) {
-    const data = snap.data();
-    if(likesCountEl) likesCountEl.textContent = data.likesCount || 0;
-    if(viewsCountEl) viewsCountEl.textContent = data.views || 0;
-    if(commentsCountEl) commentsCountEl.textContent = data.commentsCount || 0;
-  } else {
+  try {
+    const snap = await getDoc(statsRef);
+    if (snap.exists()) {
+      const data = snap.data();
+      if(likesCountEl) likesCountEl.textContent = data.likesCount || 0;
+      if(viewsCountEl) viewsCountEl.textContent = data.views || 0;
+      if(commentsCountEl) commentsCountEl.textContent = data.commentsCount || 0;
+    } else {
+      if(likesCountEl) likesCountEl.textContent = 0;
+      if(viewsCountEl) viewsCountEl.textContent = 0;
+      if(commentsCountEl) commentsCountEl.textContent = 0;
+    }
+  } catch (e) {
+    console.warn("Could not fetch stats:", e);
     if(likesCountEl) likesCountEl.textContent = 0;
     if(viewsCountEl) viewsCountEl.textContent = 0;
     if(commentsCountEl) commentsCountEl.textContent = 0;

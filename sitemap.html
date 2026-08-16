@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>خريطة الموقع (Sitemap) | Nightmares</title>
+  <meta name="description" content="خريطة الموقع لمحتوى Nightmares من قصص وأخبار وفيديوهات.">
+  <link rel="canonical" href="https://nightmares.com/sitemap.html">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/styles/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body class="bg-[#0a0a0a] text-gray-200 font-sans min-h-screen flex flex-col">
+
+  <!-- NAVBAR_PLACEHOLDER -->
+
+  <main class="flex-1 container mx-auto px-4 py-12 max-w-4xl">
+    <h1 class="text-3xl font-bold text-white mb-8 border-b border-red-900/30 pb-4">خريطة الموقع (HTML Sitemap)</h1>
+    
+    <div class="bg-black/40 border border-gray-800 rounded-lg p-6 mb-8">
+      <h2 class="text-2xl font-bold text-red-500 mb-4"><i class="fas fa-link mr-2 ml-2"></i> الروابط الرئيسية</h2>
+      <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 text-gray-300">
+        <li><a href="/" class="hover:text-red-400 transition underline">الرئيسية</a></li>
+        <li><a href="/explore" class="hover:text-red-400 transition underline">الاستكشاف</a></li>
+        <li><a href="/search" class="hover:text-red-400 transition underline">البحث</a></li>
+        <li><a href="/submit" class="hover:text-red-400 transition underline">شارك قصتك</a></li>
+        <li><a href="/Terms-of-Use-and-Privacy-Policy" class="hover:text-red-400 transition underline">الشروط والخصوصية</a></li>
+        <li><a href="/contact-us" class="hover:text-red-400 transition underline">تواصل معنا</a></li>
+      </ul>
+    </div>
+
+    <div id="sitemap-loading" class="text-center py-12">
+      <i class="fas fa-spinner fa-spin text-3xl text-red-600 mb-4"></i>
+      <p class="text-gray-400">جاري تحميل خريطة المحتوى...</p>
+    </div>
+
+    <div id="sitemap-content" class="hidden space-y-8">
+      <div id="sitemap-stories" class="bg-black/40 border border-gray-800 rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-red-500 mb-4 border-b border-red-900/30 pb-2">القصص (Stories)</h2>
+        <ul class="list-disc list-inside space-y-2 text-gray-300" id="list-stories"></ul>
+      </div>
+      
+      <div id="sitemap-news" class="bg-black/40 border border-gray-800 rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-green-500 mb-4 border-b border-green-900/30 pb-2">الأخبار (News)</h2>
+        <ul class="list-disc list-inside space-y-2 text-gray-300" id="list-news"></ul>
+      </div>
+
+      <div id="sitemap-videos" class="bg-black/40 border border-gray-800 rounded-lg p-6">
+        <h2 class="text-2xl font-bold text-blue-500 mb-4 border-b border-blue-900/30 pb-2">الفيديوهات (Videos)</h2>
+        <ul class="list-disc list-inside space-y-2 text-gray-300" id="list-videos"></ul>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- FOOTER_PLACEHOLDER -->
+
+  <script type="module" src="/js/sitemap.js"></script>
+</body>
+</html>

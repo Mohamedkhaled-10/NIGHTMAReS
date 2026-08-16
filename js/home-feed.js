@@ -1,9 +1,18 @@
 import { db } from './firebase-init.js';
 import { collection, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-document.addEventListener('DOMContentLoaded', () => {
-  loadHomeContent();
-  loadAnalyticsContent();
+document.addEventListener('DOMContentLoaded', async () => {
+  await loadHomeContent();
+  
+  // Defer analytics loading to free up network for main content and stop tab spinner
+  if (document.readyState === 'complete') {
+    loadAnalyticsContent();
+  } else {
+    window.addEventListener('load', () => {
+      // Small timeout to ensure critical rendering path finishes
+      setTimeout(loadAnalyticsContent, 500);
+    });
+  }
 });
 
 async function loadHomeContent() {
@@ -12,33 +21,26 @@ async function loadHomeContent() {
   const videoGrid = document.getElementById('video-grid');
   
   try {
-    const [storiesSnap, newsSnap, videosSnap] = await Promise.all([
-      getDocs(query(
-        collection(db, "posts"),
-        where("status", "==", "published"),
-        where("type", "==", "story"),
-        orderBy("createdAt", "desc"),
-        limit(6)
-      )),
-      getDocs(query(
-        collection(db, "posts"),
-        where("status", "==", "published"),
-        where("type", "==", "news"),
-        orderBy("createdAt", "desc"),
-        limit(6)
-      )),
-      getDocs(query(
-        collection(db, "posts"),
-        where("status", "==", "published"),
-        where("type", "==", "video"),
-        orderBy("createdAt", "desc"),
-        limit(3)
-      ))
-    ]);
+    // Single query to fetch recent published posts, reducing connection contention
+    const recentPostsSnap = await getDocs(query(
+      collection(db, "posts"),
+      where("status", "==", "published"),
+      orderBy("createdAt", "desc"),
+      limit(25)
+    ));
     
-    const stories = storiesSnap.docs.map(d => d.data());
-    const news = newsSnap.docs.map(d => d.data());
-    const videos = videosSnap.docs.map(d => d.data());
+    const now = new Date();
+    const filterPublished = (d) => {
+      if (!d.publishAt) return true;
+      const pDate = d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt);
+      return pDate <= now;
+    };
+
+    const allRecent = recentPostsSnap.docs.map(d => d.data()).filter(filterPublished);
+    
+    const stories = allRecent.filter(p => p.type === 'story').slice(0, 6);
+    const news = allRecent.filter(p => p.type === 'news').slice(0, 6);
+    const videos = allRecent.filter(p => p.type === 'video').slice(0, 3);
     
     renderStories(stories, storiesGrid);
     renderNews(news, newsGrid);
@@ -134,7 +136,7 @@ function renderList(items, container, type) {
       <div class="text-2xl font-black text-gray-700 group-hover:text-red-600 transition w-6 text-center">
         ${index + 1}
       </div>
-      <img src="${item.coverImage || '/assets/images/icon-white.png'}" class="w-12 h-12 rounded object-cover border border-gray-800" alt="${item.title}">
+      <img src="${item.coverImage || '/assets/images/icon-white.png'}" class="w-12 h-12 rounded object-cover border border-gray-800" alt="${item.title}" loading="lazy">
       <div class="flex-1 min-w-0">
         <h4 class="text-white text-sm font-bold truncate group-hover:text-red-400 transition">${item.title}</h4>
         <div class="flex items-center gap-3 mt-1 text-xs text-gray-500">

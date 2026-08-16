@@ -92,9 +92,21 @@ app.get('/home', (req, res) => {
   servePage(res, path.join(__dirname, 'index.html'));
 });
 
+app.get('/sitemap.html', (req, res) => {
+  servePage(res, path.join(__dirname, 'sitemap.html'));
+});
+
 // Explicit 404 handler
 app.use((req, res) => {
-  res.status(404).send('404 - Page Not Found');
+  res.status(404);
+  servePage(res, path.join(__dirname, '404.html'));
+});
+
+// Explicit 500 handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500);
+  servePage(res, path.join(__dirname, '500.html'));
 });
 
 // Export app for Vercel Serverless Functions

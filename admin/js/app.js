@@ -1,5 +1,5 @@
 import { db } from '../../js/firebase-init.js';
-import { collection, getDocs, doc, setDoc, deleteDoc, serverTimestamp, query, orderBy, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { collection, getDocs, doc, setDoc, deleteDoc, serverTimestamp, query, orderBy, getDoc, getCountFromServer, getAggregateFromServer, sum, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // DOM Elements
 const viewList = document.getElementById('view-list');
@@ -23,6 +23,7 @@ const fEmbedCode = document.getElementById('post-embed-code');
 const fReadTime = document.getElementById('post-read-time');
 const fSeoDesc = document.getElementById('post-seo-desc');
 const fPublishAt = document.getElementById('post-publish-at');
+const fUpdatedAt = document.getElementById('post-updated-at');
 const fFeatured = document.getElementById('post-featured');
 const btnPreview = document.getElementById('btn-preview-post');
 
@@ -127,6 +128,7 @@ function showEditor(isNew = true) {
     postForm.reset();
     fId.value = '';
     currentTags = [];
+    fUpdatedAt.textContent = '-';
     renderTags();
     // trigger change to hide/show fields
     fType.dispatchEvent(new Event('change'));
@@ -170,6 +172,14 @@ async function editPost(id) {
         fPublishAt.value = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
       } else {
         fPublishAt.value = '';
+      }
+      
+      if (data.updatedAt) {
+        fUpdatedAt.textContent = new Date(data.updatedAt.toDate()).toLocaleString('ar-EG');
+      } else if (data.createdAt) {
+        fUpdatedAt.textContent = new Date(data.createdAt.toDate()).toLocaleString('ar-EG');
+      } else {
+        fUpdatedAt.textContent = '-';
       }
       
       btnPreview.classList.remove('hidden');
@@ -277,7 +287,12 @@ import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/fi
 
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    loadPosts();
+    const menuOverview = document.getElementById('menu-overview');
+    if (menuOverview) {
+      menuOverview.click();
+    } else {
+      loadPosts();
+    }
   }
 });
 
@@ -618,6 +633,7 @@ const menuUsers = document.getElementById('menu-users');
 const menuComments = document.getElementById('menu-comments');
 const menuAudit = document.getElementById('menu-audit');
 
+const viewOverview = document.getElementById('view-overview');
 const viewUsers = document.getElementById('view-users');
 const viewComments = document.getElementById('view-comments');
 const viewAudit = document.getElementById('view-audit');
@@ -626,6 +642,7 @@ const menuReports = document.getElementById('menu-reports');
 
 function overrideHideAllViews() {
   hideAllViews();
+  if(viewOverview) viewOverview.classList.add('hidden');
   if(viewUsers) viewUsers.classList.add('hidden');
   if(viewComments) viewComments.classList.add('hidden');
   if(viewAudit) viewAudit.classList.add('hidden');
@@ -636,6 +653,17 @@ function overrideHideAllViews() {
       m.classList.remove('bg-gray-800', 'text-white');
       m.classList.add('text-gray-300');
     }
+  });
+}
+
+if(menuOverview) {
+  menuOverview.addEventListener('click', () => {
+    overrideHideAllViews();
+    menuOverview.classList.add('bg-gray-800', 'text-white');
+    menuOverview.classList.remove('text-gray-300');
+    viewOverview.classList.remove('hidden');
+    document.querySelector('header h2').textContent = 'إحصائيات النظام (Overview)';
+    loadOverviewData();
   });
 }
 
@@ -1090,3 +1118,117 @@ window.resolveReport = async (reportId, targetType, targetId) => {
     alert('حدث خطأ في تنفيذ الإجراء.');
   }
 };
+
+// --- Dashboard Analytics ---
+const periodSelect = document.getElementById('overview-period');
+if (periodSelect) {
+  periodSelect.addEventListener('change', loadOverviewData);
+}
+
+async function loadOverviewData() {
+  const period = document.getElementById('overview-period').value;
+  let startDate = null;
+  
+  if (period !== 'all') {
+    startDate = new Date();
+    if (period === 'today') {
+      startDate.setHours(0,0,0,0);
+    } else if (period === '7days') {
+      startDate.setDate(startDate.getDate() - 7);
+    } else if (period === '30days') {
+      startDate.setDate(startDate.getDate() - 30);
+    }
+  }
+
+  const getQ = (colName, statusField, statusVal) => {
+    let constraints = [];
+    if (statusField && statusVal) {
+      constraints.push(where(statusField, "==", statusVal));
+    }
+    if (startDate) {
+      constraints.push(where("createdAt", ">=", startDate));
+    }
+    return query(collection(db, colName), ...constraints);
+  };
+
+  try {
+    const uiMetrics = ['users', 'posts', 'submissions', 'comments', 'reports', 'views', 'likes'];
+    uiMetrics.forEach(m => document.getElementById('stat-' + m).innerHTML = '<i class="fas fa-spinner fa-spin text-sm text-gray-400"></i>');
+    document.getElementById('chart-types-loading').classList.remove('hidden');
+    document.getElementById('chart-types-container').classList.add('hidden');
+
+    // Users
+    try {
+      const usersSnap = await getCountFromServer(getQ('users'));
+      document.getElementById('stat-users').textContent = usersSnap.data().count;
+    } catch(e) { document.getElementById('stat-users').textContent = '-'; console.log("Users count error:", e.message); }
+
+    // Submissions
+    try {
+      const subSnap = await getCountFromServer(getQ('submissions', 'status', 'pending'));
+      document.getElementById('stat-submissions').textContent = subSnap.data().count;
+    } catch(e) { document.getElementById('stat-submissions').textContent = '-'; console.log("Submissions count error:", e.message); }
+
+    // Comments
+    try {
+      const commSnap = await getCountFromServer(getQ('comments'));
+      document.getElementById('stat-comments').textContent = commSnap.data().count;
+    } catch(e) { document.getElementById('stat-comments').textContent = '-'; console.log("Comments count error:", e.message); }
+
+    // Reports
+    try {
+      const repSnap = await getCountFromServer(getQ('reports'));
+      document.getElementById('stat-reports').textContent = repSnap.data().count;
+    } catch(e) { document.getElementById('stat-reports').textContent = '-'; console.log("Reports count error:", e.message); }
+
+    // Posts, Views, Likes & Distribution
+    try {
+      // Using getDocs here is acceptable for an admin dashboard to fetch stats without creating complex multiple aggregations, 
+      // but in production with 10,000+ posts it could be heavy. For this scale, it's efficient enough.
+      const postsSnap = await getDocs(getQ('posts', 'status', 'published'));
+      let totalPosts = 0;
+      let totalViews = 0;
+      let totalLikes = 0;
+      let typeCounts = { story: 0, news: 0, video: 0 };
+      
+      postsSnap.forEach(doc => {
+        totalPosts++;
+        const data = doc.data();
+        totalViews += (data.views || 0);
+        totalLikes += (data.likesCount || 0);
+        if (data.type && typeCounts[data.type] !== undefined) {
+          typeCounts[data.type]++;
+        }
+      });
+      
+      document.getElementById('stat-posts').textContent = totalPosts;
+      document.getElementById('stat-views').textContent = totalViews;
+      document.getElementById('stat-likes').textContent = totalLikes;
+      
+      // Update Chart
+      document.getElementById('count-story').textContent = typeCounts.story;
+      document.getElementById('count-news').textContent = typeCounts.news;
+      document.getElementById('count-video').textContent = typeCounts.video;
+      
+      let pStory = totalPosts === 0 ? 0 : (typeCounts.story / totalPosts) * 100;
+      let pNews = totalPosts === 0 ? 0 : (typeCounts.news / totalPosts) * 100;
+      let pVideo = totalPosts === 0 ? 0 : (typeCounts.video / totalPosts) * 100;
+      
+      document.getElementById('bar-story').style.width = pStory + '%';
+      document.getElementById('bar-news').style.width = pNews + '%';
+      document.getElementById('bar-video').style.width = pVideo + '%';
+      
+      document.getElementById('chart-types-loading').classList.add('hidden');
+      document.getElementById('chart-types-container').classList.remove('hidden');
+
+    } catch(e) { 
+      document.getElementById('stat-posts').textContent = '-'; 
+      document.getElementById('stat-views').textContent = '-'; 
+      document.getElementById('stat-likes').textContent = '-'; 
+      console.log("Posts fetch error:", e.message);
+    }
+
+  } catch (error) {
+    console.error("Overview error", error);
+  }
+}
