@@ -177,7 +177,7 @@ function renderStories(items, container) {
         <div class="overlay"></div>
         <div class="card-content">
           <h3>${item.title}</h3>
-          <span class="fake-btn">اقرأ المزيد</span>
+          <span class="fake-btn">اقرأ القصة <i class="fa-solid fa-arrow-left text-xs"></i></span>
         </div>
       </div>
     `;
@@ -245,7 +245,9 @@ function renderVideos(items, container) {
     card.href = link;
     card.className = 'video-card';
     card.innerHTML = `
-      <img src="${item.coverImage || '/assets/images/icon-white.png'}" alt="${item.title}" loading="lazy" decoding="async">
+      <div class="thumbnail-wrapper">
+        <img src="${item.coverImage || '/assets/images/icon-white.png'}" alt="${item.title}" loading="lazy" decoding="async">
+      </div>
       <div class="video-content">
         <h3>${item.title}</h3>
       </div>

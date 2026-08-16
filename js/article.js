@@ -233,10 +233,12 @@ async function renderContent(data) {
   if (data.coverImage) {
     coverImageEl.src = data.coverImage;
     coverImageEl.alt = data.title;
-    coverImageContainer.style.display = 'block';
+    coverImageContainer.classList.remove('hidden');
+    document.getElementById('no-cover-gradient').classList.add('hidden');
   } else {
     // Hide if there's no cover image to avoid broken images
-    coverImageContainer.style.display = 'none';
+    coverImageContainer.classList.add('hidden');
+    document.getElementById('no-cover-gradient').classList.remove('hidden');
   }
 
   // Render HTML Content (depending on type, but generally it's in data.data.contentHtml or similar)
@@ -347,14 +349,14 @@ async function loadRelatedContent(currentArticle) {
       
       const card = document.createElement('a');
       card.href = link;
-      card.className = 'bg-black/60 border border-gray-800 rounded-lg overflow-hidden shadow-lg hover:border-red-600 hover:shadow-red-900/50 transition transform hover:-translate-y-1 block';
+      card.className = 'flex gap-4 group bg-[#110808]/50 hover:bg-[#1b0d0d] border border-gray-800/50 hover:border-red-900/50 p-2 rounded-xl transition-all';
       card.innerHTML = `
-        <div class="h-40 overflow-hidden relative">
-          <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" class="w-full h-full object-cover" loading="lazy" decoding="async">
-          <span class="absolute top-2 right-2 ${typeColor} text-white text-xs px-2 py-1 rounded shadow">${typeLabel}</span>
+        <div class="w-24 h-24 shrink-0 rounded-lg overflow-hidden relative">
+          <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
+          <span class="absolute bottom-1 right-1 ${typeColor} text-white text-[9px] px-1.5 py-0.5 rounded">${typeLabel}</span>
         </div>
-        <div class="p-4">
-          <h3 class="text-lg font-bold text-white mb-1 line-clamp-2">${post.title}</h3>
+        <div class="flex-1 py-1 pr-1">
+          <h3 class="text-sm font-bold text-gray-200 group-hover:text-red-400 transition-colors line-clamp-2 mb-1">${post.title}</h3>
         </div>
       `;
       relatedGrid.appendChild(card);
@@ -385,10 +387,10 @@ window.addEventListener('scroll', () => {
   if (scrollToTopBtn) {
     if (scrollTop > 300) {
       scrollToTopBtn.classList.add('show');
-      scrollToTopBtn.style.display = 'block';
+      scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none');
     } else {
       scrollToTopBtn.classList.remove('show');
-      scrollToTopBtn.style.display = 'none';
+      scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none');
     }
   }
 });

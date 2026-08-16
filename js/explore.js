@@ -139,22 +139,53 @@ async function loadData(isLoadMore = false) {
 
         const categoryHtml = post.category ? `<span class="bg-red-900/40 text-red-300 text-xs px-2 py-1 rounded border border-red-900/50 mt-2 inline-block">${getCategoryName(post.category)}</span>` : '';
 
+        
+        
         const card = document.createElement('a');
         card.href = link;
-        card.className = 'bg-black/60 border border-gray-800 rounded-lg overflow-hidden shadow-lg hover:border-red-600 hover:shadow-red-900/50 transition transform hover:-translate-y-1 flex flex-col h-full';
-        card.innerHTML = `
-          <div class="h-48 overflow-hidden relative shrink-0">
-            <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" class="w-full h-full object-cover" loading="lazy" decoding="async">
-            <span class="absolute top-2 right-2 ${typeColor} text-white text-xs px-2 py-1 rounded shadow">${typeLabel}</span>
-          </div>
-          <div class="p-5 flex-1 flex flex-col">
-            <h3 class="text-xl font-bold text-white mb-2 line-clamp-2">${post.title}</h3>
-            <div>${categoryHtml}</div>
-            <p class="text-gray-400 text-sm leading-relaxed mt-3 line-clamp-3">${snippet}</p>
-          </div>
-        `;
+        
+        if (post.type === 'story') {
+          card.className = 'card block';
+          card.innerHTML = `
+            <div class="card-inner">
+              <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async">
+              <div class="overlay"></div>
+              <div class="card-content">
+                <span class="text-xs font-bold px-2 py-1 bg-red-900/50 text-red-200 border border-red-900/50 rounded mb-2 w-fit">${getCategoryName(post.category)}</span>
+                <h3>${post.title}</h3>
+                <span class="fake-btn">اقرأ القصة <i class="fa-solid fa-arrow-left text-xs"></i></span>
+              </div>
+            </div>
+          `;
+        } else if (post.type === 'video') {
+          card.className = 'video-card h-full';
+          card.innerHTML = `
+            <div class="thumbnail-wrapper">
+              <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async">
+            </div>
+            <div class="video-content flex-1 flex flex-col h-full bg-[#0a0505]">
+              <span class="text-[10px] font-bold px-2 py-1 bg-gray-800 text-gray-300 rounded mb-2 w-fit border border-gray-700">${getCategoryName(post.category)}</span>
+              <h3 class="line-clamp-2">${post.title}</h3>
+            </div>
+          `;
+        } else {
+          card.className = 'news-card h-full flex flex-col';
+          card.innerHTML = `
+            <div class="relative shrink-0 h-[320px]">
+              <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover">
+              <span class="absolute top-3 right-3 bg-red-900/80 text-white text-[10px] px-2 py-1 rounded backdrop-blur-md z-10">${getCategoryName(post.category)}</span>
+            </div>
+            <div class="news-content flex-1 flex flex-col p-4 bg-[#0a0505]">
+              <h3 class="line-clamp-2">${post.title}</h3>
+              <p class="news-text line-clamp-3 mb-4">${snippet}</p>
+              <span class="read-more-btn mt-auto self-start">اقرأ المزيد</span>
+            </div>
+          `;
+        }
         
         grid.appendChild(card);
+
+
       });
 
       grid.classList.remove('hidden');
@@ -170,10 +201,24 @@ async function loadData(isLoadMore = false) {
   } catch (error) {
     console.error("Explore fetch error:", error);
     if (error.code === 'failed-precondition') {
-       errorState.innerHTML = `<p class="text-red-500 font-bold text-xl mb-2">فهرس قاعدة البيانات غير مكتمل لتلك التركيبة من الفلاتر.</p><p class="text-gray-400 text-sm">حاول فلترة تصنيف واحد (النوع أو التصنيف أو التاج) حتى يتم بناء الفهارس.</p>`;
+       const msgEl = document.getElementById('error-message-text');
+       if (msgEl) msgEl.innerText = 'فهرس قاعدة البيانات غير مكتمل لتلك التركيبة من الفلاتر. حاول فلترة تصنيف واحد (النوع أو التصنيف أو التاج) حتى يتم بناء الفهارس.';
+       else errorState.innerHTML = '<p class="text-red-500 font-bold text-xl mb-2">فهرس قاعدة البيانات غير مكتمل لتلك التركيبة من الفلاتر.</p><p class="text-gray-400 text-sm">حاول فلترة تصنيف واحد (النوع أو التصنيف أو التاج) حتى يتم بناء الفهارس.</p>';
     } else {
-       errorState.innerHTML = `<p class="text-red-500 font-bold text-xl mb-2">حدث خطأ أثناء جلب المحتوى.</p><button id="retry-btn" class="text-gray-400 hover:text-white underline">حاول مرة أخرى</button>`;
-       document.getElementById('retry-btn').addEventListener('click', () => { loadData(false); });
+       const msgEl = document.getElementById('error-message-text');
+       if (msgEl) {
+           msgEl.innerText = 'حدث خطأ أثناء جلب المحتوى.';
+           const retryBtn = document.getElementById('retry-btn');
+           if (retryBtn) {
+               // Remove old listeners by cloning
+               const newBtn = retryBtn.cloneNode(true);
+               retryBtn.parentNode.replaceChild(newBtn, retryBtn);
+               newBtn.addEventListener('click', () => { loadData(false); });
+           }
+       } else {
+           errorState.innerHTML = '<p class="text-red-500 font-bold text-xl mb-2">حدث خطأ أثناء جلب المحتوى.</p><button id="retry-btn" class="text-gray-400 hover:text-white underline">حاول مرة أخرى</button>';
+           document.getElementById('retry-btn').addEventListener('click', () => { loadData(false); });
+       }
     }
     if (!isLoadMore) {
       loading.classList.add('hidden');

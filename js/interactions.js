@@ -52,14 +52,14 @@ onAuthStateChanged(auth, async (user) => {
   }
   
   if (currentUser) {
-    if(commentFormContainer) commentFormContainer.style.display = 'block';
-    if(loginPrompt) loginPrompt.style.display = 'none';
+    if(commentFormContainer) commentFormContainer.classList.remove('hidden');
+    if(loginPrompt) loginPrompt.classList.add('hidden');
     checkLikeStatus();
     checkSaveStatus();
     recordHistorySafe();
   } else {
-    if(commentFormContainer) commentFormContainer.style.display = 'none';
-    if(loginPrompt) loginPrompt.style.display = 'block';
+    if(commentFormContainer) commentFormContainer.classList.add('hidden');
+    if(loginPrompt) loginPrompt.classList.remove('hidden');
   }
   
   loadStats();
@@ -386,11 +386,11 @@ async function loadComments(loadMore = false) {
       const dateStr = data.createdAt ? data.createdAt.toDate().toLocaleDateString('ar-EG') : '';
       
       const el = document.createElement('div');
-      el.style.cssText = 'display: flex; gap: 15px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid #333;';
+      el.className = 'flex gap-4 bg-[#0a0505] p-5 rounded-2xl border border-red-900/20 shadow-lg';
       
       const delBtn = (currentUser && currentUser.uid === data.authorUid) 
-         ? `<button onclick="deleteComment('${docSnap.id}')" style="background:none; border:none; color:#e50914; cursor:pointer; font-size: 0.9em;"><i class="fas fa-trash"></i> حذف</button>` 
-         : `<button onclick="openReportModal('comment', '${docSnap.id}')" style="background:none; border:none; color:#777; cursor:pointer; font-size: 0.9em;" class="hover:text-red-500 transition-colors"><i class="fas fa-flag"></i> إبلاغ</button>`;
+         ? `<button onclick="deleteComment('${docSnap.id}')" class="text-red-600 hover:text-red-400 text-xs font-bold transition-colors"><i class="fas fa-trash"></i> حذف</button>` 
+         : `<button onclick="openReportModal('comment', '${docSnap.id}')" class="text-gray-500 hover:text-red-500 text-xs font-bold transition-colors"><i class="fas fa-flag"></i> إبلاغ</button>`;
         
       el.innerHTML = `
         <a href="/author/${data.authorUid}" style="display: block; width: 40px; height: 40px; flex-shrink: 0;">

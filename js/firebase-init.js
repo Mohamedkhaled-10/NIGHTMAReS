@@ -21,8 +21,8 @@ if (cachedConfig) {
       firebaseConfig = JSON.parse(xhr.responseText);
       
       // Validate configuration before caching or initializing
-      if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId || firebaseConfig.projectId !== 'nightmare-9a1a0') {
-        throw new Error('Invalid or missing Firebase configuration for project nightmare-9a1a0');
+      if (!firebaseConfig || !firebaseConfig.apiKey || !firebaseConfig.projectId) {
+        throw new Error('Invalid or missing Firebase configuration');
       }
       
       sessionStorage.setItem('firebaseConfig', JSON.stringify(firebaseConfig));

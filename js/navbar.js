@@ -13,12 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentHash = window.location.hash;
   
   listItems.forEach(item => {
-    item.classList.remove('active');
+    item.classList.remove('active'); const lnk = item.querySelector('a'); if(lnk) lnk.classList.remove('!text-red-500');
     const link = item.querySelector('a');
     if (link) {
       const href = link.getAttribute('href');
       if (href === currentPath || href === currentPath + currentHash || (currentPath === '/' && href === '/#home' && !currentHash)) {
-        item.classList.add('active');
+        item.classList.add('active'); const lnk = item.querySelector('a'); if(lnk) lnk.classList.add('!text-red-500');
       }
     }
   });
@@ -36,8 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (active) moveIndicator(active);
     });
     item.addEventListener('click', function() {
-      listItems.forEach(item => item.classList.remove('active'));
-      this.classList.add('active');
+      listItems.forEach(item => { item.classList.remove('active'); const l = item.querySelector('a'); if(l) l.classList.remove('!text-red-500'); });
+      this.classList.add('active'); const l = this.querySelector('a'); if(l) l.classList.add('!text-red-500');
       moveIndicator(this);
     });
   });
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (searchOpen) {
         searchForm.style.maxHeight = "0";
       } else {
-        searchForm.style.maxHeight = "200px";
+        searchForm.style.maxHeight = "500px";
       }
       searchOpen = !searchOpen;
     });
@@ -62,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const sidebarMenu = document.getElementById('sidebarMenu');
   const overlay = document.getElementById('overlay');
   const hamburgerWrapper = document.getElementById('hamburgerWrapper');
-  const navbar = document.querySelector('.navbar');
+  const navbars = document.querySelectorAll('.navbar');
 
   if(menuBtn) {
     menuBtn.addEventListener('click', () => {
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (isSearchOpen) {
         mobileSearchForm.style.maxHeight = "0";
       } else {
-        mobileSearchForm.style.maxHeight = "120px";
+        mobileSearchForm.style.maxHeight = "500px";
       }
       isSearchOpen = !isSearchOpen;
     });
@@ -116,10 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     if (scrollTop > lastScrollTop && scrollTop > 100) {
-      if(navbar) navbar.style.top = '-80px';
+      navbars.forEach(n => n.style.top = '-80px');
       if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(100px)";
     } else {
-      if(navbar) navbar.style.top = '0';
+      navbars.forEach(n => n.style.top = '0');
       if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(0)";
     }
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;

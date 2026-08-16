@@ -1,227 +1,256 @@
-<nav class="navbar hidden md:block">
-    <ul>
-      <li>
-        <a href="/#home">
-          <ion-icon name="home-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="/explore">
-          <ion-icon name="compass-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="/#cards">
-          <ion-icon name="book-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="/#news">
-          <ion-icon name="newspaper-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="/#video">
-          <ion-icon name="play-circle-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="/contact-us">
-          <ion-icon name="call-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <li>
-        <a href="/Terms-of-Use-and-Privacy-Policy">
-          <ion-icon name="information-circle-outline"></ion-icon>
-          <span></span>
-        </a>
-      </li>
-      <div id="marker"></div>
-    </ul>
+<nav id="desktopNavbar" class="navbar hidden md:flex fixed top-0 w-full z-50 bg-[#050000]/90 backdrop-blur-md border-b border-red-900/20 h-16 items-center justify-between px-6 lg:px-12 transition-all duration-300">
+  <!-- Right (Start) - Logo -->
+  <div class="flex items-center">
+    <a href="/#home" class="flex items-center gap-3 group">
+      <img src="/assets/images/icon-white.png" alt="Logo" class="w-8 h-8 group-hover:scale-110 transition-transform">
+      <span class="text-white font-black tracking-wider text-xl hidden lg:block group-hover:text-red-500 transition-colors">NIGHTMAReS</span>
+    </a>
+  </div>
 
-  <!-- زر الإشعارات + القائمة المنسدلة -->
-  <div class="absolute top-1/2 right-20 -translate-y-1/2">
-    <div class="relative inline-block text-left">
-      <button id="notifBtn" aria-label="الإشعارات" class="text-white text-2xl p-2 hover:text-red-500 transition relative">
-        <ion-icon name="notifications-outline"></ion-icon>
-        <span id="notifDot" class="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold rounded-full min-w-[16px] h-[16px] flex items-center justify-center hidden px-1 border border-[#130000]"></span>
+  <!-- Center - Links -->
+  <ul class="flex items-center gap-6 lg:gap-8">
+    <li>
+      <a href="/#home" class="text-gray-300 hover:text-red-500 font-semibold text-sm transition-colors flex items-center gap-2">
+        <ion-icon name="home-outline" class="text-lg"></ion-icon>
+        <span>الرئيسية</span>
+      </a>
+    </li>
+    <li>
+      <a href="/explore" class="text-gray-300 hover:text-red-500 font-semibold text-sm transition-colors flex items-center gap-2">
+        <ion-icon name="compass-outline" class="text-lg"></ion-icon>
+        <span>اكتشف</span>
+      </a>
+    </li>
+    <li>
+      <a href="/#cards" class="text-gray-300 hover:text-red-500 font-semibold text-sm transition-colors flex items-center gap-2">
+        <ion-icon name="book-outline" class="text-lg"></ion-icon>
+        <span>القصص</span>
+      </a>
+    </li>
+    <li>
+      <a href="/#news" class="text-gray-300 hover:text-red-500 font-semibold text-sm transition-colors flex items-center gap-2">
+        <ion-icon name="newspaper-outline" class="text-lg"></ion-icon>
+        <span>الأخبار</span>
+      </a>
+    </li>
+    <li>
+      <a href="/#video" class="text-gray-300 hover:text-red-500 font-semibold text-sm transition-colors flex items-center gap-2">
+        <ion-icon name="play-circle-outline" class="text-lg"></ion-icon>
+        <span>فيديو</span>
+      </a>
+    </li>
+  </ul>
+
+  <!-- Left (End) - Actions & Auth -->
+  <div class="flex items-center gap-4">
+    <!-- Search -->
+    <div class="relative">
+      <button id="searchToggle" aria-label="فتح البحث" class="text-gray-300 hover:text-red-500 text-xl p-2 transition-colors">
+        <ion-icon name="search-outline"></ion-icon>
       </button>
+      <form id="searchForm" class="absolute top-full left-0 mt-3 w-64 bg-[#0a0505] border border-red-900/30 rounded-lg shadow-xl overflow-hidden max-h-0 transition-[max-height] duration-300 ease-in-out" style="max-height: 0; z-index: 999;">
+        <div class="flex items-center px-3 py-2 border-b border-red-900/20">
+          <ion-icon name="search-outline" class="text-gray-500"></ion-icon>
+          <input id="searchInput" type="search" placeholder="ابحث عن كابوس..." class="w-full bg-transparent px-3 text-sm text-white focus:outline-none placeholder-gray-600" />
+        </div>
+        <ul id="suggestionsList" class="max-h-60 overflow-y-auto hidden"></ul>
+      </form>
+    </div>
 
-      <!-- القائمة المنسدلة -->
-      <div id="notifMenu" class="hidden absolute right-0 mt-2 w-72 bg-[#1c1c1e] border border-[#7f1d1d] rounded-xl shadow-lg z-50 max-h-80 overflow-y-auto">
-        <ul id="notificationsList" class="divide-y divide-[#7f1d1d]">
-          <li class="px-4 py-3 text-sm text-gray-400 text-center">لا توجد إشعارات بعد</li>
+    <!-- Notifications -->
+    <div class="relative">
+      <button id="notifBtn" aria-label="الإشعارات" class="text-gray-300 hover:text-red-500 text-xl p-2 transition-colors relative">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span id="notifDot" class="absolute top-1 right-1 bg-red-600 text-white text-[9px] font-bold rounded-full min-w-[14px] h-[14px] flex items-center justify-center hidden px-1 border border-[#050000]"></span>
+      </button>
+      <div id="notifMenu" class="hidden absolute left-0 top-full mt-3 w-80 bg-[#0a0505] border border-red-900/30 rounded-lg shadow-xl z-50 max-h-80 overflow-y-auto">
+        <div class="px-4 py-3 border-b border-red-900/20">
+          <h3 class="font-bold text-white text-sm">الإشعارات</h3>
+        </div>
+        <ul id="notificationsList" class="divide-y divide-red-900/10">
+          <li class="px-4 py-6 text-sm text-gray-500 text-center">لا توجد إشعارات بعد</li>
         </ul>
       </div>
     </div>
-  </div>
 
-  <!-- زر البحث -->
-  <div class="search-wrapper absolute top-1/2 right-6 -translate-y-1/2">
-    <button id="searchToggle" aria-label="فتح البحث" class="text-white text-2xl p-2 hover:text-red-500 transition">
+    <!-- Divider -->
+    <div class="w-px h-6 bg-red-900/30 mx-1"></div>
+
+    <!-- Auth UI -->
+    <div id="desktop-auth-container" class="flex items-center">
+      <!-- Unauthenticated -->
+      <div id="desktop-auth-unauthenticated" class="flex">
+        <a href="/login" class="group relative flex items-center gap-2 px-4 py-1.5 bg-transparent border border-red-900/50 hover:border-red-600 text-gray-300 hover:text-white text-sm font-bold rounded transition-all duration-300 overflow-hidden">
+          <span class="relative z-10">تسجيل الدخول</span>
+          <div class="absolute inset-0 bg-red-900/20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
+        </a>
+      </div>
+      <!-- Authenticated -->
+      <div id="desktop-auth-authenticated" class="hidden relative">
+        <button id="desktop-user-dropdown-btn" class="flex items-center gap-2 group bg-transparent border border-transparent hover:border-red-900/40 px-2 py-1 rounded-full transition-all duration-300">
+          <img src="/assets/images/icon-white.png" width="28" height="28" id="desktop-user-avatar" class="w-8 h-8 rounded-full border border-red-900/50 object-cover" onerror="this.src='/assets/images/icon-white.png'">
+          <span id="desktop-user-name" class="text-sm font-bold text-gray-300 group-hover:text-white transition-colors truncate max-w-[100px] pointer-events-none"></span>
+          <ion-icon name="chevron-down-outline" class="text-gray-500 group-hover:text-white transition-transform text-sm pointer-events-none" id="desktop-dropdown-chevron"></ion-icon>
+        </button>
+        <!-- Dropdown Menu -->
+        <div id="desktop-user-dropdown-menu" class="absolute left-0 top-full mt-3 w-56 bg-[#0a0505]/95 backdrop-blur-md border border-red-900/30 rounded-lg shadow-xl flex flex-col py-2 z-50 origin-top-left transform transition-all duration-200 opacity-0 scale-95 pointer-events-none">
+          <div class="px-4 py-3 border-b border-red-900/20 mb-1 bg-black/20">
+            <span class="block text-xs text-gray-500 mb-1">مسجل الدخول كـ</span>
+            <span id="desktop-dropdown-user-email" class="block text-sm font-bold text-gray-300 truncate"></span>
+          </div>
+          <a href="/profile" class="px-4 py-2.5 text-sm font-semibold text-gray-400 hover:text-white hover:bg-red-950/30 hover:border-r-2 hover:border-red-600 transition-all flex items-center gap-3">
+            <ion-icon name="person-outline" class="text-red-500"></ion-icon> إدارة حسابي
+          </a>
+          <a href="/submit" class="px-4 py-2.5 text-sm font-semibold text-gray-400 hover:text-white hover:bg-red-950/30 hover:border-r-2 hover:border-red-600 transition-all flex items-center gap-3">
+            <ion-icon name="create-outline" class="text-red-500"></ion-icon> إرسال قصتك
+          </a>
+          <a href="/admin" id="desktop-admin-link" class="hidden px-4 py-2.5 text-sm font-bold text-red-400 hover:text-red-300 hover:bg-red-950/50 hover:border-r-2 hover:border-red-500 transition-all flex items-center gap-3 bg-red-900/10 mt-1">
+            <ion-icon name="shield-checkmark-outline"></ion-icon> لوحة الإدارة
+          </a>
+          <div class="h-px bg-red-900/20 my-2 mx-4"></div>
+          <button id="desktop-logout-btn" class="w-full text-right px-4 py-2.5 text-sm font-bold text-gray-500 hover:text-red-500 hover:bg-red-950/20 transition-colors flex items-center gap-3">
+            <ion-icon name="log-out-outline"></ion-icon> تسجيل الخروج
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Navbar Header -->
+<div class="navbar md:hidden fixed top-0 left-0 w-full z-40 bg-[#050000]/90 backdrop-blur-md border-b border-red-900/20 h-16 flex items-center justify-between px-4 transition-all duration-300">
+  <a href="/#home" class="flex items-center gap-2">
+    <img src="/assets/images/icon-white.png" alt="Logo" class="w-7 h-7">
+    <span class="text-white font-black tracking-wider text-base">NIGHTMAReS</span>
+  </a>
+  <div class="flex items-center gap-3">
+    <button id="mobileSearchBtn" aria-label="بحث موبايل" class="text-gray-300 hover:text-red-500 text-2xl p-1 transition-colors">
       <ion-icon name="search-outline"></ion-icon>
     </button>
-    <form id="searchForm" class="absolute top-full right-0 mt-2 w-64 bg-[#130000] rounded-md shadow-lg overflow-hidden max-h-0 transition-[max-height] duration-500 ease-in-out" style="max-height: 0; z-index: 999;">
-      <input id="searchInput" type="search" placeholder="ابحث هنا..." class="w-full px-4 py-2 bg-[#1b0d0d] text-white focus:outline-none" />
-      <ul id="suggestionsList" class="absolute top-full right-0 mt-1 w-64 bg-[#1b0d0d] text-white rounded shadow-lg hidden z-[1000]"></ul>
-    </form>
-  </div>
-
-  <!-- User Auth UI (Desktop) -->
-  <div class="absolute top-1/2 left-6 -translate-y-1/2 flex items-center gap-4" id="desktop-auth-container">
-    <div id="desktop-auth-unauthenticated" class="flex gap-2">
-      <a href="/login" class="group relative flex items-center gap-2 px-5 py-1.5 bg-[#0a0000] text-gray-300 text-sm font-bold rounded border border-red-900/50 hover:border-red-600 hover:text-white hover:shadow-[0_0_12px_rgba(220,38,38,0.4)] transition-all duration-300 overflow-hidden">
-        <ion-icon name="log-in-outline" class="text-xl text-red-600 group-hover:text-red-500 transition-colors duration-300 relative z-10"></ion-icon>
-        <span class="relative z-10 tracking-wide">تسجيل الدخول</span>
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-red-600/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-700 ease-in-out skew-x-12 z-0"></div>
-      </a>
-    </div>
-    <div id="desktop-auth-authenticated" class="hidden relative">
-      <!-- Trigger Button -->
-      <button id="desktop-user-dropdown-btn" class="flex items-center gap-2 group bg-[#0a0000] border border-red-900/40 px-3 py-1.5 rounded-full hover:border-red-600 transition-all duration-300 shadow-sm hover:shadow-[0_0_10px_rgba(220,38,38,0.3)] focus:outline-none">
-        <img src="/assets/images/icon-white.png" width="28" height="28" id="desktop-user-avatar" class="w-7 h-7 rounded-full border border-red-900/50 object-cover" onerror="this.src='/assets/images/icon-white.png'">
-        <span id="desktop-user-name" class="text-sm font-bold text-gray-200 group-hover:text-white transition-colors tracking-wide max-w-[120px] truncate pointer-events-none"></span>
-        <ion-icon name="chevron-down-outline" class="text-gray-400 group-hover:text-white transition-transform duration-300 pointer-events-none" id="desktop-dropdown-chevron"></ion-icon>
+    <div id="hamburgerWrapper" class="transition-transform duration-300 z-50">
+      <button id="menuBtn" aria-label="القائمة الجانبية" class="flex flex-col items-end gap-1.5 p-2 bg-transparent">
+        <span class="block w-6 h-[2px] bg-white transition-all"></span>
+        <span class="block w-5 h-[2px] bg-white transition-all"></span>
+        <span class="block w-6 h-[2px] bg-white transition-all"></span>
       </button>
+    </div>
+  </div>
+</div>
 
-      <!-- Dropdown Menu -->
-      <div id="desktop-user-dropdown-menu" class="absolute left-0 top-full mt-3 w-56 bg-[#0a0505]/95 backdrop-blur-md border border-red-900/50 rounded-lg shadow-[0_8px_30px_rgba(220,38,38,0.2)] flex flex-col py-2 z-50 origin-top-left transform transition-all duration-200 opacity-0 scale-95 pointer-events-none">
-        <div class="px-4 py-2 border-b border-red-900/30 mb-1">
-          <span class="block text-xs text-gray-500 mb-1">حسابك الحالي</span>
-          <span id="desktop-dropdown-user-email" class="block text-sm font-bold text-gray-300 truncate"></span>
+<!-- شريط البحث للهاتف -->
+<form id="mobileSearchForm" class="fixed top-16 left-0 right-0 bg-[#0a0505] border-b border-red-900/30 overflow-hidden shadow-xl max-h-0 transition-[max-height] duration-300 md:hidden z-30">
+  <div class="flex items-center px-4 py-2 bg-black/20">
+    <input
+      type="search"
+      id="searchInputMobile"
+      placeholder="ابحث عن كابوس..."
+      class="flex-1 bg-transparent py-2 text-white focus:outline-none placeholder-gray-600 text-sm"
+    />
+    <button type="submit" class="text-red-500 hover:text-red-400 p-2"><ion-icon name="search-outline" class="text-xl"></ion-icon></button>
+  </div>
+  <ul id="suggestionsListMobile" class="bg-[#0a0505] text-white hidden max-h-60 overflow-y-auto"></ul>
+</form>
+
+<!-- غطاء للخلفية -->
+<div id="overlay" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden z-40 md:hidden transition-opacity"></div>
+
+<!-- القائمة الجانبية للموبايل -->
+<div id="sidebarMenu" class="fixed top-0 right-0 h-full w-[280px] bg-[#0a0505] border-l border-red-900/20 transform translate-x-full transition-transform duration-300 z-50 md:hidden overflow-hidden flex flex-col shadow-2xl">
+  <div class="flex items-center justify-between p-5 border-b border-red-900/20 bg-black/20">
+    <h2 class="text-white text-lg font-bold">القائمة</h2>
+    <button id="closeSidebarBtn" class="text-gray-400 hover:text-white text-2xl">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+  </div>
+  
+  <div class="flex-1 overflow-y-auto py-2">
+    <ul class="text-gray-300 text-sm font-semibold flex flex-col gap-1 px-3">
+      <li>
+        <a href="/#home" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white transition-colors">
+          <ion-icon name="home-outline" class="text-xl text-red-600"></ion-icon> الرئيسية
+        </a>
+      </li>
+      <li>
+        <a href="/explore" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white transition-colors">
+          <ion-icon name="compass-outline" class="text-xl text-red-600"></ion-icon> اكتشف
+        </a>
+      </li>
+      <li>
+        <a href="/#cards" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white transition-colors">
+          <ion-icon name="book-outline" class="text-xl text-red-600"></ion-icon> القصص
+        </a>
+      </li>
+      <li>
+        <a href="/#news" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white transition-colors">
+          <ion-icon name="newspaper-outline" class="text-xl text-red-600"></ion-icon> الأخبار
+        </a>
+      </li>
+      <li>
+        <a href="/#video" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white transition-colors">
+          <ion-icon name="play-circle-outline" class="text-xl text-red-600"></ion-icon> الفيديو
+        </a>
+      </li>
+      <li>
+        <a href="/contact-us" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white transition-colors">
+          <ion-icon name="call-outline" class="text-xl text-red-600"></ion-icon> اتصل بنا
+        </a>
+      </li>
+      <li>
+        <a href="/Terms-of-Use-and-Privacy-Policy" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white transition-colors">
+          <ion-icon name="information-circle-outline" class="text-xl text-red-600"></ion-icon> سياسة الاستخدام والخصوصية
+        </a>
+      </li>
+    </ul>
+
+    <div class="h-px bg-red-900/20 my-4 mx-6"></div>
+    
+    <div id="mobile-auth-container" class="px-3">
+      <div id="mobile-auth-unauthenticated" class="mb-4">
+        <a href="/login" class="flex justify-center items-center gap-2 w-full py-3 bg-red-900/10 text-white font-bold rounded-lg border border-red-900/50 hover:bg-red-900/30 transition-colors">
+          <ion-icon name="log-in-outline" class="text-xl"></ion-icon> تسجيل الدخول
+        </a>
+      </div>
+      
+      <div id="mobile-auth-authenticated" class="hidden flex-col gap-1">
+        <div class="flex items-center gap-3 px-4 py-3 bg-black/30 rounded-lg border border-red-900/20 mb-2">
+          <img src="/assets/images/icon-white.png" width="36" height="36" id="mobile-user-avatar" class="w-9 h-9 rounded-full border border-red-900/50 object-cover" onerror="this.src='/assets/images/icon-white.png'">
+          <div class="flex flex-col min-w-0">
+            <span class="text-[10px] text-gray-500 uppercase tracking-wider">الحساب</span>
+            <span id="mobile-user-name" class="text-sm font-bold text-gray-200 truncate"></span>
+          </div>
         </div>
-        <a href="/profile" class="px-4 py-2.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-red-900/20 transition-colors flex items-center gap-3">
-          <ion-icon name="person-outline" class="text-red-500 text-lg"></ion-icon> إدارة حسابي
+        <a href="/profile" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white text-gray-300 text-sm font-semibold transition-colors">
+          <ion-icon name="person-outline" class="text-xl text-gray-500"></ion-icon> إدارة حسابي
         </a>
-        <a href="/submit" class="px-4 py-2.5 text-sm font-semibold text-gray-300 hover:text-white hover:bg-red-900/20 transition-colors flex items-center gap-3">
-          <ion-icon name="create-outline" class="text-red-500 text-lg"></ion-icon> إرسال قصتك
+        <a href="/submit" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 hover:text-white text-gray-300 text-sm font-semibold transition-colors">
+          <ion-icon name="create-outline" class="text-xl text-gray-500"></ion-icon> إرسال قصتك
         </a>
-        <a href="/admin" id="desktop-admin-link" class="hidden px-4 py-2.5 text-sm font-bold text-red-400 hover:text-red-300 hover:bg-red-900/20 transition-colors flex items-center gap-3 border-r-2 border-red-600 bg-red-900/10 mt-1">
-          <ion-icon name="shield-checkmark-outline" class="text-lg"></ion-icon> لوحة الإدارة
+        <a href="/admin" id="mobile-admin-link" class="hidden flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 text-red-400 text-sm font-bold transition-colors bg-red-900/10">
+          <ion-icon name="shield-checkmark-outline" class="text-xl text-red-500"></ion-icon> لوحة الإدارة
         </a>
-        <div class="h-px bg-red-900/30 my-1 mx-2"></div>
-        <button id="desktop-logout-btn" class="w-full text-right px-4 py-2.5 text-sm font-bold text-gray-400 hover:text-red-500 hover:bg-red-900/20 transition-colors flex items-center gap-3 rounded-b-lg">
-          <ion-icon name="log-out-outline" class="text-lg"></ion-icon> تسجيل الخروج
+        <button id="mobile-logout-btn" class="flex items-center gap-4 px-4 py-3 rounded-lg hover:bg-red-950/30 text-gray-400 hover:text-red-500 text-sm font-bold transition-colors w-full text-right mt-2">
+          <ion-icon name="log-out-outline" class="text-xl"></ion-icon> تسجيل الخروج
         </button>
       </div>
     </div>
   </div>
-
-</nav>
-
-<!-- أيقونة البحث للهاتف -->
-<div class="md:hidden fixed top-4 left-4 z-50">
-  <button id="mobileSearchBtn" aria-label="بحث موبايل" class="text-white text-2xl p-2 hover:text-red-500 transition">
-    <ion-icon name="search-outline"></ion-icon>
-  </button>
-</div>
-
-<!-- شريط البحث للهاتف -->
-<form id="mobileSearchForm" class="fixed top-14 left-4 right-4 bg-[#130000] rounded-lg overflow-hidden shadow-lg max-h-0 transition-all duration-300 md:hidden z-50">
-  <div class="flex">
-  <input
-    type="search"
-    id="searchInputMobile"
-    placeholder="ابحث هنا..."
-    class="flex-1 px-4 py-3 text-white bg-[#1b0d0d] focus:outline-none placeholder:text-gray-300"
-  />
-  <button type="submit" class="bg-red-800 hover:bg-red-900 px-4 text-white">بحث</button>
-</div>
-  <ul id="suggestionsListMobile" class="bg-[#1b0d0d] text-white hidden"></ul>
-</form>
-
-<!-- أيقونة الهمبرجر -->
-<div id="hamburgerWrapper" class="md:hidden fixed top-4 right-4 z-50 transition-transform duration-300">
-  <button id="menuBtn" aria-label="القائمة الجانبية" class="flex flex-col items-end gap-1 p-2 bg-[#130000] rounded-md shadow-md">
-    <span class="block w-6 h-0.5 bg-white"></span>
-    <span class="block w-5 h-0.5 bg-white"></span>
-    <span class="block w-4 h-0.5 bg-white"></span>
-  </button>
-</div>
-
-<!-- غطاء للخلفية -->
-<div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-30 md:hidden"></div>
-
-<!-- القائمة الجانبية المحسّنة -->
-<div id="sidebarMenu" class="fixed top-0 right-0 h-full w-72 bg-[#130000] transform translate-x-full transition-transform duration-300 z-40 md:hidden shadow-2xl rounded-l-2xl overflow-hidden">
-  <div class="p-5 h-full flex flex-col">
-    <h2 class="text-white text-2xl font-bold mb-4 pb-2 border-b border-[#2c1b1b]">القائمة</h2>
-    <ul class="text-white text-base divide-y divide-[#2c1b1b]">
-      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-        <ion-icon name="home-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="/#home" class="w-full">الرئيسية</a>
-      </li>
-      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-        <ion-icon name="compass-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="/explore" class="w-full">اكتشف</a>
-      </li>
-      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-        <ion-icon name="book-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="/#cards" class="w-full">القصص</a>
-      </li>
-      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-        <ion-icon name="newspaper-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="/#news" class="w-full">الأخبار</a>
-      </li>
-      <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-        <ion-icon name="play-circle-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="/#video" class="w-full">الفيديو</a>
-      </li>
-      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-        <ion-icon name="call-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="/contact-us" class="w-full">اتصل بنا</a>
-      </li>
-      <li class="bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-        <ion-icon name="person-outline" class="text-xl text-red-500"></ion-icon>
-        <a href="/Terms-of-Use-and-Privacy-Policy" class="w-full">سياسة الاستخدام والخصوصية</a>
-      </li>
-      <div id="mobile-auth-container">
-        <li id="mobile-auth-unauthenticated" class="px-4 py-4 mt-2">
-          <a href="/login" class="group relative flex justify-center items-center gap-2 w-full py-3 bg-[#0a0000] text-gray-300 text-base font-bold rounded border border-red-900/50 hover:border-red-600 active:border-red-500 hover:text-white active:text-white shadow-sm hover:shadow-[0_0_15px_rgba(220,38,38,0.4)] transition-all duration-300 overflow-hidden">
-            <ion-icon name="log-in-outline" class="text-2xl text-red-600 group-hover:text-red-500 transition-colors duration-300 relative z-10"></ion-icon>
-            <span class="relative z-10 tracking-wide">تسجيل الدخول</span>
-            <div class="absolute inset-0 bg-gradient-to-r from-transparent via-red-600/20 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] active:translate-x-[150%] transition-transform duration-700 ease-in-out skew-x-12 z-0"></div>
-          </a>
-        </li>
-        <div id="mobile-auth-authenticated" class="hidden">
-          <li class="bg-[#0a0000] border-t border-b border-red-900/30 px-4 py-4 flex items-center gap-4 my-2">
-            <img src="/assets/images/icon-white.png" width="40" height="40" id="mobile-user-avatar" class="w-10 h-10 rounded-full border border-red-900/60 object-cover shadow-[0_0_8px_rgba(220,38,38,0.2)]" onerror="this.src='/assets/images/icon-white.png'">
-            <div class="flex flex-col">
-              <span class="text-xs text-gray-500 mb-0.5">مرحباً بك،</span>
-              <span id="mobile-user-name" class="text-base font-bold text-gray-200 truncate max-w-[200px]"></span>
-            </div>
-          </li>
-          <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-            <ion-icon name="person-circle-outline" class="text-xl text-red-500"></ion-icon>
-            <a href="/profile" class="w-full text-gray-300">إدارة حسابي</a>
-          </li>
-          <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3">
-            <ion-icon name="create-outline" class="text-xl text-red-500"></ion-icon>
-            <a href="/submit" class="w-full text-gray-300">إرسال قصتك</a>
-          </li>
-          <li id="mobile-admin-link" class="hidden bg-[#130000] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3 border-l-2 border-red-600">
-            <ion-icon name="shield-checkmark-outline" class="text-xl text-red-500"></ion-icon>
-            <a href="/admin" class="w-full text-red-400 font-bold">لوحة الإدارة</a>
-          </li>
-          <li class="bg-[#1b0d0d] hover:bg-red-950 transition px-4 py-3 flex items-center gap-3 mt-2 border-t border-[#2c1b1b]">
-            <ion-icon name="log-out-outline" class="text-xl text-gray-500"></ion-icon>
-            <button id="mobile-logout-btn" class="w-full text-right text-gray-400 hover:text-red-500 font-bold transition-colors">تسجيل الخروج</button>
-          </li>
-        </div>
-      </div>
-    </ul>
-    
-    <div class="mt-auto pt-6 border-t border-[#2c1b1b] text-center text-sm text-gray-400">
-      <p>NIGHTMAReS © 2025</p>
-    </div>
+  
+  <div class="p-4 border-t border-red-900/20 bg-black/20 text-center">
+    <p class="text-xs text-gray-600 font-semibold tracking-wider">NIGHTMAReS © 2025</p>
   </div>
 </div>
+
 <script src="/js/navbar.js" defer></script>
 <script type="module" src="/js/auth-ui.js"></script>
 <script type="module" src="/js/notifications.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const closeBtn = document.getElementById('closeSidebarBtn');
+    const overlay = document.getElementById('overlay');
+    if(closeBtn && overlay) {
+      closeBtn.addEventListener('click', () => {
+        overlay.click();
+      });
+    }
+  });
+</script>

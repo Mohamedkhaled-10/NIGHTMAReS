@@ -163,22 +163,51 @@ document.addEventListener('DOMContentLoaded', () => {
               displaySnippet = snippetText.substring(0, 100) + '...';
             }
 
+            
             const card = document.createElement('a');
             card.href = link;
-            card.className = 'bg-black/60 border border-gray-800 rounded-lg overflow-hidden shadow-lg hover:border-red-600 hover:shadow-red-900/50 transition transform hover:-translate-y-1 flex flex-col h-full';
-            card.innerHTML = `
-              <div class="h-48 overflow-hidden relative shrink-0">
-                <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" class="w-full h-full object-cover" loading="lazy" decoding="async">
-                <span class="absolute top-2 right-2 ${typeColor} text-white text-xs px-2 py-1 rounded shadow">${typeLabel}</span>
-              </div>
-              <div class="p-5 flex-1 flex flex-col">
-                <h3 class="text-xl font-bold text-white mb-2 line-clamp-2">${displayTitle}</h3>
-                <div>${categoryHtml}</div>
-                <p class="text-gray-400 text-sm leading-relaxed mt-3">${displaySnippet}</p>
-              </div>
-            `;
+            
+            if (post.type === 'story') {
+              card.className = 'card block';
+              card.innerHTML = `
+                <div class="card-inner">
+                  <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async">
+                  <div class="overlay"></div>
+                  <div class="card-content">
+                    <span class="text-xs font-bold px-2 py-1 bg-red-900/50 text-red-200 border border-red-900/50 rounded mb-2 w-fit">${getCategoryName(post.category)}</span>
+                    <h3>${displayTitle}</h3>
+                    <span class="fake-btn">اقرأ القصة <i class="fa-solid fa-arrow-left text-xs"></i></span>
+                  </div>
+                </div>
+              `;
+            } else if (post.type === 'video') {
+              card.className = 'video-card h-full';
+              card.innerHTML = `
+                <div class="thumbnail-wrapper">
+                  <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async">
+                </div>
+                <div class="video-content flex-1 flex flex-col h-full bg-[#0a0505]">
+                  <span class="text-[10px] font-bold px-2 py-1 bg-gray-800 text-gray-300 rounded mb-2 w-fit border border-gray-700">${getCategoryName(post.category)}</span>
+                  <h3 class="line-clamp-2">${displayTitle}</h3>
+                </div>
+              `;
+            } else {
+              card.className = 'news-card h-full flex flex-col';
+              card.innerHTML = `
+                <div class="relative shrink-0 h-[220px]">
+                  <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover">
+                  <span class="absolute top-3 right-3 bg-red-900/80 text-white text-[10px] px-2 py-1 rounded backdrop-blur-md z-10">${getCategoryName(post.category)}</span>
+                </div>
+                <div class="news-content flex-1 flex flex-col p-4 bg-[#0a0505]">
+                  <h3 class="line-clamp-2">${displayTitle}</h3>
+                  <p class="news-text line-clamp-3 mb-4">${displaySnippet}</p>
+                  <span class="read-more-btn mt-auto self-start">اقرأ المزيد</span>
+                </div>
+              `;
+            }
             
             resultsContainer.appendChild(card);
+
           }
         });
 
