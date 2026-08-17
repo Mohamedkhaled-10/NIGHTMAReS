@@ -200,6 +200,39 @@ async function renderContent(data) {
     }).catch(e => console.error("Error fetching author details:", e));
   }
 
+  // Set Date and Read Time
+  const dateText = document.getElementById('article-date-text');
+  const readTimeText = document.getElementById('article-read-time-text');
+  
+  if (dateText) {
+    const publishDate = data.publishAt ? (data.publishAt.toDate ? data.publishAt.toDate() : new Date(data.publishAt)) : 
+                        (data.createdAt ? (data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt)) : new Date());
+    dateText.textContent = publishDate.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  if (readTimeText) {
+    let readMins = 0;
+    if (data.data?.readTimeMinutes) {
+      readMins = data.data.readTimeMinutes;
+    } else if (data.data?.contentHtml) {
+      // rough estimation: 200 words per minute
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = data.data.contentHtml;
+      const text = tempDiv.textContent || tempDiv.innerText || '';
+      const wordCount = text.split(/\s+/).length;
+      readMins = Math.ceil(wordCount / 200);
+    }
+    
+    if (readMins > 0) {
+      readTimeText.textContent = `${readMins} دقيقة قراءة`;
+    } else {
+      readTimeText.parentElement.style.display = 'none';
+      if(readTimeText.parentElement.previousElementSibling) {
+        readTimeText.parentElement.previousElementSibling.style.display = 'none'; // hide the divider
+      }
+    }
+  }
+
   // Render Taxonomy (Category and Tags)
   const taxonomyContainer = document.getElementById('article-taxonomy');
   const categoryEl = document.getElementById('article-category');

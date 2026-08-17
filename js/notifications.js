@@ -40,6 +40,8 @@ function loadNotifications(uid) {
     });
     
     updateNotificationsUI(notifications, unreadCount, uid);
+  }, (error) => {
+    console.error("Notifications fetch error (likely blocked by client):", error);
   });
 }
 

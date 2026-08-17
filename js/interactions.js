@@ -350,7 +350,7 @@ async function loadComments(loadMore = false) {
   
   if (!loadMore) {
     lastCommentDoc = null;
-    if(commentsList) commentsList.innerHTML = '';
+    if(commentsList) commentsList.innerHTML = '<div style="text-align: center; color: #888;">جاري تحميل التعليقات...</div>';
   }
   let q = query(
     collection(db, 'comments'),
@@ -385,32 +385,34 @@ async function loadComments(loadMore = false) {
       lastCommentDoc = snapshot.docs[snapshot.docs.length - 1];
     }
     
+    if (!loadMore && commentsList) commentsList.innerHTML = '';
+    
     snapshot.forEach(docSnap => {
       const data = docSnap.data();
       const dateStr = data.createdAt ? data.createdAt.toDate().toLocaleDateString('ar-EG') : '';
       
       const el = document.createElement('div');
-      el.className = 'flex gap-4 bg-[#0a0505] p-5 rounded-2xl border border-red-900/20 shadow-lg';
+      el.className = 'flex gap-5 bg-[#110808]/80 p-6 rounded-2xl border border-red-900/30 shadow-md';
       
-      const delBtn = (currentUser && currentUser.uid === data.authorUid) 
-         ? `<button onclick="deleteComment('${docSnap.id}')" class="text-red-600 hover:text-red-400 text-xs font-bold transition-colors"><i class="fas fa-trash"></i> حذف</button>` 
-         : `<button onclick="openReportModal('comment', '${docSnap.id}')" class="text-gray-500 hover:text-red-500 text-xs font-bold transition-colors"><i class="fas fa-flag"></i> إبلاغ</button>`;
-        
+      const delBtn = (currentUser && currentUser.uid === data.authorUid)
+          ? `<button onclick="deleteComment('${docSnap.id}')" class="text-red-600 hover:text-red-400 text-sm font-bold transition-colors flex items-center gap-1.5"><i class="fas fa-trash"></i> حذف</button>`
+          : `<button onclick="openReportModal('comment', '${docSnap.id}')" class="text-gray-500 hover:text-red-500 text-sm font-bold transition-colors flex items-center gap-1.5"><i class="fas fa-flag"></i> إبلاغ</button>`;
+          
       el.innerHTML = `
-        <a href="/author/${data.authorUid}" style="display: block; width: 40px; height: 40px; flex-shrink: 0;">
-          <img src="${data.authorPhoto}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" onerror="this.src='https://ui-avatars.com/api/?name=User'" loading="lazy" decoding="async">
+        <a href="/author/${data.authorUid}" class="block w-12 h-12 shrink-0">
+          <img src="${data.authorPhoto}" class="w-full h-full rounded-full border border-red-900/30 object-cover shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=User'" loading="lazy" decoding="async">
         </a>
-        <div style="flex: 1;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-            <a href="/author/${data.authorUid}" style="text-decoration: none;">
-              <strong style="color: #fff;" class="hover:text-red-500 transition-colors">${data.authorName}</strong>
+        <div class="flex-1">
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
+            <a href="/author/${data.authorUid}" class="text-lg font-bold text-gray-200 hover:text-red-500 transition-colors">
+              ${data.authorName}
             </a>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <span style="color: #777; font-size: 0.8em;">${dateStr}</span>
+            <div class="flex gap-4 items-center">
+              <span class="text-gray-500 text-sm font-medium">${dateStr}</span>
               ${delBtn}
             </div>
           </div>
-          <p style="color: #ddd; margin: 0; line-height: 1.5; white-space: pre-wrap;">${data.text}</p>
+          <p class="text-gray-300 m-0 leading-relaxed text-lg whitespace-pre-wrap">${data.text}</p>
         </div>
       `;
       
@@ -420,14 +422,15 @@ async function loadComments(loadMore = false) {
       const loadMoreBtn = document.createElement('button');
       loadMoreBtn.id = 'btn-load-more-comments';
       loadMoreBtn.textContent = 'تحميل المزيد';
-      loadMoreBtn.style.cssText = 'background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #555; padding: 10px; border-radius: 5px; cursor: pointer; width: 100%; margin-top: 10px; transition: background 0.3s;';
-      loadMoreBtn.onmouseover = () => loadMoreBtn.style.background = 'rgba(255,255,255,0.2)';
-      loadMoreBtn.onmouseout = () => loadMoreBtn.style.background = 'rgba(255,255,255,0.1)';
+      loadMoreBtn.className = 'w-full py-4 mt-4 bg-gray-900/50 hover:bg-gray-800 text-white font-bold rounded-xl border border-gray-700/50 transition-colors text-lg shadow-sm';
       loadMoreBtn.onclick = () => loadComments(true);
       if(commentsList) commentsList.appendChild(loadMoreBtn);
     }
   } catch (error) {
-    console.error(error);
+    console.error("Error loading comments:", error);
+    if (!loadMore && commentsList) {
+      commentsList.innerHTML = '<div style="text-align: center; color: #888;">تعذر تحميل التعليقات في الوقت الحالي.</div>';
+    }
   }
 }
 

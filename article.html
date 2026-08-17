@@ -22,13 +22,13 @@
     
     <div id="loading" class="col-span-full"></div>
 
-    <div id="content-area" class="hidden">
+    <div id="content-area" class="hidden flex-col items-center pt-24 pb-12">
       <!-- Article Cover Image -->
-      <div id="cover-image-container" style="display: none; max-width: 900px; width: 80%; margin: 100px auto 10px; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
-        <img id="article-cover-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Cover Image" style="width: 100%; height: auto; max-height: 500px; object-fit: cover; display: block;">
+      <div id="cover-image-container" class="hidden w-[90%] md:w-[80%] max-w-[900px] mx-auto mb-6 rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
+        <img id="article-cover-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Cover Image" class="w-full h-auto max-h-[500px] object-cover block">
       </div>
 
-      <h1 class="story-title" id="article-title" style="margin-top: 20px;"></h1>
+      <h1 class="story-title" id="article-title"></h1>
       
       <!-- Author Info (Injected dynamically if available) -->
       <div id="article-author" class="hidden flex justify-center items-center gap-3 mt-4 mb-2">
@@ -39,7 +39,7 @@
       </div>
       
       <!-- Category and Tags -->
-      <div id="article-taxonomy" class="hidden" style="max-width: 900px; width: 80%; margin: 10px auto; text-align: center;">
+      <div id="article-taxonomy" class="hidden w-[80%] max-w-[900px] mx-auto text-center my-2">
         <span id="article-category" class="inline-block bg-red-900/40 text-red-300 px-3 py-1 rounded-full text-sm font-semibold border border-red-900/30 mb-2"></span>
         <div id="article-tags" class="flex flex-wrap justify-center gap-2 mt-2"></div>
       </div>
@@ -70,23 +70,23 @@
       </section>
 
       <!-- Interactions Section (Likes & Comments) -->
-      <section id="interactions-section" class="article-container" style="margin-top: 30px; font-family: 'Cairo', sans-serif;">
-        <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #444; padding-bottom: 10px; margin-bottom: 20px;">
-          <h3 style="font-size: 1.5em;">التفاعلات والتعليقات</h3>
-          <div style="display: flex; gap: 20px; align-items: center;">
-            <span style="color: #aaa; font-size: 1em; display: flex; align-items: center; gap: 8px;" title="المشاهدات">
+      <section id="interactions-section" class="article-container mt-8 font-cairo">
+        <div class="flex items-center justify-between border-b border-gray-600 pb-3 mb-5">
+          <h3 class="text-2xl font-bold">التفاعلات والتعليقات</h3>
+          <div class="flex gap-5 items-center text-gray-400 text-lg">
+            <span class="flex items-center gap-2" title="المشاهدات">
               <i class="fas fa-eye"></i> <span id="views-count">0</span>
             </span>
-            <span style="color: #aaa; font-size: 1em; display: flex; align-items: center; gap: 8px;" title="التعليقات">
+            <span class="flex items-center gap-2" title="التعليقات">
               <i class="fas fa-comment"></i> <span id="comments-count">0</span>
             </span>
-            <button id="btn-save-post" aria-label="حفظ المقال" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2em; display: flex; align-items: center; gap: 8px;" title="حفظ المقال">
+            <button id="btn-save-post" aria-label="حفظ المقال" class="bg-transparent border-none text-gray-400 cursor-pointer text-xl flex items-center gap-2 hover:text-white transition-colors" title="حفظ المقال">
               <i class="far fa-bookmark" id="save-icon"></i>
             </button>
-            <button id="btn-report-post" aria-label="إبلاغ" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2em; display: flex; align-items: center; gap: 8px;" title="الإبلاغ عن محتوى">
+            <button id="btn-report-post" aria-label="إبلاغ" class="bg-transparent border-none text-gray-400 cursor-pointer text-xl flex items-center gap-2 hover:text-white transition-colors" title="الإبلاغ عن محتوى">
               <i class="fas fa-flag"></i>
             </button>
-            <button id="btn-like" aria-label="إعجاب" style="background: none; border: none; color: #aaa; cursor: pointer; font-size: 1.2em; display: flex; align-items: center; gap: 8px;">
+            <button id="btn-like" aria-label="إعجاب" class="bg-transparent border-none text-gray-400 cursor-pointer text-xl flex items-center gap-2 hover:text-red-500 transition-colors">
               <i class="fas fa-heart" id="like-icon"></i>
               <span id="likes-count">0</span>
             </button>
@@ -94,7 +94,7 @@
         </div>
         
         <!-- Add Comment Form -->
-        <div id="comment-form-container" style="display: none; margin-bottom: 30px;">
+        <div id="comment-form-container" class="hidden" style="margin-bottom: 30px;">
           <form id="comment-form" style="display: flex; flex-direction: column; gap: 10px;">
             <textarea id="comment-text" rows="3" placeholder="أضف تعليقاً..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #555; font-family: inherit; resize: vertical;" required></textarea>
             <button type="submit" style="align-self: flex-end; background: #e50914; color: #fff; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">تعليق</button>

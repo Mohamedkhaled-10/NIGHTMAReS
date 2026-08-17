@@ -136,7 +136,7 @@ async function loadUserSubmissions(uid) {
 
       let actionBtnHtml = '';
       if (data.status === 'needs_edit') {
-        actionBtnHtml = `<button onclick="editSubmission('${docSnap.id}')" class="mt-2 text-orange-400 border border-orange-900/50 bg-orange-950/20 px-4 py-1.5 rounded-lg text-xs hover:bg-orange-900/40 transition">تعديل التقديم</button>`;
+        actionBtnHtml = `<button onclick="editSubmission('${docSnap.id}')" class="mt-2 text-orange-400 border border-orange-900/50 bg-orange-950/20 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-orange-900/40 transition">تعديل التقديم</button>`;
       }
 
       container.innerHTML += `
@@ -225,7 +225,7 @@ function renderMiniCard(id, data, isHistory = false, docId = null) {
   
   const actionHtml = isHistory ? 
     `<i class="fas fa-chevron-left text-gray-600 group-hover:text-red-500 transition-colors pl-2"></i>` :
-    `<button onclick="removeBookmark('${docId}', event)" class="p-2 text-gray-500 hover:text-red-500 transition-colors" title="إزالة من المحفوظات"><i class="fas fa-trash"></i></button>`;
+    `<button onclick="removeBookmark('${docId}', event)" class="p-3 text-gray-500 hover:text-red-500 transition-colors text-lg" title="إزالة من المحفوظات"><i class="fas fa-trash"></i></button>`;
 
   return `
     <a href="${url}" class="flex items-center gap-4 p-3 bg-black/40 border border-gray-800/50 rounded-xl hover:border-red-900/50 transition-colors group">
@@ -246,6 +246,7 @@ function renderMiniCard(id, data, isHistory = false, docId = null) {
 
 window.removeBookmark = async (bookmarkId, event) => {
   event.preventDefault();
+  event.stopPropagation();
   if (!confirm('هل أنت متأكد من إزالة هذا المحتوى من المحفوظات؟')) return;
   try {
     const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");

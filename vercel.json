@@ -5,7 +5,18 @@
       "src": "server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["components/**", "pages/**", "assets/**", "styles/**", "js/**", "*.html", "*.json", "*.ico", "*.js", "admin/**"]
+        "includeFiles": [
+          "components/**",
+          "pages/**",
+          "assets/**",
+          "styles/**",
+          "js/**",
+          "*.html",
+          "*.json",
+          "*.ico",
+          "*.js",
+          "admin/**"
+        ]
       }
     }
   ],
@@ -14,5 +25,10 @@
       "source": "/(.*)",
       "destination": "/server.js"
     }
-  ]
+  ],
+  "git": {
+    "deploymentEnabled": {
+      "development": false
+    }
+  }
 }
