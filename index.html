@@ -5,19 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NIGHTMAReS</title>
-<link rel="manifest" href="/manifest.json" crossorigin="use-credentials">
-  <!-- أيقونة المتصفح الأساسية -->
-<link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
-
+<!-- أيقونة المتصفح الأساسية -->
 <!-- أيقونات مختلفة لحجم متعدد -->
-<link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="assets/images/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="assets/images/android-chrome-192x192.png">
-<link rel="icon" type="image/png" sizes="512x512" href="assets/images/android-chrome-512x512.png">
-
 <!-- أيقونة خاصة بأجهزة Apple -->
-<link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
-
 <!-- ملف Web Manifest لتعريف الأيقونات على أنظمة التشغيل -->
   <!-- تضمين Font Awesome و Ionicons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -40,12 +30,18 @@
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://nightma-re-s.vercel.app/home">
 
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body class="min-h-screen flex flex-col bg-[#050202] text-white overflow-x-hidden">
 <!-- NAVBAR_PLACEHOLDER -->
 
 <!-- Hero Section (Editorial/Cinematic) -->
-  <header class="relative w-full h-[75vh] min-h-[500px] flex items-end bg-[#050202] overflow-hidden border-b border-red-900/20" id="home">
+  <main class="grow w-full flex flex-col">
+<header class="relative w-full h-[75vh] min-h-[500px] flex items-end bg-[#050202] overflow-hidden border-b border-red-900/20" id="home">
     <div class="absolute inset-0 z-0 overflow-hidden" id="hero-bg-container">
       <!-- Dark/Red Atmospheric Fog Overlay -->
       <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-[#050202]/70 to-[#050202]/30 z-20 pointer-events-none"></div>
@@ -88,7 +84,7 @@
   
 
   <!-- قسم القصص -->
-  <section class="cards-section px-4 md:px-8 lg:px-16 py-20 max-w-7xl mx-auto" id="cards">
+  <section class="cards-section px-4 md:px-8 lg:px-16 py-16 md:py-20 max-w-7xl mx-auto" id="cards">
     
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 border-b border-red-900/20 pb-4 gap-4">
       <div>
@@ -125,7 +121,7 @@
 
 
 <!-- Content Analytics Section -->
-  <section class="analytics-section px-4 md:px-8 lg:px-16 py-20 max-w-7xl mx-auto w-full relative z-10 border-t border-red-900/10">
+  <section class="analytics-section px-4 md:px-8 lg:px-16 py-16 md:py-20 max-w-7xl mx-auto w-full relative z-10 border-t border-red-900/10">
     <div class="flex items-center justify-between mb-12 border-b border-red-900/20 pb-4">
       <div>
         <div class="flex items-center gap-3 mb-2">
@@ -174,7 +170,7 @@
 
 <div id="AD_CONTAINER_ID"></div>
   <!-- قسم الأخبار والفعاليات -->
-  <section class="news-section px-4 md:px-8 lg:px-16 py-20 max-w-7xl mx-auto" id="news">
+  <section class="news-section px-4 md:px-8 lg:px-16 py-16 md:py-20 max-w-7xl mx-auto" id="news">
     
     <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 border-b border-red-900/20 pb-4 gap-4">
       <div>
@@ -201,7 +197,7 @@
 
   
 
-<section class="video-section px-4 md:px-8 lg:px-16 py-20 max-w-7xl mx-auto" id="video">
+<section class="video-section px-4 md:px-8 lg:px-16 py-16 md:py-20 max-w-7xl mx-auto" id="video">
     
     <div class="flex flex-col items-center text-center mb-12">
       <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-900/30 bg-red-950/20 mb-4">
@@ -225,6 +221,7 @@
   </section>
 
   
+</main>
 <!-- FOOTER_PLACEHOLDER -->
 <script src="/js/main.js" defer></script>
 <script type="module" src="js/notifications-ads.js"></script>

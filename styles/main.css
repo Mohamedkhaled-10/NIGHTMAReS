@@ -1,11 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap");
 /* استيراد الخطوط من Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Zilla+Slab&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rakkas&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rock+Salt&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Amiri&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Sultan&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Droid+Arabic+Kufi&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap'); /* إضافة خط Cairo */
 
 /* تفعيل التمرير السلس */
 html {
@@ -35,7 +29,7 @@ html {
   box-sizing: border-box;
 }
 html, body {
-  font-family: 'Cairo', sans-serif; /* استخدم الخط العربي Cairo */
+  font-family: 'Tajawal', sans-serif; /* استخدم الخط العربي Cairo */
   direction: rtl;
 }
 
@@ -56,7 +50,7 @@ body, p, li, span {
 
 /* تطبيق الخطوط الجديدة للعناوين */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Zilla Slab', 'Rakkas', 'Rock Salt', 'Amiri', 'Sultan', 'Droid Arabic Kufi', sans-serif; /* استخدام الخطوط الجديدة للإنجليزي */
+  font-family: 'Tajawal', sans-serif; /* استخدام الخطوط الجديدة للإنجليزي */
 }
 
 
@@ -855,9 +849,6 @@ h1, h2, h3, h4, h5, h6 {
   transform: scale(1.05);
 }
 
-.stories-section {
-  margin-top: 200px;
-}
 
 
 /* نافذة التحذير المنبثقة */

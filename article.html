@@ -6,12 +6,16 @@
   <title>Nightmares</title>
   <link rel="stylesheet" href="/styles/article.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/5.5.2/css/ionicons.min.css">
-  <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .loading-spinner { display: flex; justify-content: center; align-items: center; height: 50vh; font-size: 2em; color: red; }
     .hidden { display: none !important; }
   </style>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body class="min-h-screen flex flex-col bg-[#050202] text-white overflow-x-hidden">
   <div id="progress-bar" style="position: fixed; top: 0; left: 0; height: 5px; background-color: #ff0000; width: 0%; z-index: 1001; transition: width 0.1s;"></div>
@@ -22,7 +26,7 @@
     
     <div id="loading" class="col-span-full"></div>
 
-    <div id="content-area" class="hidden flex-col items-center pt-24 pb-12">
+    <main id="content-area" class="grow hidden w-full flex-col items-center pt-20 md:pt-24 pb-12 md:pb-16">
       <!-- Article Cover Image -->
       <div id="cover-image-container" class="hidden w-[90%] md:w-[80%] max-w-[900px] mx-auto mb-6 rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
         <img id="article-cover-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Cover Image" class="w-full h-auto max-h-[500px] object-cover block">
@@ -96,7 +100,7 @@
         <!-- Add Comment Form -->
         <div id="comment-form-container" class="hidden" style="margin-bottom: 30px;">
           <form id="comment-form" style="display: flex; flex-direction: column; gap: 10px;">
-            <textarea id="comment-text" rows="3" placeholder="أضف تعليقاً..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #555; font-family: inherit; resize: vertical;" required></textarea>
+            <textarea id="comment-text" rows="3" placeholder="أضف تعليقاً..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #555; font-family: 'Tajawal', sans-serif; resize: vertical;" required></textarea>
             <button type="submit" style="align-self: flex-end; background: #e50914; color: #fff; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">تعليق</button>
           </form>
         </div>

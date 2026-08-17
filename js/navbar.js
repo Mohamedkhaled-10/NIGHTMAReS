@@ -117,9 +117,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     if (scrollTop > lastScrollTop && scrollTop > 100) {
       navbars.forEach(n => n.style.top = '-80px');
+      if(mobileSearchForm) mobileSearchForm.style.transform = 'translateY(-150px)';
       if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(100px)";
     } else {
       navbars.forEach(n => n.style.top = '0');
+      if(mobileSearchForm) mobileSearchForm.style.transform = 'translateY(0)';
       if(hamburgerWrapper) hamburgerWrapper.style.transform = "translateX(0)";
     }
     lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;

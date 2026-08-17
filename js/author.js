@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       const postId = docSnap.id;
       const type = post.type || 'story'; // story, news, video
       const dateStr = post.createdAt ? post.createdAt.toDate().toLocaleDateString('ar-EG') : '';
-      const coverImage = post.coverImage || '/assets/images/placeholder.jpg';
+      const coverImage = post.coverImage || '/assets/images/logo1.png';
       const defaultCategory = type === 'story' ? 'قصص' : (type === 'news' ? 'أخبار' : 'فيديو');
 
       const card = document.createElement('a');

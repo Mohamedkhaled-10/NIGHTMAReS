@@ -93,22 +93,25 @@ async function loadAnalyticsContent() {
     const [mostReadSnap, trendingSnap, mostDiscussedSnap] = await Promise.all([
       getDocs(query(
         collection(db, "posts"),
+        where("status", "==", "published"),
         orderBy("views", "desc"),
         limit(20)
       )),
       getDocs(query(
         collection(db, "posts"),
+        where("status", "==", "published"),
         orderBy("likesCount", "desc"),
         limit(20)
       )),
       getDocs(query(
         collection(db, "posts"),
+        where("status", "==", "published"),
         orderBy("commentsCount", "desc"),
         limit(20)
       ))
     ]);
 
-    const filterPublished = (docs) => docs.map(d => d.data()).filter(d => d.status === 'published').slice(0, 5);
+    const filterPublished = (docs) => docs.map(d => d.data()).slice(0, 5);
 
     renderList(filterPublished(mostReadSnap.docs), mostReadList, 'views');
     renderList(filterPublished(trendingSnap.docs), trendingList, 'likes');
