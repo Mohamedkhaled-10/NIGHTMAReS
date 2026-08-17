@@ -165,7 +165,7 @@ async function loadData(isLoadMore = false) {
         } else {
           card.className = 'news-card h-full flex flex-col';
           card.innerHTML = `
-            <div class="relative shrink-0 h-[320px]">
+            <div class="relative shrink-0 aspect-video w-full">
               <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover">
               <span class="absolute top-3 right-3 bg-red-900/80 text-white text-[10px] px-2 py-1 rounded backdrop-blur-md z-10">${getCategoryName(post.category)}</span>
             </div>

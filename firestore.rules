@@ -51,14 +51,16 @@ service cloud.firestore {
 
     // User Bookmarks
     match /user_bookmarks/{bookmarkId} {
-      allow read, write: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
-      allow read, delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid);
+      allow create, update: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
     }
 
     // User History
     match /user_history/{historyId} {
-      allow read, write: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
-      allow read, delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid);
+      allow create, update: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
     }
 
     // Notifications Collection

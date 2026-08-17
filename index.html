@@ -46,10 +46,21 @@
 
 <!-- Hero Section (Editorial/Cinematic) -->
   <header class="relative w-full h-[75vh] min-h-[500px] flex items-end bg-[#050202] overflow-hidden border-b border-red-900/20" id="home">
-    <div class="absolute inset-0 z-0">
-      <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-[#050202]/60 to-transparent z-10"></div>
-      <div class="absolute inset-0 bg-gradient-to-l from-[#050202] via-transparent to-[#050202]/80 z-10 hidden md:block"></div>
-      <img src="assets/images/1.webp" alt="Cinematic Horror" class="w-full h-full object-cover opacity-30 scale-105" style="animation: slowPan 30s ease-in-out infinite alternate;" loading="eager">
+    <div class="absolute inset-0 z-0 overflow-hidden" id="hero-bg-container">
+      <!-- Dark/Red Atmospheric Fog Overlay -->
+      <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-[#050202]/70 to-[#050202]/30 z-20 pointer-events-none"></div>
+      <div class="absolute inset-0 bg-gradient-to-l from-[#050202]/80 via-transparent to-[#050202]/60 z-20 hidden md:block pointer-events-none"></div>
+      <div class="absolute inset-0 bg-red-950/10 mix-blend-overlay z-20 pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
+      
+      <!-- Video Background (Loaded via JS for performance, or standard with preload="none") -->
+      <!-- Hides on mobile and reduced motion via Tailwind classes. Plays inline, muted, looping. -->
+      <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity hidden sm:block motion-reduce:hidden" 
+             autoplay loop muted playsinline preload="none" poster="assets/images/1.webp">
+        <source src="https://assets.mixkit.co/videos/preview/mixkit-dark-smoke-fog-on-a-black-background-4235-small.mp4" type="video/mp4">
+      </video>
+
+      <!-- Mobile/Fallback Poster (Shows when video is hidden or loading) -->
+      <img src="assets/images/1.webp" alt="Cinematic Horror" class="absolute inset-0 w-full h-full object-cover opacity-30 scale-105 sm:hidden motion-reduce:block" style="animation: slowPan 30s ease-in-out infinite alternate;" loading="eager">
     </div>
     
     <div class="relative z-20 container mx-auto px-6 lg:px-12 pb-20 w-full flex flex-col items-start">

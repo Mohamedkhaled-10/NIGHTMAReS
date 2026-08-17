@@ -91,12 +91,16 @@ function updateLikeUI() {
 
 async function checkSaveStatus() {
   if (!currentUser || contentId === 'home' || !btnSavePost) return;
-  const saveRef = doc(db, 'user_bookmarks', `${currentUser.uid}_${contentId}`);
   try {
-    const snap = await getDoc(saveRef);
-    hasSaved = snap.exists();
+    const q = query(
+      collection(db, 'user_bookmarks'), 
+      where('userId', '==', currentUser.uid), 
+      where('contentId', '==', contentId)
+    );
+    const snap = await getDocs(q);
+    hasSaved = !snap.empty;
   } catch (e) {
-    console.warn("Could not fetch save status:", e);
+    // Silently handle permission errors if rules are not updated yet
     hasSaved = false;
   }
   updateSaveUI();

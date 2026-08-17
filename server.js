@@ -31,7 +31,7 @@ function servePage(res, pagePath) {
   
   // Ensure Tailwind and main styles are loaded
   if (!html.includes('tailwindcss.com')) {
-    html = html.replace('</head>', '  <script src="https://cdn.tailwindcss.com" defer></script>\n</head>');
+    html = html.replace('</head>', `  <script src="https://cdn.tailwindcss.com" defer></script>\n  <script>\n    const originalWarn = console.warn;\n    console.warn = function(msg, ...args) {\n      if (typeof msg === 'string' && msg.includes('cdn.tailwindcss.com should not be used in production')) return;\n      originalWarn(msg, ...args);\n    };\n  </script>\n</head>`);
   }
   if (!html.includes('/styles/main.css') && !html.includes('"styles/main.css"')) {
     html = html.replace('</head>', '  <link rel="stylesheet" href="/styles/main.css">\n</head>');
@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 app.use(express.static(__dirname, { index: false }));
 
 app.get(['/story/:slug', '/news/:slug', '/video/:slug'], (req, res) => {
-  servePage(res, path.join(__dirname, 'article.html'));
+  servePage(res, path.join(__dirname, 'pages', 'article.html'));
 });
 
 app.get('/author/:id', (req, res) => {

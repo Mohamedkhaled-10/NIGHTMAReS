@@ -31,13 +31,21 @@
       
       <!-- Left: Visual Horror Panel (Top on Mobile) -->
       <div class="w-full lg:w-1/2 relative min-h-[30vh] lg:min-h-full flex flex-col justify-center items-center overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-l border-red-900/30">
-        <!-- Base Cinematic Image -->
-        <img src="/assets/images/1.webp" alt="NIGHTMAReS Visual" class="absolute inset-0 w-full h-full object-cover opacity-50 filter grayscale-[30%] scale-105">
+        
+        <!-- Video Background (Loaded via JS for performance, or standard with preload="none") -->
+        <video class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity hidden sm:block motion-reduce:hidden filter grayscale-[30%]" 
+               autoplay loop muted playsinline preload="none" poster="/assets/images/1.webp">
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-dark-smoke-fog-on-a-black-background-4235-small.mp4" type="video/mp4">
+        </video>
+
+        <!-- Base Cinematic Image (Fallback / Mobile) -->
+        <img src="/assets/images/1.webp" alt="NIGHTMAReS Visual" class="absolute inset-0 w-full h-full object-cover opacity-50 filter grayscale-[30%] scale-105 sm:hidden motion-reduce:block">
         
         <!-- Overlays for deep cinematic feel -->
-        <div class="absolute inset-0 bg-[#050202]/60 mix-blend-multiply"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-transparent to-[#050202]/50 lg:bg-gradient-to-r lg:from-[#050202] lg:via-transparent"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#050202_100%)]"></div>
+        <div class="absolute inset-0 bg-[#050202]/60 mix-blend-multiply pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-transparent to-[#050202]/50 lg:bg-gradient-to-r lg:from-[#050202] lg:via-transparent pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#050202_100%)] pointer-events-none"></div>
+        <div class="absolute inset-0 bg-red-950/10 mix-blend-overlay pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
         
         <!-- Subtle Red Lighting Element -->
         <div class="absolute -top-1/4 -right-1/4 w-[120%] h-[120%] bg-red-900/20 blur-[120px] rounded-full pointer-events-none mix-blend-overlay"></div>

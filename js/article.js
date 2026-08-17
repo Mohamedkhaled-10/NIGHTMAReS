@@ -93,7 +93,9 @@ if (document.readyState === "loading") {
 
 async function renderContent(data) {
   document.getElementById('loading').classList.add('hidden');
-  document.getElementById('content-area').classList.remove('hidden');
+  const contentArea = document.getElementById('content-area');
+  contentArea.classList.remove('hidden');
+  contentArea.classList.add('flex');
 
   // Update Title and SEO
   document.title = `${data.title} - Nightmares`;
@@ -233,31 +235,53 @@ async function renderContent(data) {
   // Render Cover Image
   const coverImageContainer = document.getElementById('cover-image-container');
   const coverImageEl = document.getElementById('article-cover-image');
+  const noCoverGradient = document.getElementById('no-cover-gradient');
   
   if (data.coverImage) {
-    coverImageEl.src = data.coverImage;
-    coverImageEl.alt = data.title;
-    coverImageContainer.classList.remove('hidden');
-    document.getElementById('no-cover-gradient').classList.add('hidden');
+    if (coverImageEl) {
+      coverImageEl.src = data.coverImage;
+      coverImageEl.alt = data.title || 'Cover';
+    }
+    if (coverImageContainer) coverImageContainer.classList.remove('hidden');
+    if (noCoverGradient) noCoverGradient.classList.add('hidden');
   } else {
     // Hide if there's no cover image to avoid broken images
-    coverImageContainer.classList.add('hidden');
-    document.getElementById('no-cover-gradient').classList.remove('hidden');
+    if (coverImageContainer) coverImageContainer.classList.add('hidden');
+    if (noCoverGradient) noCoverGradient.classList.remove('hidden');
   }
 
   // Render HTML Content (depending on type, but generally it's in data.data.contentHtml or similar)
   const articleBody = document.getElementById('article-body');
   
-  // Process content HTML to add lazy loading for performance
-  let rawHtml = data.data?.contentHtml || '';
+  function decodeHTML(html) {
+    if (!html) return '';
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
+  }
+  
+  // Process content HTML
+  let rawHtml = data.data?.contentHtml || data.contentHtml || data.content || data.data?.content || '';
   
   if (rawHtml) {
+    // If it's escaped HTML, decode it
+    if (rawHtml.includes('&lt;')) {
+      rawHtml = decodeHTML(rawHtml);
+    } else if (!rawHtml.includes('<p>') && !rawHtml.includes('<br>')) {
+      // If it's pure plain text, wrap in paragraphs
+      rawHtml = '<p>' + rawHtml.replace(/\n\s*\n/g, '</p><p>').replace(/\n/g, '<br>') + '</p>';
+    }
     // Basic regex replacement to add loading="lazy" to imgs and iframes if not already present
     rawHtml = rawHtml.replace(/<(img|iframe)(?![^>]*loading=)/gi, '<$1 loading="lazy" decoding="async"');
   }
 
-  if (data.type === 'video' && data.data && data.data.embedCode) {
-    let embed = data.data.embedCode.replace(/<iframe(?![^>]*loading=)/gi, '<iframe loading="lazy"');
+  let embedCode = data.data?.embedCode || data.embedCode || '';
+
+  if (data.type === 'video' && embedCode) {
+    if (embedCode.includes('&lt;')) {
+      embedCode = decodeHTML(embedCode);
+    }
+    let embed = embedCode.replace(/<iframe(?![^>]*loading=)/gi, '<iframe loading="lazy"');
     articleBody.innerHTML = `<div class="video-container">${embed}</div>`;
     if (rawHtml) {
       articleBody.innerHTML += rawHtml;
@@ -355,7 +379,7 @@ async function loadRelatedContent(currentArticle) {
       card.href = link;
       card.className = 'flex gap-4 group bg-[#110808]/50 hover:bg-[#1b0d0d] border border-gray-800/50 hover:border-red-900/50 p-2 rounded-xl transition-all';
       card.innerHTML = `
-        <div class="w-24 h-24 shrink-0 rounded-lg overflow-hidden relative">
+        <div class="w-32 aspect-video shrink-0 rounded-lg overflow-hidden relative">
           <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
           <span class="absolute bottom-1 right-1 ${typeColor} text-white text-[9px] px-1.5 py-0.5 rounded">${typeLabel}</span>
         </div>
