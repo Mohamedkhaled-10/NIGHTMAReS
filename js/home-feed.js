@@ -1,6 +1,6 @@
 import { db } from './firebase-init.js';
 import { collection, getDocs, query, where, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { UILoadingSkeleton, UISpinner, UIEmptyState, UIErrorState } from './ui-utils.js';
+import { UILoadingSkeleton, UISpinner, UIEmptyState, UIErrorState, generateStoryCard, generateNewsCard, generateVideoCard } from './ui-utils.js';
 
 const initHomeFeed = async () => {
   await loadHomeContent();
@@ -201,19 +201,10 @@ function renderStories(items, container) {
   
   items.forEach(item => {
     const link = `/story/${item.slug}`;
-    const card = document.createElement('div');
-    card.className = 'card cursor-pointer';
-    card.onclick = () => window.location.href = link;
-    card.innerHTML = `
-      <div class="card-inner">
-        <img src="${item.coverImage || '/assets/images/icon-white.png'}" alt="${item.title}" loading="lazy" decoding="async">
-        <div class="overlay"></div>
-        <div class="card-content">
-          <h3>${item.title}</h3>
-          <span class="fake-btn">اقرأ القصة <i class="fa-solid fa-arrow-left text-xs"></i></span>
-        </div>
-      </div>
-    `;
+    const card = document.createElement('a');
+    card.href = link;
+    card.className = 'content-card-link';
+    card.innerHTML = generateStoryCard(item, null, null, null);
     container.appendChild(card);
   });
 }
@@ -237,17 +228,10 @@ function renderNews(items, container) {
       snippet = snippet.substring(0, 100) + '...';
     }
     
-    const card = document.createElement('div');
-    card.className = 'news-card cursor-pointer';
-    card.onclick = () => window.location.href = link;
-    card.innerHTML = `
-      <img src="${item.coverImage || '/assets/images/icon-white.png'}" alt="${item.title}" loading="lazy" decoding="async">
-      <div class="news-content">
-        <h3>${item.title}</h3>
-        <p class="news-text">${snippet}</p>
-        <span class="read-more-btn">اقرأ المزيد</span>
-      </div>
-    `;
+    const card = document.createElement('a');
+    card.href = link;
+    card.className = 'content-card-link';
+    card.innerHTML = generateNewsCard(item, null, snippet, null);
     container.appendChild(card);
   });
 }
@@ -264,15 +248,8 @@ function renderVideos(items, container) {
     const link = `/video/${item.slug}`;
     const card = document.createElement('a');
     card.href = link;
-    card.className = 'video-card';
-    card.innerHTML = `
-      <div class="thumbnail-wrapper">
-        <img src="${item.coverImage || '/assets/images/icon-white.png'}" alt="${item.title}" loading="lazy" decoding="async">
-      </div>
-      <div class="video-content">
-        <h3>${item.title}</h3>
-      </div>
-    `;
+    card.className = 'content-card-link';
+    card.innerHTML = generateVideoCard(item, null, null);
     container.appendChild(card);
   });
 }

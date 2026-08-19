@@ -1,8 +1,7 @@
-import { auth, db, storage } from './firebase-init.js';
+import { auth, db } from './firebase-init.js';
 import { onAuthStateChanged, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { doc, getDoc, updateDoc, serverTimestamp, collection, query, where, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
-import { UILoadingSkeleton, UIEmptyState, UIErrorState, UISpinner } from './ui-utils.js';
+import { UILoadingSkeleton, UIEmptyState, UIErrorState, UISpinner, showToast, showConfirmModal } from './ui-utils.js';
 
 const loader = document.getElementById('loader');
 const content = document.getElementById('profile-content');
@@ -30,20 +29,20 @@ onAuthStateChanged(auth, async (user) => {
         
         if (currentUserDoc.accountStatus === 'banned' || currentUserDoc.accountStatus === 'deleted') {
           await signOut(auth);
-          alert('هذا الحساب محظور أو محذوف.');
+          showToast({ type: 'error', message: 'هذا الحساب محظور أو محذوف.' });
           window.location.href = '/login';
           return;
         }
 
         populateUI(user, currentUserDoc);
       } else {
-        alert('حدث خطأ في جلب بيانات الحساب.');
+        showToast({ type: 'error', message: 'حدث خطأ في جلب بيانات الحساب.' });
         await signOut(auth);
         window.location.href = '/login';
       }
     } catch (err) {
       console.error(err);
-      alert('خطأ في الاتصال بقاعدة البيانات.');
+      showToast({ type: 'error', message: 'خطأ في الاتصال بقاعدة البيانات.' });
     }
   } else {
     window.location.replace('/login');
@@ -247,14 +246,14 @@ function renderMiniCard(id, data, isHistory = false, docId = null) {
 window.removeBookmark = async (bookmarkId, event) => {
   event.preventDefault();
   event.stopPropagation();
-  if (!confirm('هل أنت متأكد من إزالة هذا المحتوى من المحفوظات؟')) return;
+  const confirmed = await showConfirmModal({ title: 'إزالة من المحفوظات', message: 'هل أنت متأكد من إزالة هذا المحتوى من المحفوظات؟' }); if (!confirmed) return;
   try {
     const { deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
     await deleteDoc(doc(db, 'user_bookmarks', bookmarkId));
     loadUserBookmarks(auth.currentUser.uid);
   } catch (error) {
     console.error("Error removing bookmark:", error);
-    alert('حدث خطأ أثناء الإزالة.');
+    showToast({ type: 'error', message: 'حدث خطأ أثناء الإزالة.' });
   }
 };
 
@@ -263,37 +262,116 @@ document.getElementById('img-upload').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
   
-  // Validate type and size (max 2MB)
-  if (!file.type.startsWith('image/')) {
-    alert('الرجاء رفع صورة صالحة.');
+  // Validate type and size (max 5MB)
+  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+  if (!allowedTypes.includes(file.type)) {
+    showToast({ type: 'warning', message: 'الرجاء رفع صورة صالحة (JPEG, PNG, WebP فقط).' });
+    e.target.value = ''; // Reset input
     return;
   }
   if (file.size > 2 * 1024 * 1024) {
-    alert('حجم الصورة يجب أن لا يتجاوز 2 ميجابايت.');
+    showToast({ type: 'error', message: 'حجم الصورة كبير جدًا. الحد الأقصى المسموح هو 2 ميجابايت.' });
+    e.target.value = ''; // Reset input
     return;
   }
   
+  const profileImg = document.getElementById('profile-img');
+  const overlay = document.getElementById('upload-progress-overlay');
+  const progressBar = document.getElementById('upload-progress-bar');
+  const progressText = document.getElementById('upload-progress-text');
+  const fileInput = document.getElementById('img-upload');
+  
+  const originalSrc = profileImg.src;
+  
   try {
     const user = auth.currentUser;
-    const storageRef = ref(storage, `profile_images/${user.uid}_${Date.now()}`);
+    if (!user) throw new Error("User not logged in");
     
-    document.getElementById('profile-img').style.opacity = '0.5';
+    // Disable inputs and buttons
+    fileInput.disabled = true;
+    const btnSave = document.getElementById('btn-save');
+    if (btnSave) btnSave.disabled = true;
     
-    await uploadBytes(storageRef, file);
-    const photoURL = await getDownloadURL(storageRef);
+    // Show Local Preview Optimistically
+    const previewUrl = URL.createObjectURL(file);
+    profileImg.src = previewUrl;
     
+    // Show Progress Overlay
+    overlay.classList.remove('opacity-0', 'pointer-events-none');
+    overlay.classList.add('opacity-100');
+    progressBar.style.width = '0%';
+    progressText.innerText = '0%';
+    
+    // Cloudinary Direct Upload using XMLHttpRequest for progress
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'nightmares_profiles');
+    
+    const cloudinaryData = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', 'https://api.cloudinary.com/v1_1/zj4whlzc/image/upload', true);
+      
+      xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+          const percentComplete = Math.round((event.loaded / event.total) * 100);
+          progressBar.style.width = percentComplete + '%';
+          progressBar.setAttribute('aria-valuenow', percentComplete);
+          progressText.innerText = percentComplete + '%';
+        }
+      };
+      
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(JSON.parse(xhr.responseText));
+        } else {
+          reject(new Error('Cloudinary upload failed: ' + xhr.statusText));
+        }
+      };
+      
+      xhr.onerror = () => reject(new Error('Cloudinary upload network error'));
+      
+      xhr.send(formData);
+    });
+
+    const photoURL = cloudinaryData.secure_url;
+    
+    // Revoke object URL to free memory
+    URL.revokeObjectURL(previewUrl);
+    
+    // Update Firestore
     await updateDoc(doc(db, 'users', user.uid), {
       photoURL: photoURL,
       updatedAt: serverTimestamp()
     });
     
-    document.getElementById('profile-img').src = photoURL;
-    alert('تم تحديث الصورة بنجاح!');
+    // Update UI (Profile image + Navbar avatars + Dropdown if available)
+    profileImg.src = photoURL;
+    
+    const avatarElements = [
+      document.getElementById("desktop-user-avatar"),
+      document.getElementById("mobile-user-avatar"),
+      document.getElementById("nav-user-avatar") // if dropdown exists
+    ];
+    
+    avatarElements.forEach(el => {
+      if (el) el.src = photoURL;
+    });
+
+    // Hide progress overlay
+    overlay.classList.remove('opacity-100');
+    overlay.classList.add('opacity-0', 'pointer-events-none');
+    
   } catch (error) {
-    console.error(error);
-    alert('حدث خطأ أثناء رفع الصورة.');
+    console.error("Error uploading avatar:", error);
+    showToast({ type: 'error', title: 'فشل الرفع', message: 'حدث خطأ أثناء رفع الصورة.' });
+    profileImg.src = originalSrc; // Revert on failure
+    overlay.classList.remove('opacity-100');
+    overlay.classList.add('opacity-0', 'pointer-events-none');
   } finally {
-    document.getElementById('profile-img').style.opacity = '1';
+    const btnSave = document.getElementById('btn-save');
+    if (btnSave) btnSave.disabled = false;
+    fileInput.disabled = false;
+    e.target.value = ''; // Reset input to allow re-uploading the same file
   }
 });
 
@@ -343,10 +421,10 @@ if (btnResetPassword) {
     
     try {
       await sendPasswordResetEmail(auth, user.email);
-      alert('تم إرسال رابط تغيير كلمة المرور إلى بريدك الإلكتروني.');
+      showToast({ type: 'success', message: 'تم إرسال رابط تغيير كلمة المرور إلى بريدك الإلكتروني.' });
     } catch (error) {
       console.error(error);
-      alert('حدث خطأ أثناء إرسال الرابط. يرجى المحاولة لاحقاً.');
+      showToast({ type: 'error', message: 'حدث خطأ أثناء إرسال الرابط. يرجى المحاولة لاحقاً.' });
     } finally {
       btnResetPassword.disabled = false;
       btnResetPassword.innerHTML = originalText;

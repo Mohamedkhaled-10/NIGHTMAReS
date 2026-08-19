@@ -1,5 +1,6 @@
 import { auth, db } from './firebase-init.js';
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { showToast, showConfirmModal } from "./ui-utils.js";
 import { 
   collection, doc, getDoc, setDoc, deleteDoc, updateDoc,
   query, where, orderBy, getDocs, addDoc, serverTimestamp, runTransaction, limit, startAfter, increment
@@ -192,7 +193,7 @@ async function recordViewSafe() {
 if(btnSavePost) {
   btnSavePost.addEventListener('click', async () => {
     if (!currentUser) {
-      alert('يجب تسجيل الدخول لحفظ المحتوى.');
+      showToast({ type: 'warning', message: 'يجب تسجيل الدخول لحفظ المحتوى.' });
       window.location.href = '/login';
       return;
     }
@@ -222,7 +223,7 @@ if(btnSavePost) {
       console.error('Save transaction failed:', error);
       hasSaved = !hasSaved;
       updateSaveUI();
-      alert('حدث خطأ أثناء حفظ المقال.');
+      showToast({ type: 'error', message: 'حدث خطأ أثناء حفظ المقال.' });
     }
   });
 }
@@ -230,7 +231,7 @@ if(btnSavePost) {
 if(btnLike) {
   btnLike.addEventListener('click', async () => {
     if (!currentUser) {
-      alert('يجب تسجيل الدخول للإعجاب بالمحتوى.');
+      showToast({ type: 'warning', message: 'يجب تسجيل الدخول للإعجاب بالمحتوى.' });
       window.location.href = '/login';
       return;
     }
@@ -338,7 +339,7 @@ if(commentForm) {
 
     } catch (err) {
       console.error(err);
-      alert('حدث خطأ أثناء إضافة التعليق.');
+      showToast({ type: 'error', message: 'حدث خطأ أثناء إضافة التعليق.' });
     } finally {
       btn.disabled = false;
     }
@@ -435,7 +436,7 @@ async function loadComments(loadMore = false) {
 }
 
 window.deleteComment = async (commentId) => {
-  if (!confirm('هل أنت متأكد من حذف هذا التعليق؟')) return;
+  const confirmed = await showConfirmModal({ title: 'حذف التعليق', message: 'هل أنت متأكد من حذف هذا التعليق؟' }); if (!confirmed) return;
   try {
     await updateDoc(doc(db, 'comments', commentId), { status: 'deleted' });
     
@@ -453,7 +454,7 @@ window.deleteComment = async (commentId) => {
     loadComments();
   } catch (error) {
     console.error(error);
-    alert('حدث خطأ أثناء الحذف.');
+    showToast({ type: 'error', message: 'حدث خطأ أثناء الحذف.' });
   }
 };
 
@@ -463,7 +464,7 @@ let currentReportTargetId = null;
 
 window.openReportModal = (type, targetId) => {
   if (!currentUser) {
-    alert('يجب تسجيل الدخول للإبلاغ.');
+    showToast({ type: 'warning', message: 'يجب تسجيل الدخول للإبلاغ.' });
     window.location.href = '/login';
     return;
   }

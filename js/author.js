@@ -1,5 +1,6 @@
 import { db } from './firebase-init.js';
 import { doc, getDoc, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { showToast, generateStoryCard, generateNewsCard, generateVideoCard } from "./ui-utils.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
   // Get author ID from the URL path (/author/:id)
@@ -68,23 +69,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
       const card = document.createElement('a');
       card.href = `/${type}/${postId}`;
-      card.className = "group block bg-[#0a0505] border border-red-900/30 rounded-xl overflow-hidden hover:border-red-600 transition-all duration-300";
+      card.className = 'content-card-link';
       
-      card.innerHTML = `
-        <div class="relative h-48 overflow-hidden">
-          <div class="absolute inset-0 bg-black/40 group-hover:bg-transparent transition-colors duration-300 z-10"></div>
-          <img src="${coverImage}" alt="${post.title}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" loading="lazy">
-          <div class="absolute top-4 right-4 z-20">
-            <span class="bg-red-900/80 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm border border-red-500/30">${post.category || defaultCategory}</span>
-          </div>
-        </div>
-        <div class="p-6">
-          <h3 class="text-xl font-bold text-gray-100 mb-2 group-hover:text-red-500 transition-colors line-clamp-2">${post.title}</h3>
-          <div class="text-sm text-gray-400 flex items-center gap-2">
-            <i class="far fa-calendar-alt"></i> ${dateStr}
-          </div>
-        </div>
-      `;
+      if (post.type === 'story') { card.innerHTML = generateStoryCard(post, null, post.category || 'قصة', null); } else if (post.type === 'video') { card.innerHTML = generateVideoCard(post, null, post.category || 'فيديو'); } else { card.innerHTML = generateNewsCard(post, null, null, post.category || 'خبر'); }
       postsGrid.appendChild(card);
     });
 
@@ -119,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnReportAuthor.addEventListener('click', () => {
       const currentUser = auth.currentUser;
       if (!currentUser) {
-        alert('يجب تسجيل الدخول للإبلاغ.');
+        showToast({ type: 'warning', message: 'يجب تسجيل الدخول للإبلاغ.' });
         window.location.href = '/login';
         return;
       }

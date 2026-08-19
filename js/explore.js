@@ -1,6 +1,6 @@
 import { db } from './firebase-init.js';
 import { collection, getDocs, query, where, orderBy, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { UILoadingSkeleton, UIEmptyState, UIErrorState } from './ui-utils.js';
+import { UILoadingSkeleton, UIEmptyState, UIErrorState, generateStoryCard, generateNewsCard, generateVideoCard } from './ui-utils.js';
 
 const form = document.getElementById('explore-filters');
 const filterType = document.getElementById('filter-type');
@@ -139,42 +139,14 @@ async function loadData(isLoadMore = false) {
         card.href = link;
         
         if (post.type === 'story') {
-          card.className = 'card block';
-          card.innerHTML = `
-            <div class="card-inner">
-              <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async">
-              <div class="overlay"></div>
-              <div class="card-content">
-                <span class="text-xs font-bold px-2 py-1 bg-red-900/50 text-red-200 border border-red-900/50 rounded mb-2 w-fit">${getCategoryName(post.category)}</span>
-                <h3>${post.title}</h3>
-                <span class="fake-btn">اقرأ القصة <i class="fa-solid fa-arrow-left text-xs"></i></span>
-              </div>
-            </div>
-          `;
+          card.className = 'content-card-link';
+          card.innerHTML = generateStoryCard(post, null, getCategoryName(post.category), null);
         } else if (post.type === 'video') {
-          card.className = 'video-card h-full';
-          card.innerHTML = `
-            <div class="thumbnail-wrapper">
-              <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async">
-            </div>
-            <div class="video-content flex-1 flex flex-col h-full bg-[#0a0505]">
-              <span class="text-[10px] font-bold px-2 py-1 bg-gray-800 text-gray-300 rounded mb-2 w-fit border border-gray-700">${getCategoryName(post.category)}</span>
-              <h3 class="line-clamp-2">${post.title}</h3>
-            </div>
-          `;
+          card.className = 'content-card-link';
+          card.innerHTML = generateVideoCard(post, null, getCategoryName(post.category));
         } else {
-          card.className = 'news-card h-full flex flex-col';
-          card.innerHTML = `
-            <div class="relative shrink-0 aspect-video w-full">
-              <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" loading="lazy" decoding="async" class="absolute inset-0 w-full h-full object-cover">
-              <span class="absolute top-3 right-3 bg-red-900/80 text-white text-[10px] px-2 py-1 rounded backdrop-blur-md z-10">${getCategoryName(post.category)}</span>
-            </div>
-            <div class="news-content flex-1 flex flex-col p-4 bg-[#0a0505]">
-              <h3 class="line-clamp-2">${post.title}</h3>
-              <p class="news-text line-clamp-3 mb-4">${snippet}</p>
-              <span class="read-more-btn mt-auto self-start">اقرأ المزيد</span>
-            </div>
-          `;
+          card.className = 'content-card-link';
+          card.innerHTML = generateNewsCard(post, null, snippet, getCategoryName(post.category));
         }
         
         grid.appendChild(card);

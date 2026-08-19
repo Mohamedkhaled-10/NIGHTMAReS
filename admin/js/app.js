@@ -1,5 +1,6 @@
 import { db } from '../../js/firebase-init.js';
-import { collection, getDocs, doc, setDoc, deleteDoc, serverTimestamp, query, orderBy, getDoc, getCountFromServer, getAggregateFromServer, sum, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { showToast, showConfirmModal, showPromptModal } from '../../js/ui-utils.js';
+import { collection, getDocs, doc, setDoc, deleteDoc, serverTimestamp, query, orderBy, getDoc, getCountFromServer, startAfter, getAggregateFromServer, sum, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // DOM Elements
 const viewList = document.getElementById('view-list');
@@ -77,37 +78,48 @@ fType.addEventListener('change', () => {
 });
 
 let currentPostsLoadToken = 0;
+let lastDoc_Posts = null;
 
 // Load Posts
-async function loadPosts() {
+async function loadPosts(isLoadMore = false) {
   const token = ++currentPostsLoadToken;
-  loadingIndicator.classList.remove('hidden');
+  if (!isLoadMore) {
+    loadingIndicator.classList.remove('hidden');
+    tableBody.innerHTML = '';
+    lastDoc_Posts = null;
+  }
   
   try {
-    const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+    const { limit, startAfter } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    let constraints = [orderBy("createdAt", "desc"), limit(50)];
+    if (isLoadMore && lastDoc_Posts) {
+      constraints.push(startAfter(lastDoc_Posts));
+    }
+    const q = query(collection(db, "posts"), ...constraints);
     const querySnapshot = await getDocs(q);
     
     if (token !== currentPostsLoadToken) return;
     
     loadingIndicator.classList.add('hidden');
-    tableBody.innerHTML = '';
     
-    if (querySnapshot.empty) {
-      tableBody.innerHTML = '<tr><td colspan="5" class="px-6 py-4 text-center text-gray-500">لا يوجد محتوى حالياً.</td></tr>';
+    if (querySnapshot.empty && !isLoadMore) {
+      tableBody.innerHTML = `<tr><td colspan="100%" class="px-6 py-12 text-center"><div class="flex flex-col items-center justify-center text-gray-500"><i class="fa-solid fa-folder-open text-4xl mb-3 text-gray-300"></i><p class="text-lg font-medium text-gray-600">لا يوجد محتوى حالياً</p></div></td></tr>`;
+      document.getElementById('btn-load-posts-container')?.classList.add('hidden');
       return;
     }
     
     const renderedIds = new Set();
-    
     querySnapshot.forEach((docSnap) => {
       const id = docSnap.id;
       if (renderedIds.has(id)) return;
       renderedIds.add(id);
       
       const data = docSnap.data();
+      if (document.getElementById('posts-table-body').querySelector(`tr[data-id="${id}"]`)) return; // Prevent duplicate
       
       const tr = document.createElement('tr');
       tr.className = 'border-b hover:bg-gray-50';
+      tr.dataset.id = id;
       tr.innerHTML = `
         <td class="px-6 py-4 font-medium text-gray-900">${data.title}</td>
         <td class="px-6 py-4"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">${data.type}</span></td>
@@ -121,14 +133,24 @@ async function loadPosts() {
       tableBody.appendChild(tr);
     });
 
+    if (querySnapshot.docs.length > 0) {
+      lastDoc_Posts = querySnapshot.docs[querySnapshot.docs.length - 1];
+    }
+    
+    if (querySnapshot.docs.length === 50) {
+      document.getElementById('btn-load-posts-container')?.classList.remove('hidden');
+    } else {
+      document.getElementById('btn-load-posts-container')?.classList.add('hidden');
+    }
+
     // Attach events
     document.querySelectorAll('.btn-edit').forEach(btn => btn.addEventListener('click', (e) => editPost(e.target.dataset.id)));
-    document.querySelectorAll('.btn-delete').forEach(btn => btn.addEventListener('click', (e) => deletePost(e.target.dataset.id)));
+    document.querySelectorAll('.btn-delete').forEach(btn => btn.addEventListener('click', (e) => deletePost(e.target.dataset.id, e.target)));
     
   } catch (error) {
     if (token !== currentPostsLoadToken) return;
     console.error("Error loading posts:", error);
-    loadingIndicator.innerHTML = '<span class="text-red-500 font-bold p-4 block">حدث خطأ أثناء جلب البيانات. (تأكد أن حسابك لديه صلاحيات الأدمن).</span>';
+    loadingIndicator.innerHTML = '<span class="text-red-500 font-bold p-4 block">حدث خطأ أثناء جلب البيانات. (تأكد أنك أدمن).</span>';
   }
 }
 
@@ -209,20 +231,34 @@ async function editPost(id) {
       fType.dispatchEvent(new Event('change'));
     }
   } catch (e) {
-    alert("Error fetching document.");
+    showToast({ type: 'error', message: 'خطأ في جلب البيانات' });
     console.error(e);
   }
 }
 
 // Delete Post
-async function deletePost(id) {
-  if (confirm("هل أنت متأكد من حذف هذا المحتوى نهائياً؟")) {
+async function deletePost(id, btnElement) {
+  if (btnElement && btnElement.disabled) return;
+  if (btnElement) {
+    btnElement.disabled = true;
+    btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  }
+  if (await showConfirmModal({ title: 'تأكيد الحذف', message: 'هل أنت متأكد من حذف هذا المحتوى نهائياً؟' })) {
     try {
       await deleteDoc(doc(db, "posts", id));
       loadPosts();
     } catch (e) {
-      alert("فشل الحذف. تأكد من أن حسابك يمتلك صلاحيات الإدارة.");
+      showToast({ type: 'error', message: 'فشل الحذف. تأكد من أن حسابك يمتلك صلاحيات الإدارة.' });
       console.error(e);
+      if (btnElement) {
+        btnElement.disabled = false;
+        btnElement.textContent = 'حذف';
+      }
+    }
+  } else {
+    if (btnElement) {
+      btnElement.disabled = false;
+      btnElement.textContent = 'حذف';
     }
   }
 }
@@ -233,62 +269,104 @@ postForm.addEventListener('submit', async (e) => {
   
   const id = fId.value || 'doc_' + Date.now(); // Auto-generate simple ID if new
   
-  const postData = {
-    id: id,
-    slug: fSlug.value,
-    type: fType.value,
-    category: fCategory.value,
-    tags: currentTags,
-    status: fStatus.value,
-    title: fTitle.value,
-    coverImage: fCover.value,
-    seoDescription: fSeoDesc.value,
-    isFeatured: fFeatured.checked,
-    updatedAt: serverTimestamp(),
-    data: {
-      contentHtml: fContentHtml.value
-    }
-  };
-  
-  if (fPublishAt.value) {
-    postData.publishAt = new Date(fPublishAt.value);
-  } else {
-    postData.publishAt = null;
-  }
-  
-  if (!fId.value) {
-    postData.createdAt = serverTimestamp();
-  }
+  // Slug Normalization
+  let normalizedSlug = fSlug.value.trim()
+    .toLowerCase()
+    .replace(/[\s_]+/g, '-') // Replace spaces and underscores with hyphen
+    .replace(/[^\w\u0600-\u06FF-]/g, '') // Remove invalid URL chars (keeps alphanumeric, Arabic, hyphen)
+    .replace(/-+/g, '-') // Remove duplicate hyphens
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
 
-  // Type specific data
-  if (fType.value === 'video') {
-    postData.data.embedCode = fEmbedCode.value;
-  } else if (fType.value === 'story') {
-    postData.data.readTimeMinutes = parseInt(fReadTime.value) || 0;
+  fSlug.value = normalizedSlug;
+
+  if (!normalizedSlug) {
+    showToast({ type: 'error', message: 'الرابط (Slug) لا يمكن أن يكون فارغاً.' });
+    return;
   }
   
+  const btnSave = document.getElementById('btn-save');
+  btnSave.textContent = "جاري التحقق...";
+  btnSave.disabled = true;
+
   try {
-    const btnSave = document.getElementById('btn-save');
+    // Check Slug Uniqueness
+    const { collection, getDocs, query, where, doc, setDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    
+    const q = query(collection(db, "posts"), where("slug", "==", normalizedSlug));
+    const snap = await getDocs(q);
+    let isDuplicate = false;
+    snap.forEach(docSnap => {
+      if (docSnap.id !== id) { // Allow updating the same post
+        isDuplicate = true;
+      }
+    });
+
+    if (isDuplicate) {
+      showToast({ type: 'error', title: 'تنبيه', message: 'هذا الرابط (Slug) مستخدم بالفعل في مقال آخر. يرجى تعديله ليكون فريداً.' });
+      btnSave.textContent = "حفظ المحتوى";
+      btnSave.disabled = false;
+      return;
+    }
+
     btnSave.textContent = "جاري الحفظ...";
-    btnSave.disabled = true;
+
+    const postData = {
+      id: id,
+      slug: normalizedSlug,
+      type: fType.value,
+      category: fCategory.value,
+      tags: currentTags,
+      status: fStatus.value,
+      title: fTitle.value,
+      coverImage: fCover.value,
+      seoDescription: fSeoDesc.value,
+      isFeatured: fFeatured.checked,
+      updatedAt: serverTimestamp(),
+      data: {
+        contentHtml: fContentHtml.value
+      }
+    };
+    
+    if (fPublishAt.value) {
+      postData.publishAt = new Date(fPublishAt.value);
+    } else {
+      postData.publishAt = null;
+    }
+    
+    if (!fId.value) {
+      postData.createdAt = serverTimestamp();
+    }
+
+    // Type specific data
+    if (fType.value === 'video') {
+      postData.data.embedCode = fEmbedCode.value;
+    } else if (fType.value === 'story') {
+      postData.data.readTimeMinutes = parseInt(fReadTime.value) || 0;
+    }
     
     await setDoc(doc(db, "posts", id), postData, { merge: true });
     
     hideEditor();
     loadPosts();
+    showToast({ type: 'success', message: 'تم حفظ المحتوى بنجاح' });
     
     btnSave.textContent = "حفظ المحتوى";
     btnSave.disabled = false;
   } catch (error) {
-    alert("حدث خطأ أثناء الحفظ. تأكد من أن حسابك يمتلك صلاحيات الإدارة.");
+    showToast({ type: 'error', title: 'خطأ', message: 'حدث خطأ أثناء الحفظ. تأكد من أن حسابك يمتلك صلاحيات الإدارة.' });
     console.error(error);
-    const btnSave = document.getElementById('btn-save');
     btnSave.textContent = "حفظ المحتوى";
     btnSave.disabled = false;
   }
 });
-
 // Event Listeners
+document.getElementById('btn-load-ads')?.addEventListener('click', () => loadAds(true));
+document.getElementById('btn-load-audit')?.addEventListener('click', () => loadAuditAdmin(true));
+document.getElementById('btn-load-reports')?.addEventListener('click', () => loadReports(true));
+document.getElementById('btn-load-comments')?.addEventListener('click', () => loadCommentsAdmin(true));
+document.getElementById('btn-load-users')?.addEventListener('click', () => loadUsersAdmin(true));
+document.getElementById('btn-load-submissions')?.addEventListener('click', () => loadSubmissions(true));
+document.getElementById('btn-load-posts')?.addEventListener('click', () => loadPosts(true));
 document.getElementById('btn-new-post').addEventListener('click', () => showEditor(true));
 document.getElementById('btn-back').addEventListener('click', hideEditor);
 document.getElementById('btn-cancel').addEventListener('click', hideEditor);
@@ -355,34 +433,44 @@ menuPosts.addEventListener('click', () => {
 });
 
 let currentSubLoadToken = 0;
+let lastDoc_Submissions = null;
 
-async function loadSubmissions() {
+async function loadSubmissions(isLoadMore = false) {
   const token = ++currentSubLoadToken;
-  loadingIndicatorSub.classList.remove('hidden');
+  if (!isLoadMore) {
+    loadingIndicatorSub.classList.remove('hidden');
+    submissionsTableBody.innerHTML = '';
+    lastDoc_Submissions = null;
+  }
   
   try {
-    const { collection, getDocs, query, where, orderBy } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    const q = query(collection(db, "user_submissions"), where("status", "==", "submitted"), orderBy("createdAt", "asc"));
-    const querySnapshot = await getDocs(q);
+    const { collection, getDocs, query, where, orderBy, limit, startAfter } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    let constraints = [where("status", "==", "submitted"), orderBy("createdAt", "asc"), limit(50)];
+    if (isLoadMore && lastDoc_Submissions) {
+      constraints.push(startAfter(lastDoc_Submissions));
+    }
+    
+    const q = query(collection(db, "user_submissions"), ...constraints);
+    const snap = await getDocs(q);
     
     if (token !== currentSubLoadToken) return;
     
     loadingIndicatorSub.classList.add('hidden');
-    submissionsTableBody.innerHTML = '';
     
-    if (querySnapshot.empty) {
-      submissionsTableBody.innerHTML = '<tr><td colspan="4" class="px-6 py-4 text-center text-gray-500">لا يوجد قصص بانتظار المراجعة.</td></tr>';
+    if (snap.empty && !isLoadMore) {
+      submissionsTableBody.innerHTML = `<tr><td colspan="100%" class="px-6 py-12 text-center"><div class="flex flex-col items-center justify-center text-gray-500"><i class="fa-solid fa-inbox text-4xl mb-3 text-gray-300"></i><p class="text-lg font-medium text-gray-600">لا توجد مشاركات جديدة تحتاج للمراجعة</p></div></td></tr>`;
+      document.getElementById('btn-load-submissions-container')?.classList.add('hidden');
       return;
     }
     
     const renderedIds = new Set();
-    
-    querySnapshot.forEach((docSnap) => {
+    snap.forEach(docSnap => {
       const id = docSnap.id;
       if (renderedIds.has(id)) return;
       renderedIds.add(id);
       
       const data = docSnap.data();
+      if (document.getElementById('submissions-table-body').querySelector(`tr[data-id="${id}"]`)) return; // Prevent duplicate
       
       const tr = document.createElement('tr');
       tr.className = 'border-b hover:bg-gray-50 cursor-pointer btn-read-sub';
@@ -395,6 +483,16 @@ async function loadSubmissions() {
       `;
       submissionsTableBody.appendChild(tr);
     });
+
+    if (snap.docs.length > 0) {
+      lastDoc_Submissions = snap.docs[snap.docs.length - 1];
+    }
+    
+    if (snap.docs.length === 50) {
+      document.getElementById('btn-load-submissions-container')?.classList.remove('hidden');
+    } else {
+      document.getElementById('btn-load-submissions-container')?.classList.add('hidden');
+    }
 
     document.querySelectorAll('.btn-read-sub').forEach(tr => {
       tr.addEventListener('click', () => readSubmission(tr.dataset.id));
@@ -428,7 +526,7 @@ async function readSubmission(id) {
     }
   } catch (e) {
     console.error(e);
-    alert('حدث خطأ');
+    showToast({ type: 'error', message: 'حدث خطأ' });
   }
 }
 
@@ -439,63 +537,107 @@ document.getElementById('btn-reader-back')?.addEventListener('click', () => {
 
 document.getElementById('btn-sub-approve')?.addEventListener('click', async () => {
   if(!currentSubmission) return;
-  if(confirm('هل أنت متأكد من الموافقة على هذه القصة ونشرها للعامة؟')) {
+  
+  const btn = document.getElementById('btn-sub-approve');
+  if (btn.disabled) return;
+
+  if (await showConfirmModal({ title: 'نشر القصة', message: 'هل أنت متأكد من الموافقة على هذه القصة ونشرها للعامة؟', confirmColor: 'green' })) {
+    btn.disabled = true;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري النشر...';
+
     try {
-      const { doc, setDoc, deleteDoc, collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+      const { doc, collection, serverTimestamp, runTransaction } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
       
-      // 1. Create Post
-      const postId = 'story_' + Date.now();
-      
-      // Auto-generate slug from title (basic)
-      let slug = currentSubmission.title.trim().replace(/\s+/g, '-');
-      // Append a random number to avoid conflicts
-      slug += '-' + Math.floor(Math.random() * 1000);
-      
-      const postData = {
-        id: postId,
-        slug: slug,
-        type: 'story',
-        status: 'published',
-        title: currentSubmission.title,
-        coverImage: '', // default
-        authorUid: currentSubmission.uid || null,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-        data: {
-          contentHtml: `<p><strong>قصة مرسلة من: ${currentSubmission.authorName}</strong></p><p>${currentSubmission.content.replace(/\n/g, '</p><p>')}</p>`,
-          readTimeMinutes: Math.ceil(currentSubmission.content.length / 1000)
+      await runTransaction(db, async (transaction) => {
+        const subRef = doc(db, "user_submissions", currentSubmission.id);
+        const subDoc = await transaction.get(subRef);
+        
+        if (!subDoc.exists()) {
+          throw new Error("NOT_FOUND");
         }
-      };
-      
-      await setDoc(doc(db, "posts", postId), postData);
-      
-      // 2. Send Notification
-      if (currentSubmission.uid) {
-        await addDoc(collection(db, "notifications"), {
-          userId: currentSubmission.uid,
-          type: 'story_approved',
-          title: 'تمت الموافقة على قصتك',
-          message: `تم نشر قصتك "${currentSubmission.title}".`,
-          link: `/story/${postId}`,
-          read: false,
-          createdAt: serverTimestamp()
+        
+        const subData = subDoc.data();
+        if (subData.status === 'approved' || subData.publishedPostId) {
+          throw new Error("ALREADY_APPROVED");
+        }
+
+        // 1. Create Post
+        const postId = 'story_' + Date.now();
+        const postRef = doc(db, "posts", postId);
+        
+        let slug = currentSubmission.title.trim().replace(/\s+/g, '-');
+        slug += '-' + Math.floor(Math.random() * 1000);
+        
+        const postData = {
+          id: postId,
+          slug: slug,
+          type: 'story',
+          status: 'published',
+          title: currentSubmission.title,
+          coverImage: '',
+          authorUid: currentSubmission.uid || null,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          sourceSubmissionId: currentSubmission.id,
+          data: {
+            contentHtml: `<p><strong>قصة مرسلة من: ${currentSubmission.authorName}</strong></p><p>${currentSubmission.content.replace(/\n/g, '</p><p>')}</p>`,
+            readTimeMinutes: Math.ceil(currentSubmission.content.length / 1000)
+          }
+        };
+        
+        transaction.set(postRef, postData);
+        
+        // 2. Send Notification
+        if (currentSubmission.uid) {
+          const notifRef = doc(collection(db, "notifications"));
+          transaction.set(notifRef, {
+            userId: currentSubmission.uid,
+            type: 'story_approved',
+            title: 'تمت الموافقة على قصتك',
+            message: `تم نشر قصتك "${currentSubmission.title}".`,
+            link: `/story/${postId}`,
+            read: false,
+            createdAt: serverTimestamp()
+          });
+        }
+        
+        // 3. Update Submission Status
+        transaction.update(subRef, {
+          status: 'approved',
+          publishedPostId: postId,
+          updatedAt: serverTimestamp()
         });
-      }
-      
-      // 3. Update Submission Status
-      await updateDoc(doc(db, "user_submissions", currentSubmission.id), {
-        status: 'approved',
-        publishedPostId: postId,
-        updatedAt: serverTimestamp()
+        
+        // 4. Audit Log
+        const auditRef = doc(collection(db, "audit_logs"));
+        transaction.set(auditRef, {
+          adminUid: auth.currentUser.uid,
+          action: 'APPROVE_SUBMISSION',
+          targetUid: currentSubmission.id,
+          targetType: 'user_submission',
+          timestamp: serverTimestamp(),
+          metadata: { postId: postId, title: currentSubmission.title }
+        });
       });
       
-      alert('تم النشر بنجاح!');
+      showToast({ type: 'success', message: 'تم النشر بنجاح!' });
       viewSubmissionReader.classList.add('hidden');
       viewSubmissions.classList.remove('hidden');
       loadSubmissions();
     } catch(e) {
       console.error(e);
-      alert('حدث خطأ أثناء النشر.');
+      if (e.message === "ALREADY_APPROVED") {
+        showToast({ type: 'warning', message: 'هذه المشاركة تمت الموافقة عليها مسبقاً.' });
+        viewSubmissionReader.classList.add('hidden');
+        viewSubmissions.classList.remove('hidden');
+        loadSubmissions();
+      } else {
+        showToast({ type: 'error', message: 'حدث خطأ أثناء النشر.' });
+      }
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
     }
   }
 });
@@ -526,20 +668,27 @@ document.getElementById('btn-cancel-action')?.addEventListener('click', () => {
 document.getElementById('btn-confirm-action')?.addEventListener('click', async () => {
   if(!currentSubmission || !pendingAction) return;
   
+  const btn = document.getElementById('btn-confirm-action');
+  if (btn.disabled) return;
+  
   const reason = document.getElementById('action-reason-text').value.trim();
   if(!reason) {
-    alert('يرجى كتابة السبب.');
+    showToast({ type: 'warning', message: 'يرجى كتابة السبب.' });
     return;
   }
   
+  btn.disabled = true;
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري المعالجة...';
+  
   try {
-    const { doc, updateDoc, collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    const { doc, collection, serverTimestamp, runTransaction } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
     
     let status, notifType, notifTitle, notifMsg;
     
     if (pendingAction === 'edit') {
       status = 'needs_edit';
-      notifType = 'story_rejected'; // we can reuse icon style
+      notifType = 'story_rejected';
       notifTitle = 'قصتك تحتاج إلى تعديل';
       notifMsg = `يرجى إجراء بعض التعديلات على قصتك "${currentSubmission.title}". السبب: ${reason}`;
     } else {
@@ -549,26 +698,49 @@ document.getElementById('btn-confirm-action')?.addEventListener('click', async (
       notifMsg = `نأسف، لم نتمكن من قبول قصتك "${currentSubmission.title}". السبب: ${reason}`;
     }
     
-    await updateDoc(doc(db, "user_submissions", currentSubmission.id), {
-      status: status,
-      rejectionReason: reason,
-      updatedAt: serverTimestamp()
+    await runTransaction(db, async (transaction) => {
+      const subRef = doc(db, "user_submissions", currentSubmission.id);
+      const subDoc = await transaction.get(subRef);
+      
+      if (!subDoc.exists()) {
+        throw new Error("NOT_FOUND");
+      }
+      
+      const subData = subDoc.data();
+      if (subData.status === status) {
+        throw new Error("ALREADY_PROCESSED");
+      }
+      
+      transaction.update(subRef, {
+        status: status,
+        rejectionReason: reason,
+        updatedAt: serverTimestamp()
+      });
+      
+      if (currentSubmission.uid) {
+        const notifRef = doc(collection(db, "notifications"));
+        transaction.set(notifRef, {
+          userId: currentSubmission.uid,
+          type: notifType,
+          title: notifTitle,
+          message: notifMsg,
+          read: false,
+          createdAt: serverTimestamp()
+        });
+      }
+      
+      const auditRef = doc(collection(db, "audit_logs"));
+      transaction.set(auditRef, {
+        adminUid: auth.currentUser.uid,
+        action: pendingAction === 'edit' ? 'REQUEST_EDIT_SUBMISSION' : 'REJECT_SUBMISSION',
+        targetUid: currentSubmission.id,
+        targetType: 'user_submission',
+        timestamp: serverTimestamp(),
+        metadata: { reason: reason, title: currentSubmission.title }
+      });
     });
     
-    if (currentSubmission.uid) {
-      await addDoc(collection(db, "notifications"), {
-        userId: currentSubmission.uid,
-        type: notifType,
-        title: notifTitle,
-        message: notifMsg,
-        read: false,
-        createdAt: serverTimestamp()
-      });
-    }
-    
-    alert('تم الإجراء بنجاح.');
-    
-    // Reset view
+    showToast({ type: 'success', message: 'تم الإجراء بنجاح.' });
     pendingAction = null;
     document.getElementById('action-reason-text').value = '';
     document.getElementById('action-reason-container').classList.add('hidden');
@@ -579,7 +751,17 @@ document.getElementById('btn-confirm-action')?.addEventListener('click', async (
     loadSubmissions();
   } catch(e) {
     console.error(e);
-    alert('حدث خطأ أثناء تنفيذ الإجراء.');
+    if (e.message === "ALREADY_PROCESSED") {
+      showToast({ type: 'warning', message: 'تمت معالجة هذه المشاركة بالفعل.' });
+      viewSubmissionReader.classList.add('hidden');
+      viewSubmissions.classList.remove('hidden');
+      loadSubmissions();
+    } else {
+      showToast({ type: 'error', message: 'حدث خطأ أثناء تنفيذ الإجراء.' });
+    }
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = originalText;
   }
 });
 // --- End Submissions Logic ---
@@ -727,154 +909,322 @@ if(menuAudit) {
 }
 
 // Users Admin Logic
-async function loadUsersAdmin() {
+let lastDoc_Users = null;
+
+async function loadUsersAdmin(isLoadMore = false) {
   const tbody = document.getElementById('users-table-body');
-  tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+  if (!isLoadMore) {
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+    lastDoc_Users = null;
+  } else {
+    document.getElementById('btn-load-users').textContent = "جاري التحميل...";
+    document.getElementById('btn-load-users').disabled = true;
+  }
+
   try {
-    const { collection, getDocs } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    const snapshot = await getDocs(collection(db, "users"));
-    tbody.innerHTML = '';
+    const { collection, getDocs, query, orderBy, limit, startAfter } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    let constraints = [orderBy('createdAt', 'desc'), limit(50)];
+    if (isLoadMore && lastDoc_Users) {
+      constraints.push(startAfter(lastDoc_Users));
+    }
     
+    const snapshot = await getDocs(query(collection(db, "users"), ...constraints));
+    
+    if (!isLoadMore) {
+      tbody.innerHTML = '';
+    }
+
+    if (snapshot.empty && !isLoadMore) {
+      tbody.innerHTML = `<tr><td colspan="100%" class="px-6 py-12 text-center"><div class="flex flex-col items-center justify-center text-gray-500"><i class="fa-solid fa-users text-4xl mb-3 text-gray-300"></i><p class="text-lg font-medium text-gray-600">لا يوجد مستخدمين</p></div></td></tr>`;
+      document.getElementById('btn-load-users-container')?.classList.add('hidden');
+      return;
+    }
+    
+    const renderedIds = new Set();
     snapshot.forEach(docSnap => {
+      const id = docSnap.id;
+      if (renderedIds.has(id)) return;
+      renderedIds.add(id);
+      
       const data = docSnap.data();
+      if (document.getElementById('users-table-body').querySelector(`tr[data-id="${id}"]`)) return; // Prevent duplicate
+      
       const tr = document.createElement('tr');
       tr.className = 'border-b hover:bg-gray-50';
+      tr.dataset.id = id;
       tr.innerHTML = `
         <td class="px-6 py-4">${data.displayName || 'بدون اسم'}</td>
         <td class="px-6 py-4" dir="ltr" style="text-align: right;">${data.email}</td>
         <td class="px-6 py-4">${data.role === 'admin' ? '<span class="text-red-600 font-bold">Admin</span>' : 'User'}</td>
-        <td class="px-6 py-4">${data.accountStatus === 'banned' ? '<span class="text-red-600">محظور</span>' : data.accountStatus === 'deleted' ? '<span class="text-gray-500">محذوف</span>' : '<span class="text-green-600">نشط</span>'}</td>
+        <td class="px-6 py-4">${data.status === 'banned' ? '<span class="text-red-600">محظور</span>' : '<span class="text-green-600">نشط</span>'}</td>
         <td class="px-6 py-4 space-x-2 space-x-reverse">
-          <button class="bg-gray-200 text-gray-800 px-2 py-1 rounded hover:bg-gray-300 text-xs" onclick="changeUserStatus('${data.uid}', 'active')">تنشيط</button>
-          <button class="bg-red-100 text-red-800 px-2 py-1 rounded hover:bg-red-200 text-xs" onclick="changeUserStatus('${data.uid}', 'banned')">حظر</button>
-          <button class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded hover:bg-yellow-200 text-xs" onclick="changeUserRole('${data.uid}', '${data.role === 'admin' ? 'user' : 'admin'}')">تغيير Role</button>
+          ${data.status !== 'banned' ? `<button class="text-red-600 hover:underline text-sm" onclick="banUser('${docSnap.id}')">حظر</button>` : `<button class="text-green-600 hover:underline text-sm" onclick="unbanUser('${docSnap.id}')">فك الحظر</button>`}
         </td>
       `;
       tbody.appendChild(tr);
     });
-  } catch (error) {
-    console.error(error);
-  }
-}
 
-window.changeUserStatus = async (uid, newStatus) => {
-  if(!confirm(`هل أنت متأكد من تغيير حالة المستخدم إلى ${newStatus}؟`)) return;
+    if (snapshot.docs.length > 0) {
+      lastDoc_Users = snapshot.docs[snapshot.docs.length - 1];
+    }
+    
+    if (snapshot.docs.length === 50) {
+      document.getElementById('btn-load-users-container')?.classList.remove('hidden');
+    } else {
+      document.getElementById('btn-load-users-container')?.classList.add('hidden');
+    }
+
+  } catch(e) {
+    console.error("Error loading users:", e);
+    if(!isLoadMore) tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-red-500">حدث خطأ</td></tr>';
+  } finally {
+    if (isLoadMore) {
+      document.getElementById('btn-load-users').textContent = "تحميل المزيد";
+      document.getElementById('btn-load-users').disabled = false;
+    }
+  }
+
+window.changeUserStatus = async (uid, newStatus, btnElement) => {
+  if (btnElement && btnElement.disabled) return;
+  if (!(await showConfirmModal({ title: 'تغيير حالة المستخدم', message: `هل أنت متأكد من تغيير حالة المستخدم إلى ${newStatus}؟` }))) return;
+  
+  if (btnElement) {
+    btnElement.dataset.originalText = btnElement.textContent;
+    btnElement.disabled = true;
+    btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  }
   try {
     const { doc, updateDoc, addDoc, collection, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    await updateDoc(doc(db, "users", uid), { accountStatus: newStatus });
-    
-    // Log Audit
+    await updateDoc(doc(db, "users", uid), { status: newStatus });
     await addDoc(collection(db, "audit_logs"), {
-      adminUid: auth.currentUser.uid,
-      action: 'CHANGE_USER_STATUS',
-      targetUid: uid,
+      action: newStatus === 'banned' ? 'ban_user' : 'unban_user',
       targetType: 'user',
-      timestamp: serverTimestamp(),
-      metadata: { newStatus }
+      targetId: uid,
+      adminUid: auth.currentUser?.uid || 'unknown',
+      timestamp: serverTimestamp()
     });
-    
     loadUsersAdmin();
-  } catch(e) { alert("حدث خطأ."); console.error(e); }
+  } catch(e) { 
+    showToast({ type: 'error', message: 'حدث خطأ.' }); 
+    console.error(e); 
+    if (btnElement) {
+      btnElement.disabled = false;
+      btnElement.textContent = btnElement.dataset.originalText;
+    }
+  }
 };
 
-window.changeUserRole = async (uid, newRole) => {
-  if(!confirm(`هل أنت متأكد من تغيير صلاحية المستخدم إلى ${newRole}؟`)) return;
+window.changeUserRole = async (uid, newRole, btnElement) => {
+  if (btnElement && btnElement.disabled) return;
+  if (!(await showConfirmModal({ title: 'تغيير صلاحية المستخدم', message: `هل أنت متأكد من تغيير صلاحية المستخدم إلى ${newRole}؟` }))) return;
+  
+  if (btnElement) {
+    btnElement.dataset.originalText = btnElement.textContent;
+    btnElement.disabled = true;
+    btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  }
   try {
     const { doc, updateDoc, addDoc, collection, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
     await updateDoc(doc(db, "users", uid), { role: newRole });
-    
-    // Log Audit
     await addDoc(collection(db, "audit_logs"), {
-      adminUid: auth.currentUser.uid,
-      action: 'CHANGE_USER_ROLE',
-      targetUid: uid,
+      action: 'change_role',
       targetType: 'user',
-      timestamp: serverTimestamp(),
-      metadata: { newRole }
+      targetId: uid,
+      metadata: { newRole },
+      adminUid: auth.currentUser?.uid || 'unknown',
+      timestamp: serverTimestamp()
     });
-    
     loadUsersAdmin();
-  } catch(e) { alert("حدث خطأ."); console.error(e); }
+  } catch(e) { 
+    showToast({ type: 'error', message: 'حدث خطأ.' }); 
+    console.error(e); 
+    if (btnElement) {
+      btnElement.disabled = false;
+      btnElement.textContent = btnElement.dataset.originalText;
+    }
+  }
 };
 
 // Comments Admin Logic
-async function loadCommentsAdmin() {
+let lastDoc_Comments = null;
+
+async function loadCommentsAdmin(isLoadMore = false) {
   const tbody = document.getElementById('comments-table-body');
-  tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+  if (!isLoadMore) {
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+    lastDoc_Comments = null;
+  } else {
+    document.getElementById('btn-load-comments').textContent = "جاري التحميل...";
+    document.getElementById('btn-load-comments').disabled = true;
+  }
+  
   try {
-    const { collection, getDocs, query, orderBy } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    const snapshot = await getDocs(query(collection(db, "comments"), orderBy('createdAt', 'desc')));
-    tbody.innerHTML = '';
+    const { collection, getDocs, query, orderBy, limit, startAfter } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    let constraints = [orderBy('createdAt', 'desc'), limit(50)];
+    if (isLoadMore && lastDoc_Comments) {
+      constraints.push(startAfter(lastDoc_Comments));
+    }
     
+    const snapshot = await getDocs(query(collection(db, "comments"), ...constraints));
+    
+    if (!isLoadMore) {
+      tbody.innerHTML = '';
+    }
+    
+    if (snapshot.empty && !isLoadMore) {
+      tbody.innerHTML = `<tr><td colspan="100%" class="px-6 py-12 text-center"><div class="flex flex-col items-center justify-center text-gray-500"><i class="fa-solid fa-comments text-4xl mb-3 text-gray-300"></i><p class="text-lg font-medium text-gray-600">لا توجد تعليقات</p></div></td></tr>`;
+      document.getElementById('btn-load-comments-container')?.classList.add('hidden');
+      return;
+    }
+    
+    const renderedIds = new Set();
     snapshot.forEach(docSnap => {
+      const id = docSnap.id;
+      if (renderedIds.has(id)) return;
+      renderedIds.add(id);
+      
       const data = docSnap.data();
+      if (document.getElementById('comments-table-body').querySelector(`tr[data-id="${id}"]`)) return; // Prevent duplicate
+      
       const tr = document.createElement('tr');
       tr.className = 'border-b hover:bg-gray-50';
+      tr.dataset.id = id;
       tr.innerHTML = `
         <td class="px-6 py-4">${data.authorName}</td>
         <td class="px-6 py-4">${data.contentId}</td>
         <td class="px-6 py-4 truncate max-w-xs" title="${data.text}">${data.text}</td>
         <td class="px-6 py-4">${data.status === 'visible' ? '<span class="text-green-600">مرئي</span>' : '<span class="text-red-600">مخفي/محذوف</span>'}</td>
         <td class="px-6 py-4 space-x-2 space-x-reverse">
-          <button class="text-red-600 hover:underline text-sm" onclick="moderateComment('${docSnap.id}', 'deleted')">حذف</button>
-          <button class="text-green-600 hover:underline text-sm" onclick="moderateComment('${docSnap.id}', 'visible')">إظهار</button>
+          <button class="text-red-600 hover:underline text-sm" onclick="moderateComment('${docSnap.id}', 'deleted', this)">حذف</button>
+          <button class="text-green-600 hover:underline text-sm" onclick="moderateComment('${docSnap.id}', 'visible', this)">إظهار</button>
         </td>
       `;
       tbody.appendChild(tr);
     });
-  } catch (error) {
-    console.error(error);
-  }
-}
 
-window.moderateComment = async (commentId, newStatus) => {
-  if(!confirm(`تأكيد تغيير حالة التعليق؟`)) return;
+    if (snapshot.docs.length > 0) {
+      lastDoc_Comments = snapshot.docs[snapshot.docs.length - 1];
+    }
+    
+    if (snapshot.docs.length === 50) {
+      document.getElementById('btn-load-comments-container')?.classList.remove('hidden');
+    } else {
+      document.getElementById('btn-load-comments-container')?.classList.add('hidden');
+    }
+
+  } catch(e) {
+    console.error("Error loading comments:", e);
+    if (!isLoadMore) tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-red-500">حدث خطأ</td></tr>';
+  } finally {
+    if (isLoadMore) {
+      document.getElementById('btn-load-comments').textContent = "تحميل المزيد";
+      document.getElementById('btn-load-comments').disabled = false;
+    }
+  }
+
+window.moderateComment = async (commentId, newStatus, btnElement) => {
+  if (btnElement && btnElement.disabled) return;
+  if (!(await showConfirmModal({ title: 'تغيير حالة التعليق', message: 'تأكيد تغيير حالة التعليق؟' }))) return;
+  
+  if (btnElement) {
+    btnElement.dataset.originalText = btnElement.textContent;
+    btnElement.disabled = true;
+    btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  }
   try {
     const { doc, updateDoc, addDoc, collection, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
     await updateDoc(doc(db, "comments", commentId), { status: newStatus });
-    
-    // Log Audit
     await addDoc(collection(db, "audit_logs"), {
-      adminUid: auth.currentUser.uid,
-      action: 'MODERATE_COMMENT',
-      targetUid: commentId,
+      action: newStatus === 'deleted' ? 'delete_comment' : 'approve_comment',
       targetType: 'comment',
-      timestamp: serverTimestamp(),
-      metadata: { newStatus }
+      targetId: commentId,
+      adminUid: auth.currentUser?.uid || 'unknown',
+      timestamp: serverTimestamp()
     });
-    
     loadCommentsAdmin();
-  } catch(e) { alert("حدث خطأ."); console.error(e); }
+  } catch(e) { 
+    showToast({ type: 'error', message: 'حدث خطأ.' }); 
+    console.error(e); 
+    if (btnElement) {
+      btnElement.disabled = false;
+      btnElement.textContent = btnElement.dataset.originalText;
+    }
+  }
 };
 
 // Audit Logs Logic
-async function loadAuditAdmin() {
+let lastDoc_Audit = null;
+
+async function loadAuditAdmin(isLoadMore = false) {
   const tbody = document.getElementById('audit-table-body');
-  tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+  if (!isLoadMore) {
+    tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4">جاري التحميل...</td></tr>';
+    lastDoc_Audit = null;
+  } else {
+    document.getElementById('btn-load-audit').textContent = "جاري التحميل...";
+    document.getElementById('btn-load-audit').disabled = true;
+  }
+  
   try {
-    const { collection, getDocs, query, orderBy, limit } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    const snapshot = await getDocs(query(collection(db, "audit_logs"), orderBy('timestamp', 'desc'), limit(50)));
-    tbody.innerHTML = '';
+    const { collection, getDocs, query, orderBy, limit, startAfter } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    let constraints = [orderBy('timestamp', 'desc'), limit(50)];
+    if (isLoadMore && lastDoc_Audit) {
+      constraints.push(startAfter(lastDoc_Audit));
+    }
     
+    const snapshot = await getDocs(query(collection(db, "audit_logs"), ...constraints));
+    
+    if (!isLoadMore) {
+      tbody.innerHTML = '';
+    }
+    
+    if (snapshot.empty && !isLoadMore) {
+      tbody.innerHTML = `<tr><td colspan="100%" class="px-6 py-12 text-center"><div class="flex flex-col items-center justify-center text-gray-500"><i class="fa-solid fa-clipboard-list text-4xl mb-3 text-gray-300"></i><p class="text-lg font-medium text-gray-600">لا توجد سجلات نشاط</p></div></td></tr>`;
+      document.getElementById('btn-load-audit-container')?.classList.add('hidden');
+      return;
+    }
+    
+    const renderedIds = new Set();
     snapshot.forEach(docSnap => {
+      const id = docSnap.id;
+      if (renderedIds.has(id)) return;
+      renderedIds.add(id);
+      
       const data = docSnap.data();
+      if (document.getElementById('audit-table-body').querySelector(`tr[data-id="${id}"]`)) return; // Prevent duplicate
+      
       const tr = document.createElement('tr');
-      tr.className = 'border-b hover:bg-gray-50';
-      const dateStr = data.timestamp ? data.timestamp.toDate().toLocaleString('ar-EG') : '';
+      tr.className = 'border-b hover:bg-gray-50 text-sm';
+      tr.dataset.id = id;
       tr.innerHTML = `
-        <td class="px-6 py-4 text-sm">${dateStr}</td>
-        <td class="px-6 py-4 text-xs font-mono">${data.adminUid}</td>
-        <td class="px-6 py-4 font-bold text-red-600">${data.action}</td>
-        <td class="px-6 py-4 text-xs font-mono">${data.targetUid}</td>
-        <td class="px-6 py-4 text-sm text-gray-500">${JSON.stringify(data.metadata || {})}</td>
+        <td class="px-6 py-4">${data.timestamp ? new Date(data.timestamp.toMillis()).toLocaleString('ar-EG') : '-'}</td>
+        <td class="px-6 py-4" dir="ltr" style="text-align: right; font-size: 0.75rem;">${data.adminUid}</td>
+        <td class="px-6 py-4 font-bold text-gray-700">${data.action}</td>
+        <td class="px-6 py-4">${data.targetType}: <span dir="ltr" class="text-xs text-gray-500">${data.targetUid || data.targetId || '-'}</span></td>
+        <td class="px-6 py-4 text-gray-500">${data.metadata ? JSON.stringify(data.metadata) : '-'}</td>
       `;
       tbody.appendChild(tr);
     });
-  } catch (error) {
-    console.error(error);
-    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-red-500 p-4">لا تملك صلاحية قراءة السجلات.</td></tr>';
+
+    if (snapshot.docs.length > 0) {
+      lastDoc_Audit = snapshot.docs[snapshot.docs.length - 1];
+    }
+    
+    if (snapshot.docs.length === 50) {
+      document.getElementById('btn-load-audit-container')?.classList.remove('hidden');
+    } else {
+      document.getElementById('btn-load-audit-container')?.classList.add('hidden');
+    }
+
+  } catch(e) {
+    console.error("Error loading audit:", e);
+    if (!isLoadMore) tbody.innerHTML = '<tr><td colspan="5" class="text-center p-4 text-red-500">حدث خطأ</td></tr>';
+  } finally {
+    if (isLoadMore) {
+      document.getElementById('btn-load-audit').textContent = "تحميل المزيد";
+      document.getElementById('btn-load-audit').disabled = false;
+    }
   }
-}
 // Ads Logic
 async function loadAds() {
   const tbody = document.getElementById('ads-table-body');
@@ -885,16 +1235,19 @@ async function loadAds() {
     
     tbody.innerHTML = '';
     if (querySnapshot.empty) {
-      tbody.innerHTML = '<tr><td colspan="4" class="text-center p-4 text-gray-500">لا توجد إعلانات.</td></tr>';
+      tbody.innerHTML = `<tr><td colspan="100%" class="px-6 py-12 text-center"><div class="flex flex-col items-center justify-center text-gray-500"><i class="fa-solid fa-bullhorn text-4xl mb-3 text-gray-300"></i><p class="text-lg font-medium text-gray-600">لا توجد إعلانات</p></div></td></tr>`;
       return;
     }
     
     querySnapshot.forEach((docSnap) => {
       const data = docSnap.data();
+      if (document.getElementById('ads-table-body').querySelector(`tr[data-id="${id}"]`)) return; // Prevent duplicate
+      
       const id = docSnap.id;
       
       const tr = document.createElement('tr');
       tr.className = 'border-b hover:bg-gray-50';
+      tr.dataset.id = id;
       tr.innerHTML = `
         <td class="p-3"><img src="${data.image}" class="h-12 w-20 object-cover rounded"></td>
         <td class="p-3">${data.text || '-'}</td>
@@ -926,7 +1279,7 @@ async function loadAds() {
     }));
 
     document.querySelectorAll('.btn-delete-ad').forEach(btn => btn.addEventListener('click', async (e) => {
-      if(confirm('متأكد؟')) {
+      if (await showConfirmModal({ title: 'تأكيد الحذف', message: 'هل أنت متأكد من الحذف؟' })) {
         const { doc, deleteDoc } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
         await deleteDoc(doc(db, "ads_templates", e.target.dataset.id));
         loadAds();
@@ -955,7 +1308,7 @@ document.getElementById('ad-form')?.addEventListener('submit', async (e) => {
     document.getElementById('ad-id').value = '';
     loadAds();
   } catch(err) {
-    alert('خطأ في الحفظ');
+    showToast({ type: 'error', message: 'خطأ في الحفظ' });
   }
 });
 
@@ -990,7 +1343,7 @@ document.getElementById('notif-form')?.addEventListener('submit', async (e) => {
     st.classList.remove('hidden');
     setTimeout(() => st.classList.add('hidden'), 5000);
   } catch(err) {
-    alert('خطأ في إرسال الإشعار');
+    showToast({ type: 'error', message: 'خطأ في إرسال الإشعار' });
   } finally {
     btn.disabled = false;
     btn.textContent = 'إرسال الإشعار الآن';
@@ -1012,88 +1365,141 @@ if(menuReports) {
 
 document.getElementById('btn-load-reports').addEventListener('click', loadReports);
 
-async function loadReports() {
+let lastDoc_Reports = null;
+
+async function loadReports(isLoadMore = false) {
   const tbody = document.getElementById('reports-table-body');
   const loading = document.getElementById('loading-indicator-reports');
   const statusFilter = document.getElementById('report-filter-status').value;
   
-  tbody.innerHTML = '';
-  loading.classList.remove('hidden');
+  if (!isLoadMore) {
+    tbody.innerHTML = '';
+    loading.classList.remove('hidden');
+    lastDoc_Reports = null;
+  } else {
+    document.getElementById('btn-load-reports').textContent = "جاري التحميل...";
+    document.getElementById('btn-load-reports').disabled = true;
+  }
   
   try {
-    const { collection, getDocs, query, where, orderBy } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    const q = query(collection(db, "reports"), where("status", "==", statusFilter), orderBy("createdAt", "desc"));
+    const { collection, getDocs, query, where, orderBy, limit, startAfter } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    let constraints = [where("status", "==", statusFilter), orderBy("createdAt", "desc"), limit(50)];
+    if (isLoadMore && lastDoc_Reports) {
+      constraints.push(startAfter(lastDoc_Reports));
+    }
+    
+    const q = query(collection(db, "reports"), ...constraints);
     const snap = await getDocs(q);
     
-    loading.classList.add('hidden');
+    if (!isLoadMore) {
+      loading.classList.add('hidden');
+    }
     
-    if (snap.empty) {
-      tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">لا توجد إبلاغات بهذه الحالة.</td></tr>';
+    if (snap.empty && !isLoadMore) {
+      tbody.innerHTML = `<tr><td colspan="100%" class="px-6 py-12 text-center"><div class="flex flex-col items-center justify-center text-gray-500"><i class="fa-solid fa-flag text-4xl mb-3 text-gray-300"></i><p class="text-lg font-medium text-gray-600">لا توجد إبلاغات بهذه الحالة</p></div></td></tr>`;
+      document.getElementById('btn-load-reports-container')?.classList.add('hidden');
       return;
     }
     
+    const renderedIds = new Set();
     snap.forEach(docSnap => {
+      const id = docSnap.id;
+      if (renderedIds.has(id)) return;
+      renderedIds.add(id);
+      
       const data = docSnap.data();
-      const dateStr = data.createdAt ? data.createdAt.toDate().toLocaleString('ar-EG') : '';
-      const targetLabel = data.targetType === 'comment' ? 'تعليق' : (data.targetType === 'content' ? 'محتوى' : 'مستخدم');
+      if (document.getElementById('reports-table-body').querySelector(`tr[data-id="${id}"]`)) return; // Prevent duplicate
       
-      let actionsHtml = '';
+      let actionHtml = '';
       if (data.status === 'pending') {
-        actionsHtml = `<button onclick="updateReportStatus('${docSnap.id}', 'reviewing')" class="text-blue-500 hover:text-blue-700 mx-1">بدء المراجعة</button>
-                       <button onclick="updateReportStatus('${docSnap.id}', 'rejected')" class="text-gray-500 hover:text-gray-700 mx-1">رفض الإبلاغ</button>`;
+        actionHtml = `
+          <button class="text-blue-600 hover:underline text-sm" onclick="updateReportStatus('${id}', 'reviewing', this)">بدء المراجعة</button>
+          <button class="text-red-600 hover:underline text-sm" onclick="updateReportStatus('${id}', 'rejected', this)">رفض كاذب</button>
+        `;
       } else if (data.status === 'reviewing') {
-        actionsHtml = `<button onclick="resolveReport('${docSnap.id}', '${data.targetType}', '${data.targetId}')" class="text-green-500 hover:text-green-700 mx-1">اتخاذ إجراء وإغلاق</button>
-                       <button onclick="updateReportStatus('${docSnap.id}', 'rejected')" class="text-gray-500 hover:text-gray-700 mx-1">رفض الإبلاغ</button>`;
+         actionHtml = `
+          <button class="text-green-600 hover:underline text-sm font-bold" onclick="resolveReport('${id}', '${data.targetType}', '${data.targetId}', this)">اتخاذ إجراء (حذف)</button>
+          <button class="text-red-600 hover:underline text-sm" onclick="updateReportStatus('${id}', 'rejected', this)">رفض كاذب</button>
+        `;
+      } else {
+         actionHtml = '<span class="text-gray-400 text-sm">تمت المعالجة</span>';
       }
-      
+
       const tr = document.createElement('tr');
       tr.className = 'border-b hover:bg-gray-50';
+      tr.dataset.id = id;
       tr.innerHTML = `
-        <td class="px-6 py-4 text-sm text-gray-500">${dateStr}</td>
-        <td class="px-6 py-4 text-sm font-bold">${targetLabel} <br><span class="text-xs text-gray-400 font-mono">${data.targetId}</span></td>
-        <td class="px-6 py-4 text-sm text-gray-500 font-mono text-xs">${data.reporterUid}</td>
-        <td class="px-6 py-4 text-sm text-gray-900">${data.reason}<br><span class="text-xs text-gray-500">${data.details || ''}</span></td>
-        <td class="px-6 py-4 text-sm font-bold">${data.status}</td>
-        <td class="px-6 py-4 text-sm">${actionsHtml}</td>
+        <td class="px-6 py-4 text-sm">${data.createdAt ? new Date(data.createdAt.toMillis()).toLocaleString('ar-EG') : '-'}</td>
+        <td class="px-6 py-4">${data.targetType}</td>
+        <td class="px-6 py-4" dir="ltr" style="text-align: right; font-size: 0.8rem;">${data.reporterId}</td>
+        <td class="px-6 py-4">${data.reason}</td>
+        <td class="px-6 py-4">${data.status}</td>
+        <td class="px-6 py-4 space-x-2 space-x-reverse">${actionHtml}</td>
       `;
       tbody.appendChild(tr);
     });
-  } catch (error) {
-    console.error(error);
-    loading.classList.add('hidden');
-    tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-red-500">حدث خطأ.</td></tr>';
-  }
-}
 
-window.updateReportStatus = async (reportId, newStatus) => {
-  if (!confirm(`هل أنت متأكد من تغيير الحالة إلى ${newStatus}؟`)) return;
+    if (snap.docs.length > 0) {
+      lastDoc_Reports = snap.docs[snap.docs.length - 1];
+    }
+    
+    if (snap.docs.length === 50) {
+      document.getElementById('btn-load-reports-container')?.classList.remove('hidden');
+    } else {
+      document.getElementById('btn-load-reports-container')?.classList.add('hidden');
+    }
+  } catch(e) {
+    console.error("Error loading reports", e);
+    if (!isLoadMore) loading.innerHTML = '<span class="text-red-500">حدث خطأ</span>';
+  } finally {
+    if (isLoadMore) {
+      document.getElementById('btn-load-reports').textContent = "تحميل المزيد";
+      document.getElementById('btn-load-reports').disabled = false;
+    }
+  }
+
+window.updateReportStatus = async (reportId, newStatus, btnElement) => {
+  if (btnElement && btnElement.disabled) return;
+  if (!(await showConfirmModal({ title: 'تغيير حالة الإبلاغ', message: `هل أنت متأكد من تغيير الحالة إلى ${newStatus}؟` }))) return;
+  
+  if (btnElement) {
+    btnElement.dataset.originalText = btnElement.textContent;
+    btnElement.disabled = true;
+    btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  }
   try {
     const { doc, updateDoc, addDoc, collection, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
-    const { auth } = await import("../../js/firebase-init.js");
-    await updateDoc(doc(db, "reports", reportId), {
-      status: newStatus,
-      updatedAt: serverTimestamp()
-    });
+    await updateDoc(doc(db, "reports", reportId), { status: newStatus, updatedAt: serverTimestamp() });
     
     await addDoc(collection(db, "audit_logs"), {
-      adminUid: auth.currentUser.uid,
-      action: 'UPDATE_REPORT_STATUS',
-      targetUid: reportId,
+      action: 'update_report_status',
       targetType: 'report',
-      timestamp: serverTimestamp(),
-      reason: `Status changed to ${newStatus}`
+      targetId: reportId,
+      metadata: { newStatus },
+      adminUid: 'admin_ui',
+      timestamp: serverTimestamp()
     });
-    
     loadReports();
-  } catch (error) {
-    console.error(error);
-    alert('حدث خطأ.');
+  } catch(e) {
+    showToast({ type: 'error', message: 'حدث خطأ.' });
+    console.error(e);
+    if (btnElement) {
+      btnElement.disabled = false;
+      btnElement.textContent = btnElement.dataset.originalText;
+    }
   }
 };
 
-window.resolveReport = async (reportId, targetType, targetId) => {
-  const action = prompt(`الرجاء اختيار الإجراء:\n- للتعليق: اكتب "hide" أو "remove"\n- للمحتوى: اكتب "suspend"\n- للمستخدم: اكتب "review"`);
+window.resolveReport = async (reportId, targetType, targetId, btnElement) => {
+  if (btnElement && btnElement.disabled) return;
+  const action = await showPromptModal({ title: 'إجراءات الإدارة', message: 'الرجاء اختيار الإجراء:\n- للتعليق: اكتب "hide" أو "remove"\n- للمحتوى: اكتب "suspend"\n- للمستخدم: اكتب "review"', placeholder: 'اكتب الإجراء هنا...' });
   if (!action) return;
+  
+  if (btnElement) {
+    btnElement.dataset.originalText = btnElement.textContent;
+    btnElement.disabled = true;
+    btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+  }
   
   try {
     const { doc, updateDoc, addDoc, collection, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
@@ -1115,33 +1521,31 @@ window.resolveReport = async (reportId, targetType, targetId) => {
       }
     } else if (targetType === 'user') {
       if (action === 'review') {
-        reasonText = `User reviewed due to report ${reportId}`;
+        await updateDoc(doc(db, "users", targetId), { status: 'under_review' });
+        reasonText = `Under review due to report ${reportId}`;
       }
     }
     
-    // Mark report as resolved
-    await updateDoc(doc(db, "reports", reportId), {
-      status: 'resolved',
-      resolutionAction: action,
-      updatedAt: serverTimestamp()
+    await updateDoc(doc(db, "reports", reportId), { status: 'resolved', updatedAt: serverTimestamp() });
+    
+    await addDoc(collection(db, "audit_logs"), {
+      action: 'resolve_report',
+      targetType: targetType,
+      targetId: targetId,
+      metadata: { reportId, appliedAction: action },
+      adminUid: auth.currentUser?.uid || 'unknown',
+      timestamp: serverTimestamp()
     });
     
-    if (reasonText) {
-      await addDoc(collection(db, "audit_logs"), {
-        adminUid: auth.currentUser.uid,
-        action: 'RESOLVE_REPORT',
-        targetUid: targetId,
-        targetType: targetType,
-        timestamp: serverTimestamp(),
-        reason: reasonText
-      });
-    }
-    
-    alert('تم اتخاذ الإجراء وحل الإبلاغ.');
+    showToast({ type: 'success', message: 'تم اتخاذ الإجراء وحل الإبلاغ.' });
     loadReports();
-  } catch (error) {
-    console.error(error);
-    alert('حدث خطأ في تنفيذ الإجراء.');
+  } catch(e) {
+    showToast({ type: 'error', message: 'حدث خطأ في تنفيذ الإجراء.' });
+    console.error(e);
+    if (btnElement) {
+      btnElement.disabled = false;
+      btnElement.textContent = btnElement.dataset.originalText;
+    }
   }
 };
 
@@ -1216,24 +1620,40 @@ async function loadOverviewData() {
 
     // Posts, Views, Likes & Distribution
     try {
-      // Using getDocs here is acceptable for an admin dashboard to fetch stats without creating complex multiple aggregations, 
-      // but in production with 10,000+ posts it could be heavy. For this scale, it's efficient enough.
-      const postsSnap = await getDocs(getQ('posts', 'status', 'published'));
-      let totalPosts = 0;
-      let totalViews = 0;
-      let totalLikes = 0;
+      const qPosts = getQ('posts', 'status', 'published');
+      
+      const [aggSnap, totalPostsSnap] = await Promise.all([
+        getAggregateFromServer(qPosts, {
+          views: sum('views'),
+          likes: sum('likesCount')
+        }),
+        getCountFromServer(qPosts)
+      ]);
+
+      let totalPosts = totalPostsSnap.data().count;
+      let totalViews = aggSnap.data().views || 0;
+      let totalLikes = aggSnap.data().likes || 0;
       let typeCounts = { story: 0, news: 0, video: 0 };
       
-      postsSnap.forEach(doc => {
-        totalPosts++;
-        const data = doc.data();
-        totalViews += (data.views || 0);
-        totalLikes += (data.likesCount || 0);
-        if (data.type && typeCounts[data.type] !== undefined) {
-          typeCounts[data.type]++;
+      const getQType = (typeVal) => {
+        let constraints = [where("status", "==", "published"), where("type", "==", typeVal)];
+        if (startDate) {
+          constraints.push(where("createdAt", ">=", startDate));
+          constraints.push(orderBy("createdAt", "desc"));
         }
-      });
-      
+        return query(collection(db, "posts"), ...constraints);
+      };
+
+      const [storySnap, newsSnap, videoSnap] = await Promise.all([
+        getCountFromServer(getQType('story')),
+        getCountFromServer(getQType('news')),
+        getCountFromServer(getQType('video'))
+      ]);
+
+      typeCounts.story = storySnap.data().count;
+      typeCounts.news = newsSnap.data().count;
+      typeCounts.video = videoSnap.data().count;
+
       document.getElementById('stat-posts').textContent = totalPosts;
       document.getElementById('stat-views').textContent = totalViews;
       document.getElementById('stat-likes').textContent = totalLikes;
@@ -1264,4 +1684,8 @@ async function loadOverviewData() {
   } catch (error) {
     console.error("Overview error", error);
   }
+}
+}
+}
+}
 }

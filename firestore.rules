@@ -68,14 +68,15 @@ service cloud.firestore {
       allow read: if isAuthenticated() && (request.auth.uid == resource.data.userId || resource.data.userId == 'all');
       allow delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
       allow update: if isAuthenticated() && (request.auth.uid == resource.data.userId || resource.data.userId == 'all') && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readBy']);
-      allow create: if isAuthenticated();
+      allow create: if isAuthenticated() && (isAdmin() || request.resource.data.userId != 'all');
     }
     
     // Comments Collection
     match /comments/{commentId} {
       allow read: if true;
       allow create: if isActiveUser() && request.resource.data.authorUid == request.auth.uid;
-      allow update: if (isActiveUser() && resource.data.authorUid == request.auth.uid && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text', 'updatedAt', 'status']))
+      allow update: if (isActiveUser() && resource.data.authorUid == request.auth.uid && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text', 'updatedAt', 'status'])
+                        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['status']) || request.resource.data.status == 'deleted'))
                     || isAdmin();
       allow delete: if isAdmin() || (isActiveUser() && resource.data.authorUid == request.auth.uid);
     }
@@ -96,14 +97,31 @@ service cloud.firestore {
     // Content Stats (Aggregated like counts)
     match /content_stats/{contentId} {
       allow read: if true;
-      allow create, update: if true; // Allow client increment for views, likes, comments
+      allow create: if request.resource.data.keys().hasOnly(['views', 'likesCount', 'commentsCount']) &&
+                    (request.resource.data.get('views', 0) == 1 || request.resource.data.get('views', 0) == 0) &&
+                    (request.resource.data.get('likesCount', 0) >= -1 && request.resource.data.get('likesCount', 0) <= 1) &&
+                    (request.resource.data.get('commentsCount', 0) >= -1 && request.resource.data.get('commentsCount', 0) <= 1);
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'likesCount', 'commentsCount']) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['views']) || 
+         request.resource.data.views == resource.data.get('views', 0) + 1) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['likesCount']) || 
+         (request.resource.data.likesCount == resource.data.get('likesCount', 0) + 1 || request.resource.data.likesCount == resource.data.get('likesCount', 0) - 1)) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['commentsCount']) || 
+         (request.resource.data.commentsCount == resource.data.get('commentsCount', 0) + 1 || request.resource.data.commentsCount == resource.data.get('commentsCount', 0) - 1));
     }
+
     // Posts Collection
     match /posts/{postId} {
       allow read: if resource.data.status == 'published' || isAdmin();
       allow create, delete: if isAdmin();
       allow update: if isAdmin() || (
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'likesCount', 'commentsCount'])
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['views', 'likesCount', 'commentsCount']) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['views']) || 
+         request.resource.data.views == resource.data.get('views', 0) + 1) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['likesCount']) || 
+         (request.resource.data.likesCount == resource.data.get('likesCount', 0) + 1 || request.resource.data.likesCount == resource.data.get('likesCount', 0) - 1)) &&
+        (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['commentsCount']) || 
+         (request.resource.data.commentsCount == resource.data.get('commentsCount', 0) + 1 || request.resource.data.commentsCount == resource.data.get('commentsCount', 0) - 1))
       );
     }
 

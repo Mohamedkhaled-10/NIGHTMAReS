@@ -96,10 +96,27 @@ async function renderContent(data) {
   const contentArea = document.getElementById('content-area');
   contentArea.classList.remove('hidden');
   contentArea.classList.add('flex');
+  contentArea.classList.add('type-' + data.type);
 
   // Update Title and SEO
   document.title = `${data.title} - Nightmares`;
   document.getElementById('article-title').textContent = data.title;
+
+  const dateMeta = document.getElementById('article-date-meta');
+  if (dateMeta) {
+    let d = data.publishAt || data.createdAt;
+    if (d) {
+       let dObj = d.toDate ? d.toDate() : new Date(d);
+       dateMeta.textContent = dObj.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
+    }
+  }
+  const readTimeEl = document.getElementById('article-read-time');
+  const readTimeVal = document.getElementById('read-time-val');
+  if (data.readingTime && readTimeEl && readTimeVal) {
+     readTimeEl.classList.remove('hidden');
+     readTimeVal.textContent = data.readingTime;
+  }
+
   
   // Update Meta Description
   let metaDesc = document.querySelector('meta[name="description"]');
@@ -249,14 +266,23 @@ async function renderContent(data) {
   }
 
   tagsContainer.innerHTML = '';
+  const tagsSection = document.getElementById('tags-section');
   if (Array.isArray(data.tags) && data.tags.length > 0) {
     data.tags.forEach(tag => {
       const tagEl = document.createElement('span');
       tagEl.className = 'bg-[#1b0d0d] text-gray-400 px-3 py-1 rounded-full text-xs font-semibold border border-red-900/30 hover:text-white hover:border-red-600 transition-colors cursor-pointer';
       tagEl.textContent = '#' + tag;
+      tagEl.className = 'inline-block bg-[#110808] border border-red-900/30 text-gray-300 hover:text-red-400 hover:border-red-500 px-4 py-2 rounded-xl text-sm font-semibold transition-colors';
+      tagEl.addEventListener('click', () => window.location.href = '/search?tag=' + encodeURIComponent(tag));
       tagsContainer.appendChild(tagEl);
     });
     hasTaxonomy = true;
+  }
+
+  if (data.tags && data.tags.length > 0) {
+    if (tagsSection) tagsSection.classList.remove('hidden');
+  } else {
+    if (tagsSection) tagsSection.classList.add('hidden');
   }
 
   if (hasTaxonomy) {
@@ -408,18 +434,19 @@ async function loadRelatedContent(currentArticle) {
       const typeLabel = post.type === 'story' ? 'قصة' : post.type === 'video' ? 'فيديو' : 'خبر';
       const typeColor = post.type === 'story' ? 'bg-red-900' : post.type === 'video' ? 'bg-blue-900' : 'bg-green-900';
       
+      
       const card = document.createElement('a');
       card.href = link;
-      card.className = 'flex gap-4 group bg-[#110808]/50 hover:bg-[#1b0d0d] border border-gray-800/50 hover:border-red-900/50 p-2 rounded-xl transition-all';
-      card.innerHTML = `
-        <div class="w-32 aspect-video shrink-0 rounded-lg overflow-hidden relative">
-          <img src="${post.coverImage || '/assets/images/icon-white.png'}" alt="${post.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" decoding="async">
-          <span class="absolute bottom-1 right-1 ${typeColor} text-white text-[9px] px-1.5 py-0.5 rounded">${typeLabel}</span>
-        </div>
-        <div class="flex-1 py-1 pr-1">
-          <h3 class="text-sm font-bold text-gray-200 group-hover:text-red-400 transition-colors line-clamp-2 mb-1">${post.title}</h3>
-        </div>
-      `;
+      card.className = 'content-card-link';
+      
+      if (post.type === 'story') {
+        card.innerHTML = generateStoryCard(post, null, post.category || 'قصة', null);
+      } else if (post.type === 'video') {
+        card.innerHTML = generateVideoCard(post, null, post.category || 'فيديو');
+      } else {
+        card.innerHTML = generateNewsCard(post, null, null, post.category || 'خبر');
+      }
+
       relatedGrid.appendChild(card);
     });
 

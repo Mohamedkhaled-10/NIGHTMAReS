@@ -95,7 +95,16 @@
             <label for="img-upload" class="absolute inset-0 bg-black/60 flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 cursor-pointer transition-all duration-300 z-20 backdrop-blur-sm">
               <i class="fas fa-camera text-3xl text-white drop-shadow-lg transform scale-75 group-hover:scale-100 transition-transform"></i>
             </label>
-            <input type="file" id="img-upload" class="hidden" accept="image/*">
+            <input type="file" id="img-upload" class="hidden" accept="image/jpeg, image/png, image/webp">
+            
+            <!-- Upload Progress Overlay -->
+            <div id="upload-progress-overlay" class="absolute inset-0 bg-black/80 rounded-full z-30 flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+              <div class="text-red-500 text-sm font-bold mb-2">جاري الرفع...</div>
+              <div class="w-20 h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                <div id="upload-progress-bar" class="h-full bg-red-600 transition-all duration-150 ease-out" style="width: 0%;" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+              </div>
+              <div id="upload-progress-text" class="text-white text-xs font-semibold mt-2">0%</div>
+            </div>
           </div>
 
           <!-- User Info & Badges -->

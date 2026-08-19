@@ -26,120 +26,133 @@
     
     <div id="loading" class="col-span-full"></div>
 
-    <main id="content-area" class="grow hidden w-full flex-col items-center pt-20 md:pt-24 pb-12 md:pb-16">
-      <!-- Article Cover Image -->
-      <div id="cover-image-container" class="hidden w-[90%] md:w-[80%] max-w-[900px] mx-auto mb-6 rounded-xl overflow-hidden shadow-[0_5px_15px_rgba(0,0,0,0.5)]">
-        <img id="article-cover-image" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" alt="Cover Image" class="w-full h-auto max-h-[500px] object-cover block">
+    
+    <main id="content-area" class="grow hidden w-full flex-col items-center pt-20 md:pt-28 pb-12 md:pb-16 article-page-container">
+      
+      <!-- 1. HEADER SECTION -->
+      <header class="article-header w-[90%] md:w-[80%] max-w-[900px] mx-auto text-center mb-10">
+        <div id="article-taxonomy" class="hidden mb-6">
+           <span id="article-category" class="category-badge uppercase tracking-wider text-sm font-bold bg-red-900/40 text-red-400 px-4 py-1.5 rounded-full border border-red-900/50"></span>
+        </div>
+        
+        <h1 id="article-title" class="article-main-title text-3xl md:text-5xl font-black text-white leading-tight mb-8 drop-shadow-lg"></h1>
+        
+        <div id="article-author" class="hidden author-meta-bar flex flex-wrap justify-center items-center gap-4 text-gray-400 text-sm md:text-base">
+          <a id="article-author-link" href="#" class="flex items-center gap-3 hover:text-red-400 transition-colors">
+            <img id="article-author-avatar" src="/assets/images/logo1.png" class="w-10 h-10 rounded-full border-2 border-red-900/50 object-cover shadow-md" alt="Author">
+            <span id="article-author-name" class="font-bold text-gray-200"></span>
+          </a>
+          <span class="text-gray-600 hidden md:inline">•</span>
+          <span id="article-date-meta" class="meta-date"></span>
+          <span id="article-read-time" class="hidden"><span class="text-gray-600 mx-2">•</span> <i class="far fa-clock mr-1"></i> <span id="read-time-val"></span></span>
+        </div>
+      </header>
+
+      <!-- 2. COVER MEDIA -->
+      <div id="cover-image-container" class="hidden w-[95%] md:w-[85%] max-w-[1000px] mx-auto mb-12 rounded-2xl overflow-hidden shadow-2xl relative">
+        <img id="article-cover-image" src="" alt="Cover Image" class="w-full h-auto max-h-[600px] object-cover block">
       </div>
 
-      <h1 class="story-title" id="article-title"></h1>
-      
-      <!-- Author Info (Injected dynamically if available) -->
-      <div id="article-author" class="hidden flex justify-center items-center gap-3 mt-4 mb-2">
-        <a id="article-author-link" href="#" class="flex items-center gap-2 text-gray-300 hover:text-red-400 transition">
-          <img id="article-author-avatar" src="/assets/images/logo1.png" class="w-8 h-8 rounded-full border border-red-900/30 object-cover" alt="Author">
-          <span id="article-author-name" class="font-bold"></span>
-        </a>
-      </div>
-      
-      <!-- Category and Tags -->
-      <div id="article-taxonomy" class="hidden w-[80%] max-w-[900px] mx-auto text-center my-2">
-        <span id="article-category" class="inline-block bg-red-900/40 text-red-300 px-3 py-1 rounded-full text-sm font-semibold border border-red-900/30 mb-2"></span>
-        <div id="article-tags" class="flex flex-wrap justify-center gap-2 mt-2"></div>
-      </div>
-
-      <div class="story-separator"></div>
-      
-      <section class="article-container">
+      <!-- 3. MAIN CONTENT -->
+      <section class="article-body-wrapper w-[90%] md:w-[75%] max-w-[850px] mx-auto text-gray-300 text-lg md:text-xl leading-relaxed font-cairo">
         <div class="article-box" id="article-body">
           <!-- Content goes here -->
         </div>
       </section>
 
-      <div class="share-buttons">
-        <a id="share-whatsapp" href="#" target="_blank" class="share-btn whatsapp" title="شارك على واتساب">
-          <img src="/assets/images/whatsapp-512.png" alt="WhatsApp" />
-        </a>
-        <a id="share-facebook" href="#" target="_blank" class="share-btn facebook" title="شارك على فيسبوك">
-          <img src="/assets/images/facebook-512.png" alt="Facebook" />
-        </a>
-      </div>
+      <!-- 4. CONTENT ACTIONS -->
+      <section class="article-actions-bar w-[90%] md:w-[75%] max-w-[850px] mx-auto mt-16 mb-12 py-6 border-y border-red-900/20 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="action-buttons-group flex gap-4">
+          <button id="btn-like" aria-label="إعجاب" class="flex items-center gap-2 px-6 py-3 bg-[#110808] hover:bg-[#1a0c0c] border border-red-900/30 hover:border-red-500 rounded-xl transition-all group" title="إعجاب">
+            <i class="fas fa-heart text-gray-500 group-hover:text-red-500 text-xl transition-colors" id="like-icon"></i>
+            <span id="likes-count" class="font-bold">0</span>
+          </button>
+          <button id="btn-save-post" aria-label="حفظ المقال" class="flex items-center justify-center w-12 h-12 bg-[#110808] hover:bg-[#1a0c0c] border border-red-900/30 hover:border-red-500 rounded-xl transition-all group" title="حفظ المقال">
+            <i class="far fa-bookmark text-gray-500 group-hover:text-white text-xl transition-colors" id="save-icon"></i>
+          </button>
+          <button id="btn-report-post" aria-label="إبلاغ" class="flex items-center justify-center w-12 h-12 bg-[#110808] hover:bg-[#1a0c0c] border border-red-900/30 hover:border-red-500 rounded-xl transition-all group" title="الإبلاغ عن محتوى">
+            <i class="fas fa-flag text-gray-500 group-hover:text-gray-300 text-xl transition-colors"></i>
+          </button>
+        </div>
+        <div class="share-buttons-group flex gap-3">
+          <span class="text-sm text-gray-500 mr-2 self-center font-bold">شارك:</span>
+          <a id="share-whatsapp" href="#" target="_blank" class="flex items-center justify-center w-10 h-10 bg-[#0d140e] hover:bg-[#121c14] border border-green-900/30 hover:border-green-500 rounded-full transition-all group" title="شارك على واتساب">
+            <i class="fab fa-whatsapp text-green-600 group-hover:text-green-400 text-lg"></i>
+          </a>
+          <a id="share-facebook" href="#" target="_blank" class="flex items-center justify-center w-10 h-10 bg-[#080d14] hover:bg-[#0c131c] border border-blue-900/30 hover:border-blue-500 rounded-full transition-all group" title="شارك على فيسبوك">
+            <i class="fab fa-facebook-f text-blue-600 group-hover:text-blue-400 text-lg"></i>
+          </a>
+        </div>
+      </section>
 
-      <!-- Related Content Section -->
-      <section id="related-content-section" class="article-container hidden" style="margin-top: 40px; margin-bottom: 20px;">
-        <h3 class="text-2xl font-bold text-red-600 mb-6 drop-shadow-md border-b border-red-900/30 pb-2">قد يعجبك أيضًا</h3>
-        <div id="related-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- 5. TAGS -->
+      <section id="tags-section" class="hidden w-[90%] md:w-[75%] max-w-[850px] mx-auto mb-16">
+        <div id="article-tags" class="flex flex-wrap justify-center md:justify-start gap-3"></div>
+      </section>
+
+      <!-- 7. RELATED CONTENT -->
+      <section id="related-content-section" class="hidden w-[90%] md:w-[85%] max-w-[1100px] mx-auto mb-20">
+        <h3 class="text-2xl font-black text-white mb-8 border-r-4 border-red-600 pr-4 drop-shadow-md">قد يعجبك أيضًا</h3>
+        <div id="related-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Related cards will be injected here -->
         </div>
       </section>
 
-      <!-- Interactions Section (Likes & Comments) -->
-      <section id="interactions-section" class="article-container mt-8 font-cairo">
-        <div class="flex items-center justify-between border-b border-gray-600 pb-3 mb-5">
-          <h3 class="text-2xl font-bold">التفاعلات والتعليقات</h3>
-          <div class="flex gap-5 items-center text-gray-400 text-lg">
+      <!-- 8. INTERACTIONS & COMMENTS -->
+      <section id="interactions-section" class="w-[90%] md:w-[75%] max-w-[850px] mx-auto font-cairo bg-[#0a0505] p-6 md:p-10 rounded-2xl border border-red-900/20 shadow-2xl mb-12">
+        <div class="flex items-center justify-between border-b border-red-900/20 pb-6 mb-8">
+          <h3 class="text-2xl font-black text-white">التعليقات</h3>
+          <div class="flex gap-6 items-center text-gray-400 text-lg font-bold">
             <span class="flex items-center gap-2" title="المشاهدات">
-              <i class="fas fa-eye"></i> <span id="views-count">0</span>
+              <i class="fas fa-eye text-red-900"></i> <span id="views-count">0</span>
             </span>
             <span class="flex items-center gap-2" title="التعليقات">
-              <i class="fas fa-comment"></i> <span id="comments-count">0</span>
+              <i class="fas fa-comment text-red-900"></i> <span id="comments-count">0</span>
             </span>
-            <button id="btn-save-post" aria-label="حفظ المقال" class="bg-transparent border-none text-gray-400 cursor-pointer text-xl flex items-center gap-2 hover:text-white transition-colors" title="حفظ المقال">
-              <i class="far fa-bookmark" id="save-icon"></i>
-            </button>
-            <button id="btn-report-post" aria-label="إبلاغ" class="bg-transparent border-none text-gray-400 cursor-pointer text-xl flex items-center gap-2 hover:text-white transition-colors" title="الإبلاغ عن محتوى">
-              <i class="fas fa-flag"></i>
-            </button>
-            <button id="btn-like" aria-label="إعجاب" class="bg-transparent border-none text-gray-400 cursor-pointer text-xl flex items-center gap-2 hover:text-red-500 transition-colors">
-              <i class="fas fa-heart" id="like-icon"></i>
-              <span id="likes-count">0</span>
-            </button>
           </div>
         </div>
         
         <!-- Add Comment Form -->
-        <div id="comment-form-container" class="hidden" style="margin-bottom: 30px;">
-          <form id="comment-form" style="display: flex; flex-direction: column; gap: 10px;">
-            <textarea id="comment-text" rows="3" placeholder="أضف تعليقاً..." style="width: 100%; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.1); color: #fff; border: 1px solid #555; font-family: 'Tajawal', sans-serif; resize: vertical;" required></textarea>
-            <button type="submit" style="align-self: flex-end; background: #e50914; color: #fff; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">تعليق</button>
+        <div id="comment-form-container" class="hidden mb-12">
+          <form id="comment-form" class="flex flex-col gap-4">
+            <textarea id="comment-text" rows="4" placeholder="أضف تعليقاً يثري النقاش..." class="w-full p-4 rounded-xl bg-[#110808] text-white border border-red-900/30 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none font-cairo transition-all resize-y" required></textarea>
+            <button type="submit" class="self-end bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-[0_4px_15px_rgba(220,38,38,0.2)]">إضافة التعليق</button>
           </form>
         </div>
-        <div id="login-prompt" style="text-align: center; margin-bottom: 30px; color: #aaa;">
-          يجب <a href="/login" style="color: #e50914; text-decoration: underline;">تسجيل الدخول</a> لإضافة إعجاب أو تعليق.
+        <div id="login-prompt" class="text-center mb-12 py-8 bg-[#110808] rounded-xl border border-red-900/20">
+          <p class="text-gray-400 text-lg">يجب <a href="/login" class="text-red-500 hover:text-red-400 font-bold underline underline-offset-4 decoration-red-900">تسجيل الدخول</a> للمشاركة في النقاش.</p>
         </div>
 
         <!-- Comments List -->
-        <div id="comments-list" style="display: flex; flex-direction: column; gap: 20px;">
-          <div style="text-align: center; color: #888;">جاري تحميل التعليقات...</div>
+        <div id="comments-list" class="flex flex-col gap-6">
+          <div class="text-center text-gray-500 py-8">جاري تحميل التعليقات...</div>
         </div>
       </section>
 
       <!-- Report Modal -->
       <div id="report-modal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex justify-center items-center backdrop-blur-sm">
-        <div class="bg-[#111] border border-red-900/30 rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
-          <h3 class="text-xl font-bold text-white mb-4 border-b border-red-900/30 pb-2">تقديم إبلاغ</h3>
-          <p class="text-gray-400 text-sm mb-4">يرجى تحديد سبب الإبلاغ. نحن نأخذ جميع الإبلاغات على محمل الجد.</p>
-          <select id="report-reason" class="w-full bg-[#222] border border-red-900/30 rounded p-2 text-white mb-4 outline-none focus:border-red-600">
+        <div class="bg-[#110808] border border-red-900/30 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+          <h3 class="text-2xl font-black text-white mb-4 border-b border-red-900/20 pb-4">تقديم إبلاغ</h3>
+          <p class="text-gray-400 text-sm mb-6">يرجى تحديد سبب الإبلاغ. نحن نأخذ جميع الإبلاغات على محمل الجد.</p>
+          <select id="report-reason" class="w-full bg-[#1a0c0c] border border-red-900/30 rounded-xl p-3 text-white mb-4 outline-none focus:border-red-500 font-cairo">
             <option value="spam">محتوى مزعج (Spam)</option>
             <option value="harassment">مضايقة أو تنمر</option>
             <option value="inappropriate">محتوى غير لائق</option>
             <option value="hate_speech">خطاب كراهية</option>
-            <option value="other">أخرى</option>
+            <option value="other">أخرى</option>          
           </select>
-          <textarea id="report-details" rows="3" class="w-full bg-[#222] border border-red-900/30 rounded p-2 text-white mb-4 outline-none focus:border-red-600" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
+          <textarea id="report-details" rows="4" class="w-full bg-[#1a0c0c] border border-red-900/30 rounded-xl p-3 text-white mb-6 outline-none focus:border-red-500 font-cairo resize-none" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
           <div id="report-msg" class="hidden text-sm mb-4 font-bold text-center"></div>
-          <div class="flex gap-3 justify-end mt-2">
-            <button id="btn-cancel-report" class="px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-white rounded transition">إلغاء</button>
-            <button id="btn-submit-report" class="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded transition">إرسال الإبلاغ</button>
+          <div class="flex gap-4 justify-end mt-2">
+            <button id="btn-cancel-report" class="px-6 py-2.5 bg-transparent hover:bg-gray-800 text-gray-300 font-bold rounded-xl transition-colors">إلغاء</button>
+            <button id="btn-submit-report" class="px-6 py-2.5 bg-red-700 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-lg">إرسال الإبلاغ</button>
           </div>
         </div>
-      </div>
-      
-    </div>
-    
-    <button id="scrollToTop" style="display: none;">عودة للأعلى</button>
-
+      </div>    
+    </main>
+    <button id="scrollToTop" class="hidden opacity-0 pointer-events-none transition-all duration-300 fixed bottom-6 left-6 z-50 bg-red-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-[0_4px_15px_rgba(220,38,38,0.4)] hover:bg-red-600 hover:scale-110"><i class="fas fa-arrow-up"></i></button>
     <!-- FOOTER_PLACEHOLDER -->
+
 
   </div>
 
