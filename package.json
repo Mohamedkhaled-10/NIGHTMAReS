@@ -9,7 +9,8 @@
     "build": "echo \"No build required\""
   },
   "dependencies": {
-    "express": "^4.22.2"
+    "express": "^4.22.2",
+    "firebase-admin": "^14.2.0"
   },
   "keywords": [],
   "author": "",

@@ -27,8 +27,15 @@ const fPublishAt = document.getElementById('post-publish-at');
 const fUpdatedAt = document.getElementById('post-updated-at');
 const fFeatured = document.getElementById('post-featured');
 const btnPreview = document.getElementById('btn-preview-post');
+const charCountContent = document.getElementById('char-count-content');
 
 let currentTags = [];
+
+// Content character count logic
+fContentHtml.addEventListener('input', () => {
+  const count = fContentHtml.value.length;
+  charCountContent.textContent = `${count} حرف`;
+});
 
 // Tags logic
 fTagsInput.addEventListener('keydown', (e) => {
@@ -228,6 +235,9 @@ async function editPost(id) {
         fReadTime.value = data.data.readTimeMinutes || '';
       }
       
+      // Update char count
+      charCountContent.textContent = `${fContentHtml.value.length} حرف`;
+      
       fType.dispatchEvent(new Event('change'));
     }
   } catch (e) {
@@ -310,6 +320,12 @@ postForm.addEventListener('submit', async (e) => {
 
     btnSave.textContent = "جاري الحفظ...";
 
+    // Sanitize HTML Content
+    const sanitizedHtml = window.DOMPurify ? DOMPurify.sanitize(fContentHtml.value, { USE_PROFILES: { html: true } }) : fContentHtml.value;
+    
+    // Sanitize Embed Code (allowing iframes safely)
+    const sanitizedEmbed = window.DOMPurify ? DOMPurify.sanitize(fEmbedCode.value, { ADD_TAGS: ['iframe'], ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'] }) : fEmbedCode.value;
+
     const postData = {
       id: id,
       slug: normalizedSlug,
@@ -323,7 +339,7 @@ postForm.addEventListener('submit', async (e) => {
       isFeatured: fFeatured.checked,
       updatedAt: serverTimestamp(),
       data: {
-        contentHtml: fContentHtml.value
+        contentHtml: sanitizedHtml
       }
     };
     
@@ -339,7 +355,7 @@ postForm.addEventListener('submit', async (e) => {
 
     // Type specific data
     if (fType.value === 'video') {
-      postData.data.embedCode = fEmbedCode.value;
+      postData.data.embedCode = sanitizedEmbed;
     } else if (fType.value === 'story') {
       postData.data.readTimeMinutes = parseInt(fReadTime.value) || 0;
     }
@@ -581,7 +597,9 @@ document.getElementById('btn-sub-approve')?.addEventListener('click', async () =
           updatedAt: serverTimestamp(),
           sourceSubmissionId: currentSubmission.id,
           data: {
-            contentHtml: `<p><strong>قصة مرسلة من: ${currentSubmission.authorName}</strong></p><p>${currentSubmission.content.replace(/\n/g, '</p><p>')}</p>`,
+            contentHtml: window.DOMPurify 
+              ? DOMPurify.sanitize(`<p><strong>قصة مرسلة من: ${currentSubmission.authorName}</strong></p><p>${currentSubmission.content.replace(/\n/g, '</p><p>')}</p>`, { USE_PROFILES: { html: true } })
+              : `<p><strong>قصة مرسلة من: ${currentSubmission.authorName}</strong></p><p>${currentSubmission.content.replace(/\n/g, '</p><p>')}</p>`,
             readTimeMinutes: Math.ceil(currentSubmission.content.length / 1000)
           }
         };
@@ -983,6 +1001,7 @@ async function loadUsersAdmin(isLoadMore = false) {
       document.getElementById('btn-load-users').disabled = false;
     }
   }
+}
 
 window.changeUserStatus = async (uid, newStatus, btnElement) => {
   if (btnElement && btnElement.disabled) return;
@@ -1121,6 +1140,7 @@ async function loadCommentsAdmin(isLoadMore = false) {
       document.getElementById('btn-load-comments').disabled = false;
     }
   }
+}
 
 window.moderateComment = async (commentId, newStatus, btnElement) => {
   if (btnElement && btnElement.disabled) return;
@@ -1225,6 +1245,7 @@ async function loadAuditAdmin(isLoadMore = false) {
       document.getElementById('btn-load-audit').disabled = false;
     }
   }
+}
 // Ads Logic
 async function loadAds() {
   const tbody = document.getElementById('ads-table-body');
@@ -1457,6 +1478,7 @@ async function loadReports(isLoadMore = false) {
       document.getElementById('btn-load-reports').disabled = false;
     }
   }
+}
 
 window.updateReportStatus = async (reportId, newStatus, btnElement) => {
   if (btnElement && btnElement.disabled) return;
@@ -1622,17 +1644,29 @@ async function loadOverviewData() {
     try {
       const qPosts = getQ('posts', 'status', 'published');
       
-      const [aggSnap, totalPostsSnap] = await Promise.all([
-        getAggregateFromServer(qPosts, {
+      let totalPosts = 0;
+      let totalViews = 0;
+      let totalLikes = 0;
+      
+      const totalPostsSnap = await getCountFromServer(qPosts);
+      totalPosts = totalPostsSnap.data().count;
+
+      try {
+        const aggSnap = await getAggregateFromServer(qPosts, {
           views: sum('views'),
           likes: sum('likesCount')
-        }),
-        getCountFromServer(qPosts)
-      ]);
+        });
+        totalViews = aggSnap.data().views || 0;
+        totalLikes = aggSnap.data().likes || 0;
+      } catch (aggErr) {
+        console.warn("Aggregation requires index, falling back to client-side.", aggErr.message);
+        const docsSnap = await getDocs(qPosts);
+        docsSnap.forEach(d => {
+          totalViews += d.data().views || 0;
+          totalLikes += d.data().likesCount || 0;
+        });
+      }
 
-      let totalPosts = totalPostsSnap.data().count;
-      let totalViews = aggSnap.data().views || 0;
-      let totalLikes = aggSnap.data().likes || 0;
       let typeCounts = { story: 0, news: 0, video: 0 };
       
       const getQType = (typeVal) => {
@@ -1683,9 +1717,23 @@ async function loadOverviewData() {
 
   } catch (error) {
     console.error("Overview error", error);
+  } finally {
+    document.getElementById('chart-types-loading').classList.add('hidden');
+    // Ensure container is shown even if empty so it doesn't just spin forever
+    document.getElementById('chart-types-container').classList.remove('hidden');
   }
 }
-}
-}
-}
+
+// Safe string escaper for HTML
+function escapeHTML(str) {
+  if (typeof str !== 'string') return '';
+  return str.replace(/[&<>'"]/g, 
+    tag => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[tag] || tag)
+  );
 }

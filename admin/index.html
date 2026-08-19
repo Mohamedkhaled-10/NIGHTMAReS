@@ -12,6 +12,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     body { font-family: 'Tajawal', sans-serif; background-color: #f3f4f6; }
@@ -462,14 +463,19 @@
             
             <!-- Story/News Content -->
             <div id="field-content-html" class="mb-4">
-              <label class="block text-gray-700 font-semibold mb-2">المحتوى النصي (HTML)</label>
+              <div class="flex justify-between items-end mb-2">
+                <label class="block text-gray-700 font-semibold">المحتوى النصي (HTML)</label>
+                <span id="char-count-content" class="text-xs text-gray-500 font-mono">0 حرف</span>
+              </div>
               <textarea id="post-content-html" rows="10" class="w-full border rounded p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-red-500" dir="ltr" placeholder="<p>محتوى القصة أو الخبر هنا...</p>"></textarea>
+              <p class="text-xs text-gray-500 mt-2">ملاحظة: يمكنك استخدام وسوم HTML الأساسية (مثل &lt;p&gt;, &lt;b&gt;, &lt;h2&gt;). سيتم تنظيف الكود تلقائياً لحماية الموقع.</p>
             </div>
 
             <!-- Video Content -->
             <div id="field-embed-code" class="mb-4 hidden">
               <label class="block text-gray-700 font-semibold mb-2">كود التضمين (Embed Code للفيديو)</label>
               <textarea id="post-embed-code" rows="4" class="w-full border rounded p-3 font-mono text-sm focus:outline-none focus:ring-2 focus:ring-red-500" dir="ltr" placeholder='<iframe src="..."></iframe>'></textarea>
+              <p class="text-xs text-gray-500 mt-2">يُسمح فقط بأكواد iframe من المصادر الموثوقة (مثل YouTube). سيتم إزالة الأكواد غير الآمنة.</p>
             </div>
             
             <!-- Story Extra -->

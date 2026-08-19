@@ -234,7 +234,9 @@ async function renderContent(data) {
     } else if (data.data?.contentHtml) {
       // rough estimation: 200 words per minute
       const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = data.data.contentHtml;
+      tempDiv.innerHTML = window.DOMPurify 
+        ? DOMPurify.sanitize(data.data.contentHtml, { USE_PROFILES: { html: true } })
+        : data.data.contentHtml;
       const text = tempDiv.textContent || tempDiv.innerText || '';
       const wordCount = text.split(/\s+/).length;
       readMins = Math.ceil(wordCount / 200);
@@ -341,11 +343,21 @@ async function renderContent(data) {
       embedCode = decodeHTML(embedCode);
     }
     let embed = embedCode.replace(/<iframe(?![^>]*loading=)/gi, '<iframe loading="lazy"');
+    
+    // Sanitize iframe safely using DOMPurify
+    if (window.DOMPurify) {
+      embed = DOMPurify.sanitize(embed, { ADD_TAGS: ['iframe'], ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'] });
+      rawHtml = DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } });
+    }
+    
     articleBody.innerHTML = `<div class="video-container">${embed}</div>`;
     if (rawHtml) {
       articleBody.innerHTML += rawHtml;
     }
   } else if (rawHtml) {
+    if (window.DOMPurify) {
+      rawHtml = DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } });
+    }
     articleBody.innerHTML = rawHtml;
   } else {
     articleBody.innerHTML = "<p>لا يوجد محتوى متاح.</p>";
