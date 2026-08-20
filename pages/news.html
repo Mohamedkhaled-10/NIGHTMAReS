@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الأخبار - NIGHTMAReS</title>
+  <meta name="description" content="تصفح أرشيف الأخبار والفعاليات.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/styles/main.css">
+
+  <style>
+    /* Override legacy limits from main.css */
+    #explore-grid .news-card:nth-child(n),
+    #explore-grid .video-card:nth-child(n) {
+      display: flex !important;
+    }
+    
+    #explore-grid .news-card, 
+    #explore-grid .video-card, 
+    #explore-grid .card {
+      min-height: 380px;
+      height: 100%;
+    }
+    
+    #explore-grid .news-card img {
+      height: 220px !important;
+    }
+  </style>
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.json">
+</head>
+
+<body class="bg-[#050202] text-white overflow-x-hidden selection:bg-red-900 selection:text-white min-h-screen flex flex-col">
+  <!-- NAVBAR_PLACEHOLDER -->
+  
+  <main class="grow flex-col w-full pt-20 md:pt-24 pb-12 md:pb-16 " >
+    <!-- Premium Header -->
+    <section class="relative w-full overflow-hidden border-b border-red-900/20 bg-[#0a0505] py-20 lg:py-28">
+      <!-- Atmospheric Background Elements -->
+      <div class="absolute inset-0 z-0">
+        <div class="absolute top-[-50%] left-[-10%] w-[70%] h-[150%] bg-red-900/10 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[100%] bg-[#050202] blur-[80px] pointer-events-none"></div>
+        <!-- Grid pattern overlay -->
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
+      </div>
+      
+      <div class="container mx-auto px-6 relative z-10 text-center max-w-4xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-900/30 bg-red-950/30 mb-6">
+          <i class="fa-solid fa-compass text-red-500 text-xs"></i>
+          <span class="text-red-400 text-[10px] font-bold tracking-widest uppercase">الأرشيف المظلم</span>
+        </div>
+        <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight drop-shadow-2xl">
+          أرشيف <span class="text-transparent bg-clip-text bg-gradient-to-l from-red-600 to-red-900">الأخبار</span>
+        </h1>
+        <p class="text-gray-400 text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium">
+          تصفح أرشيفنا المتنامي من الأخبار والفعاليات المرعبة. استخدم الفلاتر أدناه للبحث عن ما يثير اهتمامك.
+        </p>
+      </div>
+    </section>
+
+    <div class="container mx-auto px-4 md:px-8 lg:px-12 py-12 max-w-7xl">
+      <!-- Advanced Filters Section -->
+      <div class="bg-[#0a0505]/80 border border-red-900/30 rounded-2xl p-6 md:p-8 mb-16 shadow-2xl backdrop-blur-md relative z-20 -mt-24">
+        <form id="news-filters" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Category Filter -->
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-gray-500 tracking-wider uppercase flex items-center gap-2">
+              <i class="fa-solid fa-folder-open text-red-900"></i> التصنيف
+            </label>
+            <div class="relative">
+              <select id="filter-category" class="w-full appearance-none px-4 py-3 bg-[#110808] border border-red-900/30 rounded-xl text-gray-200 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all font-semibold cursor-pointer text-sm">
+                <option value="">جميع التصنيفات</option>
+                <option value="horror">رعب (Horror)</option>
+                <option value="mystery">غموض (Mystery)</option>
+                <option value="true_crime">جرائم حقيقية (True Crime)</option>
+                <option value="paranormal">ما وراء الطبيعة (Paranormal)</option>
+                <option value="legends">أساطير (Legends)</option>
+                <option value="movies">أفلام (Movies)</option>
+                <option value="games">ألعاب (Games)</option>
+              </select>
+              <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-500">
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Tag Filter -->
+          <div class="space-y-2">
+            <label class="text-xs font-bold text-gray-500 tracking-wider uppercase flex items-center gap-2">
+              <i class="fa-solid fa-hashtag text-red-900"></i> كلمة دلالية
+            </label>
+            <input type="text" id="filter-tag" placeholder="ابحث عن كلمة (مثال: جن, أشباح)..." class="w-full px-4 py-3 bg-[#110808] border border-red-900/30 rounded-xl text-gray-200 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all font-semibold text-sm placeholder-gray-600">
+          </div>
+          
+          <!-- Search / Apply -->
+          <div class="flex items-end">
+            <button type="submit" class="w-full h-[46px] bg-red-700 hover:bg-red-600 text-white font-bold rounded-xl transition-all border border-red-600 shadow-[0_4px_14px_rgba(220,38,38,0.25)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.4)] hover:-translate-y-0.5 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-magnifying-glass"></i> بحث وتطبيق
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Content Grid -->
+      <div id="news-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Cards will be injected here by JS -->
+      </div>
+      
+      <!-- Load More -->
+      <div id="load-more-container" class="mt-16 text-center hidden">
+        <button id="load-more-btn" class="group relative px-8 py-3 bg-[#0a0505] border border-red-900/30 text-gray-300 hover:text-white rounded-full transition-all duration-300 font-bold overflow-hidden">
+          <span class="relative z-10 flex items-center gap-2">
+            تحميل المزيد <i class="fa-solid fa-chevron-down text-sm group-hover:translate-y-1 transition-transform"></i>
+          </span>
+          <div class="absolute inset-0 bg-red-900/20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
+        </button>
+      </div>
+      
+    </div>
+  </main>
+  
+  <!-- FOOTER_PLACEHOLDER -->
+  
+  <!-- Type modules for JS -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script type="module" src="/js/news.js"></script>
+</body>
+</html>

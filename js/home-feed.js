@@ -31,10 +31,10 @@ async function loadHomeContent() {
   
   // Independent async fetches so one doesn't block the other
   const fetchStories = async () => {
-    if(storiesGrid) storiesGrid.innerHTML = UILoadingSkeleton(6);
+    if(storiesGrid) storiesGrid.innerHTML = UILoadingSkeleton(3);
     try {
       const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "story"), orderBy("createdAt", "desc"), limit(10)));
-      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 6);
+      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 3);
       renderStories(items, storiesGrid);
     } catch(e) {
       if(storiesGrid) {
@@ -48,7 +48,7 @@ async function loadHomeContent() {
     if(newsGrid) newsGrid.innerHTML = UILoadingSkeleton(3);
     try {
       const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "news"), orderBy("createdAt", "desc"), limit(10)));
-      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 6);
+      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 3);
       renderNews(items, newsGrid);
     } catch(e) {
       if(newsGrid) {
