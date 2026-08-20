@@ -38,15 +38,24 @@ const initArticle = async () => {
         );
       }
 
-      const querySnapshot = await getDocs(q);
+      let querySnapshot = await getDocs(q);
       
+      let docSnap;
       if (querySnapshot.empty) {
-        showError("عذراً، لم يتم العثور على المحتوى أو أنه غير متاح حالياً.");
-        return;
+        // Fallback for old notifications/profiles that used the document ID as the slug
+        const docRef = doc(db, "posts", slug);
+        const fbDocSnap = await getDoc(docRef);
+        if (fbDocSnap.exists() && fbDocSnap.data().type === type && (isPreview || fbDocSnap.data().status === 'published')) {
+          docSnap = fbDocSnap;
+        } else {
+          showError("عذراً، لم يتم العثور على المحتوى أو أنه غير متاح حالياً.");
+          return;
+        }
+      } else {
+        docSnap = querySnapshot.docs[0];
       }
 
       // Assuming slug is unique per type
-      const docSnap = querySnapshot.docs[0];
       const docData = { id: docSnap.id, ...docSnap.data() };
       
       // Handle Scheduled Posts

@@ -5,6 +5,9 @@ import { UILoadingSkeleton, UIEmptyState, UIErrorState, generateStoryCard, gener
 const form = document.getElementById('stories-filters');
 const filterCategory = document.getElementById('filter-category');
 const filterTag = document.getElementById('filter-tag');
+const filterSort = document.getElementById('filter-sort');
+const clearFiltersBtn = document.getElementById('clear-filters-btn');
+const categoryChips = document.querySelectorAll('.category-chip');
 
 const grid = document.getElementById('stories-grid');
 const loadMoreBtn = document.getElementById('load-more-btn');
@@ -31,8 +34,12 @@ function getCategoryName(id) {
 // Read URL params
 function parseUrlParams() {
   const params = new URLSearchParams(window.location.search);
-  if(params.has('category')) filterCategory.value = params.get('category');
-  if(params.has('tag')) filterTag.value = params.get('tag');
+  filterCategory.value = params.get('category') || '';
+  filterTag.value = params.get('tag') || '';
+  filterSort.value = params.get('sort') || 'desc';
+  
+  updateChipsUI();
+  updateClearBtnVisibility();
 }
 
 // Update URL params
@@ -40,7 +47,29 @@ function updateUrlParams() {
   const url = new URL(window.location);
   if(filterCategory.value) url.searchParams.set('category', filterCategory.value); else url.searchParams.delete('category');
   if(filterTag.value.trim()) url.searchParams.set('tag', filterTag.value.trim()); else url.searchParams.delete('tag');
+  if(filterSort.value && filterSort.value !== 'desc') url.searchParams.set('sort', filterSort.value); else url.searchParams.delete('sort');
   window.history.pushState({}, '', url);
+  updateClearBtnVisibility();
+}
+
+function updateChipsUI() {
+  categoryChips.forEach(chip => {
+    if (chip.getAttribute('data-val') === filterCategory.value) {
+      chip.classList.remove('border-gray-800/60', 'bg-[#0a0505]', 'text-gray-400');
+      chip.classList.add('border-red-900', 'bg-red-900/20', 'text-white');
+    } else {
+      chip.classList.add('border-gray-800/60', 'bg-[#0a0505]', 'text-gray-400');
+      chip.classList.remove('border-red-900', 'bg-red-900/20', 'text-white');
+    }
+  });
+}
+
+function updateClearBtnVisibility() {
+  if (filterCategory.value || filterTag.value.trim() || filterSort.value !== 'desc') {
+    clearFiltersBtn.classList.remove('hidden');
+  } else {
+    clearFiltersBtn.classList.add('hidden');
+  }
 }
 
 async function loadData(isLoadMore = false) {
@@ -63,6 +92,9 @@ async function loadData(isLoadMore = false) {
     // Server-side filtering when possible
     const selectedCategory = filterCategory.value;
     const selectedTag = filterTag.value.trim();
+    const sortValue = filterSort.value || 'desc';
+    const sortField = sortValue === 'popular' ? 'views' : 'createdAt';
+    const sortDirection = sortValue === 'popular' ? 'desc' : sortValue;
     
     if (selectedCategory) {
       qConstraints.push(where("category", "==", selectedCategory));
@@ -72,7 +104,7 @@ async function loadData(isLoadMore = false) {
       qConstraints.push(where("tags", "array-contains", selectedTag));
     }
 
-    qConstraints.push(orderBy("createdAt", "desc"));
+    qConstraints.push(orderBy(sortField, sortDirection));
     qConstraints.push(limit(PAGE_SIZE * 2)); // Fetch extra to account for potential scheduled posts
 
     if (isLoadMore && lastVisible) {
@@ -89,7 +121,7 @@ async function loadData(isLoadMore = false) {
     if (snapshot.empty) {
       isEndOfData = true;
       if (!isLoadMore) {
-        grid.innerHTML = UIEmptyState("لا توجد نتائج تطابق بحثك... جرب استخدام فلاتر مختلفة أو كلمات دلالية أبسط.", "fa-ghost");
+        grid.innerHTML = UIEmptyState("لم نجد محتوى مطابقًا. جرّب إزالة بعض الفلاتر.", "fa-ghost");
       } else {
         loadMoreContainer.classList.add('hidden');
       }
@@ -181,6 +213,34 @@ async function loadData(isLoadMore = false) {
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   updateUrlParams();
+  loadData(false);
+});
+
+filterSort.addEventListener('change', () => {
+  updateUrlParams();
+  loadData(false);
+});
+
+categoryChips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    filterCategory.value = chip.getAttribute('data-val');
+    updateChipsUI();
+    updateUrlParams();
+    loadData(false);
+  });
+});
+
+clearFiltersBtn.addEventListener('click', () => {
+  filterCategory.value = '';
+  filterTag.value = '';
+  filterSort.value = 'desc';
+  updateChipsUI();
+  updateUrlParams();
+  loadData(false);
+});
+
+window.addEventListener('popstate', () => {
+  parseUrlParams();
   loadData(false);
 });
 

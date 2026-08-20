@@ -136,6 +136,11 @@ async function loadUserSubmissions(uid) {
       let actionBtnHtml = '';
       if (data.status === 'needs_edit') {
         actionBtnHtml = `<button onclick="editSubmission('${docSnap.id}')" class="mt-2 text-orange-400 border border-orange-900/50 bg-orange-950/20 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-orange-900/40 transition">تعديل التقديم</button>`;
+      } else if (data.status === 'approved' || data.status === 'published') {
+        const linkSlug = data.publishedSlug || data.publishedPostId;
+        if (linkSlug) {
+          actionBtnHtml = `<a href="/story/${linkSlug}" class="mt-2 inline-block text-green-400 border border-green-900/50 bg-green-950/20 px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-green-900/40 transition"><i class="fa-solid fa-eye ml-1"></i> عرض القصة</a>`;
+        }
       }
 
       container.innerHTML += `

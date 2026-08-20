@@ -50,59 +50,72 @@
       
       <div class="container mx-auto px-6 relative z-10 text-center max-w-4xl">
         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-900/30 bg-red-950/30 mb-6">
-          <i class="fa-solid fa-compass text-red-500 text-xs"></i>
-          <span class="text-red-400 text-[10px] font-bold tracking-widest uppercase">الأرشيف المظلم</span>
+          <i class="fa-solid fa-book-skull text-red-500 text-xs"></i>
+          <span class="text-red-400 text-[10px] font-bold tracking-widest uppercase">كوابيس مكتوبة</span>
         </div>
         <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight drop-shadow-2xl">
-          أرشيف <span class="text-transparent bg-clip-text bg-gradient-to-l from-red-600 to-red-900">القصص</span>
+          قصص <span class="text-transparent bg-clip-text bg-gradient-to-l from-red-600 to-red-900">الرعب</span>
         </h1>
         <p class="text-gray-400 text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium">
-          تصفح أرشيفنا المتنامي من القصص المرعبة. استخدم الفلاتر أدناه للبحث عن كابوسك المفضل.
+          اكتشف حكايات لا تنتهي عند إغلاق الصفحة... تصفح أرشيفنا المتنامي من القصص المروعة.
         </p>
       </div>
     </section>
 
     <div class="container mx-auto px-4 md:px-8 lg:px-12 py-12 max-w-7xl">
-      <!-- Advanced Filters Section -->
-      <div class="bg-[#0a0505]/80 border border-red-900/30 rounded-2xl p-6 md:p-8 mb-16 shadow-2xl backdrop-blur-md relative z-20 -mt-24">
-        <form id="stories-filters" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Smart Content Discovery -->
+      <div class="mb-12 relative z-20 -mt-8 md:-mt-12 bg-[#050202]">
+        
+        <!-- Category Chips -->
+        <div id="category-chips" class="flex overflow-x-auto hide-scrollbar items-center gap-3 pb-4 mb-2">
+          <!-- The hidden select is kept so the JS still works seamlessly, but we'll bind chips to it -->
+          <select id="filter-category" class="hidden">
+            <option value="">الكل</option>
+            <option value="horror">رعب</option>
+            <option value="mystery">غموض</option>
+            <option value="true_crime">جرائم حقيقية</option>
+            <option value="paranormal">ما وراء الطبيعة</option>
+            <option value="legends">أساطير</option>
+            <option value="movies">أفلام</option>
+            <option value="games">ألعاب</option>
+          </select>
           
-          <!-- Category Filter -->
-          <div class="space-y-2">
-            <label class="text-xs font-bold text-gray-500 tracking-wider uppercase flex items-center gap-2">
-              <i class="fa-solid fa-folder-open text-red-900"></i> التصنيف
-            </label>
-            <div class="relative">
-              <select id="filter-category" class="w-full appearance-none px-4 py-3 bg-[#110808] border border-red-900/30 rounded-xl text-gray-200 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all font-semibold cursor-pointer text-sm">
-                <option value="">جميع التصنيفات</option>
-                <option value="horror">رعب (Horror)</option>
-                <option value="mystery">غموض (Mystery)</option>
-                <option value="true_crime">جرائم حقيقية (True Crime)</option>
-                <option value="paranormal">ما وراء الطبيعة (Paranormal)</option>
-                <option value="legends">أساطير (Legends)</option>
-                <option value="movies">أفلام (Movies)</option>
-                <option value="games">ألعاب (Games)</option>
-              </select>
-              <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-500">
-                <i class="fa-solid fa-chevron-down text-xs"></i>
-              </div>
+          <button type="button" data-val="" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-red-900 bg-red-900/20 text-white font-bold text-sm transition-all shadow-[0_0_15px_rgba(220,38,38,0.15)]">الكل</button>
+          <button type="button" data-val="horror" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">رعب</button>
+          <button type="button" data-val="mystery" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">غموض</button>
+          <button type="button" data-val="true_crime" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">جرائم حقيقية</button>
+          <button type="button" data-val="paranormal" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">ما وراء الطبيعة</button>
+          <button type="button" data-val="legends" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">أساطير</button>
+        </div>
+
+        <form id="stories-filters" class="flex flex-col md:flex-row items-center gap-4 w-full p-4 bg-[#0a0505]/80 border border-red-900/20 rounded-2xl backdrop-blur-md">
+          
+          <!-- Tag Search -->
+          <div class="relative w-full md:flex-1">
+            <i class="fa-solid fa-hashtag absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <input type="text" id="filter-tag" placeholder="ابحث بكلمة دلالية..." class="w-full pr-10 pl-4 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium placeholder-gray-600">
+          </div>
+
+          <!-- Sort Filter -->
+          <div class="relative w-full md:w-56 shrink-0">
+            <i class="fa-solid fa-sort absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <select id="filter-sort" class="w-full appearance-none pr-10 pl-10 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium cursor-pointer">
+              <option value="desc">الأحدث أولاً</option>
+              <option value="asc">الأقدم أولاً</option>
+              <option value="popular">الأكثر مشاهدة</option>
+            </select>
+            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-600 text-xs">
+              <i class="fa-solid fa-chevron-down"></i>
             </div>
           </div>
           
-          <!-- Tag Filter -->
-          <div class="space-y-2">
-            <label class="text-xs font-bold text-gray-500 tracking-wider uppercase flex items-center gap-2">
-              <i class="fa-solid fa-hashtag text-red-900"></i> كلمة دلالية
-            </label>
-            <input type="text" id="filter-tag" placeholder="ابحث عن كلمة (مثال: جن, أشباح)..." class="w-full px-4 py-3 bg-[#110808] border border-red-900/30 rounded-xl text-gray-200 focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all font-semibold text-sm placeholder-gray-600">
-          </div>
+          <!-- Clear Filters -->
+          <button type="button" id="clear-filters-btn" class="hidden w-full md:w-auto px-6 py-3 bg-transparent text-gray-400 hover:text-red-400 rounded-xl border border-gray-800 hover:border-red-900/50 transition-all text-sm font-semibold flex items-center justify-center gap-2 shrink-0">
+            <i class="fa-solid fa-times"></i> مسح
+          </button>
           
-          <!-- Search / Apply -->
-          <div class="flex items-end">
-            <button type="submit" class="w-full h-[46px] bg-red-700 hover:bg-red-600 text-white font-bold rounded-xl transition-all border border-red-600 shadow-[0_4px_14px_rgba(220,38,38,0.25)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.4)] hover:-translate-y-0.5 flex items-center justify-center gap-2">
-              <i class="fa-solid fa-magnifying-glass"></i> بحث وتطبيق
-            </button>
-          </div>
+          <!-- Hidden Submit (For Enter key to work) -->
+          <button type="submit" class="hidden"></button>
         </form>
       </div>
 

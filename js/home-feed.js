@@ -33,8 +33,8 @@ async function loadHomeContent() {
   const fetchStories = async () => {
     if(storiesGrid) storiesGrid.innerHTML = UILoadingSkeleton(3);
     try {
-      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "story"), orderBy("createdAt", "desc"), limit(10)));
-      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 3);
+      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "story"), orderBy("createdAt", "desc"), limit(3)));
+      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now);
       renderStories(items, storiesGrid);
     } catch(e) {
       if(storiesGrid) {
@@ -47,8 +47,8 @@ async function loadHomeContent() {
   const fetchNews = async () => {
     if(newsGrid) newsGrid.innerHTML = UILoadingSkeleton(3);
     try {
-      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "news"), orderBy("createdAt", "desc"), limit(10)));
-      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 3);
+      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "news"), orderBy("createdAt", "desc"), limit(3)));
+      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now);
       renderNews(items, newsGrid);
     } catch(e) {
       if(newsGrid) {
@@ -61,8 +61,8 @@ async function loadHomeContent() {
   const fetchVideos = async () => {
     if(videoGrid) videoGrid.innerHTML = UILoadingSkeleton(3);
     try {
-      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "video"), orderBy("createdAt", "desc"), limit(5)));
-      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now).slice(0, 3);
+      const snap = await getDocs(query(collection(db, "posts"), where("status", "==", "published"), where("type", "==", "video"), orderBy("createdAt", "desc"), limit(3)));
+      const items = snap.docs.map(d => d.data()).filter(d => !d.publishAt || (d.publishAt.toDate ? d.publishAt.toDate() : new Date(d.publishAt)) <= now);
       renderVideos(items, videoGrid);
     } catch(e) {
       if(videoGrid) {

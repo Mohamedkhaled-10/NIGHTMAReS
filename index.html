@@ -40,8 +40,9 @@
 <!-- NAVBAR_PLACEHOLDER -->
 
 <!-- Hero Section (Editorial/Cinematic) -->
-  <main class="grow w-full flex flex-col">
-<header class="relative w-full h-[75vh] min-h-[500px] flex items-end bg-[#050202] overflow-hidden border-b border-red-900/20" id="home">
+  <main class="grow w-full flex flex-col bg-[#050202]">
+  <!-- Hero Section (Editorial/Cinematic) -->
+  <header class="relative w-full h-[75vh] min-h-[500px] flex items-end bg-[#050202] overflow-hidden border-b border-red-900/20" id="home">
     <div class="absolute inset-0 z-0 overflow-hidden" id="hero-bg-container">
       <!-- Dark/Red Atmospheric Fog Overlay -->
       <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-[#050202]/70 to-[#050202]/30 z-20 pointer-events-none"></div>
@@ -81,25 +82,22 @@
     </div>
   </header>
 
-  
-
-  <!-- قسم القصص -->
-  <section class="cards-section px-4 md:px-8 lg:px-16 py-16 md:py-20 max-w-7xl mx-auto" id="cards">
-    
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 border-b border-red-900/20 pb-4 gap-4">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <span class="w-6 h-[2px] bg-red-700"></span>
-          <span class="text-red-500 text-xs font-bold tracking-widest uppercase">كوابيس مكتوبة</span>
-        </div>
-        <h2 class="text-3xl md:text-4xl font-black text-white">أحدث القصص</h2>
-      </div>
-      <a href="/stories" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors font-semibold group">
-        عرض جميع القصص <i class="fa-solid fa-arrow-left transform group-hover:-translate-x-1 transition-transform"></i>
+  <!-- القسم 1: القصص (مثل Trends Now في الصورة) -->
+  <section class="w-full max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 py-16 md:py-20" id="cards">
+    <!-- عنوان القسم المنظم -->
+    <div class="relative flex items-center justify-between mb-8 md:mb-10 pb-3 z-10">
+      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-red-900/30 to-red-600/80"></div>
+      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-red-600 shadow-[0_0_15px_rgba(220,38,38,0.8)]"></div>
+      
+      <h2 class="text-2xl md:text-3xl font-black text-white tracking-wide uppercase drop-shadow-md">أحدث القصص</h2>
+      
+      <a href="/stories" class="px-5 py-2 bg-red-900/20 border border-red-900/50 hover:bg-red-700 hover:border-red-500 text-gray-200 hover:text-white rounded-full text-xs font-bold tracking-widest transition-all shadow-[0_0_15px_rgba(220,38,38,0.15)] flex items-center gap-2 group">
+        عرض الجميع
+        <i class="fa-solid fa-arrow-left text-[10px] transform group-hover:-translate-x-1 transition-transform"></i>
       </a>
     </div>
     
-    <div class="cards-section-grid" id="stories-grid">
+    <div class="cards-section-grid relative z-10" id="stories-grid">
       <div id="stories-loading" class="col-span-full">
         <!-- Skeleton Loading -->
         <div class="flex flex-col items-center justify-center py-12">
@@ -109,114 +107,25 @@
       </div>
     </div>
   </section>
-  
-<div class="flex justify-center mt-6 mb-16">
-  <a href="/stories"
-     class="group flex items-center gap-2 px-8 py-3 bg-transparent border border-red-900/30 hover:border-red-600 hover:bg-red-950/20 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300">
-    تصفح جميع القصص
-    <i class="fa-solid fa-arrow-left text-sm transform group-hover:-translate-x-1 transition-transform"></i>
-  </a>
-</div>
 
-
-
-<!-- Content Analytics Section -->
-  <section class="analytics-section px-4 md:px-8 lg:px-16 py-16 md:py-20 max-w-7xl mx-auto w-full relative z-10 border-t border-red-900/10">
-    <div class="flex items-center justify-between mb-12 border-b border-red-900/20 pb-4">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <span class="w-6 h-[2px] bg-red-700"></span>
-          <span class="text-red-500 text-xs font-bold tracking-widest uppercase">نبض المجتمع</span>
-        </div>
-        <h2 class="text-3xl md:text-4xl font-black text-white">الأكثر تفاعلاً</h2>
-      </div>
-    </div>
+  <!-- القسم 2: الفيديوهات (مثل Continue Watching في الصورة) -->
+  <section class="w-full max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16 relative" id="video">
+    <!-- خلفية خافتة لمزيد من التباين -->
+    <div class="absolute top-1/2 right-0 w-[500px] h-[500px] bg-red-900/5 rounded-full blur-[150px] pointer-events-none -translate-y-1/2"></div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12" id="analytics-grids">
-      <!-- Most Read -->
-      <div class="flex flex-col gap-6">
-        <h3 class="text-lg font-bold text-gray-200 flex items-center gap-3">
-          <span class="w-2 h-2 rounded-full bg-red-600"></span>
-          الأكثر قراءة
-        </h3>
-        <div id="most-read-list" class="flex flex-col gap-4">
-          <p class="text-gray-500 text-sm py-4">جاري التحميل...</p>
-        </div>
-      </div>
-
-      <!-- Trending / Most Liked -->
-      <div class="flex flex-col gap-6">
-        <h3 class="text-lg font-bold text-gray-200 flex items-center gap-3">
-          <span class="w-2 h-2 rounded-full bg-red-600"></span>
-          الأفضل تقييماً
-        </h3>
-        <div id="trending-list" class="flex flex-col gap-4">
-          <p class="text-gray-500 text-sm py-4">جاري التحميل...</p>
-        </div>
-      </div>
-
-      <!-- Most Discussed -->
-      <div class="flex flex-col gap-6">
-        <h3 class="text-lg font-bold text-gray-200 flex items-center gap-3">
-          <span class="w-2 h-2 rounded-full bg-red-600"></span>
-          الأكثر نقاشاً
-        </h3>
-        <div id="most-discussed-list" class="flex flex-col gap-4">
-          <p class="text-gray-500 text-sm py-4">جاري التحميل...</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-<div id="AD_CONTAINER_ID"></div>
-  <!-- قسم الأخبار والفعاليات -->
-  <section class="news-section px-4 md:px-8 lg:px-16 py-16 md:py-20 max-w-7xl mx-auto" id="news">
-    
-    <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 border-b border-red-900/20 pb-4 gap-4">
-      <div>
-        <div class="flex items-center gap-3 mb-2">
-          <span class="w-6 h-[2px] bg-red-700"></span>
-          <span class="text-red-500 text-xs font-bold tracking-widest uppercase">عالم الرعب</span>
-        </div>
-        <h2 class="text-3xl md:text-4xl font-black text-white">الأخبار والفعاليات</h2>
-      </div>
-      <a href="/news" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors font-semibold group">
-        عرض جميع الأخبار <i class="fa-solid fa-arrow-left transform group-hover:-translate-x-1 transition-transform"></i>
+    <div class="relative flex items-center justify-between mb-8 md:mb-10 pb-3 z-10">
+      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-red-900/30 to-red-600/80"></div>
+      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-red-600 shadow-[0_0_15px_rgba(220,38,38,0.8)]"></div>
+      
+      <h2 class="text-2xl md:text-3xl font-black text-white tracking-wide uppercase drop-shadow-md">أحدث الفيديوهات</h2>
+      
+      <a href="/videos" class="px-5 py-2 bg-red-900/20 border border-red-900/50 hover:bg-red-700 hover:border-red-500 text-gray-200 hover:text-white rounded-full text-xs font-bold tracking-widest transition-all shadow-[0_0_15px_rgba(220,38,38,0.15)] flex items-center gap-2 group">
+        مكتبة الفيديو
+        <i class="fa-solid fa-arrow-left text-[10px] transform group-hover:-translate-x-1 transition-transform"></i>
       </a>
     </div>
-    <div class="news-grid" id="news-grid">
-      <div id="news-loading" class="col-span-full">
-        <!-- Skeleton Loading -->
-        <div class="flex flex-col items-center justify-center py-12">
-           <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
-           <p class="text-gray-400 font-semibold">نجمع الأخبار المروعة...</p>
-        </div>
-      </div>
-    </div>
-    <div class="flex justify-center mt-6 mb-16">
-      <a href="/news"
-         class="group flex items-center gap-2 px-8 py-3 bg-transparent border border-red-900/30 hover:border-red-600 hover:bg-red-950/20 text-gray-300 hover:text-white font-semibold rounded-lg transition-all duration-300">
-        تصفح جميع الأخبار
-        <i class="fa-solid fa-arrow-left text-sm transform group-hover:-translate-x-1 transition-transform"></i>
-      </a>
-    </div>
-  </section>
 
-  
-
-<section class="video-section px-4 md:px-8 lg:px-16 py-16 md:py-20 max-w-7xl mx-auto" id="video">
-    
-    <div class="flex flex-col items-center text-center mb-12">
-      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-900/30 bg-red-950/20 mb-4">
-        <i class="fa-solid fa-play text-red-500 text-xs"></i>
-        <span class="text-red-400 text-xs font-bold tracking-widest uppercase">مشاهد مرعبة</span>
-      </div>
-      <h2 class="text-3xl md:text-4xl font-black text-white mb-4">أحدث الفيديوهات</h2>
-      <a href="/videos" class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors font-semibold group bg-black/50 border border-red-900/30 px-4 py-2.5 rounded-lg">
-        استكشف مكتبة الفيديو <i class="fa-solid fa-arrow-left transform group-hover:-translate-x-1 transition-transform"></i>
-      </a>
-    </div>
-  <div class="video-grid" id="video-grid">
+    <div class="video-grid relative z-10" id="video-grid">
       <div id="video-loading" class="col-span-full">
         <!-- Skeleton Loading -->
         <div class="flex flex-col items-center justify-center py-12">
@@ -227,7 +136,77 @@
     </div>
   </section>
 
-  
+  <!-- القسم 3: الأخبار (يأخذ حيز مستقل ومنظم) -->
+  <section class="w-full max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16 relative" id="news">
+    <div class="relative flex items-center justify-between mb-8 md:mb-10 pb-3 z-10">
+      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-red-900/30 to-red-600/80"></div>
+      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-red-600 shadow-[0_0_15px_rgba(220,38,38,0.8)]"></div>
+      
+      <h2 class="text-2xl md:text-3xl font-black text-white tracking-wide uppercase drop-shadow-md">الأخبار والفعاليات</h2>
+      
+      <a href="/news" class="px-5 py-2 bg-red-900/20 border border-red-900/50 hover:bg-red-700 hover:border-red-500 text-gray-200 hover:text-white rounded-full text-xs font-bold tracking-widest transition-all shadow-[0_0_15px_rgba(220,38,38,0.15)] flex items-center gap-2 group">
+        كل الأخبار
+        <i class="fa-solid fa-arrow-left text-[10px] transform group-hover:-translate-x-1 transition-transform"></i>
+      </a>
+    </div>
+
+    <div class="news-grid relative z-10" id="news-grid">
+      <div id="news-loading" class="col-span-full">
+        <!-- Skeleton Loading -->
+        <div class="flex flex-col items-center justify-center py-12">
+           <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
+           <p class="text-gray-400 font-semibold">نجمع الأخبار المروعة...</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="AD_CONTAINER_ID" class="w-full max-w-[1400px] mx-auto px-4 my-8"></div>
+
+  <!-- القسم 4: الإحصائيات والأكثر تفاعلاً (منظم بخلفية داكنة لفصله) -->
+  <section class="w-full bg-[#030101] border-t border-red-900/10 py-16 md:py-24 relative z-10" id="analytics-section">
+    <div class="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12">
+      <div class="relative flex flex-col items-center text-center mb-16 pb-4">
+        <h2 class="text-3xl md:text-4xl font-black text-white tracking-wide uppercase drop-shadow-md">نبض المجتمع</h2>
+        <div class="w-24 h-[3px] bg-red-600 mx-auto mt-6 shadow-[0_0_15px_rgba(220,38,38,0.8)]"></div>
+      </div>
+      
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12" id="analytics-grids">
+        <!-- Most Read -->
+        <div class="flex flex-col gap-6 bg-[#050202] p-6 rounded-2xl border border-red-900/20 shadow-xl">
+          <h3 class="text-lg font-bold text-gray-200 flex items-center justify-center gap-3 border-b border-red-900/20 pb-4">
+            <span class="w-2 h-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,1)]"></span>
+            الأكثر قراءة
+          </h3>
+          <div id="most-read-list" class="flex flex-col gap-4">
+            <p class="text-gray-500 text-sm py-4 text-center">جاري التحميل...</p>
+          </div>
+        </div>
+
+        <!-- Trending / Most Liked -->
+        <div class="flex flex-col gap-6 bg-[#050202] p-6 rounded-2xl border border-red-900/20 shadow-xl">
+          <h3 class="text-lg font-bold text-gray-200 flex items-center justify-center gap-3 border-b border-red-900/20 pb-4">
+            <span class="w-2 h-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,1)]"></span>
+            الأفضل تقييماً
+          </h3>
+          <div id="trending-list" class="flex flex-col gap-4">
+            <p class="text-gray-500 text-sm py-4 text-center">جاري التحميل...</p>
+          </div>
+        </div>
+
+        <!-- Most Discussed -->
+        <div class="flex flex-col gap-6 bg-[#050202] p-6 rounded-2xl border border-red-900/20 shadow-xl">
+          <h3 class="text-lg font-bold text-gray-200 flex items-center justify-center gap-3 border-b border-red-900/20 pb-4">
+            <span class="w-2 h-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,1)]"></span>
+            الأكثر نقاشاً
+          </h3>
+          <div id="most-discussed-list" class="flex flex-col gap-4">
+            <p class="text-gray-500 text-sm py-4 text-center">جاري التحميل...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </main>
 <!-- FOOTER_PLACEHOLDER -->
 <script src="/js/main.js" defer></script>

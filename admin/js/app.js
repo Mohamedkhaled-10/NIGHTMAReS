@@ -614,7 +614,7 @@ document.getElementById('btn-sub-approve')?.addEventListener('click', async () =
             type: 'story_approved',
             title: 'تمت الموافقة على قصتك',
             message: `تم نشر قصتك "${currentSubmission.title}".`,
-            link: `/story/${postId}`,
+            link: `/story/${slug}`,
             read: false,
             createdAt: serverTimestamp()
           });
@@ -624,6 +624,7 @@ document.getElementById('btn-sub-approve')?.addEventListener('click', async () =
         transaction.update(subRef, {
           status: 'approved',
           publishedPostId: postId,
+          publishedSlug: slug,
           updatedAt: serverTimestamp()
         });
         
