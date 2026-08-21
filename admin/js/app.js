@@ -539,12 +539,39 @@ async function readSubmission(id) {
       // Basic formatting for newlines
       const content = currentSubmission.content.replace(/\n/g, '<br>');
       document.getElementById('reader-content').innerHTML = content;
+      
+      const typeSelect = document.getElementById('review-horror-type');
+      if (typeSelect) typeSelect.value = currentSubmission.suggestedHorrorType || 'other';
+
+      const warningCheck = document.getElementById('review-content-warning');
+      const noteContainer = document.getElementById('review-warning-note-container');
+      const noteInput = document.getElementById('review-warning-note');
+
+      if (warningCheck && noteInput && noteContainer) {
+        warningCheck.checked = !!currentSubmission.suggestedContentWarning;
+        if (warningCheck.checked) {
+          noteContainer.classList.remove('hidden');
+          noteInput.value = currentSubmission.suggestedContentWarningNote || '';
+        } else {
+          noteContainer.classList.add('hidden');
+          noteInput.value = '';
+        }
+      }
     }
   } catch (e) {
     console.error(e);
     showToast({ type: 'error', message: 'حدث خطأ' });
   }
 }
+
+document.getElementById('review-content-warning')?.addEventListener('change', (e) => {
+  const container = document.getElementById('review-warning-note-container');
+  if (e.target.checked) {
+    if(container) container.classList.remove('hidden');
+  } else {
+    if(container) container.classList.add('hidden');
+  }
+});
 
 document.getElementById('btn-reader-back')?.addEventListener('click', () => {
   viewSubmissionReader.classList.add('hidden');
@@ -585,6 +612,20 @@ document.getElementById('btn-sub-approve')?.addEventListener('click', async () =
         let slug = currentSubmission.title.trim().replace(/\s+/g, '-');
         slug += '-' + Math.floor(Math.random() * 1000);
         
+        const finalHorrorType = document.getElementById('review-horror-type')?.value || currentSubmission.suggestedHorrorType || 'other';
+        const finalWarning = document.getElementById('review-content-warning')?.checked || false;
+        const finalWarningNoteRaw = document.getElementById('review-warning-note')?.value || '';
+        const finalWarningNote = finalWarning && finalWarningNoteRaw.trim() ? (window.DOMPurify ? DOMPurify.sanitize(finalWarningNoteRaw.trim()) : finalWarningNoteRaw.trim()) : null;
+        
+        const rawHtml = `<p><strong>قصة مرسلة من: ${currentSubmission.authorName}</strong></p><p>${currentSubmission.content.replace(/\n/g, '</p><p>')}</p>`;
+        const sanitizedHtml = window.DOMPurify ? DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } }) : rawHtml;
+        
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = sanitizedHtml;
+        const textContent = tempDiv.textContent || tempDiv.innerText || '';
+        const wordCount = textContent.trim().split(/\s+/).filter(word => word.length > 0).length;
+        const readingTime = Math.max(1, Math.ceil(wordCount / 180));
+
         const postData = {
           id: postId,
           slug: slug,
@@ -596,11 +637,16 @@ document.getElementById('btn-sub-approve')?.addEventListener('click', async () =
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
           sourceSubmissionId: currentSubmission.id,
+          horrorType: finalHorrorType,
+          contentWarning: finalWarning,
+          contentWarningNote: finalWarningNote,
+          readingTime: readingTime,
+          randomWeight: Math.random(),
+          weeklyViews: 0,
+          weeklyViewsResetAt: serverTimestamp(),
           data: {
-            contentHtml: window.DOMPurify 
-              ? DOMPurify.sanitize(`<p><strong>قصة مرسلة من: ${currentSubmission.authorName}</strong></p><p>${currentSubmission.content.replace(/\n/g, '</p><p>')}</p>`, { USE_PROFILES: { html: true } })
-              : `<p><strong>قصة مرسلة من: ${currentSubmission.authorName}</strong></p><p>${currentSubmission.content.replace(/\n/g, '</p><p>')}</p>`,
-            readTimeMinutes: Math.ceil(currentSubmission.content.length / 1000)
+            contentHtml: sanitizedHtml,
+            readTimeMinutes: readingTime
           }
         };
         

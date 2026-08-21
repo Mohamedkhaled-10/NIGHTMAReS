@@ -4,10 +4,14 @@ import { UILoadingSkeleton, UIEmptyState, UIErrorState, generateStoryCard, gener
 
 const form = document.getElementById('stories-filters');
 const filterCategory = document.getElementById('filter-category');
+const filterHorrorType = document.getElementById('filter-horror-type');
+const filterReadingTime = document.getElementById('filter-reading-time');
+const filterArchive = document.getElementById('filter-archive');
 const filterTag = document.getElementById('filter-tag');
 const filterSort = document.getElementById('filter-sort');
 const clearFiltersBtn = document.getElementById('clear-filters-btn');
 const categoryChips = document.querySelectorAll('.category-chip');
+const horrorChips = document.querySelectorAll('.horror-chip');
 
 const grid = document.getElementById('stories-grid');
 const loadMoreBtn = document.getElementById('load-more-btn');
@@ -35,6 +39,9 @@ function getCategoryName(id) {
 function parseUrlParams() {
   const params = new URLSearchParams(window.location.search);
   filterCategory.value = params.get('category') || '';
+  filterHorrorType.value = params.get('horrorType') || '';
+  filterReadingTime.value = params.get('readingTime') || '';
+  filterArchive.value = params.get('archive') || '';
   filterTag.value = params.get('tag') || '';
   filterSort.value = params.get('sort') || 'desc';
   
@@ -46,6 +53,9 @@ function parseUrlParams() {
 function updateUrlParams() {
   const url = new URL(window.location);
   if(filterCategory.value) url.searchParams.set('category', filterCategory.value); else url.searchParams.delete('category');
+  if(filterHorrorType.value) url.searchParams.set('horrorType', filterHorrorType.value); else url.searchParams.delete('horrorType');
+  if(filterReadingTime.value) url.searchParams.set('readingTime', filterReadingTime.value); else url.searchParams.delete('readingTime');
+  if(filterArchive.value) url.searchParams.set('archive', filterArchive.value); else url.searchParams.delete('archive');
   if(filterTag.value.trim()) url.searchParams.set('tag', filterTag.value.trim()); else url.searchParams.delete('tag');
   if(filterSort.value && filterSort.value !== 'desc') url.searchParams.set('sort', filterSort.value); else url.searchParams.delete('sort');
   window.history.pushState({}, '', url);
@@ -62,10 +72,20 @@ function updateChipsUI() {
       chip.classList.remove('border-red-900', 'bg-red-900/20', 'text-white');
     }
   });
+
+  horrorChips.forEach(chip => {
+    if (chip.getAttribute('data-val') === filterHorrorType.value) {
+      chip.classList.remove('border-gray-800/60', 'bg-[#0a0505]', 'text-gray-400');
+      chip.classList.add('border-red-900', 'bg-red-900/20', 'text-white');
+    } else {
+      chip.classList.add('border-gray-800/60', 'bg-[#0a0505]', 'text-gray-400');
+      chip.classList.remove('border-red-900', 'bg-red-900/20', 'text-white');
+    }
+  });
 }
 
 function updateClearBtnVisibility() {
-  if (filterCategory.value || filterTag.value.trim() || filterSort.value !== 'desc') {
+  if (filterCategory.value || filterTag.value.trim() || filterSort.value !== 'desc' || filterHorrorType.value || filterReadingTime.value || filterArchive.value) {
     clearFiltersBtn.classList.remove('hidden');
   } else {
     clearFiltersBtn.classList.add('hidden');
@@ -91,20 +111,64 @@ async function loadData(isLoadMore = false) {
     
     // Server-side filtering when possible
     const selectedCategory = filterCategory.value;
+    const selectedHorrorType = filterHorrorType.value;
+    const selectedReadingTime = filterReadingTime.value;
+    const selectedArchive = filterArchive.value;
     const selectedTag = filterTag.value.trim();
     const sortValue = filterSort.value || 'desc';
-    const sortField = sortValue === 'popular' ? 'views' : 'createdAt';
-    const sortDirection = sortValue === 'popular' ? 'desc' : sortValue;
+    let sortField = sortValue === 'popular' ? 'views' : 'createdAt';
+    if (sortValue === 'weekly_popular') sortField = 'weeklyViews';
+    const sortDirection = (sortValue === 'popular' || sortValue === 'weekly_popular') ? 'desc' : sortValue;
     
     if (selectedCategory) {
       qConstraints.push(where("category", "==", selectedCategory));
+    }
+    
+    if (selectedHorrorType) {
+      qConstraints.push(where("horrorType", "==", selectedHorrorType));
+    }
+
+    if (selectedArchive) {
+      // selectedArchive is "YYYY-MM"
+      const [year, month] = selectedArchive.split('-');
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 1);
+      qConstraints.push(where("createdAt", ">=", startDate));
+      qConstraints.push(where("createdAt", "<", endDate));
+    }
+
+    let clientSideReadingTimeFilter = false;
+
+    if (selectedArchive && selectedReadingTime) {
+      // Cannot have multiple inequality fields in Firestore.
+      // Filter by Archive in Firestore, ReadingTime in Client
+      clientSideReadingTimeFilter = true;
+    } else {
+      if (selectedReadingTime === 'short') {
+        qConstraints.push(where("readingTime", "<", 5));
+      } else if (selectedReadingTime === 'medium') {
+        qConstraints.push(where("readingTime", ">=", 5));
+        qConstraints.push(where("readingTime", "<=", 15));
+      } else if (selectedReadingTime === 'long') {
+        qConstraints.push(where("readingTime", ">", 15));
+      }
     }
 
     if (selectedTag) {
       qConstraints.push(where("tags", "array-contains", selectedTag));
     }
-
-    qConstraints.push(orderBy(sortField, sortDirection));
+    
+    if (selectedArchive) {
+      qConstraints.push(orderBy("createdAt", sortDirection === 'desc' ? 'desc' : 'asc'));
+      if (sortField !== 'createdAt') {
+        qConstraints.push(orderBy(sortField, sortDirection));
+      }
+    } else if (selectedReadingTime && !clientSideReadingTimeFilter) {
+      qConstraints.push(orderBy("readingTime", sortDirection === 'desc' ? 'desc' : 'asc'));
+      qConstraints.push(orderBy(sortField, sortDirection));
+    } else {
+      qConstraints.push(orderBy(sortField, sortDirection));
+    }
     qConstraints.push(limit(PAGE_SIZE * 2)); // Fetch extra to account for potential scheduled posts
 
     if (isLoadMore && lastVisible) {
@@ -138,6 +202,13 @@ async function loadData(isLoadMore = false) {
         if (post.publishAt) {
           const pDate = post.publishAt.toDate ? post.publishAt.toDate() : new Date(post.publishAt);
           if (pDate > now) isPublished = false;
+        }
+
+        if (clientSideReadingTimeFilter) {
+          const rTime = post.readingTime || 0;
+          if (selectedReadingTime === 'short' && rTime >= 5) return;
+          if (selectedReadingTime === 'medium' && (rTime < 5 || rTime > 15)) return;
+          if (selectedReadingTime === 'long' && rTime <= 15) return;
         }
         
         if (!isPublished || displayedCount >= PAGE_SIZE) return;
@@ -221,6 +292,16 @@ filterSort.addEventListener('change', () => {
   loadData(false);
 });
 
+filterReadingTime.addEventListener('change', () => {
+  updateUrlParams();
+  loadData(false);
+});
+
+filterArchive.addEventListener('change', () => {
+  updateUrlParams();
+  loadData(false);
+});
+
 categoryChips.forEach(chip => {
   chip.addEventListener('click', () => {
     filterCategory.value = chip.getAttribute('data-val');
@@ -230,8 +311,20 @@ categoryChips.forEach(chip => {
   });
 });
 
+horrorChips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    filterHorrorType.value = chip.getAttribute('data-val');
+    updateChipsUI();
+    updateUrlParams();
+    loadData(false);
+  });
+});
+
 clearFiltersBtn.addEventListener('click', () => {
   filterCategory.value = '';
+  filterHorrorType.value = '';
+  filterReadingTime.value = '';
+  filterArchive.value = '';
   filterTag.value = '';
   filterSort.value = 'desc';
   updateChipsUI();

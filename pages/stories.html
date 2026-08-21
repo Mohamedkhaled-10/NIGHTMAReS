@@ -56,9 +56,12 @@
         <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight drop-shadow-2xl">
           قصص <span class="text-transparent bg-clip-text bg-gradient-to-l from-red-600 to-red-900">الرعب</span>
         </h1>
-        <p class="text-gray-400 text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium">
+        <p class="text-gray-400 text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium mb-8">
           اكتشف حكايات لا تنتهي عند إغلاق الصفحة... تصفح أرشيفنا المتنامي من القصص المروعة.
         </p>
+        <button id="btn-random-story" class="inline-flex items-center gap-2 px-6 py-3 bg-red-900 hover:bg-red-800 text-white font-bold rounded-lg transition-colors shadow-lg shadow-red-900/20">
+          <i class="fa-solid fa-dice"></i> قصة عشوائية
+        </button>
       </div>
     </section>
 
@@ -67,7 +70,7 @@
       <div class="mb-12 relative z-20 -mt-8 md:-mt-12 bg-[#050202]">
         
         <!-- Category Chips -->
-        <div id="category-chips" class="flex overflow-x-auto hide-scrollbar items-center gap-3 pb-4 mb-2">
+        <div id="category-chips" class="flex overflow-x-auto hide-scrollbar items-center gap-3 pb-2 mb-2">
           <!-- The hidden select is kept so the JS still works seamlessly, but we'll bind chips to it -->
           <select id="filter-category" class="hidden">
             <option value="">الكل</option>
@@ -88,12 +91,53 @@
           <button type="button" data-val="legends" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">أساطير</button>
         </div>
 
+        <!-- Horror Type Chips -->
+        <div id="horror-type-chips" class="flex overflow-x-auto hide-scrollbar items-center gap-3 pb-4 mb-2">
+          <select id="filter-horror-type" class="hidden">
+            <option value="">الكل (أنواع الرعب)</option>
+            <option value="ghosts">أشباح</option>
+            <option value="jinn">جن</option>
+            <option value="urban_legend">أساطير حضرية</option>
+            <option value="psychological">رعب نفسي</option>
+            <option value="true_story">مبنية على حقيقة</option>
+            <option value="other">أخرى</option>
+          </select>
+          
+          <button type="button" data-val="" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-red-900 bg-red-900/20 text-white font-bold text-sm transition-all flex items-center gap-2"><span>الكل</span></button>
+          <button type="button" data-val="ghosts" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>👻</span> أشباح</button>
+          <button type="button" data-val="jinn" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>🕯️</span> جن</button>
+          <button type="button" data-val="urban_legend" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>🏙️</span> أساطير</button>
+          <button type="button" data-val="psychological" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>🧠</span> رعب نفسي</button>
+          <button type="button" data-val="true_story" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>📰</span> حقيقة</button>
+          <button type="button" data-val="other" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>🎭</span> أخرى</button>
+        </div>
+
         <form id="stories-filters" class="flex flex-col md:flex-row items-center gap-4 w-full p-4 bg-[#0a0505]/80 border border-red-900/20 rounded-2xl backdrop-blur-md">
           
           <!-- Tag Search -->
           <div class="relative w-full md:flex-1">
             <i class="fa-solid fa-hashtag absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
             <input type="text" id="filter-tag" placeholder="ابحث بكلمة دلالية..." class="w-full pr-10 pl-4 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium placeholder-gray-600">
+          </div>
+
+          <!-- Reading Time Filter -->
+          <div class="relative w-full md:w-48 shrink-0">
+            <i class="fa-solid fa-clock absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <select id="filter-reading-time" class="w-full appearance-none pr-10 pl-10 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium cursor-pointer">
+              <option value="">مدة القراءة (الكل)</option>
+              <option value="short">قصيرة (&lt; 5 د)</option>
+              <option value="medium">متوسطة (5-15 د)</option>
+              <option value="long">طويلة (&gt; 15 د)</option>
+            </select>
+            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-600 text-xs">
+              <i class="fa-solid fa-chevron-down"></i>
+            </div>
+          </div>
+
+          <!-- Archive Filter -->
+          <div class="relative w-full md:w-48 shrink-0">
+            <i class="fa-solid fa-calendar-alt absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
+            <input type="month" id="filter-archive" class="w-full appearance-none pr-10 pl-4 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium cursor-pointer" style="color-scheme: dark;">
           </div>
 
           <!-- Sort Filter -->
@@ -103,6 +147,7 @@
               <option value="desc">الأحدث أولاً</option>
               <option value="asc">الأقدم أولاً</option>
               <option value="popular">الأكثر مشاهدة</option>
+              <option value="weekly_popular">الأكثر قراءة هذا الأسبوع</option>
             </select>
             <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-600 text-xs">
               <i class="fa-solid fa-chevron-down"></i>
@@ -143,5 +188,6 @@
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script type="module" src="/js/stories.js"></script>
+  <script type="module" src="/js/random-story.js"></script>
 </body>
 </html>

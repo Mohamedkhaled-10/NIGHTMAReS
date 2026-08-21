@@ -181,7 +181,32 @@ async function recordViewSafe() {
       
       try {
         const postRef = doc(db, 'posts', contentId);
-        await updateDoc(postRef, { views: increment(1) });
+        const postSnap = await getDoc(postRef);
+        if (postSnap.exists()) {
+          const data = postSnap.data();
+          let needsReset = false;
+          if (data.weeklyViewsResetAt) {
+            const resetDate = data.weeklyViewsResetAt.toDate();
+            const now = new Date();
+            const diffDays = (now - resetDate) / (1000 * 60 * 60 * 24);
+            if (diffDays >= 7) needsReset = true;
+          } else {
+            needsReset = true;
+          }
+
+          if (needsReset) {
+            await updateDoc(postRef, { 
+              views: increment(1),
+              weeklyViews: 1,
+              weeklyViewsResetAt: serverTimestamp()
+            });
+          } else {
+            await updateDoc(postRef, { 
+              views: increment(1),
+              weeklyViews: increment(1)
+            });
+          }
+        }
       } catch(e) {}
       
     } catch (error) {

@@ -2,7 +2,7 @@
 import { db, auth } from './firebase-init.js';
 import { collection, query, where, getDocs, orderBy, limit, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { UISpinner, UIErrorState } from './ui-utils.js';
+import { UISpinner, UIErrorState, generateStoryCard, generateVideoCard, generateNewsCard } from './ui-utils.js';
 
 const initArticle = async () => {
   const loadingEl = document.getElementById('loading');
@@ -367,7 +367,62 @@ async function renderContent(data) {
     if (window.DOMPurify) {
       rawHtml = DOMPurify.sanitize(rawHtml, { USE_PROFILES: { html: true } });
     }
-    articleBody.innerHTML = rawHtml;
+    
+    // Content Warning Check
+    if (data.type === 'story' && data.contentWarning === true) {
+      let safeNoteHtml = '';
+      if (data.contentWarningNote) {
+        if (window.DOMPurify) {
+          safeNoteHtml = DOMPurify.sanitize(data.contentWarningNote, { USE_PROFILES: { html: true } });
+        } else {
+          safeNoteHtml = data.contentWarningNote.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+      }
+
+      const warningGateHtml = `
+        <div id="content-warning-gate" class="bg-[#0a0505] border border-red-900/50 rounded-2xl p-8 md:p-12 mb-10 shadow-2xl relative overflow-hidden flex flex-col items-center text-center">
+          <div class="absolute -right-8 -top-8 opacity-5">
+            <i class="fa-solid fa-triangle-exclamation text-[200px] text-red-600"></i>
+          </div>
+          <div class="relative z-10 w-full flex flex-col items-center">
+            <div class="w-20 h-20 bg-red-900/20 rounded-full flex items-center justify-center mb-6 border border-red-900/50 shadow-inner">
+              <i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 shadow-red-500 drop-shadow-md"></i>
+            </div>
+            <h3 class="text-3xl font-black text-white mb-4 drop-shadow-md">تحذير محتوى</h3>
+            <p class="text-gray-300 text-lg mb-6 max-w-2xl leading-relaxed m-0" style="margin-bottom: 1.5rem !important;">
+              قد تحتوي هذه القصة على مشاهد مزعجة، عنف، أو محتوى غير مناسب لبعض القراء. يُنصح بالحذر.
+            </p>
+            ${safeNoteHtml ? `<div class="bg-[#110808] border border-red-900/30 p-5 rounded-xl mb-8 max-w-2xl w-full text-gray-400 italic text-base m-0" style="margin-bottom: 2rem !important;">${safeNoteHtml}</div>` : ''}
+            
+            <button id="btn-reveal-content" class="px-8 py-4 bg-red-800 hover:bg-red-700 text-white font-bold text-lg rounded-xl transition-all hover:scale-105 shadow-[0_0_20px_rgba(220,38,38,0.4)] flex items-center gap-3">
+              <i class="fa-solid fa-eye"></i> أقر بذلك، أريد المتابعة
+            </button>
+          </div>
+        </div>
+        <div id="gated-content" class="hidden opacity-0 transition-opacity duration-1000 ease-in-out">
+          ${rawHtml}
+        </div>
+      `;
+      articleBody.innerHTML = warningGateHtml;
+      
+      const btnReveal = document.getElementById('btn-reveal-content');
+      if (btnReveal) {
+        btnReveal.addEventListener('click', () => {
+          const gate = document.getElementById('content-warning-gate');
+          const gatedContent = document.getElementById('gated-content');
+          if (gate) gate.remove();
+          if (gatedContent) {
+            gatedContent.classList.remove('hidden');
+            // Trigger reflow to apply transition
+            void gatedContent.offsetWidth;
+            gatedContent.classList.remove('opacity-0');
+            gatedContent.classList.add('opacity-100');
+          }
+        });
+      }
+    } else {
+      articleBody.innerHTML = rawHtml;
+    }
   } else {
     articleBody.innerHTML = "<p>لا يوجد محتوى متاح.</p>";
   }
@@ -383,6 +438,7 @@ async function renderContent(data) {
 
   // Load related content
   loadRelatedContent(data);
+  loadSimilarVibe(data);
 }
 
 async function loadRelatedContent(currentArticle) {
@@ -477,6 +533,111 @@ async function loadRelatedContent(currentArticle) {
   }
 }
 
+async function loadSimilarVibe(currentArticle) {
+  if (currentArticle.type !== 'story') return; // Only for stories
+  const vibeSection = document.getElementById('similar-vibe-section');
+  const vibeGrid = document.getElementById('similar-vibe-grid');
+  if (!vibeSection || !vibeGrid) return;
+
+  try {
+    let qConstraints = [
+      where("status", "==", "published"),
+      where("type", "==", "story")
+    ];
+    
+    if (currentArticle.horrorType) {
+      qConstraints.push(where("horrorType", "==", currentArticle.horrorType));
+    }
+    
+    qConstraints.push(orderBy("createdAt", "desc"));
+    qConstraints.push(limit(15));
+    
+    const qRef = query(collection(db, "posts"), ...qConstraints);
+    const snapshot = await getDocs(qRef);
+    
+    let results = [];
+    const now = new Date();
+    
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      let isPublished = true;
+      if (data.publishAt) {
+        const pDate = data.publishAt.toDate ? data.publishAt.toDate() : new Date(data.publishAt);
+        if (pDate > now) isPublished = false;
+      }
+      if (doc.id !== currentArticle.id && isPublished) {
+        results.push({ id: doc.id, ...data });
+      }
+    });
+
+    if (results.length < 3 && currentArticle.horrorType) {
+      // Fallback: fetch without horrorType filter
+      const fallbackQ = query(
+         collection(db, "posts"),
+         where("status", "==", "published"),
+         where("type", "==", "story"),
+         orderBy("createdAt", "desc"),
+         limit(15)
+      );
+      const fallbackSnap = await getDocs(fallbackQ);
+      fallbackSnap.forEach(doc => {
+         const data = doc.data();
+         let isPublished = true;
+         if (data.publishAt) {
+           const pDate = data.publishAt.toDate ? data.publishAt.toDate() : new Date(data.publishAt);
+           if (pDate > now) isPublished = false;
+         }
+         if (doc.id !== currentArticle.id && isPublished && !results.find(r => r.id === doc.id)) {
+           results.push({ id: doc.id, ...data });
+         }
+      });
+    }
+
+    // Now re-order if user is logged in
+    const user = await new Promise(resolve => {
+      const unsubscribe = onAuthStateChanged(auth, u => {
+        unsubscribe();
+        resolve(u);
+      });
+    });
+
+    let readIds = new Set();
+    if (user) {
+      const historyQ = query(collection(db, 'user_history'), where('userId', '==', user.uid));
+      const historySnap = await getDocs(historyQ);
+      historySnap.forEach(doc => {
+        if (doc.data().contentId) readIds.add(doc.data().contentId);
+      });
+      
+      const unread = results.filter(r => !readIds.has(r.id));
+      const read = results.filter(r => readIds.has(r.id));
+      results = [...unread, ...read];
+    }
+    
+    results = results.slice(0, 6);
+    
+    if (results.length === 0) return;
+    
+    vibeGrid.innerHTML = '';
+    results.forEach(post => {
+      const link = `/story/${post.slug || post.id}`;
+      const card = document.createElement('a');
+      card.href = link;
+      card.className = 'content-card-link block transition-transform hover:-translate-y-1';
+      
+      const horrorTypeName = getHorrorTypeName(post.horrorType);
+      
+      card.innerHTML = generateStoryCard(post, null, horrorTypeName || 'قصة', null);
+      vibeGrid.appendChild(card);
+    });
+    
+    vibeSection.classList.remove('hidden');
+    
+  } catch (error) {
+    console.error("Error loading similar vibe:", error);
+  }
+}
+
 function showError(message) {
   const loadingEl = document.getElementById('loading');
   loadingEl.innerHTML = UIErrorState(message, "retry-article");
@@ -512,6 +673,19 @@ if (scrollToTopBtn) {
   scrollToTopBtn.addEventListener('click', () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
+}
+
+function getHorrorTypeName(id) {
+  const horrorTypes = {
+    'psychological': 'رعب نفسي',
+    'paranormal': 'ما وراء الطبيعة',
+    'slasher': 'دموي',
+    'monsters': 'وحوش وكائنات',
+    'sci_fi': 'خيال علمي مرعب',
+    'folk': 'رعب شعبي',
+    'cosmic': 'رعب كوني'
+  };
+  return horrorTypes[id] || id;
 }
 
 function getCategoryName(id) {

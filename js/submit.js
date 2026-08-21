@@ -4,13 +4,132 @@ import { UIErrorState, UISuccessState } from './ui-utils.js';
 
 let editId = sessionStorage.getItem('editSubmissionId');
 
+let selectedHorrorType = null;
+let estimatedReadingTime = 1;
+const DRAFT_KEY = 'nightmares_story_draft';
+
+function saveDraft() {
+  if (editId) return; // Do not save drafts while in edit mode
+  
+  const titleInput = document.getElementById('story-title');
+  const contentInput = document.getElementById('story-content');
+  const suggestedContentWarningInput = document.getElementById('suggestedContentWarning');
+  const suggestedContentWarningNoteInput = document.getElementById('suggestedContentWarningNote');
+  const authorNameInput = document.getElementById('author-name');
+  
+  const draft = {
+    title: titleInput ? titleInput.value : '',
+    content: contentInput ? contentInput.value : '',
+    authorName: authorNameInput ? authorNameInput.value : '',
+    suggestedHorrorType: selectedHorrorType,
+    suggestedContentWarning: suggestedContentWarningInput ? suggestedContentWarningInput.checked : false,
+    suggestedContentWarningNote: suggestedContentWarningNoteInput ? suggestedContentWarningNoteInput.value : ''
+  };
+  localStorage.setItem(DRAFT_KEY, JSON.stringify(draft));
+}
+
+function loadDraft() {
+  if (editId) return;
+  const draftJson = localStorage.getItem(DRAFT_KEY);
+  if (draftJson) {
+    try {
+      const draft = JSON.parse(draftJson);
+      if (draft.title && document.getElementById('story-title')) {
+        document.getElementById('story-title').value = draft.title;
+      }
+      if (draft.authorName && document.getElementById('author-name')) {
+        document.getElementById('author-name').value = draft.authorName;
+      }
+      
+      if (draft.suggestedHorrorType) {
+        const btn = document.querySelector(`.horror-type-btn[data-type="${draft.suggestedHorrorType}"]`);
+        if (btn) btn.click();
+      }
+      
+      const contentWarningInput = document.getElementById('suggestedContentWarning');
+      const contentWarningNoteContainer = document.getElementById('content-warning-note-container');
+      const contentWarningNoteInput = document.getElementById('suggestedContentWarningNote');
+      
+      if (draft.suggestedContentWarning && contentWarningInput) {
+        contentWarningInput.checked = true;
+        if(contentWarningNoteContainer) contentWarningNoteContainer.classList.remove('hidden');
+        if (draft.suggestedContentWarningNote && contentWarningNoteInput) {
+          contentWarningNoteInput.value = draft.suggestedContentWarningNote;
+        }
+      }
+      
+      if (draft.content && document.getElementById('story-content')) {
+        const contentInput = document.getElementById('story-content');
+        contentInput.value = draft.content;
+        contentInput.dispatchEvent(new Event('input')); // to trigger counters
+      }
+    } catch (e) {
+      console.error("Error loading draft", e);
+    }
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
   const contentInput = document.getElementById('story-content');
   const charCount = document.getElementById('char-count');
+  const readingTimeDisplay = document.getElementById('reading-time');
+  const titleInput = document.getElementById('story-title');
+  const authorNameInput = document.getElementById('author-name');
+  
+  // New UI Elements
+  const horrorTypeBtns = document.querySelectorAll('.horror-type-btn');
+  const suggestedContentWarningInput = document.getElementById('suggestedContentWarning');
+  const contentWarningNoteContainer = document.getElementById('content-warning-note-container');
+  const suggestedContentWarningNoteInput = document.getElementById('suggestedContentWarningNote');
+  
+  // Set up listeners for drafts
+  if(titleInput) titleInput.addEventListener('input', saveDraft);
+  if(authorNameInput) authorNameInput.addEventListener('input', saveDraft);
+  if(suggestedContentWarningNoteInput) suggestedContentWarningNoteInput.addEventListener('input', saveDraft);
+  
+  if (suggestedContentWarningInput) {
+    suggestedContentWarningInput.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        if(contentWarningNoteContainer) contentWarningNoteContainer.classList.remove('hidden');
+      } else {
+        if(contentWarningNoteContainer) contentWarningNoteContainer.classList.add('hidden');
+        if(suggestedContentWarningNoteInput) suggestedContentWarningNoteInput.value = '';
+      }
+      saveDraft();
+    });
+  }
+  
+  horrorTypeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      horrorTypeBtns.forEach(b => {
+        b.classList.remove('border-red-500', 'bg-red-950/30');
+        b.classList.add('border-red-900/30', 'bg-[#0a0505]');
+      });
+      btn.classList.remove('border-red-900/30', 'bg-[#0a0505]');
+      btn.classList.add('border-red-500', 'bg-red-950/30');
+      selectedHorrorType = btn.dataset.type;
+      
+      // Update hidden input for required validation if needed
+      const hiddenInput = document.getElementById('suggestedHorrorType');
+      if(hiddenInput) hiddenInput.value = selectedHorrorType;
+      
+      saveDraft();
+    });
+  });
   
   if (contentInput && charCount) {
     contentInput.addEventListener('input', () => {
-      charCount.textContent = `${contentInput.value.length} حرف`;
+      const length = contentInput.value.length;
+      charCount.textContent = `${length} حرف`;
+      
+      // Calculate Reading Time
+      const wordCount = contentInput.value.trim().split(/\s+/).filter(word => word.length > 0).length;
+      estimatedReadingTime = Math.max(1, Math.ceil(wordCount / 180));
+      if(readingTimeDisplay) {
+        readingTimeDisplay.textContent = `مدة القراءة: ${estimatedReadingTime} دقيقة`;
+      }
+      
+      saveDraft();
     });
   }
 
@@ -24,8 +143,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('story-title').value = data.title || '';
         document.getElementById('story-content').value = data.content || '';
         
+        // Populate new fields if they exist from a previous revision
+        if (data.suggestedHorrorType) {
+          const btn = document.querySelector(`.horror-type-btn[data-type="${data.suggestedHorrorType}"]`);
+          if (btn) btn.click();
+        }
+        if (data.suggestedContentWarning) {
+          const warningInput = document.getElementById('suggestedContentWarning');
+          if (warningInput) {
+            warningInput.checked = true;
+            document.getElementById('content-warning-note-container').classList.remove('hidden');
+            if (data.suggestedContentWarningNote) {
+              document.getElementById('suggestedContentWarningNote').value = data.suggestedContentWarningNote;
+            }
+          }
+        }
+        
         if (contentInput && charCount) {
-          charCount.textContent = `${contentInput.value.length} حرف`;
+          contentInput.dispatchEvent(new Event('input'));
         }
         
         const titleEl = document.getElementById('page-title');
@@ -51,7 +186,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     if(!editId) {
        document.getElementById('btn-text').textContent = 'إرسال القصة للمراجعة';
+       // Load draft only if not editing
+       setTimeout(() => loadDraft(), 100);
     }
+  } else {
+    // If no edit ID, load draft immediately
+    setTimeout(() => loadDraft(), 100);
   }
 });
 
@@ -71,6 +211,19 @@ document.getElementById('submit-form').addEventListener('submit', async (e) => {
     if (category) finalContent += `**التصنيف:** ${category}\n`;
     if (tags) finalContent += `**الوسوم:** ${tags}\n`;
   }
+  
+  if (!selectedHorrorType) {
+    const msgEl = document.getElementById('status-msg');
+    msgEl.innerHTML = UIErrorState('يرجى اختيار نوع الرعب للقصة قبل الإرسال.');
+    msgEl.classList.remove('hidden');
+    msgEl.className = 'mt-8 p-4 rounded-lg text-center font-bold text-sm border flex items-center justify-center gap-2';
+    return;
+  }
+  
+  const suggestedContentWarningInput = document.getElementById('suggestedContentWarning');
+  const suggestedContentWarningNoteInput = document.getElementById('suggestedContentWarningNote');
+  const isWarningChecked = suggestedContentWarningInput ? suggestedContentWarningInput.checked : false;
+  const warningNote = isWarningChecked && suggestedContentWarningNoteInput ? suggestedContentWarningNoteInput.value.trim() : null;
   
   const btn = document.getElementById('btn-submit');
   const btnText = document.getElementById('btn-text');
@@ -95,12 +248,19 @@ document.getElementById('submit-form').addEventListener('submit', async (e) => {
         title: storyTitle,
         content: finalContent,
         status: 'submitted', // change back to submitted for re-review
+        suggestedHorrorType: selectedHorrorType,
+        suggestedContentWarning: isWarningChecked,
+        suggestedContentWarningNote: warningNote,
+        estimatedReadingTime: estimatedReadingTime,
         updatedAt: serverTimestamp()
       });
       sessionStorage.removeItem('editSubmissionId');
       editId = null;
       document.getElementById('submit-form').reset();
       document.getElementById('char-count').textContent = '0 حرف';
+      const readingTimeDisplay = document.getElementById('reading-time');
+      if (readingTimeDisplay) readingTimeDisplay.textContent = 'مدة القراءة: 1 دقيقة';
+      localStorage.removeItem(DRAFT_KEY);
       
       msgEl.innerHTML = UISuccessState('تم تعديل قصتك وإعادة إرسالها للمراجعة بنجاح!');
       msgEl.classList.remove('hidden');
@@ -116,11 +276,18 @@ document.getElementById('submit-form').addEventListener('submit', async (e) => {
         content: finalContent,
         uid: user ? user.uid : null,
         status: 'submitted',
+        suggestedHorrorType: selectedHorrorType,
+        suggestedContentWarning: isWarningChecked,
+        suggestedContentWarningNote: warningNote,
+        estimatedReadingTime: estimatedReadingTime,
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       });
       document.getElementById('submit-form').reset();
       document.getElementById('char-count').textContent = '0 حرف';
+      const readingTimeDisplay = document.getElementById('reading-time');
+      if (readingTimeDisplay) readingTimeDisplay.textContent = 'مدة القراءة: 1 دقيقة';
+      localStorage.removeItem(DRAFT_KEY);
       
       msgEl.innerHTML = UISuccessState('تم إرسال قصتك بنجاح! سيتم مراجعتها قريباً من قبل الإدارة.');
       msgEl.classList.remove('hidden');
