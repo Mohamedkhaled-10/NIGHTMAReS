@@ -1,3 +1,4 @@
+// DEPRECATED - Legacy Realtime Database script, confirmed unused as of August 2026. Kept for reference only. Do not import.
 const db = firebase.database();
 
 function saveCard(index, data) {
