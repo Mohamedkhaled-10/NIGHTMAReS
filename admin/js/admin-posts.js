@@ -371,9 +371,6 @@ export async function deletePost(id, btnElement) {
       await logAdminAction('delete_post', 'post', id, 'قام بحذف محتوى (مقال/قصة)', 'محتوى ' + id);
       isTabLoaded[currentPostsTab] = false;
       loadPosts(false, true);
-    }
-
-
     } catch (e) {
       showToast({ type: 'error', message: 'فشل الحذف. تأكد من أن حسابك يمتلك صلاحيات الإدارة.' });
       console.error(e);

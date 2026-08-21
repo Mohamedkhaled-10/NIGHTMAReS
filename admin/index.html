@@ -11,6 +11,13 @@
   <meta name="twitter:card" content="summary_large_image">
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script>
+    const _origWarn = console.warn;
+    console.warn = function(...args) {
+      if (typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com should not be used in production')) return;
+      _origWarn.apply(console, args);
+    };
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -230,38 +237,52 @@
         </div>
       </div>
 
-      <!-- Reports View -->
+            <!-- Reports View -->
       <div id="view-reports" class="bg-white rounded-lg shadow hidden">
-        <div class="p-4 flex gap-4 border-b">
-          <select id="report-filter-status" class="border p-2 rounded">
-            <option value="pending">قيد الانتظار (Pending)</option>
-            <option value="reviewing">قيد المراجعة (Reviewing)</option>
-            <option value="resolved">محلول (Resolved)</option>
-            <option value="rejected">مرفوض (Rejected)</option>
-          </select>
-          <button id="btn-refresh-reports" class="bg-gray-800 text-white px-4 py-2.5 rounded">تحديث</button>
+        <div class="p-4 border-b flex flex-wrap gap-4 justify-between items-center bg-gray-50 rounded-t-lg">
+          <div class="flex gap-4 flex-1">
+            <button class="report-tab-btn active px-4 py-2 font-bold text-red-600 border-b-2 border-red-600 transition" data-status="pending">قيد الانتظار</button>
+            <button class="report-tab-btn px-4 py-2 font-bold text-gray-500 hover:text-gray-800 transition" data-status="reviewing">قيد المراجعة</button>
+            <button class="report-tab-btn px-4 py-2 font-bold text-gray-500 hover:text-gray-800 transition" data-status="resolved">محلول</button>
+            <button class="report-tab-btn px-4 py-2 font-bold text-gray-500 hover:text-gray-800 transition" data-status="rejected">مرفوض</button>
+          </div>
+        </div>
+        <div class="p-4 bg-white border-b flex flex-wrap gap-4 justify-between items-center">
+          <div class="flex flex-wrap gap-3 items-center flex-1">
+            <select id="report-filter-target-type" class="border p-2 rounded text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+              <option value="all">كل الأهداف</option>
+              <option value="content">منشور / مقال</option>
+              <option value="comment">تعليق</option>
+              <option value="user">مستخدم / كاتب</option>
+            </select>
+            <input type="text" id="search-reports" placeholder="بحث بالسبب، التفاصيل، أو معرف الهدف..." class="border p-2 rounded w-full md:w-1/3 text-sm focus:outline-none focus:ring-2 focus:ring-red-500">
+          </div>
+          <button id="btn-refresh-reports" class="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 transition text-sm font-semibold">تحديث</button>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-right border-collapse">
             <thead>
-              <tr class="bg-gray-50 border-b">
-                <th class="px-6 py-3 text-gray-500 font-semibold">التاريخ</th>
-                <th class="px-6 py-3 text-gray-500 font-semibold">النوع</th>
-                <th class="px-6 py-3 text-gray-500 font-semibold">المبلغ (User ID)</th>
-                
-                <th class="px-6 py-3 text-gray-500 font-semibold">الحالة</th>
-                <th class="px-6 py-3 text-gray-500 font-semibold">إجراءات</th>
+              <tr class="bg-gray-100 border-b">
+                <th class="px-4 py-3 text-gray-600 font-semibold w-28">التاريخ</th>
+                <th class="px-4 py-3 text-gray-600 font-semibold w-24">نوع الهدف</th>
+                <th class="px-4 py-3 text-gray-600 font-semibold w-48">الهدف المُبلَّغ عنه</th>
+                <th class="px-4 py-3 text-gray-600 font-semibold">السبب والتفاصيل</th>
+                <th class="px-4 py-3 text-gray-600 font-semibold w-28">المُبلِّغ</th>
+                <th class="px-4 py-3 text-gray-600 font-semibold w-24">الحالة</th>
+                <th class="px-4 py-3 text-gray-600 font-semibold w-40">إجراءات</th>
               </tr>
             </thead>
-            <tbody id="reports-table-body"></tbody>
+            <tbody id="reports-table-pending"></tbody>
+            <tbody id="reports-table-reviewing" class="hidden"></tbody>
+            <tbody id="reports-table-resolved" class="hidden"></tbody>
+            <tbody id="reports-table-rejected" class="hidden"></tbody>
           </table>
           <div id="loading-indicator-reports" class="p-8 text-center text-gray-500 hidden">جارِ تحميل التبليغات...</div>
+        </div>
         <div class="p-4 text-center border-t hidden" id="btn-load-reports-container">
           <button id="btn-load-reports" class="px-6 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200 transition font-semibold">تحميل المزيد</button>
         </div>
-        </div>
       </div>
-
       <!-- Audit Logs View -->
       <div id="view-audit" class="bg-white rounded-lg shadow hidden">
         <div class="overflow-x-auto">
@@ -328,26 +349,80 @@
         </div>
 
       <!-- Notifications View -->
+      <!-- Notifications View -->
       <div id="view-notifications" class="bg-white rounded-lg shadow p-6 hidden">
-        <h3 class="text-2xl font-bold mb-6">إرسال إشعار عاجل</h3>
-        <form id="notif-form" class="space-y-4 max-w-lg">
+        <h3 class="text-2xl font-bold mb-6">إرسال إشعار</h3>
+        <form id="notif-form" class="space-y-5 max-w-xl">
+          
+          <!-- Recipient Selection -->
           <div>
-            <label class="block mb-1 font-semibold">محتوى الإشعار</label>
-            <textarea id="notif-text" class="w-full border rounded p-2" required rows="3"></textarea>
+            <label class="block mb-2 font-bold text-gray-700">نوع المستلم</label>
+            <div class="grid grid-cols-3 gap-3">
+              <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 transition">
+                <input type="radio" name="notif-target-type" value="all" checked class="text-red-600 focus:ring-red-500">
+                <span class="text-sm font-semibold">الكل (عام)</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 transition">
+                <input type="radio" name="notif-target-type" value="single" class="text-red-600 focus:ring-red-500">
+                <span class="text-sm font-semibold">مستخدم واحد</span>
+              </label>
+              <label class="flex items-center gap-2 p-3 border rounded-lg cursor-pointer hover:bg-gray-50 has-[:checked]:border-red-600 has-[:checked]:bg-red-50 transition">
+                <input type="radio" name="notif-target-type" value="multiple" class="text-red-600 focus:ring-red-500">
+                <span class="text-sm font-semibold">عدة مستخدمين</span>
+              </label>
+            </div>
           </div>
+
+          <!-- User Search / Multi-select Container -->
+          <div id="notif-user-selection-container" class="border rounded-lg p-4 bg-gray-50 space-y-3 hidden">
+            <label class="block font-semibold text-sm text-gray-700">
+              <span id="notif-user-search-label">البحث عن المستخدم وتحديده</span>
+            </label>
+            <div class="relative">
+              <input type="text" id="notif-user-search-input" placeholder="ابحث بالاسم، البريد الإلكتروني، أو الـ UID..." class="w-full border rounded-lg p-2.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-red-500">
+              <div id="notif-user-search-spinner" class="absolute left-3 top-3 hidden text-gray-400">
+                <i class="fas fa-spinner fa-spin"></i>
+              </div>
+            </div>
+
+            <!-- Selected Users Badges -->
+            <div id="notif-selected-users-list" class="flex flex-wrap gap-2 pt-1 min-h-[32px]">
+              <span class="text-xs text-gray-400 italic py-1" id="notif-no-users-hint">لم يتم تحديد مستخدمين بعد</span>
+            </div>
+
+            <!-- Search Results Dropdown / Box -->
+            <div id="notif-user-search-results" class="max-h-48 overflow-y-auto border rounded-lg bg-white shadow-inner divide-y hidden">
+              <!-- JS Injected items -->
+            </div>
+          </div>
+
           <div>
-            <label class="block mb-1 font-semibold">رابط التوجيه (اختياري)</label>
-            <input type="text" id="notif-link" class="w-full border rounded p-2">
+            <label class="block mb-1 font-semibold text-gray-700">عنوان الإشعار (اختياري)</label>
+            <input type="text" id="notif-title" placeholder="إعلان إداري جديد" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-red-500">
           </div>
+
           <div>
-            <label class="block mb-1 font-semibold">رابط الصورة (اختياري)</label>
-            <input type="url" id="notif-image" class="w-full border rounded p-2">
+            <label class="block mb-1 font-semibold text-gray-700">محتوى الإشعار <span class="text-red-500">*</span></label>
+            <textarea id="notif-text" class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-red-500" required rows="3" placeholder="اكتب نص الإشعار هنا..."></textarea>
           </div>
-          <button type="submit" id="btn-send-notif" class="bg-red-600 text-white px-6 py-2.5 rounded hover:bg-red-700">إرسال الإشعار الآن</button>
+
+          <div>
+            <label class="block mb-1 font-semibold text-gray-700">رابط التوجيه (اختياري)</label>
+            <input type="text" id="notif-link" placeholder="/story/example-slug أو https://..." class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-red-500" dir="ltr">
+          </div>
+
+          <div>
+            <label class="block mb-1 font-semibold text-gray-700">رابط الصورة (اختياري)</label>
+            <input type="url" id="notif-image" placeholder="https://..." class="w-full border rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-red-500" dir="ltr">
+          </div>
+
+          <button type="submit" id="btn-send-notif" class="w-full sm:w-auto bg-red-600 text-white px-8 py-2.5 rounded-lg hover:bg-red-700 font-bold transition flex items-center justify-center gap-2">
+            <i class="fas fa-paper-plane"></i>
+            <span>إرسال الإشعار الآن</span>
+          </button>
         </form>
         <p id="notif-status" class="mt-4 text-green-600 font-bold hidden"></p>
       </div>
-
 
       <!-- Series View -->
       <div id="view-series" class="bg-white rounded-lg shadow p-6 hidden">

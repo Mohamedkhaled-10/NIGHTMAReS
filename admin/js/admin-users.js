@@ -5,12 +5,17 @@ let lastDoc_Users = null;
 
 export async function loadUsersAdmin(isLoadMore = false) {
   const tbody = document.getElementById('users-table-body');
+  if (!tbody) return;
+
   if (!isLoadMore) {
     tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4">جاري التحميل...</td></tr>';
     lastDoc_Users = null;
   } else {
-    document.getElementById('btn-load-users').textContent = "جاري التحميل...";
-    document.getElementById('btn-load-users').disabled = true;
+    const btn = document.getElementById('btn-load-users');
+    if (btn) {
+      btn.textContent = "جاري التحميل...";
+      btn.disabled = true;
+    }
   }
 
   const roleFilter = document.getElementById('filter-user-role')?.value || 'all';
@@ -34,9 +39,8 @@ export async function loadUsersAdmin(isLoadMore = false) {
     try {
       snapshot = await getDocs(query(collection(db, "users"), ...constraints));
     } catch(err) {
-      if (err.message.includes('index')) {
+      if (err.message && err.message.includes('index')) {
         console.warn("Missing index for query, falling back to basic query", err.message);
-        // Fallback to basic order if composite index fails
         constraints = [orderBy('createdAt', 'desc'), limit(50)];
         if (isLoadMore && lastDoc_Users) constraints.push(startAfter(lastDoc_Users));
         snapshot = await getDocs(query(collection(db, "users"), ...constraints));
@@ -62,23 +66,23 @@ export async function loadUsersAdmin(isLoadMore = false) {
       renderedIds.add(id);
       
       const data = docSnap.data();
-      if (document.getElementById('users-table-body').querySelector(`tr[data-id="${id}"]`)) return; 
-      
+      if (tbody.querySelector(`tr[data-id="${id}"]`)) return;
+       
       // Client side filtering for fallback
       const dataRole = data.role || 'user';
       const dataStatus = data.status || 'active';
-      if (roleFilter !== 'all' if (roleFilter !== 'all' && data.role !== roleFilter) return;if (roleFilter !== 'all' && data.role !== roleFilter) return; dataRole !== roleFilter) return;
-      if (statusFilter !== 'all' if (statusFilter !== 'all' && data.status !== statusFilter) return;if (statusFilter !== 'all' && data.status !== statusFilter) return; dataStatus !== statusFilter) return;
+      if (roleFilter !== 'all' && dataRole !== roleFilter) return;
+      if (statusFilter !== 'all' && dataStatus !== statusFilter) return;
 
       const tr = document.createElement('tr');
       const nameText = (data.displayName || 'بدون اسم');
       const emailText = (data.email || '');
-      const dateText = data.createdAt ? new Date(data.createdAt.toMillis()).toLocaleDateString('ar-EG') : '-';
+      const dateText = data.createdAt ? new Date(data.createdAt.toMillis ? data.createdAt.toMillis() : data.createdAt).toLocaleDateString('ar-EG') : '-';
       
       tr.className = 'border-b hover:bg-gray-50';
       tr.dataset.id = id;
-      tr.dataset.role = data.role || 'user';
-      tr.dataset.status = data.status || 'active';
+      tr.dataset.role = dataRole;
+      tr.dataset.status = dataStatus;
       
       tr.innerHTML = `
         <td class="px-4 py-4 text-center">
@@ -115,11 +119,14 @@ export async function loadUsersAdmin(isLoadMore = false) {
 
   } catch(e) {
     console.error("Error loading users:", e);
-    if(!isLoadMore) tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-red-500">حدث خطأ</td></tr>';
+    if (!isLoadMore && tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center p-4 text-red-500">حدث خطأ</td></tr>';
   } finally {
     if (isLoadMore) {
-      document.getElementById('btn-load-users').textContent = "تحميل المزيد";
-      document.getElementById('btn-load-users').disabled = false;
+      const btn = document.getElementById('btn-load-users');
+      if (btn) {
+        btn.textContent = "تحميل المزيد";
+        btn.disabled = false;
+      }
     }
     updateBatchButtonState();
   }
@@ -192,7 +199,7 @@ document.getElementById('btn-batch-ban-users')?.addEventListener('click', async 
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التنفيذ...';
 
   try {
-    const { doc, updateDoc, writeBatch } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
+    const { doc, writeBatch } = await import("https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js");
     const { logAdminAction } = await import('./admin-core.js');
     
     const batch = writeBatch(db);
@@ -216,7 +223,8 @@ document.getElementById('btn-batch-ban-users')?.addEventListener('click', async 
     );
     
     showToast({ type: 'success', message: `تم حظر ${checked.length} مستخدمين بنجاح.` });
-    document.getElementById('selectAllUsers').checked = false;
+    const selectAll = document.getElementById('selectAllUsers');
+    if (selectAll) selectAll.checked = false;
     loadUsersAdmin();
   } catch(e) {
     showToast({ type: 'error', message: 'حدث خطأ أثناء التنفيذ الجماعي.' });
