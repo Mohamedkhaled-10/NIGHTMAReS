@@ -42,15 +42,15 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    if (listStories.children.length === 0) listStories.innerHTML = '<li class="text-gray-500 list-none">لا توجد قصص.</li>';
-    if (listNews.children.length === 0) listNews.innerHTML = '<li class="text-gray-500 list-none">لا توجد أخبار.</li>';
-    if (listVideos.children.length === 0) listVideos.innerHTML = '<li class="text-gray-500 list-none">لا توجد فيديوهات.</li>';
+    if (listStories.children.length === 0) listStories.innerHTML = '<li class="text-[var(--color-text-meta)] list-none">لا توجد قصص.</li>';
+    if (listNews.children.length === 0) listNews.innerHTML = '<li class="text-[var(--color-text-meta)] list-none">لا توجد أخبار.</li>';
+    if (listVideos.children.length === 0) listVideos.innerHTML = '<li class="text-[var(--color-text-meta)] list-none">لا توجد فيديوهات.</li>';
 
     loading.classList.add('hidden');
     content.classList.remove('hidden');
 
   } catch (error) {
     console.error("Error loading sitemap:", error);
-    loading.innerHTML = '<p class="text-red-500 font-bold">حدث خطأ أثناء جلب خريطة الموقع.</p>';
+    loading.innerHTML = '<p class="text-[var(--color-accent)] font-bold">حدث خطأ أثناء جلب خريطة الموقع.</p>';
   }
 });

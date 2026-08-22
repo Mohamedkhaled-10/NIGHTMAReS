@@ -142,13 +142,13 @@ function renderList(items, container, type) {
     let statValue = 0;
     
     if (type === 'views') {
-      statIcon = '<i class="fas fa-eye text-gray-500"></i>';
+      statIcon = '<i class="fas fa-eye text-[var(--color-text-meta)]"></i>';
       statValue = item.views || 0;
     } else if (type === 'likes') {
-      statIcon = '<i class="fas fa-heart text-red-900"></i>';
+      statIcon = '<i class="fas fa-heart text-[var(--color-accent)]"></i>';
       statValue = item.likesCount || 0;
     } else {
-      statIcon = '<i class="fas fa-comment text-gray-500"></i>';
+      statIcon = '<i class="fas fa-comment text-[var(--color-text-meta)]"></i>';
       statValue = item.commentsCount || 0;
     }
 
@@ -159,27 +159,27 @@ function renderList(items, container, type) {
     div.href = link;
     
     if (index === 0) {
-      div.className = 'group relative block overflow-hidden rounded-xl border border-red-900/30 mb-4 bg-[#050202]';
+      div.className = 'group relative block overflow-hidden rounded-xl border border-[var(--color-border-subtle)] mb-4 bg-[var(--color-bg-surface)]';
       div.innerHTML = `
-        <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-[#050202]/60 to-transparent z-10 group-hover:from-red-950/80 transition-colors"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-base)] via-[var(--color-bg-base)]/60 to-transparent z-10 group-hover:from-[var(--color-accent)]/20 transition-colors"></div>
         <img src="${item.coverImage || '/assets/images/icon-white.png'}" class="w-full h-48 object-cover opacity-60 group-hover:opacity-80 transition-opacity" alt="${item.title}" loading="lazy">
         <div class="absolute inset-x-0 bottom-0 p-4 z-20 flex flex-col gap-2">
-          <div class="flex items-center gap-3 text-[11px] text-gray-400 font-bold tracking-wider">
-            <span class="bg-red-900/40 text-red-300 px-2 py-0.5 rounded">${typeLabel}</span>
+          <div class="flex items-center gap-3 text-[11px] text-[var(--color-text-meta)] font-bold tracking-wider">
+            <span class="bg-accent-15 text-[var(--color-accent)] px-2 py-0.5 rounded">${typeLabel}</span>
             <span class="flex items-center gap-1.5">${statIcon} ${statValue}</span>
           </div>
-          <h4 class="text-white text-base font-bold leading-snug group-hover:text-red-400 transition-colors line-clamp-2">${item.title}</h4>
+          <h4 class="text-[var(--color-text-primary)] text-base font-bold leading-snug group-hover:text-[var(--color-accent)] transition-colors line-clamp-2">${item.title}</h4>
         </div>
       `;
     } else {
-      div.className = 'flex items-start gap-4 p-3 bg-transparent hover:bg-black/40 rounded-lg transition group border-b border-red-900/10 last:border-0';
+      div.className = 'flex items-start gap-4 p-3 bg-transparent hover:bg-[var(--color-accent)]/5 rounded-lg transition group border-b border-[var(--color-border-subtle)] last:border-0';
       div.innerHTML = `
-        <div class="text-xl font-black text-red-950/40 group-hover:text-red-900 transition w-4 text-center mt-0.5">
+        <div class="text-xl font-black text-[var(--color-text-meta)] group-hover:text-[var(--color-accent)] transition w-4 text-center mt-0.5">
           ${index + 1}
         </div>
         <div class="flex-1 min-w-0 flex flex-col gap-1.5">
-          <h4 class="text-gray-300 text-sm font-bold line-clamp-2 group-hover:text-white transition-colors leading-snug">${item.title}</h4>
-          <div class="flex items-center gap-3 text-[11px] text-gray-500 font-medium">
+          <h4 class="text-[var(--color-text-secondary)] text-sm font-bold line-clamp-2 group-hover:text-[var(--color-text-primary)] transition-colors leading-snug">${item.title}</h4>
+          <div class="flex items-center gap-3 text-[11px] text-[var(--color-text-meta)] font-medium">
             <span>${typeLabel}</span>
             <span class="flex items-center gap-1">${statIcon} ${statValue}</span>
           </div>

@@ -418,27 +418,27 @@ async function loadComments(loadMore = false) {
       const dateStr = data.createdAt ? data.createdAt.toDate().toLocaleDateString('ar-EG') : '';
       
       const el = document.createElement('div');
-      el.className = 'flex gap-5 bg-[#110808]/80 p-6 rounded-2xl border border-red-900/30 shadow-md';
+      el.className = 'flex gap-5 bg-[var(--color-bg-surface)] p-6 rounded-2xl border border-[var(--color-border-subtle)] shadow-elevation';
       
       const delBtn = (currentUser && currentUser.uid === data.authorUid)
-          ? `<button onclick="deleteComment('${docSnap.id}')" class="text-red-600 hover:text-red-400 text-sm font-bold transition-colors flex items-center gap-1.5"><i class="fas fa-trash"></i> حذف</button>`
-          : `<button onclick="openReportModal('comment', '${docSnap.id}')" class="text-gray-500 hover:text-red-500 text-sm font-bold transition-colors flex items-center gap-1.5"><i class="fas fa-flag"></i> إبلاغ</button>`;
+          ? `<button onclick="deleteComment('${docSnap.id}')" class="text-[var(--color-accent)] hover:underline text-sm font-bold transition-colors flex items-center gap-1.5"><i class="fas fa-trash"></i> حذف</button>`
+          : `<button onclick="openReportModal('comment', '${docSnap.id}')" class="text-[var(--color-text-meta)] hover:text-[var(--color-accent)] text-sm font-bold transition-colors flex items-center gap-1.5"><i class="fas fa-flag"></i> إبلاغ</button>`;
           
       el.innerHTML = `
         <a href="/author/${data.authorUid}" class="block w-12 h-12 shrink-0">
-          <img src="${data.authorPhoto}" class="w-full h-full rounded-full border border-red-900/30 object-cover shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=User'" loading="lazy" decoding="async">
+          <img src="${data.authorPhoto}" class="w-full h-full rounded-full border border-[var(--color-border-subtle)] object-cover shadow-sm" onerror="this.src='https://ui-avatars.com/api/?name=User'" loading="lazy" decoding="async">
         </a>
         <div class="flex-1">
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-3 gap-2">
-            <a href="/author/${data.authorUid}" class="text-lg font-bold text-gray-200 hover:text-red-500 transition-colors">
+            <a href="/author/${data.authorUid}" class="text-lg font-bold text-[var(--color-text-primary)] hover:text-[var(--color-accent)] transition-colors">
               ${data.authorName}
             </a>
             <div class="flex gap-4 items-center">
-              <span class="text-gray-500 text-sm font-medium">${dateStr}</span>
+              <span class="text-[var(--color-text-meta)] text-sm font-medium">${dateStr}</span>
               ${delBtn}
             </div>
           </div>
-          <p class="text-gray-300 m-0 leading-relaxed text-lg whitespace-pre-wrap">${data.text}</p>
+          <p class="text-[var(--color-text-secondary)] m-0 leading-relaxed text-lg whitespace-pre-wrap">${data.text}</p>
         </div>
       `;
       
@@ -448,14 +448,14 @@ async function loadComments(loadMore = false) {
       const loadMoreBtn = document.createElement('button');
       loadMoreBtn.id = 'btn-load-more-comments';
       loadMoreBtn.textContent = 'تحميل المزيد';
-      loadMoreBtn.className = 'w-full py-4 mt-4 bg-gray-900/50 hover:bg-gray-800 text-white font-bold rounded-xl border border-gray-700/50 transition-colors text-lg shadow-sm';
+      loadMoreBtn.className = 'w-full py-4 mt-4 bg-[var(--color-bg-surface)] hover:bg-[var(--color-bg-elevated)] text-[var(--color-text-primary)] font-bold rounded-xl border border-[var(--color-border-subtle)] transition-colors text-lg shadow-elevation';
       loadMoreBtn.onclick = () => loadComments(true);
       if(commentsList) commentsList.appendChild(loadMoreBtn);
     }
   } catch (error) {
     console.error("Error loading comments:", error);
     if (!loadMore && commentsList) {
-      commentsList.innerHTML = '<div style="text-align: center; color: #888;">تعذر تحميل التعليقات في الوقت الحالي.</div>';
+      commentsList.innerHTML = '<div class="text-center text-[var(--color-text-meta)] py-4">تعذر تحميل التعليقات في الوقت الحالي.</div>';
     }
   }
 }
@@ -572,7 +572,7 @@ if (btnSubmitReport) {
     } catch (error) {
       console.error("Report error:", error);
       msgEl.textContent = 'حدث خطأ. يرجى المحاولة لاحقاً.';
-      msgEl.className = 'text-sm mb-4 font-bold text-center text-red-500 block';
+      msgEl.className = 'text-sm mb-4 font-bold text-center text-[var(--color-accent)] block';
     } finally {
       btnSubmitReport.disabled = false;
       btnSubmitReport.textContent = 'إرسال الإبلاغ';

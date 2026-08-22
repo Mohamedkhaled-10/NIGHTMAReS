@@ -19,18 +19,14 @@ html, body {
 }
 
 body {
-  /* خلفية جديدة: تدرج عمودي بين الأخضر الداكن (#013220) والأسود */
-  background: linear-gradient(180deg, #320101, #000000);
-  background-attachment: fixed;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #fff;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
   overflow-x: hidden;
 }
 
-/* تطبيق اللون الأبيض لجميع النصوص العامة */
+/* تطبيق اللون لجميع النصوص العامة */
 body, p, li, span {
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 /* تطبيق خط مرعب للعناوين */

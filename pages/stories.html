@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('nightmares-theme');
+        var theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>القصص - NIGHTMAReS</title>
@@ -34,32 +45,32 @@
   <link rel="manifest" href="/manifest.json">
 </head>
 
-<body class="bg-[#050202] text-white overflow-x-hidden selection:bg-red-900 selection:text-white min-h-screen flex flex-col">
+<body class="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent)] selection:text-white min-h-screen flex flex-col">
   <!-- NAVBAR_PLACEHOLDER -->
   
   <main class="grow flex-col w-full pt-20 md:pt-24 pb-12 md:pb-16 " >
     <!-- Premium Header -->
-    <section class="relative w-full overflow-hidden border-b border-red-900/20 bg-[#0a0505] py-20 lg:py-28">
+    <section class="relative w-full overflow-hidden border-b border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] py-20 lg:py-28">
       <!-- Atmospheric Background Elements -->
       <div class="absolute inset-0 z-0">
-        <div class="absolute top-[-50%] left-[-10%] w-[70%] h-[150%] bg-red-900/10 blur-[120px] rounded-full pointer-events-none"></div>
-        <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[100%] bg-[#050202] blur-[80px] pointer-events-none"></div>
+        <div class="absolute top-[-50%] left-[-10%] w-[70%] h-[150%] bg-accent-10 blur-[120px] rounded-full pointer-events-none"></div>
+        <div class="absolute bottom-[-20%] right-[-10%] w-[50%] h-[100%] bg-[var(--color-bg-base)] blur-[80px] pointer-events-none"></div>
         <!-- Grid pattern overlay -->
         <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSkiLz48L3N2Zz4=')] opacity-50"></div>
       </div>
       
       <div class="container mx-auto px-6 relative z-10 text-center max-w-4xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-red-900/30 bg-red-950/30 mb-6">
-          <i class="fa-solid fa-book-skull text-red-500 text-xs"></i>
-          <span class="text-red-400 text-[10px] font-bold tracking-widest uppercase">كوابيس مكتوبة</span>
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent-30 bg-accent-10 mb-6">
+          <i class="fa-solid fa-book-skull text-[var(--color-accent)] text-xs"></i>
+          <span class="text-[var(--color-accent)] text-[10px] font-bold tracking-widest uppercase">كوابيس مكتوبة</span>
         </div>
-        <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight drop-shadow-2xl">
-          قصص <span class="text-transparent bg-clip-text bg-gradient-to-l from-red-600 to-red-900">الرعب</span>
+        <h1 class="text-4xl md:text-6xl font-black text-[var(--color-text-primary)] mb-6 tracking-tight drop-shadow-2xl">
+          قصص <span class="text-transparent bg-clip-text bg-gradient-to-l from-[var(--color-accent)] to-[var(--color-accent)]">الرعب</span>
         </h1>
-        <p class="text-gray-400 text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium mb-8">
+        <p class="text-[var(--color-text-secondary)] text-base md:text-lg leading-relaxed max-w-2xl mx-auto font-medium mb-8">
           اكتشف حكايات لا تنتهي عند إغلاق الصفحة... تصفح أرشيفنا المتنامي من القصص المروعة.
         </p>
-        <button id="btn-random-story" class="inline-flex items-center gap-2 px-6 py-3 bg-red-900 hover:bg-red-800 text-white font-bold rounded-lg transition-colors shadow-lg shadow-red-900/20">
+        <button id="btn-random-story" class="inline-flex items-center gap-2 px-6 py-3 bg-[var(--color-accent)] hover:bg-[var(--color-accent)] text-white font-bold rounded-lg transition-colors shadow-lg shadow-[var(--color-accent)]/20">
           <i class="fa-solid fa-dice"></i> قصة عشوائية
         </button>
       </div>
@@ -67,10 +78,10 @@
 
     <div class="container mx-auto px-4 md:px-8 lg:px-12 py-12 max-w-7xl">
       <!-- Smart Content Discovery -->
-      <div class="mb-12 relative z-20 -mt-8 md:-mt-12 bg-[#050202]">
+      <div class="mb-12 relative z-20 -mt-8 md:-mt-12 bg-transparent">
         
         <!-- Category Chips -->
-        <div id="category-chips" class="flex overflow-x-auto hide-scrollbar items-center gap-3 pb-2 mb-2">
+        <div id="category-chips" class="filter-scroll-container hide-scrollbar flex items-center gap-2.5 pb-2 mb-2">
           <!-- The hidden select is kept so the JS still works seamlessly, but we'll bind chips to it -->
           <select id="filter-category" class="hidden">
             <option value="">الكل</option>
@@ -83,16 +94,16 @@
             <option value="games">ألعاب</option>
           </select>
           
-          <button type="button" data-val="" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-red-900 bg-red-900/20 text-white font-bold text-sm transition-all shadow-[0_0_15px_rgba(220,38,38,0.15)]">الكل</button>
-          <button type="button" data-val="horror" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">رعب</button>
-          <button type="button" data-val="mystery" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">غموض</button>
-          <button type="button" data-val="true_crime" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">جرائم حقيقية</button>
-          <button type="button" data-val="paranormal" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">ما وراء الطبيعة</button>
-          <button type="button" data-val="legends" class="category-chip shrink-0 px-6 py-2.5 rounded-full border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200">أساطير</button>
+          <button type="button" data-val="" class="category-chip shrink-0 min-h-[44px] px-5 py-2 rounded-full border border-[var(--color-accent)] bg-accent-20 text-[var(--color-text-primary)] font-bold text-sm transition-all is-active">الكل</button>
+          <button type="button" data-val="horror" class="category-chip shrink-0 min-h-[44px] px-5 py-2 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all">رعب</button>
+          <button type="button" data-val="mystery" class="category-chip shrink-0 min-h-[44px] px-5 py-2 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all">غموض</button>
+          <button type="button" data-val="true_crime" class="category-chip shrink-0 min-h-[44px] px-5 py-2 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all">جرائم حقيقية</button>
+          <button type="button" data-val="paranormal" class="category-chip shrink-0 min-h-[44px] px-5 py-2 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all">ما وراء الطبيعة</button>
+          <button type="button" data-val="legends" class="category-chip shrink-0 min-h-[44px] px-5 py-2 rounded-full border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all">أساطير</button>
         </div>
 
         <!-- Horror Type Chips -->
-        <div id="horror-type-chips" class="flex overflow-x-auto hide-scrollbar items-center gap-3 pb-4 mb-2">
+        <div id="horror-type-chips" class="filter-scroll-container hide-scrollbar flex items-center gap-2.5 pb-4 mb-2">
           <select id="filter-horror-type" class="hidden">
             <option value="">الكل (أنواع الرعب)</option>
             <option value="ghosts">أشباح</option>
@@ -103,59 +114,60 @@
             <option value="other">أخرى</option>
           </select>
           
-          <button type="button" data-val="" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-red-900 bg-red-900/20 text-white font-bold text-sm transition-all flex items-center gap-2"><span>الكل</span></button>
-          <button type="button" data-val="ghosts" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>👻</span> أشباح</button>
-          <button type="button" data-val="jinn" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>🕯️</span> جن</button>
-          <button type="button" data-val="urban_legend" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>🏙️</span> أساطير</button>
-          <button type="button" data-val="psychological" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>🧠</span> رعب نفسي</button>
-          <button type="button" data-val="true_story" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>📰</span> حقيقة</button>
-          <button type="button" data-val="other" class="horror-chip shrink-0 px-5 py-2 rounded-lg border border-gray-800/60 bg-[#0a0505] text-gray-400 font-semibold text-sm transition-all hover:border-red-900/50 hover:text-gray-200 flex items-center gap-2"><span>🎭</span> أخرى</button>
+          <button type="button" data-val="" class="horror-chip shrink-0 min-h-[44px] px-4 py-2 rounded-xl border border-[var(--color-accent)] bg-accent-20 text-[var(--color-text-primary)] font-bold text-sm transition-all flex items-center justify-center gap-2 is-active"><span>الكل</span></button>
+          <button type="button" data-val="ghosts" class="horror-chip shrink-0 min-h-[44px] px-4 py-2 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-ghost text-[var(--color-accent)] text-sm"></i> <span>أشباح</span></button>
+          <button type="button" data-val="jinn" class="horror-chip shrink-0 min-h-[44px] px-4 py-2 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-fire text-[var(--color-accent)] text-sm"></i> <span>جن</span></button>
+          <button type="button" data-val="urban_legend" class="horror-chip shrink-0 min-h-[44px] px-4 py-2 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-city text-[var(--color-accent)] text-sm"></i> <span>أساطير</span></button>
+          <button type="button" data-val="psychological" class="horror-chip shrink-0 min-h-[44px] px-4 py-2 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-brain text-[var(--color-accent)] text-sm"></i> <span>رعب نفسي</span></button>
+          <button type="button" data-val="true_story" class="horror-chip shrink-0 min-h-[44px] px-4 py-2 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-newspaper text-[var(--color-accent)] text-sm"></i> <span>حقيقة</span></button>
+          <button type="button" data-val="other" class="horror-chip shrink-0 min-h-[44px] px-4 py-2 rounded-xl border border-[var(--color-border-subtle)] bg-[var(--color-bg-surface)] text-[var(--color-text-secondary)] font-semibold text-sm transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-masks-theater text-[var(--color-accent)] text-sm"></i> <span>أخرى</span></button>
         </div>
+      </div>
 
-        <form id="stories-filters" class="flex flex-col md:flex-row items-center gap-4 w-full p-4 bg-[#0a0505]/80 border border-red-900/20 rounded-2xl backdrop-blur-md">
+        <form id="stories-filters" class="flex flex-wrap items-center gap-3 md:gap-4 w-full p-4 md:p-5 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl shadow-elevation backdrop-blur-md">
           
           <!-- Tag Search -->
-          <div class="relative w-full md:flex-1">
-            <i class="fa-solid fa-hashtag absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-            <input type="text" id="filter-tag" placeholder="ابحث بكلمة دلالية..." class="w-full pr-10 pl-4 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium placeholder-gray-600">
+          <div class="relative w-full lg:flex-1 min-w-[220px]">
+            <i class="fa-solid fa-hashtag absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-meta)] text-sm"></i>
+            <input type="text" id="filter-tag" placeholder="ابحث بكلمة دلالية..." class="w-full pr-10 pl-4 py-3 bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded-xl text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)] transition-all text-sm font-medium placeholder-[var(--color-text-meta)]">
           </div>
 
           <!-- Reading Time Filter -->
-          <div class="relative w-full md:w-48 shrink-0">
-            <i class="fa-solid fa-clock absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-            <select id="filter-reading-time" class="w-full appearance-none pr-10 pl-10 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium cursor-pointer">
+          <div class="relative w-full sm:w-[calc(50%-0.5rem)] md:w-44 lg:w-48 shrink-0 min-w-[150px]">
+            <i class="fa-solid fa-clock absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-meta)] text-sm"></i>
+            <select id="filter-reading-time" class="w-full appearance-none pr-10 pl-10 py-3 bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded-xl text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)] transition-all text-sm font-medium cursor-pointer">
               <option value="">مدة القراءة (الكل)</option>
               <option value="short">قصيرة (&lt; 5 د)</option>
               <option value="medium">متوسطة (5-15 د)</option>
               <option value="long">طويلة (&gt; 15 د)</option>
             </select>
-            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-600 text-xs">
+            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[var(--color-text-meta)] text-xs">
               <i class="fa-solid fa-chevron-down"></i>
             </div>
           </div>
 
           <!-- Archive Filter -->
-          <div class="relative w-full md:w-48 shrink-0">
-            <i class="fa-solid fa-calendar-alt absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-            <input type="month" id="filter-archive" class="w-full appearance-none pr-10 pl-4 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium cursor-pointer" style="color-scheme: dark;">
+          <div class="relative w-full sm:w-[calc(50%-0.5rem)] md:w-44 lg:w-48 shrink-0 min-w-[150px]">
+            <i class="fa-solid fa-calendar-alt absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-meta)] text-sm"></i>
+            <input type="month" id="filter-archive" class="w-full appearance-none pr-10 pl-4 py-3 bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded-xl text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)] transition-all text-sm font-medium cursor-pointer">
           </div>
 
           <!-- Sort Filter -->
-          <div class="relative w-full md:w-56 shrink-0">
-            <i class="fa-solid fa-sort absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 text-sm"></i>
-            <select id="filter-sort" class="w-full appearance-none pr-10 pl-10 py-3 bg-[#050202] border border-gray-800 rounded-xl text-gray-200 focus:border-red-700 focus:outline-none focus:ring-1 focus:ring-red-900/50 transition-all text-sm font-medium cursor-pointer">
+          <div class="relative w-full sm:w-full md:w-52 lg:w-56 shrink-0 min-w-[170px]">
+            <i class="fa-solid fa-sort absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-text-meta)] text-sm"></i>
+            <select id="filter-sort" class="w-full appearance-none pr-10 pl-10 py-3 bg-[var(--color-bg-base)] border border-[var(--color-border-subtle)] rounded-xl text-[var(--color-text-primary)] focus:border-[var(--color-accent)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)] transition-all text-sm font-medium cursor-pointer">
               <option value="desc">الأحدث أولاً</option>
               <option value="asc">الأقدم أولاً</option>
               <option value="popular">الأكثر مشاهدة</option>
               <option value="weekly_popular">الأكثر قراءة هذا الأسبوع</option>
             </select>
-            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-600 text-xs">
+            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[var(--color-text-meta)] text-xs">
               <i class="fa-solid fa-chevron-down"></i>
             </div>
           </div>
           
           <!-- Clear Filters -->
-          <button type="button" id="clear-filters-btn" class="hidden w-full md:w-auto px-6 py-3 bg-transparent text-gray-400 hover:text-red-400 rounded-xl border border-gray-800 hover:border-red-900/50 transition-all text-sm font-semibold flex items-center justify-center gap-2 shrink-0">
+          <button type="button" id="clear-filters-btn" class="hidden w-full md:w-auto px-6 py-3 bg-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] rounded-xl border border-[var(--color-border-subtle)] hover:border-accent-50 transition-all text-sm font-semibold flex items-center justify-center gap-2 shrink-0">
             <i class="fa-solid fa-times"></i> مسح
           </button>
           
@@ -171,11 +183,11 @@
       
       <!-- Load More -->
       <div id="load-more-container" class="mt-16 text-center hidden">
-        <button id="load-more-btn" class="group relative px-8 py-3 bg-[#0a0505] border border-red-900/30 text-gray-300 hover:text-white rounded-full transition-all duration-300 font-bold overflow-hidden">
+        <button id="load-more-btn" class="group relative px-8 py-3 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] rounded-full transition-all duration-300 font-bold overflow-hidden">
           <span class="relative z-10 flex items-center gap-2">
             تحميل المزيد <i class="fa-solid fa-chevron-down text-sm group-hover:translate-y-1 transition-transform"></i>
           </span>
-          <div class="absolute inset-0 bg-red-900/20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
+          <div class="absolute inset-0 bg-accent-20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
         </button>
       </div>
       

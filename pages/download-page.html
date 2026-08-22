@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('nightmares-theme');
+        var theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>تحميل تطبيق NIGHTMAReS</title>
+  <link rel="stylesheet" href="/styles/main.css" />
   <link rel="stylesheet" href="/styles/download-page.css" />
     <!-- أيقونة المتصفح الأساسية -->
 <!-- أيقونات مختلفة لحجم متعدد -->
@@ -11,15 +23,17 @@
 <style>
     body {
       font-family: 'Tajawal', sans-serif;
+      background-color: var(--color-bg-base);
+      color: var(--color-text-primary);
     }
 
     .play-container {
       max-width: 1000px;
-      
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border-subtle);
       padding: 30px 20px;
       border-radius: 15px;
-      
+      box-shadow: var(--shadow-elevation);
     }
 
     .app-header {
@@ -27,7 +41,7 @@
       flex-wrap: wrap;
       align-items: center;
       gap: 20px;
-      border-bottom: 1px solid #555;
+      border-bottom: 1px solid var(--color-border-subtle);
       padding-bottom: 20px;
     }
 
@@ -35,7 +49,7 @@
       width: 100px;
       height: 100px;
       border-radius: 20px;
-      border: 2px solid #fff;
+      border: 2px solid var(--color-border-strong);
       background-size: cover;
       background-position: center;
       flex-shrink: 0;
@@ -48,29 +62,29 @@
     .app-info h1 {
       font-size: 2.2em;
       margin-bottom: 5px;
-      color: #fff;
+      color: var(--color-text-primary);
     }
 
     .app-info span {
-      color: #ccc;
+      color: var(--color-text-secondary);
       font-size: 1em;
     }
 
     .download-btn {
       margin-top: 20px;
       display: inline-block;
-      background: #7a0202;
+      background: var(--color-accent);
       color: white;
       font-size: 1.1em;
       padding: 12px 25px;
       border-radius: 10px;
       text-decoration: none;
-      box-shadow: 0 0 15px #7a0202;
+      box-shadow: var(--shadow-elevation);
       transition: background 0.3s;
     }
 
     .download-btn:hover {
-      background: #b50303;
+      background: var(--color-accent-hover);
     }
 
     .screenshots {
@@ -84,7 +98,7 @@
       width: 200px;
       border-radius: 10px;
       flex-shrink: 0;
-      border: 2px solid white;
+      border: 2px solid var(--color-border-strong);
     }
 
     .section {
@@ -94,15 +108,17 @@
     .section h2 {
       font-size: 1.6em;
       margin-bottom: 10px;
-      border-bottom: 1px solid #888;
+      border-bottom: 1px solid var(--color-border-subtle);
       padding-bottom: 10px;
       text-align: right;
+      color: var(--color-text-primary);
     }
 
     .section p, .section ul {
       text-align: right;
       font-size: 1em;
       line-height: 1.8;
+      color: var(--color-text-primary);
     }
 
     .info-grid {
@@ -113,10 +129,11 @@
     }
 
     .info-box {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--color-bg-elevated);
       padding: 10px 15px;
       border-radius: 10px;
-      border: 1px solid #444;
+      border: 1px solid var(--color-border-subtle);
+      color: var(--color-text-secondary);
     }
 
     @media (max-width: 600px) {
@@ -149,7 +166,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
 </head>
-<body class="min-h-screen flex flex-col bg-[#050202] text-white overflow-x-hidden">
+<body class="min-h-screen flex flex-col bg-[var(--color-bg-base)] text-[var(--color-text-primary)] overflow-x-hidden">
     <!-- شريط التنقل -->
     <!-- NAVBAR_PLACEHOLDER -->
 
@@ -160,7 +177,7 @@
     <div class="app-header">
       <div class="app-icon" style="background-image: url('images/icon-white.png');"></div>
       <div class="app-info">
-        <h1>NIGHTMAR<span class="text-red-600" style="color: #dc2626;">e</span>S</h1>
+        <h1>NIGHTMAR<span class="text-[var(--color-accent)]" style="color: #dc2626;">e</span>S</h1>
         <span>بواسطة NIGHTMAReS</span><br />
         <a href="apk/NIGHTMAReS.apk" download class="download-btn">تحميل التطبيق</a>
       </div>

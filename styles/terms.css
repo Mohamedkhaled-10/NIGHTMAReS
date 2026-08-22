@@ -34,16 +34,13 @@ body > main {
 }
 
 body {
-  background: linear-gradient(180deg, #320101, #000000);
-  background-attachment: fixed;
-  background-size: cover;
-  background-repeat: no-repeat;
-  color: #fff;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
   overflow-x: hidden;
 }
 
 body, p, li, span {
-  color: #fff;
+  color: var(--color-text-primary);
 }
 
 /* الخطوط للعناوين */

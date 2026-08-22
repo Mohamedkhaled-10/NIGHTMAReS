@@ -102,11 +102,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   horrorTypeBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       horrorTypeBtns.forEach(b => {
-        b.classList.remove('border-red-500', 'bg-red-950/30');
-        b.classList.add('border-red-900/30', 'bg-[#0a0505]');
+        b.classList.remove('border-[var(--color-accent)]', 'bg-accent-30');
+        b.classList.add('border-accent-30', 'bg-[var(--color-bg-surface)]');
       });
-      btn.classList.remove('border-red-900/30', 'bg-[#0a0505]');
-      btn.classList.add('border-red-500', 'bg-red-950/30');
+      btn.classList.remove('border-accent-30', 'bg-[var(--color-bg-surface)]');
+      btn.classList.add('border-[var(--color-accent)]', 'bg-accent-30');
       selectedHorrorType = btn.dataset.type;
       
       // Update hidden input for required validation if needed
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
         const titleEl = document.getElementById('page-title');
-        if (titleEl) titleEl.innerHTML = 'تعديل <span class="text-red-600">المساهمة</span>';
+        if (titleEl) titleEl.innerHTML = 'تعديل <span class="text-[var(--color-accent)]">المساهمة</span>';
         
         const subtitleEl = document.getElementById('page-subtitle');
         if (subtitleEl && data.rejectionReason) {

@@ -66,15 +66,15 @@ function updateNotificationsUI(notifications, unreadCount, uid) {
   notifList.innerHTML = ''; // Clear current
   
   if (notifications.length === 0) {
-    notifList.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 text-center">لا توجد إشعارات بعد</li>';
+    notifList.innerHTML = '<li class="px-4 py-3 text-sm text-[var(--color-text-meta)] text-center">لا توجد إشعارات بعد</li>';
     return;
   }
   
   // Mark all as read button
   if (unreadCount > 0) {
     const markAllDiv = document.createElement("div");
-    markAllDiv.className = "px-4 py-2 border-b border-[#7f1d1d] text-right";
-    markAllDiv.innerHTML = `<button id="markAllReadBtn" class="text-xs text-red-500 hover:text-red-400 font-bold">تحديد الكل كمقروء</button>`;
+    markAllDiv.className = "px-4 py-2 border-b border-[var(--color-border-subtle)] text-right";
+    markAllDiv.innerHTML = `<button id="markAllReadBtn" class="text-xs text-[var(--color-accent)] hover:text-[var(--color-accent-hover)] font-bold">تحديد الكل كمقروء</button>`;
     notifList.appendChild(markAllDiv);
     markAllDiv.querySelector('#markAllReadBtn').addEventListener('click', async (e) => {
       e.stopPropagation();
@@ -94,24 +94,24 @@ function updateNotificationsUI(notifications, unreadCount, uid) {
   
   notifications.forEach(n => {
     const li = document.createElement("li");
-    li.className = `px-4 py-3 text-sm text-white hover:bg-[#2c2c2e] cursor-pointer transition relative group ${n.read ? 'opacity-70' : 'bg-[#1b0d0d]'}`;
+    li.className = `px-4 py-3 text-sm text-[var(--color-text-primary)] hover:bg-accent-10 cursor-pointer transition relative group border-b border-[var(--color-border-subtle)] ${n.read ? 'opacity-70 bg-transparent' : 'bg-[var(--color-bg-surface)]'}`;
     
     const timeStr = (n.createdAt && n.createdAt.toDate) ? n.createdAt.toDate().toLocaleDateString('ar-EG', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'الآن';
     const typeLabel = n.type === 'story_approved' ? '<span class="text-green-500">تمت الموافقة</span>' : 
-                      n.type === 'story_rejected' ? '<span class="text-red-500">تم الرفض</span>' : 
+                      n.type === 'story_rejected' ? '<span class="text-[var(--color-accent)]">تم الرفض</span>' : 
                       n.type === 'comment_reply' ? '<span class="text-blue-400">رد جديد</span>' : 
-                      n.type === 'admin_announcement' ? '<span class="text-red-500 font-bold">إعلان إداري</span>' :
+                      n.type === 'admin_announcement' ? '<span class="text-[var(--color-accent)] font-bold">إعلان إداري</span>' :
                       '<span class="text-yellow-500">تحديث</span>';
     
     li.innerHTML = `
       <div class="flex justify-between items-start mb-1">
         <strong class="block">${typeLabel} - ${n.title}</strong>
-        ${!n.read ? '<span class="w-2 h-2 bg-red-600 rounded-full inline-block shrink-0 mt-1"></span>' : ''}
+        ${!n.read ? '<span class="w-2 h-2 bg-[var(--color-accent)] rounded-full inline-block shrink-0 mt-1"></span>' : ''}
       </div>
-      <span class="text-gray-300 block mb-2">${n.message}</span>
-      <div class="flex justify-between items-center text-xs text-gray-500">
+      <span class="text-[var(--color-text-secondary)] block mb-2">${n.message}</span>
+      <div class="flex justify-between items-center text-xs text-[var(--color-text-meta)]">
         <span>${timeStr}</span>
-        ${n.link ? `<a href="${n.link}" class="text-red-400 hover:text-red-300">عرض</a>` : ''}
+        ${n.link ? `<a href="${n.link}" class="text-[var(--color-accent)] hover:underline">عرض</a>` : ''}
       </div>
     `;
     
@@ -139,7 +139,7 @@ function clearNotificationsUI() {
   const notifDot = document.getElementById("notifDot");
   const notifList = document.getElementById("notificationsList");
   if (notifDot) notifDot.classList.add("hidden");
-  if (notifList) notifList.innerHTML = '<li class="px-4 py-3 text-sm text-gray-400 text-center">لا توجد إشعارات بعد</li>';
+  if (notifList) notifList.innerHTML = '<li class="px-4 py-3 text-sm text-[var(--color-text-meta)] text-center">لا توجد إشعارات بعد</li>';
 }
 
 if (document.readyState === 'complete' || document.readyState === 'interactive') {

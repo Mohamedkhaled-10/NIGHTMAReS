@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('nightmares-theme');
+        var theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <meta name="google-site-verification" content="eBq9l8CCfzBrXYArPr96pdVtWRutunbaLMa6WLUxlz0" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,46 +47,46 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
 </head>
-<body class="min-h-screen flex flex-col bg-[#050202] text-white overflow-x-hidden">
+<body class="min-h-screen flex flex-col bg-[var(--color-bg-base)] text-[var(--color-text-primary)] overflow-x-hidden">
 <!-- NAVBAR_PLACEHOLDER -->
 
 <!-- Hero Section (Editorial/Cinematic) -->
-  <main class="grow w-full flex flex-col bg-[#050202]">
+  <main class="grow w-full flex flex-col bg-[var(--color-bg-base)]">
   <!-- Hero Section (Editorial/Cinematic) -->
-  <header class="relative w-full h-[75vh] min-h-[500px] flex items-end bg-[#050202] overflow-hidden border-b border-red-900/20" id="home">
+  <header class="relative w-full h-[75vh] min-h-[500px] flex items-end bg-[var(--color-bg-base)] overflow-hidden border-b border-[var(--color-border-subtle)]" id="home">
     <div class="absolute inset-0 z-0 overflow-hidden" id="hero-bg-container">
       <!-- Dark/Red Atmospheric Fog Overlay -->
-      <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-[#050202]/70 to-[#050202]/30 z-20 pointer-events-none"></div>
-      <div class="absolute inset-0 bg-gradient-to-l from-[#050202]/80 via-transparent to-[#050202]/60 z-20 hidden md:block pointer-events-none"></div>
-      <div class="absolute inset-0 bg-red-950/10 mix-blend-overlay z-20 pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
+      <div class="hero-fog-v absolute inset-0 bg-gradient-to-t from-[var(--color-bg-base)] via-base-70 to-base-30 z-20 pointer-events-none transition-colors duration-300"></div>
+      <div class="hero-fog-h absolute inset-0 bg-gradient-to-l from-base-80 via-transparent to-base-60 z-20 hidden md:block pointer-events-none transition-colors duration-300"></div>
+      <div class="hero-fog-pulse absolute inset-0 bg-accent-10 mix-blend-overlay z-20 pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
       
       <!-- Video Background (Loaded via JS for performance, or standard with preload="none") -->
       <!-- Hides on mobile and reduced motion via Tailwind classes. Plays inline, muted, looping. -->
-      <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity hidden sm:block motion-reduce:hidden" 
+      <video id="hero-video" class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity hidden sm:block motion-reduce:hidden transition-all duration-500" 
              autoplay loop muted playsinline preload="none" poster="assets/images/1.webp">
         <source src="https://assets.mixkit.co/videos/preview/mixkit-dark-smoke-fog-on-a-black-background-4235-small.mp4" type="video/mp4">
       </video>
 
       <!-- Mobile/Fallback Poster (Shows when video is hidden or loading) -->
-      <img src="assets/images/1.webp" alt="Cinematic Horror" class="absolute inset-0 w-full h-full object-cover opacity-30 scale-105 sm:hidden motion-reduce:block" style="animation: slowPan 30s ease-in-out infinite alternate;" loading="eager">
+      <img src="assets/images/1.webp" alt="Cinematic Horror" class="absolute inset-0 w-full h-full object-cover opacity-30 scale-105 sm:hidden motion-reduce:block transition-all duration-500" style="animation: slowPan 30s ease-in-out infinite alternate;" loading="eager">
     </div>
     
     <div class="relative z-20 container mx-auto px-6 lg:px-12 pb-20 w-full flex flex-col items-start">
       <div class="inline-flex items-center gap-3 mb-6">
-        <span class="w-8 h-[2px] bg-red-600"></span>
-        <span class="text-red-500 text-sm font-bold tracking-widest uppercase">الوجهة الأولى للرعب</span>
+        <span class="w-8 h-[2px] bg-[var(--color-accent)] glow-subtle"></span>
+        <span class="text-[var(--color-accent)] text-sm font-bold tracking-widest uppercase">الوجهة الأولى للرعب</span>
       </div>
-      <h1 class="text-4xl md:text-5xl lg:text-7xl font-black text-white mb-6 drop-shadow-2xl leading-[1.1] max-w-3xl">
-        نغوص بك في أعماق <span class="text-transparent bg-clip-text bg-gradient-to-br from-red-500 to-red-800">الكوابيس</span> المنسية.
+      <h1 class="text-4xl md:text-5xl lg:text-7xl font-black text-[var(--color-text-primary)] mb-6 drop-shadow-md leading-[1.1] max-w-3xl">
+        نغوص بك في أعماق <span class="text-transparent bg-clip-text bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-active)]">الكوابيس</span> المنسية.
       </h1>
-      <p class="text-lg md:text-xl text-gray-400 mb-10 max-w-2xl font-medium leading-relaxed drop-shadow-lg">
+      <p class="text-lg md:text-xl text-[var(--color-text-secondary)] mb-10 max-w-2xl font-medium leading-relaxed">
         منصة المحتوى الأضخم للقصص المخيفة، الأخبار الغامضة، ومقاطع الفيديو التي تحبس الأنفاس. استكشف ما وراء الظلام.
       </p>
       <div class="flex flex-wrap items-center gap-4 w-full sm:w-auto">
-        <a href="#cards" class="w-full sm:w-auto px-8 py-3.5 bg-red-700 hover:bg-red-600 text-white rounded-lg font-bold transition-all shadow-[0_4px_20px_rgba(185,28,28,0.3)] text-center">
+        <a href="#cards" class="w-full sm:w-auto px-8 py-3.5 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] active:bg-[var(--color-accent-active)] text-white rounded-lg font-bold transition-all duration-200 hover:glow-accent text-center shadow-soft active:scale-[0.98]">
           اقرأ الآن
         </a>
-        <a href="#news" class="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-red-900/50 hover:border-red-600 hover:bg-red-950/20 text-gray-300 hover:text-white rounded-lg font-bold transition-all text-center">
+        <a href="#news" class="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-[var(--color-border-strong)] hover:border-[var(--color-accent)] hover:bg-accent-10 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] rounded-lg font-bold transition-all duration-200 text-center active:scale-[0.98]">
           استكشف الأخبار
         </a>
       </div>
@@ -86,12 +97,12 @@
   <section class="w-full max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 py-16 md:py-20" id="cards">
     <!-- عنوان القسم المنظم -->
     <div class="relative flex items-center justify-between mb-8 md:mb-10 pb-3 z-10">
-      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-red-900/30 to-red-600/80"></div>
-      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-red-600 shadow-[0_0_15px_rgba(220,38,38,0.8)]"></div>
+      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-[var(--color-border-subtle)] to-[var(--color-accent)]"></div>
+      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-[var(--color-accent)] glow-subtle"></div>
       
-      <h2 class="text-2xl md:text-3xl font-black text-white tracking-wide uppercase drop-shadow-md">أحدث القصص</h2>
+      <h2 class="text-2xl md:text-3xl font-black text-[var(--color-text-primary)] tracking-wide uppercase drop-shadow-md">أحدث القصص</h2>
       
-      <a href="/stories" class="px-5 py-2 bg-red-900/20 border border-red-900/50 hover:bg-red-700 hover:border-red-500 text-gray-200 hover:text-white rounded-full text-xs font-bold tracking-widest transition-all shadow-[0_0_15px_rgba(220,38,38,0.15)] flex items-center gap-2 group">
+      <a href="/stories" class="px-5 py-2 bg-[var(--color-bg-surface)] border border-[var(--color-border-strong)] hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] text-[var(--color-text-secondary)] hover:text-white rounded-full text-xs font-bold tracking-widest transition-all flex items-center gap-2 group shadow-sm">
         عرض الجميع
         <i class="fa-solid fa-arrow-left text-[10px] transform group-hover:-translate-x-1 transition-transform"></i>
       </a>
@@ -101,8 +112,8 @@
       <div id="stories-loading" class="col-span-full">
         <!-- Skeleton Loading -->
         <div class="flex flex-col items-center justify-center py-12">
-           <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
-           <p class="text-gray-400 font-semibold">جاري تحضير الكوابيس...</p>
+           <div class="w-10 h-10 border-4 border-[var(--color-border-strong)] border-t-[var(--color-accent)] rounded-full animate-spin mb-4"></div>
+           <p class="text-[var(--color-text-meta)] font-semibold">جاري تحضير الكوابيس...</p>
         </div>
       </div>
     </div>
@@ -110,16 +121,13 @@
 
   <!-- القسم 2: الفيديوهات (مثل Continue Watching في الصورة) -->
   <section class="w-full max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16 relative" id="video">
-    <!-- خلفية خافتة لمزيد من التباين -->
-    <div class="absolute top-1/2 right-0 w-[500px] h-[500px] bg-red-900/5 rounded-full blur-[150px] pointer-events-none -translate-y-1/2"></div>
-    
     <div class="relative flex items-center justify-between mb-8 md:mb-10 pb-3 z-10">
-      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-red-900/30 to-red-600/80"></div>
-      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-red-600 shadow-[0_0_15px_rgba(220,38,38,0.8)]"></div>
+      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-[var(--color-border-subtle)] to-[var(--color-accent)]"></div>
+      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-[var(--color-accent)] glow-subtle"></div>
       
-      <h2 class="text-2xl md:text-3xl font-black text-white tracking-wide uppercase drop-shadow-md">أحدث الفيديوهات</h2>
+      <h2 class="text-2xl md:text-3xl font-black text-[var(--color-text-primary)] tracking-wide uppercase drop-shadow-md">أحدث الفيديوهات</h2>
       
-      <a href="/videos" class="px-5 py-2 bg-red-900/20 border border-red-900/50 hover:bg-red-700 hover:border-red-500 text-gray-200 hover:text-white rounded-full text-xs font-bold tracking-widest transition-all shadow-[0_0_15px_rgba(220,38,38,0.15)] flex items-center gap-2 group">
+      <a href="/videos" class="px-5 py-2 bg-[var(--color-bg-surface)] border border-[var(--color-border-strong)] hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] text-[var(--color-text-secondary)] hover:text-white rounded-full text-xs font-bold tracking-widest transition-all flex items-center gap-2 group shadow-sm">
         مكتبة الفيديو
         <i class="fa-solid fa-arrow-left text-[10px] transform group-hover:-translate-x-1 transition-transform"></i>
       </a>
@@ -129,8 +137,8 @@
       <div id="video-loading" class="col-span-full">
         <!-- Skeleton Loading -->
         <div class="flex flex-col items-center justify-center py-12">
-           <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
-           <p class="text-gray-400 font-semibold">جاري جلب الفيديوهات...</p>
+           <div class="w-10 h-10 border-4 border-[var(--color-border-strong)] border-t-[var(--color-accent)] rounded-full animate-spin mb-4"></div>
+           <p class="text-[var(--color-text-meta)] font-semibold">جاري جلب الفيديوهات...</p>
         </div>
       </div>
     </div>
@@ -139,12 +147,12 @@
   <!-- القسم 3: الأخبار (يأخذ حيز مستقل ومنظم) -->
   <section class="w-full max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12 py-12 md:py-16 relative" id="news">
     <div class="relative flex items-center justify-between mb-8 md:mb-10 pb-3 z-10">
-      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-red-900/30 to-red-600/80"></div>
-      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-red-600 shadow-[0_0_15px_rgba(220,38,38,0.8)]"></div>
+      <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-l from-transparent via-[var(--color-border-subtle)] to-[var(--color-accent)]"></div>
+      <div class="absolute bottom-[-1px] right-0 w-32 md:w-48 h-[3px] bg-[var(--color-accent)] glow-subtle"></div>
       
-      <h2 class="text-2xl md:text-3xl font-black text-white tracking-wide uppercase drop-shadow-md">الأخبار والفعاليات</h2>
+      <h2 class="text-2xl md:text-3xl font-black text-[var(--color-text-primary)] tracking-wide uppercase drop-shadow-md">الأخبار والفعاليات</h2>
       
-      <a href="/news" class="px-5 py-2 bg-red-900/20 border border-red-900/50 hover:bg-red-700 hover:border-red-500 text-gray-200 hover:text-white rounded-full text-xs font-bold tracking-widest transition-all shadow-[0_0_15px_rgba(220,38,38,0.15)] flex items-center gap-2 group">
+      <a href="/news" class="px-5 py-2 bg-[var(--color-bg-surface)] border border-[var(--color-border-strong)] hover:bg-[var(--color-accent)] hover:border-[var(--color-accent)] text-[var(--color-text-secondary)] hover:text-white rounded-full text-xs font-bold tracking-widest transition-all flex items-center gap-2 group shadow-sm">
         كل الأخبار
         <i class="fa-solid fa-arrow-left text-[10px] transform group-hover:-translate-x-1 transition-transform"></i>
       </a>
@@ -154,8 +162,8 @@
       <div id="news-loading" class="col-span-full">
         <!-- Skeleton Loading -->
         <div class="flex flex-col items-center justify-center py-12">
-           <div class="w-10 h-10 border-4 border-red-900 border-t-red-500 rounded-full animate-spin mb-4"></div>
-           <p class="text-gray-400 font-semibold">نجمع الأخبار المروعة...</p>
+           <div class="w-10 h-10 border-4 border-[var(--color-border-strong)] border-t-[var(--color-accent)] rounded-full animate-spin mb-4"></div>
+           <p class="text-[var(--color-text-meta)] font-semibold">نجمع الأخبار المروعة...</p>
         </div>
       </div>
     </div>
@@ -163,45 +171,45 @@
 
   <div id="AD_CONTAINER_ID" class="w-full max-w-[1400px] mx-auto px-4 my-8"></div>
 
-  <!-- القسم 4: الإحصائيات والأكثر تفاعلاً (منظم بخلفية داكنة لفصله) -->
-  <section class="w-full bg-[#030101] border-t border-red-900/10 py-16 md:py-24 relative z-10" id="analytics-section">
+  <!-- القسم 4: الإحصائيات والأكثر تفاعلاً -->
+  <section class="w-full bg-[var(--color-bg-surface)] border-t border-[var(--color-border-subtle)] py-16 md:py-24 relative z-10 transition-colors duration-300" id="analytics-section">
     <div class="max-w-[1400px] mx-auto px-4 md:px-8 lg:px-12">
       <div class="relative flex flex-col items-center text-center mb-16 pb-4">
-        <h2 class="text-3xl md:text-4xl font-black text-white tracking-wide uppercase drop-shadow-md">نبض المجتمع</h2>
-        <div class="w-24 h-[3px] bg-red-600 mx-auto mt-6 shadow-[0_0_15px_rgba(220,38,38,0.8)]"></div>
+        <h2 class="text-3xl md:text-4xl font-black text-[var(--color-text-primary)] tracking-wide uppercase drop-shadow-md">نبض المجتمع</h2>
+        <div class="w-24 h-[3px] bg-[var(--color-accent)] mx-auto mt-6 glow-subtle"></div>
       </div>
       
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12" id="analytics-grids">
         <!-- Most Read -->
-        <div class="flex flex-col gap-6 bg-[#050202] p-6 rounded-2xl border border-red-900/20 shadow-xl">
-          <h3 class="text-lg font-bold text-gray-200 flex items-center justify-center gap-3 border-b border-red-900/20 pb-4">
-            <span class="w-2 h-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,1)]"></span>
+        <div class="flex flex-col gap-6 bg-[var(--color-bg-elevated)] p-6 rounded-2xl border border-[var(--color-border-strong)] shadow-elevation">
+          <h3 class="text-lg font-bold text-[var(--color-text-primary)] flex items-center justify-center gap-3 border-b border-[var(--color-border-subtle)] pb-4">
+            <span class="w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
             الأكثر قراءة
           </h3>
           <div id="most-read-list" class="flex flex-col gap-4">
-            <p class="text-gray-500 text-sm py-4 text-center">جاري التحميل...</p>
+            <p class="text-[var(--color-text-meta)] text-sm py-4 text-center">جاري التحميل...</p>
           </div>
         </div>
 
         <!-- Trending / Most Liked -->
-        <div class="flex flex-col gap-6 bg-[#050202] p-6 rounded-2xl border border-red-900/20 shadow-xl">
-          <h3 class="text-lg font-bold text-gray-200 flex items-center justify-center gap-3 border-b border-red-900/20 pb-4">
-            <span class="w-2 h-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,1)]"></span>
+        <div class="flex flex-col gap-6 bg-[var(--color-bg-elevated)] p-6 rounded-2xl border border-[var(--color-border-strong)] shadow-elevation">
+          <h3 class="text-lg font-bold text-[var(--color-text-primary)] flex items-center justify-center gap-3 border-b border-[var(--color-border-subtle)] pb-4">
+            <span class="w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
             الأفضل تقييماً
           </h3>
           <div id="trending-list" class="flex flex-col gap-4">
-            <p class="text-gray-500 text-sm py-4 text-center">جاري التحميل...</p>
+            <p class="text-[var(--color-text-meta)] text-sm py-4 text-center">جاري التحميل...</p>
           </div>
         </div>
 
         <!-- Most Discussed -->
-        <div class="flex flex-col gap-6 bg-[#050202] p-6 rounded-2xl border border-red-900/20 shadow-xl">
-          <h3 class="text-lg font-bold text-gray-200 flex items-center justify-center gap-3 border-b border-red-900/20 pb-4">
-            <span class="w-2 h-2 rounded-full bg-red-600 shadow-[0_0_8px_rgba(220,38,38,1)]"></span>
+        <div class="flex flex-col gap-6 bg-[var(--color-bg-elevated)] p-6 rounded-2xl border border-[var(--color-border-strong)] shadow-elevation">
+          <h3 class="text-lg font-bold text-[var(--color-text-primary)] flex items-center justify-center gap-3 border-b border-[var(--color-border-subtle)] pb-4">
+            <span class="w-2 h-2 rounded-full bg-[var(--color-accent)]"></span>
             الأكثر نقاشاً
           </h3>
           <div id="most-discussed-list" class="flex flex-col gap-4">
-            <p class="text-gray-500 text-sm py-4 text-center">جاري التحميل...</p>
+            <p class="text-[var(--color-text-meta)] text-sm py-4 text-center">جاري التحميل...</p>
           </div>
         </div>
       </div>

@@ -23,12 +23,12 @@ async function loadAds() {
     
     // Render the ad
     adContainer.innerHTML = `
-      <a href="${randomAd.link}" target="_blank" class="block bg-[#111] border border-gray-800 hover:border-red-600 rounded-xl overflow-hidden shadow-lg transition transform hover:scale-[1.02]">
+      <a href="${randomAd.link}" target="_blank" class="block bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] hover:border-[var(--color-accent)] rounded-xl overflow-hidden shadow-lg transition transform hover:scale-[1.02]">
         <div class="relative">
           <span class="absolute top-2 right-2 bg-yellow-600 text-white text-xs font-bold px-2 py-1 rounded shadow z-10">إعلان</span>
           <img src="${randomAd.image}" alt="إعلان" class="w-full h-auto object-cover max-h-64" loading="lazy">
         </div>
-        ${randomAd.text ? `<div class="p-3 text-center text-gray-300 font-semibold">${randomAd.text}</div>` : ''}
+        ${randomAd.text ? `<div class="p-3 text-center text-[var(--color-text-secondary)] font-semibold">${randomAd.text}</div>` : ''}
       </a>
     `;
     

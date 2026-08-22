@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('nightmares-theme');
+        var theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>الملاذ المظلم - تسجيل الدخول</title>
@@ -26,7 +37,7 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
 </head>
-<body class="bg-[#050202] text-gray-300 min-h-screen flex flex-col selection:bg-red-900 selection:text-white overflow-x-hidden">
+<body class="bg-[var(--color-bg-base)] text-[var(--color-text-secondary)] min-h-screen flex flex-col selection:bg-[var(--color-accent)] selection:text-white overflow-x-hidden">
   <!-- NAVBAR_PLACEHOLDER -->
 
   <main class="grow flex w-full pt-16 relative">
@@ -34,7 +45,7 @@
     <div class="flex flex-col lg:flex-row w-full grow">
       
       <!-- Left: Visual Horror Panel (Top on Mobile) -->
-      <div class="w-full lg:w-1/2 relative min-h-[30vh] lg:min-h-full flex flex-col justify-center items-center overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-l border-red-900/30">
+      <div class="w-full lg:w-1/2 relative min-h-[30vh] lg:min-h-full flex flex-col justify-center items-center overflow-hidden shrink-0 border-b lg:border-b-0 lg:border-l border-accent-30">
         
         <!-- Video Background (Loaded via JS for performance, or standard with preload="none") -->
         <video class="absolute inset-0 w-full h-full object-cover opacity-40 mix-blend-luminosity hidden sm:block motion-reduce:hidden filter grayscale-[30%]" 
@@ -46,48 +57,48 @@
         <img src="/assets/images/1.webp" alt="NIGHTMAReS Visual" class="absolute inset-0 w-full h-full object-cover opacity-50 filter grayscale-[30%] scale-105 sm:hidden motion-reduce:block">
         
         <!-- Overlays for deep cinematic feel -->
-        <div class="absolute inset-0 bg-[#050202]/60 mix-blend-multiply pointer-events-none"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-[#050202] via-transparent to-[#050202]/50 lg:bg-gradient-to-r lg:from-[#050202] lg:via-transparent pointer-events-none"></div>
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_#050202_100%)] pointer-events-none"></div>
-        <div class="absolute inset-0 bg-red-950/10 mix-blend-overlay pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
+        <div class="absolute inset-0 bg-[var(--color-bg-base)]/60 mix-blend-multiply pointer-events-none"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-bg-base)] via-transparent to-[var(--color-bg-base)]/50 lg:bg-gradient-to-r lg:from-[var(--color-bg-base)] lg:via-transparent pointer-events-none"></div>
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_transparent_0%,_var(--color-bg-base)_100%)] pointer-events-none"></div>
+        <div class="absolute inset-0 bg-accent-10 mix-blend-overlay pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
         
         <!-- Subtle Red Lighting Element -->
-        <div class="absolute -top-1/4 -right-1/4 w-[120%] h-[120%] bg-red-900/20 blur-[120px] rounded-full pointer-events-none mix-blend-overlay"></div>
+        <div class="absolute -top-1/4 -right-1/4 w-[120%] h-[120%] bg-accent-20 blur-[120px] rounded-full pointer-events-none mix-blend-overlay"></div>
 
         <!-- Panel Content -->
         <div class="relative z-20 text-center flex flex-col items-center px-6 lg:px-12 py-12 lg:py-0">
           <a href="/" class="block group">
             <div class="relative w-24 h-24 md:w-32 md:h-32 mb-6 mx-auto">
-              <div class="absolute inset-0 bg-red-600 blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 rounded-full animate-pulse"></div>
+              <div class="absolute inset-0 bg-[var(--color-accent)] blur-2xl opacity-20 group-hover:opacity-40 transition-opacity duration-700 rounded-full animate-pulse"></div>
               <img src="/assets/images/logo1.png" alt="Logo" class="relative z-10 w-full h-full object-contain filter drop-shadow-[0_0_20px_rgba(220,38,38,0.4)]">
             </div>
           </a>
-          <h2 class="text-3xl md:text-5xl font-black text-white mb-4 tracking-tight drop-shadow-2xl">
-            NIGHTMAR<span class="text-red-600">e</span>S
+          <h2 class="text-3xl md:text-5xl font-black text-[var(--color-text-primary)] mb-4 tracking-tight drop-shadow-2xl">
+            NIGHTMAR<span class="text-[var(--color-accent)]">e</span>S
           </h2>
-          <p class="text-gray-300 text-sm md:text-base leading-relaxed max-w-sm mx-auto font-medium">
+          <p class="text-[var(--color-text-secondary)] text-sm md:text-base leading-relaxed max-w-sm mx-auto font-medium">
             بوابتك إلى العالم السفلي.<br>سجل الدخول لحفظ كوابيسك والمشاركة في مجتمع الرعب الأول.
           </p>
         </div>
       </div>
 
       <!-- Right: Authentication Panel (Bottom on Mobile) -->
-      <div class="w-full lg:w-1/2 flex-1 flex flex-col justify-center items-center p-6 sm:p-10 lg:p-16 relative bg-[#0a0505] auth-bg">
+      <div class="w-full lg:w-1/2 flex-1 flex flex-col justify-center items-center p-6 sm:p-10 lg:p-16 relative bg-[var(--color-bg-surface)] auth-bg">
         <div class="absolute top-0 right-0 w-full h-full bg-[radial-gradient(circle_at_top_right,_rgba(220,38,38,0.05),_transparent_60%)] pointer-events-none"></div>
         
         <!-- Auth Card -->
-        <div class="w-full max-w-md relative z-10 bg-[#0a0505]/90 backdrop-blur-xl p-8 md:p-10 rounded-2xl border border-red-900/30 shadow-2xl">
+        <div class="w-full max-w-md relative z-10 bg-surface-90 backdrop-blur-xl p-8 md:p-10 rounded-2xl border border-accent-30 shadow-soft">
           
           <div class="text-center mb-8">
-            <h2 class="text-2xl md:text-3xl font-black text-white tracking-wide flex items-center justify-center gap-3">
-              <i class="fa-solid fa-ghost text-red-600 text-2xl drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]"></i> 
+            <h2 class="text-2xl md:text-3xl font-black text-[var(--color-text-primary)] tracking-wide flex items-center justify-center gap-3">
+              <i class="fa-solid fa-ghost text-[var(--color-accent)] text-2xl drop-shadow-[0_0_8px_rgba(220,38,38,0.6)]"></i> 
               <span id="form-title-text">تسجيل الدخول</span>
             </h2>
-            <p class="text-gray-500 text-sm mt-2 font-medium" id="form-subtitle">مرحباً بك مجدداً في الظلام</p>
+            <p class="text-[var(--color-text-meta)] text-sm mt-2 font-medium" id="form-subtitle">مرحباً بك مجدداً في الظلام</p>
           </div>
 
           <!-- Alert Messages -->
-          <div id="error-msg" class="hidden mb-6 flex items-start gap-3 bg-red-950/40 border border-red-900/30 p-4 rounded-lg text-red-400 text-sm font-semibold">
+          <div id="error-msg" class="hidden mb-6 flex items-start gap-3 bg-accent-40 border border-accent-30 p-4 rounded-lg text-[var(--color-accent)] text-sm font-semibold">
             <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
             <p id="error-text" class="grow text-right"></p>
           </div>
@@ -101,39 +112,39 @@
           <form id="auth-form" class="space-y-5" novalidate>
             
             <div id="name-field" class="hidden space-y-2">
-              <label class="block text-gray-400 text-xs font-bold uppercase tracking-wider">اسم المستخدم</label>
-              <div class="input-wrapper flex items-center bg-[#110808] border border-red-900/30 rounded-lg overflow-hidden transition-all duration-300">
-                <span class="pl-4 pr-4 text-gray-500"><i class="fa-solid fa-user"></i></span>
-                <input type="text" id="displayName" placeholder="اسمك المستعار في الظلام" class="w-full bg-transparent border-none text-white focus:outline-none focus:ring-1 focus:ring-red-600/50 focus:border-red-600 py-3 pr-2 placeholder-gray-700 text-sm font-medium">
+              <label class="block text-[var(--color-text-meta)] text-xs font-bold uppercase tracking-wider">اسم المستخدم</label>
+              <div class="input-wrapper flex items-center bg-[var(--color-bg-surface)] border border-accent-30 rounded-lg overflow-hidden transition-all duration-300">
+                <span class="pl-4 pr-4 text-[var(--color-text-meta)]"><i class="fa-solid fa-user"></i></span>
+                <input type="text" id="displayName" placeholder="اسمك المستعار في الظلام" class="w-full bg-transparent border-none text-white focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]/50 focus:border-[var(--color-accent)] py-3 pr-2 placeholder-[var(--color-text-meta)] text-sm font-medium">
               </div>
-              <p class="hidden text-xs text-red-500 mt-1" id="name-error">يرجى إدخال اسم مستخدم صالح</p>
+              <p class="hidden text-xs text-[var(--color-accent)] mt-1" id="name-error">يرجى إدخال اسم مستخدم صالح</p>
             </div>
             
             <div class="space-y-2">
-              <label class="block text-gray-400 text-xs font-bold uppercase tracking-wider">البريد الإلكتروني</label>
-              <div class="input-wrapper flex items-center bg-[#110808] border border-red-900/30 rounded-lg overflow-hidden transition-all duration-300">
-                <span class="pl-4 pr-4 text-gray-500"><i class="fa-solid fa-envelope"></i></span>
-                <input type="email" id="email" placeholder="name@domain.com" class="w-full bg-transparent border-none text-white focus:outline-none focus:ring-1 focus:ring-red-600/50 focus:border-red-600 py-3 pr-2 placeholder-gray-700 text-sm font-medium" required>
+              <label class="block text-[var(--color-text-meta)] text-xs font-bold uppercase tracking-wider">البريد الإلكتروني</label>
+              <div class="input-wrapper flex items-center bg-[var(--color-bg-surface)] border border-accent-30 rounded-lg overflow-hidden transition-all duration-300">
+                <span class="pl-4 pr-4 text-[var(--color-text-meta)]"><i class="fa-solid fa-envelope"></i></span>
+                <input type="email" id="email" placeholder="name@domain.com" class="w-full bg-transparent border-none text-white focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]/50 focus:border-[var(--color-accent)] py-3 pr-2 placeholder-[var(--color-text-meta)] text-sm font-medium" required>
               </div>
-              <p class="hidden text-xs text-red-500 mt-1" id="email-error">صيغة البريد الإلكتروني غير صحيحة</p>
+              <p class="hidden text-xs text-[var(--color-accent)] mt-1" id="email-error">صيغة البريد الإلكتروني غير صحيحة</p>
             </div>
             
             <div id="password-field" class="space-y-2">
               <div class="flex justify-between items-end">
-                <label class="block text-gray-400 text-xs font-bold uppercase tracking-wider">كلمة المرور</label>
-                <button type="button" id="toggle-reset" class="text-xs text-red-500 hover:text-red-400 font-bold hover:underline focus:outline-none">نسيتها؟</button>
+                <label class="block text-[var(--color-text-meta)] text-xs font-bold uppercase tracking-wider">كلمة المرور</label>
+                <button type="button" id="toggle-reset" class="text-xs text-[var(--color-accent)] hover:text-[var(--color-accent)] font-bold hover:underline focus:outline-none">نسيتها؟</button>
               </div>
-              <div class="input-wrapper flex items-center bg-[#110808] border border-red-900/30 rounded-lg overflow-hidden transition-all duration-300 relative">
-                <span class="pl-4 pr-4 text-gray-500"><i class="fa-solid fa-lock"></i></span>
-                <input type="password" id="password" placeholder="••••••••" class="w-full bg-transparent border-none text-white focus:outline-none focus:ring-1 focus:ring-red-600/50 focus:border-red-600 py-3 pr-2 placeholder-gray-700 text-sm font-medium tracking-widest">
-                <button type="button" id="toggle-password" class="absolute left-3 p-2 text-gray-500 hover:text-gray-300 transition-colors focus:outline-none" tabindex="-1">
+              <div class="input-wrapper flex items-center bg-[var(--color-bg-surface)] border border-accent-30 rounded-lg overflow-hidden transition-all duration-300 relative">
+                <span class="pl-4 pr-4 text-[var(--color-text-meta)]"><i class="fa-solid fa-lock"></i></span>
+                <input type="password" id="password" placeholder="••••••••" class="w-full bg-transparent border-none text-white focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]/50 focus:border-[var(--color-accent)] py-3 pr-2 placeholder-[var(--color-text-meta)] text-sm font-medium tracking-widest">
+                <button type="button" id="toggle-password" class="absolute left-3 p-2 text-[var(--color-text-meta)] hover:text-[var(--color-text-secondary)] transition-colors focus:outline-none" tabindex="-1">
                   <i class="fa-solid fa-eye" id="eye-icon"></i>
                 </button>
               </div>
-              <p class="hidden text-xs text-red-500 mt-1" id="password-error">كلمة المرور يجب أن تكون 6 أحرف على الأقل</p>
+              <p class="hidden text-xs text-[var(--color-accent)] mt-1" id="password-error">كلمة المرور يجب أن تكون 6 أحرف على الأقل</p>
             </div>
 
-            <button type="submit" id="btn-submit" class="w-full h-12 bg-red-700 hover:bg-red-600 text-white font-bold rounded-lg mt-8 shadow-[0_4px_12px_rgba(220,38,38,0.15)] hover:shadow-[0_6px_16px_rgba(220,38,38,0.3)] transition-all duration-300 flex items-center justify-center gap-2 group relative overflow-hidden disabled:opacity-70 disabled:cursor-not-allowed">
+            <button type="submit" id="btn-submit" class="w-full h-12 bg-[var(--color-accent)] hover:bg-[var(--color-accent)] text-white font-bold rounded-lg mt-8 glow-subtle hover:glow-accent transition-all duration-300 flex items-center justify-center gap-2 group relative overflow-hidden disabled:opacity-70 disabled:cursor-not-allowed">
               <span class="relative z-10 flex items-center justify-center gap-2 w-full">
                 <span id="btn-text">تسجيل الدخول</span>
                 <i id="btn-icon" class="fa-solid fa-arrow-left-to-bracket transition-transform group-hover:-translate-x-1"></i>
@@ -143,9 +154,9 @@
           </form>
 
           <!-- Toggle Modes -->
-          <div class="mt-8 pt-6 border-t border-red-900/20 text-center text-sm font-medium text-gray-400">
-            <p id="toggle-register" class="transition-colors">ليس لديك حساب؟ <button class="text-red-500 hover:text-red-400 font-bold hover:underline ml-1 focus:outline-none">انضم إلينا الآن</button></p>
-            <p id="toggle-login" class="hidden transition-colors">لديك حساب بالفعل؟ <button class="text-red-500 hover:text-red-400 font-bold hover:underline ml-1 focus:outline-none">تسجيل الدخول</button></p>
+          <div class="mt-8 pt-6 border-t border-[var(--color-accent)]/20 text-center text-sm font-medium text-[var(--color-text-meta)]">
+            <p id="toggle-register" class="transition-colors">ليس لديك حساب؟ <button class="text-[var(--color-accent)] hover:text-[var(--color-accent)] font-bold hover:underline ml-1 focus:outline-none">انضم إلينا الآن</button></p>
+            <p id="toggle-login" class="hidden transition-colors">لديك حساب بالفعل؟ <button class="text-[var(--color-accent)] hover:text-[var(--color-accent)] font-bold hover:underline ml-1 focus:outline-none">تسجيل الدخول</button></p>
           </div>
           
         </div>

@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('nightmares-theme');
+        var theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>البحث - NIGHTMAReS</title>
@@ -46,35 +57,35 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
 </head>
-<body class="bg-[#050202] text-white overflow-x-hidden selection:bg-red-900 selection:text-white min-h-screen flex flex-col">
+<body class="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent)] selection:text-white min-h-screen flex flex-col">
   <!-- NAVBAR_PLACEHOLDER -->
   
   <main class="grow flex-col w-full pt-20 md:pt-24 pb-12 md:pb-16 " >
     <!-- Premium Search Header -->
-    <section class="relative w-full overflow-hidden bg-[#0a0505] pt-20 pb-12 lg:pt-24 lg:pb-16 border-b border-red-900/20">
+    <section class="relative w-full overflow-hidden bg-[var(--color-bg-surface)] pt-20 pb-12 lg:pt-24 lg:pb-16 border-b border-[var(--color-border-subtle)]">
       <!-- Atmospheric Background Elements -->
       <div class="absolute inset-0 z-0 opacity-40 pointer-events-none">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-full bg-red-900/10 blur-[100px] rounded-full"></div>
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-full bg-accent-10 blur-[100px] rounded-full"></div>
       </div>
       
       <div class="container mx-auto px-4 md:px-6 relative z-10 max-w-5xl text-center">
-        <h1 class="text-3xl md:text-5xl font-black text-white mb-8 tracking-tight">
-          البحث في <span class="text-red-600">NIGHTMAReS</span>
+        <h1 class="text-3xl md:text-5xl font-black text-[var(--color-text-primary)] mb-8 tracking-tight">
+          البحث في <span class="text-[var(--color-accent)]">NIGHTMAReS</span>
         </h1>
         
         <!-- Search Bar -->
         <form id="search-page-form" class="w-full mx-auto relative z-20">
-          <div class="search-input-wrapper relative flex items-center bg-[#110808] border border-red-900/30 rounded-2xl overflow-hidden transition-all duration-300">
-            <div class="pl-2 pr-6 py-4 md:py-5 text-gray-400">
-              <i class="fa-solid fa-magnifying-glass text-xl md:text-2xl text-red-700"></i>
+          <div class="search-input-wrapper relative flex items-center bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl overflow-hidden transition-all duration-300">
+            <div class="pl-2 pr-6 py-4 md:py-5 text-[var(--color-text-meta)]">
+              <i class="fa-solid fa-magnifying-glass text-xl md:text-2xl text-[var(--color-accent)]"></i>
             </div>
-            <input type="search" id="search-page-input" placeholder="ابحث عن قصة، خبر، أو فيديو مرعب..." class="grow bg-transparent border-none text-white text-lg md:text-xl placeholder-gray-600 focus:outline-none focus:ring-1 focus:ring-red-600/50 focus:border-red-600 py-4 md:py-5 px-2 font-medium w-full">
-            <button type="submit" aria-label="إرسال البحث" class="mx-3 px-6 md:px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-bold rounded-xl transition-all shadow-[0_4px_14px_rgba(220,38,38,0.25)] hover:shadow-[0_6px_20px_rgba(220,38,38,0.4)] hidden md:block">
+            <input type="search" id="search-page-input" placeholder="ابحث عن قصة، خبر، أو فيديو مرعب..." class="grow bg-transparent border-none text-[var(--color-text-primary)] text-lg md:text-xl placeholder-[var(--color-text-meta)] focus:outline-none focus:ring-1 focus:ring-[var(--color-accent)]/50 focus:border-[var(--color-accent)] py-4 md:py-5 px-2 font-medium w-full">
+            <button type="submit" aria-label="إرسال البحث" class="mx-3 px-6 md:px-8 py-3 bg-[var(--color-accent)] hover:bg-[var(--color-accent)] text-white font-bold rounded-xl transition-all glow-subtle hover:glow-accent hidden md:block">
               بحث
             </button>
           </div>
           
-          <button type="submit" class="w-full mt-4 py-4 bg-red-800 text-white font-bold rounded-xl md:hidden flex items-center justify-center gap-2">
+          <button type="submit" class="w-full mt-4 py-4 bg-[var(--color-accent)] text-white font-bold rounded-xl md:hidden flex items-center justify-center gap-2 glow-subtle">
             <i class="fa-solid fa-magnifying-glass"></i> بحث
           </button>
           
@@ -82,20 +93,20 @@
           <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
             <!-- Type Filter -->
             <div class="relative">
-              <select id="filter-type" class="w-full appearance-none px-4 py-3 bg-[#110808]/80 border border-red-900/30 rounded-xl text-gray-300 focus:outline-none focus:border-red-600 focus:bg-[#110808] transition-all font-semibold cursor-pointer text-sm">
+              <select id="filter-type" class="w-full appearance-none px-4 py-3 bg-[var(--color-bg-surface)]/80 border border-accent-30 rounded-xl text-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-accent)] focus:bg-[var(--color-bg-surface)] transition-all font-semibold cursor-pointer text-sm">
                 <option value="">أي نوع محتوى</option>
                 <option value="story">قصص فقط</option>
                 <option value="news">أخبار فقط</option>
                 <option value="video">فيديوهات فقط</option>
               </select>
-              <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-500">
+              <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[var(--color-text-meta)]">
                 <i class="fa-solid fa-chevron-down text-xs"></i>
               </div>
             </div>
             
             <!-- Category Filter -->
             <div class="relative">
-              <select id="filter-category" class="w-full appearance-none px-4 py-3 bg-[#110808]/80 border border-red-900/30 rounded-xl text-gray-300 focus:outline-none focus:border-red-600 focus:bg-[#110808] transition-all font-semibold cursor-pointer text-sm">
+              <select id="filter-category" class="w-full appearance-none px-4 py-3 bg-[var(--color-bg-surface)]/80 border border-accent-30 rounded-xl text-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-accent)] focus:bg-[var(--color-bg-surface)] transition-all font-semibold cursor-pointer text-sm">
                 <option value="">جميع التصنيفات</option>
                 <option value="horror">رعب (Horror)</option>
                 <option value="mystery">غموض (Mystery)</option>
@@ -105,15 +116,15 @@
                 <option value="movies">أفلام (Movies)</option>
                 <option value="games">ألعاب (Games)</option>
               </select>
-              <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-500">
+              <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[var(--color-text-meta)]">
                 <i class="fa-solid fa-chevron-down text-xs"></i>
               </div>
             </div>
             
             <!-- Tag Filter -->
             <div class="relative">
-              <input type="text" id="filter-tag" placeholder="كلمة دلالية (Tag)..." class="w-full px-4 py-3 bg-[#110808]/80 border border-red-900/30 rounded-xl text-gray-300 focus:outline-none focus:border-red-600 focus:bg-[#110808] transition-all font-semibold text-sm placeholder-gray-600">
-              <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-gray-500">
+              <input type="text" id="filter-tag" placeholder="كلمة دلالية (Tag)..." class="w-full px-4 py-3 bg-[var(--color-bg-surface)]/80 border border-accent-30 rounded-xl text-[var(--color-text-secondary)] focus:outline-none focus:border-[var(--color-accent)] focus:bg-[var(--color-bg-surface)] transition-all font-semibold text-sm placeholder-[var(--color-text-meta)]">
+              <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none text-[var(--color-text-meta)]">
                 <i class="fa-solid fa-hashtag text-xs"></i>
               </div>
             </div>
@@ -126,14 +137,14 @@
     <div class="container mx-auto px-4 md:px-8 lg:px-12 py-12 max-w-7xl">
       <!-- Firestore Limitation Notice -->
       <div class="flex justify-center mb-10">
-        <div class="inline-flex items-center gap-2 px-4 py-2.5 bg-gray-900/50 border border-red-900/30 rounded-full text-xs text-gray-500 font-medium">
-          <i class="fa-solid fa-circle-info text-gray-600"></i>
+        <div class="inline-flex items-center gap-2 px-4 py-2.5 bg-[var(--color-bg-elevated)]/50 border border-accent-30 rounded-full text-xs text-[var(--color-text-meta)] font-medium">
+          <i class="fa-solid fa-circle-info text-[var(--color-text-meta)]"></i>
           يتم البحث نصياً ضمن أحدث المنشورات المطابقة للفلاتر لتوفير نتائج دقيقة وسريعة.
         </div>
       </div>
       
       <!-- Initial / Stats State -->
-      <div id="search-stats" class="text-center py-12 text-gray-400 font-bold text-lg hidden">
+      <div id="search-stats" class="text-center py-12 text-[var(--color-text-meta)] font-bold text-lg hidden">
         <!-- Text injected by JS -->
       </div>
 
@@ -144,11 +155,11 @@
       
       <!-- Load More Button -->
       <div id="load-more-container" class="mt-16 text-center hidden">
-        <button id="load-more-btn" class="group relative px-8 py-3 bg-[#0a0505] border border-red-900/30 text-gray-300 hover:text-white rounded-full transition-all duration-300 font-bold overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:border-red-600">
+        <button id="load-more-btn" class="group relative px-8 py-3 bg-[var(--color-bg-surface)] border border-accent-30 text-[var(--color-text-secondary)] hover:text-white rounded-full transition-all duration-300 font-bold overflow-hidden shadow-soft hover:border-[var(--color-accent)]">
           <span class="relative z-10 flex items-center gap-2">
             البحث في الدفعة الأقدم <i class="fa-solid fa-clock-rotate-left text-sm group-hover:-rotate-90 transition-transform duration-500"></i>
           </span>
-          <div class="absolute inset-0 bg-red-900/20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
+          <div class="absolute inset-0 bg-accent-20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
         </button>
       </div>
     </div>

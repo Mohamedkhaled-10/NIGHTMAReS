@@ -121,7 +121,7 @@ async function loadData(isLoadMore = false) {
 
         const link = `/${post.type}/${post.slug}`;
         const typeLabel = post.type === 'story' ? 'قصة' : post.type === 'video' ? 'فيديو' : 'خبر';
-        const typeColor = post.type === 'story' ? 'bg-red-900' : post.type === 'video' ? 'bg-blue-900' : 'bg-green-900';
+        const typeColor = post.type === 'story' ? 'bg-[var(--color-accent)]' : post.type === 'video' ? 'bg-blue-900' : 'bg-green-900';
         
         let snippet = '';
         if (post.data?.contentHtml) {
@@ -131,7 +131,7 @@ async function loadData(isLoadMore = false) {
           snippet = snippet.substring(0, 100) + '...';
         }
 
-        const categoryHtml = post.category ? `<span class="bg-red-900/40 text-red-300 text-xs px-2 py-1 rounded border border-red-900/50 mt-2 inline-block">${getCategoryName(post.category)}</span>` : '';
+        const categoryHtml = post.category ? `<span class="bg-accent-40 text-[var(--color-accent)] text-xs px-2 py-1 rounded border border-accent-50 mt-2 inline-block">${getCategoryName(post.category)}</span>` : '';
 
         
         
@@ -179,7 +179,7 @@ async function loadData(isLoadMore = false) {
         <span class="relative z-10 flex items-center gap-2">
           تحميل المزيد <i class="fa-solid fa-chevron-down text-sm group-hover:translate-y-1 transition-transform"></i>
         </span>
-        <div class="absolute inset-0 bg-red-900/20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
+        <div class="absolute inset-0 bg-accent-20 -translate-x-[150%] group-hover:translate-x-0 transition-transform duration-500 ease-in-out skew-x-12"></div>
       `;
       loadMoreBtn.disabled = false;
     }

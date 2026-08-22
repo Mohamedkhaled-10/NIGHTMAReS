@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('nightmares-theme');
+        var theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NIGHTMAReS - قراءة المقال</title>
@@ -13,25 +24,26 @@
     #article-body {
       font-size: 1.25rem;
       line-height: 1.85;
-      color: #e5e7eb;
+      color: var(--color-text-primary);
       letter-spacing: 0.2px;
     }
     #article-body p {
       margin-bottom: 2rem;
+      color: var(--color-text-primary);
     }
     #article-body h2 {
       font-size: 1.875rem;
       font-weight: 900;
-      color: #fff;
+      color: var(--color-text-primary);
       margin-top: 3rem;
       margin-bottom: 1.25rem;
-      border-right: 4px solid #dc2626;
+      border-right: 4px solid var(--color-accent);
       padding-right: 1rem;
     }
     #article-body h3 {
       font-size: 1.5rem;
       font-weight: 800;
-      color: #f87171;
+      color: var(--color-accent);
       margin-top: 2.5rem;
       margin-bottom: 1rem;
     }
@@ -41,14 +53,14 @@
       border-radius: 0.75rem;
       margin: 2.5rem auto;
       display: block;
-      box-shadow: 0 4px 25px rgba(0,0,0,0.6);
-      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: var(--shadow-elevation);
+      border: 1px solid var(--color-border-subtle);
     }
     #article-body blockquote {
-      border-right: 4px solid #dc2626;
+      border-right: 4px solid var(--color-accent);
       padding-right: 1.5rem;
       font-style: italic;
-      color: #fca5a5;
+      color: var(--color-text-secondary);
       background: rgba(220, 38, 38, 0.05);
       padding: 1.5rem;
       border-radius: 0.5rem;
@@ -56,19 +68,32 @@
       font-size: 1.25rem;
       line-height: 1.7;
     }
+    html[data-theme="light"] #article-body blockquote {
+      background: rgba(185, 28, 28, 0.04);
+      color: var(--color-text-secondary);
+    }
     #article-body ul, #article-body ol {
       margin-bottom: 1.75rem;
       padding-right: 1.5rem;
+      color: var(--color-text-primary);
     }
     #article-body li {
       margin-bottom: 0.5rem;
+    }
+    #article-body a {
+      color: var(--color-accent);
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+    #article-body a:hover {
+      color: var(--color-accent-hover);
     }
     #article-body iframe {
       width: 100%;
       aspect-ratio: 16/9;
       border-radius: 0.75rem;
       margin: 2.5rem 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      box-shadow: var(--shadow-elevation);
     }
     .video-container {
       position: relative;
@@ -78,8 +103,8 @@
       max-width: 100%;
       border-radius: 12px;
       margin: 2.5rem 0;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow-elevation);
+      border: 1px solid var(--color-border-subtle);
     }
     .video-container iframe,
     .video-container object,
@@ -91,17 +116,18 @@
       height: 100%;
     }
     .comment-item {
-      background: #0a0505;
-      border: 1px solid rgba(220, 38, 38, 0.2);
+      background: var(--color-bg-surface);
+      border: 1px solid var(--color-border-subtle);
       border-radius: 12px;
       padding: 1rem 1.25rem;
       margin-bottom: 1rem;
+      color: var(--color-text-primary);
     }
   
     #article-body figcaption {
       text-align: center;
       font-size: 0.95rem;
-      color: #9ca3af;
+      color: var(--color-text-meta);
       margin-top: 1rem;
       font-style: italic;
     }
@@ -112,55 +138,55 @@
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
 </head>
-<body class="bg-[#050202] text-white overflow-x-hidden selection:bg-red-900 selection:text-white min-h-screen flex flex-col">
+<body class="bg-[var(--color-bg-base)] text-[var(--color-text-primary)] overflow-x-hidden selection:bg-[var(--color-accent)] selection:text-white min-h-screen flex flex-col">
   <!-- Progress Bar -->
-  <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-red-600 z-[1001] transition-all duration-150" style="width: 0%;"></div>
+  <div id="progress-bar" class="fixed top-0 left-0 h-1 bg-[var(--color-accent)] z-[1001] transition-all duration-150" style="width: 0%;"></div>
 
   <!-- NAVBAR_PLACEHOLDER -->
   
   <div id="loading" class="grow flex flex-col items-center justify-center pt-32 pb-20">
     <div class="relative w-16 h-16 mb-6">
-      <div class="absolute inset-0 rounded-full border-4 border-red-900/30"></div>
-      <div class="absolute inset-0 rounded-full border-4 border-red-600 border-t-transparent animate-spin"></div>
+      <div class="absolute inset-0 rounded-full border-4 border-accent-30"></div>
+      <div class="absolute inset-0 rounded-full border-4 border-[var(--color-accent)] border-t-transparent animate-spin"></div>
     </div>
-    <p class="text-gray-400 font-bold tracking-wider animate-pulse">جاري تحضير المحتوى...</p>
+    <p class="text-[var(--color-text-tertiary)] font-bold tracking-wider animate-pulse">جاري تحضير المحتوى...</p>
   </div>
 
-  <main class="grow flex-col w-full pt-20 md:pt-24 pb-12 md:pb-16 hidden " id="content-area" >
+  <main class="grow flex-col w-full pt-20 md:pt-24 pb-12 md:pb-16 hidden" id="content-area">
     <!-- Premium Header -->
     <div class="container mx-auto px-4 md:px-8 max-w-4xl pt-6 relative z-30">
-      <a href="javascript:history.back()" class="inline-flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors font-bold text-lg bg-black/30 px-4 py-2 rounded-lg border border-red-900/20 shadow-sm backdrop-blur-sm">
+      <a href="javascript:history.back()" class="inline-flex items-center gap-2 text-[var(--color-text-tertiary)] hover:text-[var(--color-accent)] transition-colors font-bold text-lg bg-[var(--color-bg-surface)] px-4 py-2 rounded-lg border border-[var(--color-border-subtle)] shadow-sm backdrop-blur-sm">
         <i class="fa-solid fa-arrow-right"></i> <span>رجوع</span>
       </a>
     </div>
-    <header class="w-full relative pt-8 mb-8 bg-[#0a0505]/50 border-b border-red-900/10 pb-10">
+    <header class="w-full relative pt-8 mb-8 bg-[var(--color-bg-surface)]/50 border-b border-[var(--color-border-subtle)] pb-10">
       <div class="container mx-auto px-4 md:px-8 max-w-4xl relative z-20">
         <!-- Taxonomy (Tags & Category) -->
         <div id="article-taxonomy" class="hidden mb-6 flex flex-wrap items-center gap-3">
-          <span id="article-category" class="bg-red-900 text-white px-3 py-1 rounded text-sm font-bold tracking-wider shadow-lg"></span>
-          <div id="article-tags" class="flex flex-wrap gap-2 text-sm text-gray-400"></div>
+          <span id="article-category" class="bg-[var(--color-accent)] text-white px-3 py-1 rounded text-sm font-bold tracking-wider shadow-lg"></span>
+          <div id="article-tags" class="flex flex-wrap gap-2 text-sm text-[var(--color-text-meta)]"></div>
         </div>
 
-        <h1 id="article-title" class="text-3xl md:text-5xl lg:text-5xl font-black text-white mb-6 leading-[1.4] drop-shadow-xl max-w-3xl"></h1>
+        <h1 id="article-title" class="text-3xl md:text-5xl lg:text-5xl font-black text-[var(--color-text-primary)] mb-6 leading-[1.4] drop-shadow-xl max-w-3xl"></h1>
         
         <!-- Meta Data (Author, Date, Time) -->
-        <div class="flex flex-wrap items-center gap-6 text-sm text-gray-400 border-t border-red-900/20 pt-6 mt-6">
+        <div class="flex flex-wrap items-center gap-6 text-sm text-[var(--color-text-tertiary)] border-t border-[var(--color-border-subtle)] pt-6 mt-6">
           <div id="article-author" class="hidden">
             <a id="article-author-link" href="#" class="flex items-center gap-3 group">
-              <img id="article-author-avatar" src="" class="w-12 h-12 rounded-full border border-red-900/30 object-cover group-hover:border-red-500 transition-colors shadow-lg">
+              <img id="article-author-avatar" src="" class="w-12 h-12 rounded-full border border-[var(--color-border-subtle)] object-cover group-hover:border-[var(--color-accent)] transition-colors shadow-lg">
               <div class="flex flex-col justify-center">
-                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-0.5">بواسطة</span>
-                <span id="article-author-name" class="font-bold text-gray-200 group-hover:text-white transition-colors text-base"></span>
+                <span class="text-[10px] font-bold text-[var(--color-text-meta)] uppercase tracking-wider mb-0.5">بواسطة</span>
+                <span id="article-author-name" class="font-bold text-[var(--color-text-secondary)] group-hover:text-[var(--color-text-primary)] transition-colors text-base"></span>
               </div>
             </a>
           </div>
           
-          <div class="hidden md:block w-px h-8 bg-gray-800"></div>
+          <div class="hidden md:block w-px h-8 bg-[var(--color-border-subtle)]"></div>
           
-          <div class="flex items-center gap-4 text-gray-400 bg-black/40 px-4 py-2 rounded-lg border border-red-900/30 backdrop-blur-sm">
-             <div class="flex items-center gap-2"><i class="fa-regular fa-calendar text-red-700"></i> <span id="article-date-text"></span></div>
-             <div class="w-px h-4 bg-gray-600"></div>
-             <div class="flex items-center gap-2"><i class="fa-regular fa-clock text-red-700"></i> <span id="article-read-time-text"></span></div>
+          <div class="flex items-center gap-4 text-[var(--color-text-secondary)] bg-[var(--color-bg-surface)] px-4 py-2 rounded-lg border border-[var(--color-border-subtle)] backdrop-blur-sm">
+             <div class="flex items-center gap-2"><i class="fa-regular fa-calendar text-[var(--color-accent)]"></i> <span id="article-date-text"></span></div>
+             <div class="w-px h-4 bg-[var(--color-border-subtle)]"></div>
+             <div class="flex items-center gap-2"><i class="fa-regular fa-clock text-[var(--color-accent)]"></i> <span id="article-read-time-text"></span></div>
           </div>
         </div>
       </div>
@@ -172,19 +198,19 @@
       <!-- Article Body -->
       <article class="grow max-w-3xl mx-auto w-full">
         <!-- Cover Image -->
-        <div id="cover-image-container" class="w-full relative aspect-video hidden mb-10 rounded-2xl overflow-hidden shadow-2xl border border-red-900/20">
+        <div id="cover-image-container" class="w-full relative aspect-video hidden mb-10 rounded-2xl overflow-hidden shadow-soft border border-[var(--color-border-subtle)]">
           <img id="article-cover-image" src="" alt="Cover" class="w-full h-full object-cover">
         </div>
         
         <!-- No Cover Fallback gradient -->
         <div id="no-cover-gradient" class="w-full h-px hidden"></div>
 
-        <div id="article-body" class="font-sans text-lg md:text-xl leading-loose text-gray-200 mt-8"></div>
+        <div id="article-body" class="font-sans text-lg md:text-xl leading-loose text-[var(--color-text-primary)] mt-8"></div>
         
         <!-- Desktop Share & Actions -->
-        <div class="mt-16 pt-8 border-t border-red-900/30 flex flex-col sm:flex-row items-center justify-between gap-6 bg-[#0a0505] p-6 rounded-2xl border border-red-900/10">
+        <div class="mt-16 pt-8 border-t border-[var(--color-border-subtle)] flex flex-col sm:flex-row items-center justify-between gap-6 bg-[var(--color-bg-surface)] p-6 rounded-2xl border border-[var(--color-border-subtle)]">
           <div class="flex items-center gap-4 w-full sm:w-auto justify-center sm:justify-start">
-            <span class="font-bold text-gray-400 text-base">شارك الرعب:</span>
+            <span class="font-bold text-[var(--color-text-secondary)] text-base">شارك الرعب:</span>
             <div class="share-buttons flex gap-4">
               <a id="share-whatsapp" href="#" target="_blank" class="w-12 h-12 rounded-full bg-[#25D366] flex items-center justify-center text-white hover:scale-110 transition-transform shadow-lg">
                 <i class="fa-brands fa-whatsapp text-2xl"></i>
@@ -196,10 +222,10 @@
           </div>
           
           <div class="flex gap-4 w-full sm:w-auto">
-             <button id="btn-save-post" class="flex-1 sm:flex-none justify-center px-6 py-3 rounded-xl bg-gray-900 border border-red-900/30 flex items-center gap-2 text-gray-300 hover:text-white hover:border-gray-600 transition-colors font-bold text-base shadow-md" title="حفظ المقال">
+             <button id="btn-save-post" class="flex-1 sm:flex-none justify-center px-6 py-3 rounded-xl bg-[var(--color-bg-input)] border border-[var(--color-border-subtle)] hover:border-[var(--color-border-strong)] flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors font-bold text-base shadow-md" title="حفظ المقال">
                 <i class="far fa-bookmark text-lg" id="save-icon"></i> <span>حفظ</span>
              </button>
-             <button id="btn-report-post" class="flex-1 sm:flex-none justify-center px-6 py-3 rounded-xl bg-gray-900 border border-red-900/30 flex items-center gap-2 text-gray-300 hover:text-red-500 hover:border-red-900 hover:bg-red-950/20 transition-colors font-bold text-base shadow-md" title="الإبلاغ">
+             <button id="btn-report-post" class="flex-1 sm:flex-none justify-center px-6 py-3 rounded-xl bg-[var(--color-bg-input)] border border-[var(--color-border-subtle)] hover:border-[var(--color-accent)] flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors font-bold text-base shadow-md" title="الإبلاغ">
                 <i class="fas fa-flag text-lg"></i> <span>إبلاغ</span>
              </button>
           </div>
@@ -207,9 +233,9 @@
         
         <!-- Similar Vibe Section -->
         <section id="similar-vibe-section" class="mt-12 hidden">
-          <div class="flex items-center gap-3 mb-6 border-b border-red-900/20 pb-3">
-            <i class="fa-solid fa-ghost text-red-600 text-2xl"></i>
-            <h3 class="text-2xl font-bold text-white">قصص بنفس الجو</h3>
+          <div class="flex items-center gap-3 mb-6 border-b border-[var(--color-border-subtle)] pb-3">
+            <i class="fa-solid fa-ghost text-[var(--color-accent)] text-2xl"></i>
+            <h3 class="text-2xl font-bold text-[var(--color-text-primary)]">قصص بنفس الجو</h3>
           </div>
           <div id="similar-vibe-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <!-- Cards injected by JS -->
@@ -217,24 +243,24 @@
         </section>
 
         <!-- Interactions Section -->
-        <section id="interactions-section" class="mt-12 bg-[#0a0505] border border-red-900/20 rounded-2xl p-6 md:p-10 shadow-xl">
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-10 border-b border-red-900/20 pb-6">
-            <h3 class="text-2xl md:text-3xl font-bold flex items-center gap-3 text-white">
-              <i class="fa-solid fa-comments text-red-600"></i> النقاشات
+        <section id="interactions-section" class="mt-12 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl p-6 md:p-10 shadow-soft">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-10 border-b border-[var(--color-border-subtle)] pb-6">
+            <h3 class="text-2xl md:text-3xl font-bold flex items-center gap-3 text-[var(--color-text-primary)]">
+              <i class="fa-solid fa-comments text-[var(--color-accent)]"></i> النقاشات
             </h3>
             
-            <div class="flex items-center justify-center w-full sm:w-auto gap-6 text-gray-300 font-bold bg-black/40 px-5 py-3 rounded-xl border border-red-900/30 shadow-inner">
+            <div class="flex items-center justify-center w-full sm:w-auto gap-6 text-[var(--color-text-secondary)] font-bold bg-[var(--color-bg-input)] px-5 py-3 rounded-xl border border-[var(--color-border-subtle)]">
               <span class="flex items-center gap-2 text-lg" title="المشاهدات">
-                <i class="fa-solid fa-eye text-red-900"></i> <span id="views-count">0</span>
+                <i class="fa-solid fa-eye text-[var(--color-accent)]"></i> <span id="views-count">0</span>
               </span>
-              <div class="w-px h-5 bg-gray-700"></div>
-              <button id="btn-like" class="flex items-center gap-2 hover:text-red-500 transition-colors group text-lg">
-                <i class="fas fa-heart text-red-900 group-hover:scale-110 transition-transform" id="like-icon"></i>
+              <div class="w-px h-5 bg-[var(--color-border-subtle)]"></div>
+              <button id="btn-like" class="flex items-center gap-2 hover:text-[var(--color-accent)] transition-colors group text-lg">
+                <i class="fas fa-heart text-[var(--color-accent)] group-hover:scale-110 transition-transform" id="like-icon"></i>
                 <span id="likes-count">0</span>
               </button>
-              <div class="w-px h-5 bg-gray-700"></div>
+              <div class="w-px h-5 bg-[var(--color-border-subtle)]"></div>
               <span class="flex items-center gap-2 text-lg" title="التعليقات">
-                <i class="fa-solid fa-comment text-red-900"></i> <span id="comments-count">0</span>
+                <i class="fa-solid fa-comment text-[var(--color-accent)]"></i> <span id="comments-count">0</span>
               </span>
             </div>
           </div>
@@ -243,25 +269,25 @@
           <div id="comment-form-container" class="mb-12 hidden">
             <form id="comment-form" class="space-y-4">
               <div class="relative flex gap-5">
-                <img src="/assets/images/icon-white.png" class="w-12 h-12 rounded-full border-2 border-red-900/30 shrink-0 hidden sm:block object-cover shadow-md">
-                <textarea id="comment-text" rows="4" placeholder="أضف تعليقاً... شاركنا رأيك في هذا المحتوى المظلم." class="w-full bg-[#110808] border border-red-900/30 rounded-xl p-5 text-lg text-white focus:outline-none focus:border-red-600 focus:ring-1 focus:ring-red-600/50 transition-all resize-y shadow-inner leading-relaxed placeholder-gray-600" required></textarea>
+                <img src="/assets/images/icon-white.png" class="w-12 h-12 rounded-full border-2 border-[var(--color-border-subtle)] shrink-0 hidden sm:block object-cover shadow-soft">
+                <textarea id="comment-text" rows="4" placeholder="أضف تعليقاً... شاركنا رأيك في هذا المحتوى المظلم." class="w-full bg-[var(--color-bg-input)] border border-[var(--color-border-subtle)] rounded-xl p-5 text-lg text-[var(--color-text-primary)] focus:outline-none focus:border-[var(--color-accent)] transition-all resize-y leading-relaxed placeholder-[var(--color-text-meta)]" required></textarea>
               </div>
               <div class="flex justify-end">
-                <button type="submit" class="px-8 py-3 bg-red-700 hover:bg-red-600 text-white font-bold text-lg rounded-xl transition-colors shadow-[0_0_15px_rgba(220,38,38,0.3)] flex items-center gap-3 w-full sm:w-auto justify-center">
+                <button type="submit" class="px-8 py-3 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white font-bold text-lg rounded-xl transition-colors hover:glow-accent flex items-center gap-3 w-full sm:w-auto justify-center">
                   <i class="fa-solid fa-paper-plane"></i> نشر التعليق
                 </button>
               </div>
             </form>
           </div>
           
-          <div id="login-prompt" class="text-center py-8 bg-red-900/10 border border-red-900/30 rounded-xl mb-12 text-gray-300 text-lg">
-            يجب <a href="/login" class="text-red-500 font-bold hover:underline">تسجيل الدخول</a> لتتمكن من إضافة إعجاب أو المشاركة في النقاش.
+          <div id="login-prompt" class="text-center py-8 bg-accent-10 border border-[var(--color-accent)]/20 rounded-xl mb-12 text-[var(--color-text-secondary)] text-lg">
+            يجب <a href="/login" class="text-[var(--color-accent)] font-bold hover:underline">تسجيل الدخول</a> لتتمكن من إضافة إعجاب أو المشاركة في النقاش.
           </div>
           
           <!-- Comments List -->
           <div id="comments-list" class="space-y-4">
-            <div class="text-center text-gray-500 py-4 font-semibold flex items-center justify-center gap-2">
-              <div class="w-5 h-5 border-2 border-gray-600 border-t-red-600 rounded-full animate-spin"></div> جاري تحميل التعليقات...
+            <div class="text-center text-[var(--color-text-meta)] py-4 font-semibold flex items-center justify-center gap-2">
+              <div class="w-5 h-5 border-2 border-[var(--color-border-strong)] border-t-[var(--color-accent)] rounded-full animate-spin"></div> جاري تحميل التعليقات...
             </div>
           </div>
         </section>
@@ -272,9 +298,9 @@
         <div class="sticky top-24 space-y-8">
           <!-- Related Content -->
           <section id="related-content-section" class="hidden bg-transparent">
-            <div class="flex items-center gap-3 mb-6 border-b border-red-900/20 pb-3">
-              <i class="fa-solid fa-fire-flame-curved text-red-600 text-xl"></i>
-              <h3 class="text-xl font-bold text-white">قد يعجبك أيضًا</h3>
+            <div class="flex items-center gap-3 mb-6 border-b border-[var(--color-border-subtle)] pb-3">
+              <i class="fa-solid fa-fire-flame-curved text-[var(--color-accent)] text-xl"></i>
+              <h3 class="text-xl font-bold text-[var(--color-text-primary)]">قد يعجبك أيضًا</h3>
             </div>
             
             <div id="related-grid" class="flex flex-col gap-4">
@@ -288,26 +314,26 @@
 
   <!-- Report Modal -->
   <div id="report-modal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex justify-center items-center backdrop-blur-sm px-4">
-    <div class="bg-[#110808] border border-red-900/30 rounded-2xl p-6 md:p-8 max-w-md w-full shadow-[0_0_40px_rgba(220,38,38,0.2)]">
-      <h3 class="text-2xl font-black text-white mb-2 flex items-center gap-2 text-red-500"><i class="fa-solid fa-triangle-exclamation"></i> تقديم إبلاغ</h3>
-      <p class="text-gray-400 text-sm mb-6 pb-4 border-b border-red-900/30">يرجى تحديد سبب الإبلاغ بدقة. نحن نأخذ جميع البلاغات بجدية لحماية مجتمعنا.</p>
-      <select id="report-reason" class="w-full bg-[#1b0d0d] border border-red-900/30 rounded-xl p-3 text-white mb-4 outline-none focus:border-red-600">
+    <div class="bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-2xl p-6 md:p-8 max-w-md w-full glow-accent">
+      <h3 class="text-2xl font-black text-[var(--color-accent)] mb-2 flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> تقديم إبلاغ</h3>
+      <p class="text-[var(--color-text-tertiary)] text-sm mb-6 pb-4 border-b border-[var(--color-border-subtle)]">يرجى تحديد سبب الإبلاغ بدقة. نحن نأخذ جميع البلاغات بجدية لحماية مجتمعنا.</p>
+      <select id="report-reason" class="w-full bg-[var(--color-bg-input)] border border-[var(--color-border-subtle)] rounded-xl p-3 text-[var(--color-text-primary)] mb-4 outline-none focus:border-[var(--color-accent)]">
         <option value="spam">محتوى مزعج (Spam)</option>
         <option value="harassment">مضايقة أو تنمر</option>
         <option value="inappropriate">محتوى غير لائق</option>
         <option value="hate_speech">خطاب كراهية</option>
         <option value="other">أخرى</option>
       </select>
-      <textarea id="report-details" rows="3" class="w-full bg-[#1b0d0d] border border-red-900/30 rounded-xl p-3 text-white mb-6 outline-none focus:border-red-600 resize-y" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
+      <textarea id="report-details" rows="3" class="w-full bg-[var(--color-bg-input)] border border-[var(--color-border-subtle)] rounded-xl p-3 text-[var(--color-text-primary)] mb-6 outline-none focus:border-[var(--color-accent)] resize-y" placeholder="تفاصيل إضافية (اختياري)..."></textarea>
       <div id="report-msg" class="hidden text-sm mb-4 font-bold text-center"></div>
       <div class="flex gap-3 justify-end">
-        <button id="btn-cancel-report" class="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition-colors">إلغاء</button>
-        <button id="btn-submit-report" class="px-6 py-2.5 bg-red-700 hover:bg-red-600 text-white font-bold rounded-lg transition-colors shadow-lg">إرسال الإبلاغ</button>
+        <button id="btn-cancel-report" class="px-6 py-2.5 bg-[var(--color-bg-input)] hover:bg-[var(--color-bg-elevated)] border border-[var(--color-border-subtle)] text-[var(--color-text-primary)] font-semibold rounded-lg transition-colors">إلغاء</button>
+        <button id="btn-submit-report" class="px-6 py-2.5 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white font-bold rounded-lg transition-colors">إرسال الإبلاغ</button>
       </div>
     </div>
   </div>
 
-  <button id="scrollToTop" class="fixed bottom-6 left-6 w-12 h-12 bg-red-800 text-white rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(220,38,38,0.5)] hover:bg-red-600 hover:-translate-y-1 transition-all z-50 opacity-0 pointer-events-none" aria-label="عودة للأعلى">
+  <button id="scrollToTop" class="fixed bottom-6 left-6 w-12 h-12 bg-[var(--color-accent)] text-white rounded-full flex items-center justify-center glow-subtle hover:glow-accent hover:-translate-y-1 transition-all z-50 opacity-0 pointer-events-none" aria-label="عودة للأعلى">
     <i class="fa-solid fa-arrow-up"></i>
   </button>
 

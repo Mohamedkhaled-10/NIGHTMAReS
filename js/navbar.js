@@ -13,12 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const currentHash = window.location.hash;
   
   listItems.forEach(item => {
-    item.classList.remove('active'); const lnk = item.querySelector('a'); if(lnk) lnk.classList.remove('!text-red-500');
+    item.classList.remove('active');
     const link = item.querySelector('a');
     if (link) {
       const href = link.getAttribute('href');
       if (href === currentPath || href === currentPath + currentHash || (currentPath === '/' && href === '/#home' && !currentHash)) {
-        item.classList.add('active'); const lnk = item.querySelector('a'); if(lnk) lnk.classList.add('!text-red-500');
+        item.classList.add('active');
       }
     }
   });
@@ -36,8 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
       if (active) moveIndicator(active);
     });
     item.addEventListener('click', function() {
-      listItems.forEach(item => { item.classList.remove('active'); const l = item.querySelector('a'); if(l) l.classList.remove('!text-red-500'); });
-      this.classList.add('active'); const l = this.querySelector('a'); if(l) l.classList.add('!text-red-500');
+      listItems.forEach(item => item.classList.remove('active'));
+      this.classList.add('active');
       moveIndicator(this);
     });
   });

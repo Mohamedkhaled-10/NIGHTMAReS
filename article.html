@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('nightmares-theme');
+        var theme = (savedTheme === 'light' || savedTheme === 'dark') ? savedTheme : 'dark';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nightmares</title>
@@ -49,7 +60,7 @@
       </header>
 
       <!-- 2. COVER MEDIA -->
-      <div id="cover-image-container" class="hidden w-[95%] md:w-[85%] max-w-[1000px] mx-auto mb-12 rounded-2xl overflow-hidden shadow-2xl relative">
+      <div id="cover-image-container" class="hidden w-[95%] md:w-[85%] max-w-[1000px] mx-auto mb-12 rounded-2xl overflow-hidden shadow-soft relative">
         <img id="article-cover-image" src="" alt="Cover Image" class="w-full h-auto max-h-[600px] object-cover block">
       </div>
 
@@ -99,7 +110,7 @@
       </section>
 
       <!-- 8. INTERACTIONS & COMMENTS -->
-      <section id="interactions-section" class="w-[90%] md:w-[75%] max-w-[850px] mx-auto font-cairo bg-[#0a0505] p-6 md:p-10 rounded-2xl border border-red-900/20 shadow-2xl mb-12">
+      <section id="interactions-section" class="w-[90%] md:w-[75%] max-w-[850px] mx-auto font-cairo bg-[#0a0505] p-6 md:p-10 rounded-2xl border border-red-900/20 shadow-soft mb-12">
         <div class="flex items-center justify-between border-b border-red-900/20 pb-6 mb-8">
           <h3 class="text-2xl font-black text-white">التعليقات</h3>
           <div class="flex gap-6 items-center text-gray-400 text-lg font-bold">
@@ -116,7 +127,7 @@
         <div id="comment-form-container" class="hidden mb-12">
           <form id="comment-form" class="flex flex-col gap-4">
             <textarea id="comment-text" rows="4" placeholder="أضف تعليقاً يثري النقاش..." class="w-full p-4 rounded-xl bg-[#110808] text-white border border-red-900/30 focus:border-red-500 focus:ring-1 focus:ring-red-500 outline-none font-cairo transition-all resize-y" required></textarea>
-            <button type="submit" class="self-end bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-xl transition-colors shadow-[0_4px_15px_rgba(220,38,38,0.2)]">إضافة التعليق</button>
+            <button type="submit" class="self-end bg-red-700 hover:bg-red-600 text-white font-bold py-3 px-8 rounded-xl transition-all glow-subtle hover:glow-accent">إضافة التعليق</button>
           </form>
         </div>
         <div id="login-prompt" class="text-center mb-12 py-8 bg-[#110808] rounded-xl border border-red-900/20">
@@ -131,7 +142,7 @@
 
       <!-- Report Modal -->
       <div id="report-modal" class="hidden fixed inset-0 bg-black/80 z-[9999] flex justify-center items-center backdrop-blur-sm">
-        <div class="bg-[#110808] border border-red-900/30 rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
+        <div class="bg-[#110808] border border-red-900/30 rounded-2xl p-8 max-w-md w-full mx-4 shadow-soft">
           <h3 class="text-2xl font-black text-white mb-4 border-b border-red-900/20 pb-4">تقديم إبلاغ</h3>
           <p class="text-gray-400 text-sm mb-6">يرجى تحديد سبب الإبلاغ. نحن نأخذ جميع الإبلاغات على محمل الجد.</p>
           <select id="report-reason" class="w-full bg-[#1a0c0c] border border-red-900/30 rounded-xl p-3 text-white mb-4 outline-none focus:border-red-500 font-cairo">
@@ -145,12 +156,12 @@
           <div id="report-msg" class="hidden text-sm mb-4 font-bold text-center"></div>
           <div class="flex gap-4 justify-end mt-2">
             <button id="btn-cancel-report" class="px-6 py-2.5 bg-transparent hover:bg-gray-800 text-gray-300 font-bold rounded-xl transition-colors">إلغاء</button>
-            <button id="btn-submit-report" class="px-6 py-2.5 bg-red-700 hover:bg-red-600 text-white font-bold rounded-xl transition-colors shadow-lg">إرسال الإبلاغ</button>
+            <button id="btn-submit-report" class="px-6 py-2.5 bg-red-700 hover:bg-red-600 text-white font-bold rounded-xl transition-colors">إرسال الإبلاغ</button>
           </div>
         </div>
       </div>    
     </main>
-    <button id="scrollToTop" class="hidden opacity-0 pointer-events-none transition-all duration-300 fixed bottom-6 left-6 z-50 bg-red-700 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-[0_4px_15px_rgba(220,38,38,0.4)] hover:bg-red-600 hover:scale-110"><i class="fas fa-arrow-up"></i></button>
+    <button id="scrollToTop" class="hidden opacity-0 pointer-events-none transition-all duration-300 fixed bottom-6 left-6 z-50 bg-red-700 text-white w-12 h-12 rounded-full flex items-center justify-center glow-subtle hover:glow-accent hover:bg-red-600 hover:scale-110"><i class="fas fa-arrow-up"></i></button>
     <!-- FOOTER_PLACEHOLDER -->
 
 

@@ -84,7 +84,7 @@ function populateUI(user, data) {
   statusBadge.innerHTML = `<i class="fas fa-check-circle"></i> ${statuses[data.accountStatus] || 'غير معروف'}`;
   
   if (data.accountStatus !== 'active') {
-    statusBadge.className = 'px-3 py-1.5 text-sm font-bold rounded-lg bg-red-950/30 text-red-400 border border-red-900/50 shadow-sm flex items-center gap-2';
+    statusBadge.className = 'px-3 py-1.5 text-sm font-bold rounded-lg bg-accent-30 text-[var(--color-accent)] border border-accent-50 shadow-sm flex items-center gap-2';
     statusBadge.innerHTML = `<i class="fas fa-times-circle"></i> ${statuses[data.accountStatus] || 'غير معروف'}`;
   }
 
@@ -127,11 +127,11 @@ async function loadUserSubmissions(uid) {
       let statusHtml = '';
       if (data.status === 'submitted' || data.status === 'pending') statusHtml = '<span class="text-yellow-500 bg-yellow-900/30 px-2 py-0.5 rounded text-xs">قيد المراجعة</span>';
       else if (data.status === 'approved' || data.status === 'published') statusHtml = '<span class="text-green-500 bg-green-900/30 px-2 py-0.5 rounded text-xs">منشورة</span>';
-      else if (data.status === 'rejected') statusHtml = '<span class="text-red-500 bg-red-900/30 px-2 py-0.5 rounded text-xs">مرفوضة</span>';
+      else if (data.status === 'rejected') statusHtml = '<span class="text-[var(--color-accent)] bg-accent-20 px-2 py-0.5 rounded text-xs">مرفوضة</span>';
       else if (data.status === 'needs_edit') statusHtml = '<span class="text-orange-400 bg-orange-900/30 px-2 py-0.5 rounded text-xs">تحتاج تعديل</span>';
-      else statusHtml = `<span class="text-gray-400 bg-gray-900 px-2 py-0.5 rounded text-xs">${data.status}</span>`;
+      else statusHtml = `<span class="text-[var(--color-text-meta)] bg-[var(--color-bg-elevated)] px-2 py-0.5 rounded text-xs">${data.status}</span>`;
 
-      const reasonHtml = data.rejectionReason ? `<p class="mt-2 text-xs text-red-400 p-2 bg-red-950/30 rounded border border-red-900/50"><strong>سبب الرفض/التعديل:</strong> ${data.rejectionReason}</p>` : '';
+      const reasonHtml = data.rejectionReason ? `<p class="mt-2 text-xs text-[var(--color-accent)] p-2 bg-accent-15 rounded border border-accent-30"><strong>سبب الرفض/التعديل:</strong> ${data.rejectionReason}</p>` : '';
 
       let actionBtnHtml = '';
       if (data.status === 'needs_edit') {
@@ -144,12 +144,12 @@ async function loadUserSubmissions(uid) {
       }
 
       container.innerHTML += `
-        <div class="p-4 bg-black/40 border border-gray-800/50 rounded-xl hover:border-red-900/50 transition-colors">
+        <div class="p-4 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-xl hover:border-accent-50 transition-colors">
           <div class="flex justify-between items-start mb-2">
-            <h4 class="font-bold text-gray-200">${data.title || 'بدون عنوان'}</h4>
+            <h4 class="font-bold text-[var(--color-text-primary)]">${data.title || 'بدون عنوان'}</h4>
             ${statusHtml}
           </div>
-          <div class="text-xs text-gray-500 mb-2">${dateStr}</div>
+          <div class="text-xs text-[var(--color-text-meta)] mb-2">${dateStr}</div>
           ${reasonHtml}
           ${actionBtnHtml}
         </div>
@@ -228,18 +228,18 @@ function renderMiniCard(id, data, isHistory = false, docId = null) {
   const url = `/${data.contentType}/${data.contentId}`;
   
   const actionHtml = isHistory ? 
-    `<i class="fas fa-chevron-left text-gray-600 group-hover:text-red-500 transition-colors pl-2"></i>` :
-    `<button onclick="removeBookmark('${docId}', event)" class="p-3 text-gray-500 hover:text-red-500 transition-colors text-lg" title="إزالة من المحفوظات"><i class="fas fa-trash"></i></button>`;
+    `<i class="fas fa-chevron-left text-[var(--color-text-meta)] group-hover:text-[var(--color-accent)] transition-colors pl-2"></i>` :
+    `<button onclick="removeBookmark('${docId}', event)" class="p-3 text-[var(--color-text-meta)] hover:text-[var(--color-accent)] transition-colors text-lg" title="إزالة من المحفوظات"><i class="fas fa-trash"></i></button>`;
 
   return `
-    <a href="${url}" class="flex items-center gap-4 p-3 bg-black/40 border border-gray-800/50 rounded-xl hover:border-red-900/50 transition-colors group">
-      <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-gray-900">
+    <a href="${url}" class="flex items-center gap-4 p-3 bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] rounded-xl hover:border-accent-50 transition-colors group">
+      <div class="w-16 h-16 rounded-lg overflow-hidden shrink-0 bg-[var(--color-bg-elevated)]">
         <img src="${data.image || '/assets/images/logo1.png'}" alt="cover" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy" onerror="this.src='/assets/images/logo1.png'">
       </div>
       <div class="flex-1 min-w-0">
-        <h4 class="font-bold text-gray-200 truncate group-hover:text-red-400 transition-colors">${data.title || 'بدون عنوان'}</h4>
-        <div class="flex items-center gap-2 mt-1 text-xs text-gray-500">
-          <span class="px-2 py-0.5 rounded bg-gray-900 border border-gray-800">${typeText}</span>
+        <h4 class="font-bold text-[var(--color-text-primary)] truncate group-hover:text-[var(--color-accent)] transition-colors">${data.title || 'بدون عنوان'}</h4>
+        <div class="flex items-center gap-2 mt-1 text-xs text-[var(--color-text-meta)]">
+          <span class="px-2 py-0.5 rounded bg-[var(--color-bg-elevated)] border border-[var(--color-border-subtle)]">${typeText}</span>
           <span>${dateStr}</span>
         </div>
       </div>
@@ -390,7 +390,7 @@ form.addEventListener('submit', async (e) => {
   btnSave.disabled = true;
   btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري الحفظ...';
   profileMsg.classList.add('hidden');
-  profileMsg.classList.remove('bg-green-900/20', 'border-green-900/50', 'text-green-400', 'bg-red-900/20', 'border-red-900/50', 'text-red-400');
+  profileMsg.classList.remove('bg-green-900/20', 'border-green-900/50', 'text-green-400', 'bg-accent-20', 'border-accent-50', 'text-[var(--color-accent)]');
   
   try {
     const user = auth.currentUser;
@@ -406,7 +406,7 @@ form.addEventListener('submit', async (e) => {
   } catch (error) {
     console.error(error);
     profileMsg.innerHTML = '<i class="fas fa-exclamation-circle mr-1"></i> فشل في حفظ التعديلات.';
-    profileMsg.classList.add('bg-red-900/20', 'border-red-900/50', 'text-red-400');
+    profileMsg.classList.add('bg-accent-20', 'border-accent-50', 'text-[var(--color-accent)]');
     profileMsg.classList.remove('hidden');
   } finally {
     btnSave.disabled = false;

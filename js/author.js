@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   if (!authorId || authorId === 'author.html' || authorId === 'author') {
     document.getElementById('author-name').textContent = 'الكاتب غير موجود';
-    document.getElementById('author-posts-grid').innerHTML = '<div class="col-span-full text-center text-red-500 py-12">لم يتم العثور على الكاتب.</div>';
+    document.getElementById('author-posts-grid').innerHTML = '<div class="col-span-full text-center text-[var(--color-accent)] py-12">لم يتم العثور على الكاتب.</div>';
     return;
   }
 
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('author-posts-count').textContent = postsSnap.size;
 
     if (postsSnap.empty) {
-      postsGrid.innerHTML = '<div class="col-span-full text-center text-gray-500 py-12">لا توجد مقالات منشورة لهذا الكاتب بعد.</div>';
+      postsGrid.innerHTML = '<div class="col-span-full text-center text-[var(--color-text-meta)] py-12">لا توجد مقالات منشورة لهذا الكاتب بعد.</div>';
       return;
     }
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   } catch (error) {
     console.error("Error loading author data:", error);
-    document.getElementById('author-posts-grid').innerHTML = '<div class="col-span-full text-center text-red-500 py-12">حدث خطأ أثناء تحميل بيانات الكاتب.</div>';
+    document.getElementById('author-posts-grid').innerHTML = '<div class="col-span-full text-center text-[var(--color-accent)] py-12">حدث خطأ أثناء تحميل بيانات الكاتب.</div>';
   }
 });
 
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (error) {
         console.error("Report error:", error);
         msgEl.textContent = 'حدث خطأ. يرجى المحاولة لاحقاً.';
-        msgEl.className = 'text-sm mb-4 font-bold text-center text-red-500 block';
+        msgEl.className = 'text-sm mb-4 font-bold text-center text-[var(--color-accent)] block';
       } finally {
         btnSubmitReport.disabled = false;
         btnSubmitReport.textContent = 'إرسال الإبلاغ';

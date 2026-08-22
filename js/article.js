@@ -281,9 +281,8 @@ async function renderContent(data) {
   if (Array.isArray(data.tags) && data.tags.length > 0) {
     data.tags.forEach(tag => {
       const tagEl = document.createElement('span');
-      tagEl.className = 'bg-[#1b0d0d] text-gray-400 px-3 py-1 rounded-full text-xs font-semibold border border-red-900/30 hover:text-white hover:border-red-600 transition-colors cursor-pointer';
       tagEl.textContent = '#' + tag;
-      tagEl.className = 'inline-block bg-[#110808] border border-red-900/30 text-gray-300 hover:text-red-400 hover:border-red-500 px-4 py-2 rounded-xl text-sm font-semibold transition-colors';
+      tagEl.className = 'inline-block bg-[var(--color-bg-surface)] border border-[var(--color-border-subtle)] text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] hover:border-[var(--color-accent)] px-4 py-2 rounded-xl text-sm font-semibold transition-colors cursor-pointer';
       tagEl.addEventListener('click', () => window.location.href = '/search?tag=' + encodeURIComponent(tag));
       tagsContainer.appendChild(tagEl);
     });
@@ -380,21 +379,21 @@ async function renderContent(data) {
       }
 
       const warningGateHtml = `
-        <div id="content-warning-gate" class="bg-[#0a0505] border border-red-900/50 rounded-2xl p-8 md:p-12 mb-10 shadow-2xl relative overflow-hidden flex flex-col items-center text-center">
+        <div id="content-warning-gate" class="bg-[var(--color-bg-elevated)] border border-accent-30 rounded-2xl p-8 md:p-12 mb-10 shadow-elevation relative overflow-hidden flex flex-col items-center text-center">
           <div class="absolute -right-8 -top-8 opacity-5">
-            <i class="fa-solid fa-triangle-exclamation text-[200px] text-red-600"></i>
+            <i class="fa-solid fa-triangle-exclamation text-[200px] text-[var(--color-accent)]"></i>
           </div>
           <div class="relative z-10 w-full flex flex-col items-center">
-            <div class="w-20 h-20 bg-red-900/20 rounded-full flex items-center justify-center mb-6 border border-red-900/50 shadow-inner">
-              <i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 shadow-red-500 drop-shadow-md"></i>
+            <div class="w-20 h-20 bg-accent-10 rounded-full flex items-center justify-center mb-6 border border-accent-30">
+              <i class="fa-solid fa-triangle-exclamation text-4xl text-[var(--color-accent)] drop-shadow-md"></i>
             </div>
-            <h3 class="text-3xl font-black text-white mb-4 drop-shadow-md">تحذير محتوى</h3>
-            <p class="text-gray-300 text-lg mb-6 max-w-2xl leading-relaxed m-0" style="margin-bottom: 1.5rem !important;">
+            <h3 class="text-3xl font-black text-[var(--color-text-primary)] mb-4 drop-shadow-md">تحذير محتوى</h3>
+            <p class="text-[var(--color-text-secondary)] text-lg mb-6 max-w-2xl leading-relaxed m-0" style="margin-bottom: 1.5rem !important;">
               قد تحتوي هذه القصة على مشاهد مزعجة، عنف، أو محتوى غير مناسب لبعض القراء. يُنصح بالحذر.
             </p>
-            ${safeNoteHtml ? `<div class="bg-[#110808] border border-red-900/30 p-5 rounded-xl mb-8 max-w-2xl w-full text-gray-400 italic text-base m-0" style="margin-bottom: 2rem !important;">${safeNoteHtml}</div>` : ''}
+            ${safeNoteHtml ? `<div class="bg-[var(--color-bg-surface)] border border-accent-30 p-5 rounded-xl mb-8 max-w-2xl w-full text-[var(--color-text-meta)] italic text-base m-0" style="margin-bottom: 2rem !important;">${safeNoteHtml}</div>` : ''}
             
-            <button id="btn-reveal-content" class="px-8 py-4 bg-red-800 hover:bg-red-700 text-white font-bold text-lg rounded-xl transition-all hover:scale-105 shadow-[0_0_20px_rgba(220,38,38,0.4)] flex items-center gap-3">
+            <button id="btn-reveal-content" class="px-8 py-4 bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] text-white font-bold text-lg rounded-xl transition-all hover:scale-105 shadow-elevation flex items-center gap-3">
               <i class="fa-solid fa-eye"></i> أقر بذلك، أريد المتابعة
             </button>
           </div>
@@ -509,7 +508,7 @@ async function loadRelatedContent(currentArticle) {
     results.forEach(post => {
       const link = `/${post.type}/${post.slug}`;
       const typeLabel = post.type === 'story' ? 'قصة' : post.type === 'video' ? 'فيديو' : 'خبر';
-      const typeColor = post.type === 'story' ? 'bg-red-900' : post.type === 'video' ? 'bg-blue-900' : 'bg-green-900';
+      const typeColor = post.type === 'story' ? 'bg-[var(--color-accent)]' : post.type === 'video' ? 'bg-blue-900' : 'bg-green-900';
       
       
       const card = document.createElement('a');
